@@ -1,4 +1,0 @@
-﻿  AI1GetPosition.cpp
-c:\users\notzuonotdied\desktop\buweiqi\buweiqi\ai1_source\ai1getposition.cpp(19): warning C4305: “参数”: 从“double”到“float”截断
-  buweiqi.vcxproj -> C:\Users\Notzuonotdied\Desktop\buweiqi\Debug\buweiqi.exe
-  buweiqi.vcxproj -> C:\Users\Notzuonotdied\Desktop\buweiqi\Debug\buweiqi.pdb (Full PDB)
