@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DEFECTS>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\notzuonotdied\desktop\buweiqi\buweiqi\chessboard_source\util\</FILEPATH>
+      <FILENAME>int2string.cpp</FILENAME>
+      <LINE>36</LINE>
+      <COLUMN>38</COLUMN>
+    </SFA>
+    <DEFECTCODE>6276</DEFECTCODE>
+    <DESCRIPTION>语义不同的字符串类型之间的强制转换: char * 转换为 wchar_t *。使用无效的字符串会导致未定义的行为。</DESCRIPTION>
+    <FUNCTION>ChessBoard::addChar</FUNCTION>
+    <DECORATED>?addChar@ChessBoard@@AAEXH@Z</DECORATED>
+    <FUNCLINE>32</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\notzuonotdied\desktop\buweiqi\buweiqi\chessboard_source\util\</FILEPATH>
+      <FILENAME>int2string.cpp</FILENAME>
+      <LINE>37</LINE>
+      <COLUMN>38</COLUMN>
+    </SFA>
+    <DEFECTCODE>6276</DEFECTCODE>
+    <DESCRIPTION>语义不同的字符串类型之间的强制转换: char * 转换为 wchar_t *。使用无效的字符串会导致未定义的行为。</DESCRIPTION>
+    <FUNCTION>ChessBoard::addChar</FUNCTION>
+    <DECORATED>?addChar@ChessBoard@@AAEXH@Z</DECORATED>
+    <FUNCLINE>32</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\notzuonotdied\desktop\buweiqi\buweiqi\chessboard_source\util\</FILEPATH>
+      <FILENAME>int2string.cpp</FILENAME>
+      <LINE>38</LINE>
+      <COLUMN>38</COLUMN>
+    </SFA>
+    <DEFECTCODE>6276</DEFECTCODE>
+    <DESCRIPTION>语义不同的字符串类型之间的强制转换: char * 转换为 wchar_t *。使用无效的字符串会导致未定义的行为。</DESCRIPTION>
+    <FUNCTION>ChessBoard::addChar</FUNCTION>
+    <DECORATED>?addChar@ChessBoard@@AAEXH@Z</DECORATED>
+    <FUNCLINE>32</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\notzuonotdied\desktop\buweiqi\buweiqi\chessboard_source\util\</FILEPATH>
+      <FILENAME>int2string.cpp</FILENAME>
+      <LINE>39</LINE>
+      <COLUMN>38</COLUMN>
+    </SFA>
+    <DEFECTCODE>6276</DEFECTCODE>
+    <DESCRIPTION>语义不同的字符串类型之间的强制转换: char * 转换为 wchar_t *。使用无效的字符串会导致未定义的行为。</DESCRIPTION>
+    <FUNCTION>ChessBoard::addChar</FUNCTION>
+    <DECORATED>?addChar@ChessBoard@@AAEXH@Z</DECORATED>
+    <FUNCLINE>32</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\notzuonotdied\desktop\buweiqi\buweiqi\chessboard_source\util\</FILEPATH>
+      <FILENAME>int2string.cpp</FILENAME>
+      <LINE>40</LINE>
+      <COLUMN>38</COLUMN>
+    </SFA>
+    <DEFECTCODE>6276</DEFECTCODE>
+    <DESCRIPTION>语义不同的字符串类型之间的强制转换: char * 转换为 wchar_t *。使用无效的字符串会导致未定义的行为。</DESCRIPTION>
+    <FUNCTION>ChessBoard::addChar</FUNCTION>
+    <DECORATED>?addChar@ChessBoard@@AAEXH@Z</DECORATED>
+    <FUNCLINE>32</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\notzuonotdied\desktop\buweiqi\buweiqi\chessboard_source\util\</FILEPATH>
+      <FILENAME>int2string.cpp</FILENAME>
+      <LINE>41</LINE>
+      <COLUMN>38</COLUMN>
+    </SFA>
+    <DEFECTCODE>6276</DEFECTCODE>
+    <DESCRIPTION>语义不同的字符串类型之间的强制转换: char * 转换为 wchar_t *。使用无效的字符串会导致未定义的行为。</DESCRIPTION>
+    <FUNCTION>ChessBoard::addChar</FUNCTION>
+    <DECORATED>?addChar@ChessBoard@@AAEXH@Z</DECORATED>
+    <FUNCLINE>32</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\notzuonotdied\desktop\buweiqi\buweiqi\chessboard_source\util\</FILEPATH>
+      <FILENAME>int2string.cpp</FILENAME>
+      <LINE>42</LINE>
+      <COLUMN>38</COLUMN>
+    </SFA>
+    <DEFECTCODE>6276</DEFECTCODE>
+    <DESCRIPTION>语义不同的字符串类型之间的强制转换: char * 转换为 wchar_t *。使用无效的字符串会导致未定义的行为。</DESCRIPTION>
+    <FUNCTION>ChessBoard::addChar</FUNCTION>
+    <DECORATED>?addChar@ChessBoard@@AAEXH@Z</DECORATED>
+    <FUNCLINE>32</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\notzuonotdied\desktop\buweiqi\buweiqi\chessboard_source\util\</FILEPATH>
+      <FILENAME>int2string.cpp</FILENAME>
+      <LINE>43</LINE>
+      <COLUMN>38</COLUMN>
+    </SFA>
+    <DEFECTCODE>6276</DEFECTCODE>
+    <DESCRIPTION>语义不同的字符串类型之间的强制转换: char * 转换为 wchar_t *。使用无效的字符串会导致未定义的行为。</DESCRIPTION>
+    <FUNCTION>ChessBoard::addChar</FUNCTION>
+    <DECORATED>?addChar@ChessBoard@@AAEXH@Z</DECORATED>
+    <FUNCLINE>32</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\notzuonotdied\desktop\buweiqi\buweiqi\chessboard_source\util\</FILEPATH>
+      <FILENAME>int2string.cpp</FILENAME>
+      <LINE>44</LINE>
+      <COLUMN>38</COLUMN>
+    </SFA>
+    <DEFECTCODE>6276</DEFECTCODE>
+    <DESCRIPTION>语义不同的字符串类型之间的强制转换: char * 转换为 wchar_t *。使用无效的字符串会导致未定义的行为。</DESCRIPTION>
+    <FUNCTION>ChessBoard::addChar</FUNCTION>
+    <DECORATED>?addChar@ChessBoard@@AAEXH@Z</DECORATED>
+    <FUNCLINE>32</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\notzuonotdied\desktop\buweiqi\buweiqi\chessboard_source\util\</FILEPATH>
+      <FILENAME>int2string.cpp</FILENAME>
+      <LINE>45</LINE>
+      <COLUMN>67</COLUMN>
+    </SFA>
+    <DEFECTCODE>6276</DEFECTCODE>
+    <DESCRIPTION>语义不同的字符串类型之间的强制转换: char * 转换为 wchar_t *。使用无效的字符串会导致未定义的行为。</DESCRIPTION>
+    <FUNCTION>ChessBoard::addChar</FUNCTION>
+    <DECORATED>?addChar@ChessBoard@@AAEXH@Z</DECORATED>
+    <FUNCLINE>32</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+</DEFECTS>
