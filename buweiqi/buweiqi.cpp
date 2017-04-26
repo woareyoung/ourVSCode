@@ -115,7 +115,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			else
 			{
-				SendMessage((HWND)lParam, WM_SETTEXT, (WPARAM)NULL, LPARAM("使用AI"));
+				SendMessageA((HWND)lParam, WM_SETTEXT, (WPARAM)NULL, LPARAM("使用AI"));
 				CB.Player1isAI = false;
 			}
 			break;
@@ -129,7 +129,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			else
 			{
-				SendMessage((HWND)lParam, WM_SETTEXT, (WPARAM)NULL, LPARAM("使用AI"));
+				SendMessageA((HWND)lParam, WM_SETTEXT, (WPARAM)NULL, LPARAM("使用AI"));
 				CB.Player2isAI = false;
 			}
 			break;
@@ -140,7 +140,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 				ShowWindow(CB.TurnToBlack, SW_SHOW);
 				UpdateWindow(CB.TurnToBlack);
 				CB.PrintTime = true;
-				SendMessage((HWND)lParam, WM_SETTEXT, (WPARAM)NULL, LPARAM("正在游戏中"));
+				SendMessageA((HWND)lParam, WM_SETTEXT, (WPARAM)NULL, LPARAM("正在游戏中"));
 				CB.Start = true;
 				if (CB.Player1isAI)
 				{
@@ -301,7 +301,7 @@ void Select()
 		case 3:CB.Player1AI = &CB.ai3; break;
 		}
 		CB.Player1isAI = true;
-		SendMessage((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI"));
+		SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI"));
 		break;
 	case 2:
 		switch (Num)
@@ -311,7 +311,7 @@ void Select()
 		case 3:CB.Player2AI = &CB.ai3; break;
 		}
 		CB.Player2isAI = true;
-		SendMessage((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI"));
+		SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI"));
 		break;
 	}
 	ShowSelect1 = false;//是否显示AI

@@ -12,8 +12,8 @@ void ChessBoard::PaintTimer(HWND All, HWND Round, int Player, bool FirstPrint)
 	int i;
 	if (FirstPrint)
 	{
-		SendMessage(All, WM_SETTEXT, (WPARAM)NULL, LPARAM("15£º00"));
-		SendMessage(Round, WM_SETTEXT, (WPARAM)NULL, LPARAM("1£º00"));
+		SendMessageA(All, WM_SETTEXT, (WPARAM)NULL, LPARAM("15:00"));
+		SendMessageA(Round, WM_SETTEXT, (WPARAM)NULL, LPARAM("1:00"));
 		return;
 	}
 	if (Start)
@@ -31,7 +31,7 @@ void ChessBoard::PaintTimer(HWND All, HWND Round, int Player, bool FirstPrint)
 			lstrcat(LPWSTR(str), LPWSTR("£º"));
 			lstrcat(LPWSTR(str), LPWSTR(Int2String(AllTime2 % 60)));
 		}
-		SendMessage(All, WM_SETTEXT, (WPARAM)NULL, LPARAM(str));
+		SendMessageA(All, WM_SETTEXT, (WPARAM)NULL, LPARAM(str));
 		for (i = 0; i < 20; i++) str[i] = '\0';
 		if (Player == 1)
 		{
@@ -45,6 +45,6 @@ void ChessBoard::PaintTimer(HWND All, HWND Round, int Player, bool FirstPrint)
 			lstrcat(LPWSTR(str), LPWSTR("£º"));
 			lstrcat(LPWSTR(str), LPWSTR(Int2String(Round2 % 60)));
 		}
-		SendMessage(Round, WM_SETTEXT, (WPARAM)NULL, LPARAM(str));
+		SendMessageA(Round, WM_SETTEXT, (WPARAM)NULL, LPARAM(str));
 	}
 }

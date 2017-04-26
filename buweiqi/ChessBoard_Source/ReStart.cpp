@@ -25,9 +25,9 @@ void ChessBoard::ReStart()
 
 	PostMessage(RootHwnd, WM_PAINT, (WPARAM)NULL, (LPARAM)NULL);
 
-	SendMessage(Player1UseAI, WM_SETTEXT, (WPARAM)NULL, LPARAM("使用AI"));
-	SendMessage(Player2UseAI, WM_SETTEXT, (WPARAM)NULL, LPARAM("使用AI"));
-	SendMessage(StartGame, WM_SETTEXT, (WPARAM)NULL, LPARAM("开始游戏"));
+	SendMessageA(Player1UseAI, WM_SETTEXT, (WPARAM)NULL, LPARAM("使用AI"));
+	SendMessageA(Player2UseAI, WM_SETTEXT, (WPARAM)NULL, LPARAM("使用AI"));
+	SendMessageA(StartGame, WM_SETTEXT, (WPARAM)NULL, LPARAM("开始游戏"));
 	ShowWindow(TurnToWhite, SW_HIDE);
 	ShowWindow(TurnToBlack, SW_SHOW);
 
