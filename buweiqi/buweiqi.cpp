@@ -25,10 +25,9 @@ LPARAM Param;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);//窗口过程函数
 LRESULT CALLBACK WndProcB(HWND, UINT, WPARAM, LPARAM);//窗口过程函数
-void TimerProc();//计时器处理函数
+DWORD WINAPI TimerProc(PVOID pParam);//计时器处理函数
 void SelectFun();//选择AI功能
 void Select();//选择之后的处理
-DWORD WINAPI ThreadProc(PVOID pParam);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	PSTR szCmdLine, int iCmdShow)
@@ -147,7 +146,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 					CB.onTurn = isAI1onTurn;
 					CB.PaintChess();
 				}
-				TimerProc();
+				CB.TimeHandle = CreateThread(NULL, 0, TimerProc, NULL, 0, NULL);
 			}
 			break;
 		}
@@ -201,12 +200,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return DefWindowProc(hwnd, message, wParam, lParam);
 }
 ///计时器函数
-void TimerProc()
+DWORD WINAPI TimerProc(PVOID pParam)
 {
 	double Count = GetTickCount();//现在的计数
 	double Interval = 1000;//时间间隔（单位：ms）
 	double Now = Count;//现在已记录的时间
-	while (GetMessage(&msg, NULL, 0, 0))
+	while (CB.Start)
 	{
 		Now = GetTickCount();//获取当前计时
 		if (Now - Count > Interval)
@@ -237,11 +236,8 @@ void TimerProc()
 				CB.PaintTimer(CB.Timer2A, CB.Timer2R, 2);
 			}
 		}
-		if (!CB.Start) break;//当游戏结束时断开循环
-							 ///下面是普通的接收消息的函数
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
 	}
+	return 0;
 }
 ///响应选择AI
 void SelectFun()
@@ -251,32 +247,41 @@ void SelectFun()
 	MoveWindow(CB.SelectAI, CB.MainWinRect.left + (CB.RootWidth - 250) / 2, CB.MainWinRect.top + (CB.RootHeight - 300) / 2, 250, 300, false);//改变窗口位置和大小
 	ShowWindow(CB.SelectAI, SW_SHOW);//设置窗口可视
 	int line, column;//用于检查AI是否已完成（即可以进行下棋了）
-					 ///检查AI1
-	line = CB.line;
-	column = CB.column;
-	CB.ai1.GetPosition(CB.line, CB.column, 0);
-	if (line != CB.line && column != CB.column)
+	///检查AI1
+	if (!ShowSelect1)
 	{
-		ShowWindow(CB.SelectAI1, SW_SHOW);
-		ShowSelect1 = true;
+		line = CB.line;
+		column = CB.column;
+		CB.ai1.GetPosition(CB.line, CB.column, 0);
+		if (line != CB.line && column != CB.column)
+		{
+			ShowWindow(CB.SelectAI1, SW_SHOW);
+			ShowSelect1 = true;
+		}
 	}
 	///检查AI2
-	CB.line = line;
-	CB.column = column;
-	CB.ai2.GetPosition(CB.line, CB.column, 0);
-	if (line != CB.line && column != CB.column)
+	if (!ShowSelect2)
 	{
-		ShowWindow(CB.SelectAI2, SW_SHOW);
-		ShowSelect2 = true;
+		CB.line = line;
+		CB.column = column;
+		CB.ai2.GetPosition(CB.line, CB.column, 0);
+		if (line != CB.line && column != CB.column)
+		{
+			ShowWindow(CB.SelectAI2, SW_SHOW);
+			ShowSelect2 = true;
+		}
 	}
 	///检查AI3
-	CB.line = line;
-	CB.column = column;
-	CB.ai3.GetPosition(CB.line, CB.column, 0);
-	if (line != CB.line && column != CB.column)
+	if (!ShowSelect3)
 	{
-		ShowWindow(CB.SelectAI3, SW_SHOW);
-		ShowSelect3 = true;
+		CB.line = line;
+		CB.column = column;
+		CB.ai3.GetPosition(CB.line, CB.column, 0);
+		if (line != CB.line && column != CB.column)
+		{
+			ShowWindow(CB.SelectAI3, SW_SHOW);
+			ShowSelect3 = true;
+		}
 	}
 	//-------//
 	CB.line = line;
@@ -360,9 +365,4 @@ LRESULT CALLBACK WndProcB(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	}
 	return DefWindowProc(hwnd, message, wParam, lParam);
-}
-DWORD WINAPI ThreadProc(PVOID pParam)
-{
-	CB.RePaint();
-	return 0;
 }

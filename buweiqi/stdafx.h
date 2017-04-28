@@ -17,6 +17,7 @@
 #include <memory.h>
 #include <tchar.h>
 #include <conio.h>
+#include <string>
 /// 在PaintChess中使用
 #define isPlay1onTurn 1
 #define isPlay2onTurn 2

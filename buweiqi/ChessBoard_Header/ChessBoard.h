@@ -55,9 +55,8 @@ private:
 	bool Position[4];
 
 	///类型转换 在int2String.cpp文件中
-	bool TheFirstNumber;
-	char string[2];//用于类型转换
-	char* Int2String(int num);//整型换换为字符型
+	std::string String;//用于类型转换
+	std::string Int2String(int num);//整型换换为字符型
 	void addChar(int mid);//用于辅助转换
 	void showChessBroadInfoOnDOS();
 

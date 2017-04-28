@@ -5,9 +5,9 @@
 * @param  num []
 * @return     []
 */
-char* ChessBoard::Int2String(int num)
+std::string ChessBoard::Int2String(int num)
 {
-	for (int i = 0; i < 2; i++) string[i] = '\0';
+	String.clear();
 	int mid;
 	if (num > 100 || num == 100)
 	{
@@ -23,7 +23,7 @@ char* ChessBoard::Int2String(int num)
 	}
 	mid = num % 10;
 	addChar(mid);
-	return string;
+	return String;
 }
 /**
 * [ChessBoard::addChar 整型转换为字符串时的辅助函数]
@@ -33,15 +33,15 @@ void ChessBoard::addChar(int mid)
 {
 	switch (mid)
 	{
-	case 9:lstrcat(LPWSTR(string), LPWSTR("9")); break;
-	case 8:lstrcat(LPWSTR(string), LPWSTR("8")); break;
-	case 7:lstrcat(LPWSTR(string), LPWSTR("7")); break;
-	case 6:lstrcat(LPWSTR(string), LPWSTR("6")); break;
-	case 5:lstrcat(LPWSTR(string), LPWSTR("5")); break;
-	case 4:lstrcat(LPWSTR(string), LPWSTR("4")); break;
-	case 3:lstrcat(LPWSTR(string), LPWSTR("3")); break;
-	case 2:lstrcat(LPWSTR(string), LPWSTR("2")); break;
-	case 1:lstrcat(LPWSTR(string), LPWSTR("1")); break;
-	case 0:if (TheFirstNumber == false) lstrcat(LPWSTR(string), LPWSTR("0")); break;
+	case 9:String += "9"; break;
+	case 8:String += "8"; break;
+	case 7:String += "7"; break;
+	case 6:String += "6"; break;
+	case 5:String += "5"; break;
+	case 4:String += "4"; break;
+	case 3:String += "3"; break;
+	case 2:String += "2"; break;
+	case 1:String += "1"; break;
+	case 0:String += "0"; break;
 	}
 }

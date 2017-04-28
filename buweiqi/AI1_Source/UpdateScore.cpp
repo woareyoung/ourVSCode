@@ -1,16 +1,16 @@
 #include "../stdafx.h"
 #include "../AI1_Header/AI1.h"
-///更新棋盘位置分值，参数：行，列，下棋的玩家
-void AI1::UpdateScore(int row1, int row2, int who)
+///更新棋盘位置分值，参数：行，列，下棋的玩家，是否是加分
+void AI1::UpdateScore(int row1, int row2, int who, bool isAddScore)
 {
 	Score[row1][row2] = PointStyle[10];//设置下棋点为-5分
-	if (row1 != 0 && row2 > 0 && cross[row1][row2 - 1] == 0) RecordSpecialPoint(row1, row2 - 1, who);//查看下棋点的左边位置上的特殊点
-	if (row1 != 0 && row2 < 9 && cross[row1][row2 + 1] == 0) RecordSpecialPoint(row1, row2 + 1, who);//查看下棋点的右边位置上的特殊点
-	if (row2 != 0 && row1 > 0 && cross[row1 - 1][row2] == 0) RecordSpecialPoint(row1 - 1, row2, who);//查看下棋点的上边位置上的特殊点
-	if (row2 != 0 && row1 < 9 && cross[row1 + 1][row2] == 0) RecordSpecialPoint(row1 + 1, row2, who);//查看下棋点的下边位置上的特殊点
+	if (row1 != 0 && row2 > 0 && cross[row1][row2 - 1] == 0) RecordSpecialPoint(row1, row2 - 1, who, isAddScore);//查看下棋点的左边位置上的特殊点
+	if (row1 != 0 && row2 < 9 && cross[row1][row2 + 1] == 0) RecordSpecialPoint(row1, row2 + 1, who, isAddScore);//查看下棋点的右边位置上的特殊点
+	if (row2 != 0 && row1 > 0 && cross[row1 - 1][row2] == 0) RecordSpecialPoint(row1 - 1, row2, who, isAddScore);//查看下棋点的上边位置上的特殊点
+	if (row2 != 0 && row1 < 9 && cross[row1 + 1][row2] == 0) RecordSpecialPoint(row1 + 1, row2, who, isAddScore);//查看下棋点的下边位置上的特殊点
 }
 ///添加特殊点
-void AI1::RecordSpecialPoint(int row1, int row2, int who)
+void AI1::RecordSpecialPoint(int row1, int row2, int who, bool isAddScore)
 {
 	int n = row1 * 10 + row2;
 	int sc = GetChessAmount(row1, row2, who);//查看特定位置周围有多少个“自己”的棋子
@@ -20,39 +20,39 @@ void AI1::RecordSpecialPoint(int row1, int row2, int who)
 	case 1:
 		if (who == PlayerNumber) SetCurrentPoint(5, MyFormatChipPoor, 15, MySinglePointPoor);
 		else SetCurrentPoint(8, RivalFormatChipPoor, 8, RivalSinglePointPoor);
-		AddRecord(n, n + 10, n - 10, n - 1, 0, 5);
+		AddRecord(n, n + 10, n - 10, n - 1, 0, 5, isAddScore);
 		break;
 		//只有左边有棋子，前两个参数无意义
 	case 2:
 		if (who == PlayerNumber) SetCurrentPoint(5, MyFormatChipPoor, 15, MySinglePointPoor);
 		else SetCurrentPoint(8, RivalFormatChipPoor, 8, RivalSinglePointPoor);
-		AddRecord(n, n + 10, n + 1, n - 10, 0, 5);
+		AddRecord(n, n + 10, n + 1, n - 10, 0, 5, isAddScore);
 		break;
 		//左、右边都有棋子
 	case 3:
 		if (who == PlayerNumber) SetCurrentPoint(3, MyFormatTigerMouthPoor, 16, MyChipPoor, 5, MyFormatChipPoor, 15, MySinglePointPoor);
 		else SetCurrentPoint(6, RivalFormatTigerMouthPoor, 17, RivalChipPoor, 8, RivalFormatChipPoor, 8, RivalSinglePointPoor);
-		AddRecord(n, n + 10, n - 10, 0, 0, 2);
+		AddRecord(n, n + 10, n - 10, 0, 0, 2, isAddScore);
 		spa[who].Chip++;
 		break;
 		//只有下边有棋子，前两个参数无意义
 	case 4:
 		if (who == PlayerNumber) SetCurrentPoint(5, MyFormatChipPoor, 15, MySinglePointPoor);
 		else SetCurrentPoint(8, RivalFormatChipPoor, 8, RivalSinglePointPoor);
-		AddRecord(n, n - 10, n + 1, n - 1, 0, 5);
+		AddRecord(n, n - 10, n + 1, n - 1, 0, 5, isAddScore);
 		break;
 		//下、右边都有棋子
 	case 5:
 		if (who == PlayerNumber) SetCurrentPoint(3, MyFormatTigerMouthPoor, 16, MyChipPoor, 5, MyFormatChipPoor, 15, MySinglePointPoor);
 		else SetCurrentPoint(6, RivalFormatTigerMouthPoor, 17, RivalChipPoor, 8, RivalFormatChipPoor, 8, RivalSinglePointPoor);
-		AddRecord(n, n + 10, n + 1, 0, 0, 2);
+		AddRecord(n, n + 10, n + 1, 0, 0, 2, isAddScore);
 		spa[who].Chip++;
 		break;
 		//下、左边都有棋子
 	case 6:
 		if (who == PlayerNumber) SetCurrentPoint(3, MyFormatTigerMouthPoor, 16, MyChipPoor, 5, MyFormatChipPoor, 15, MySinglePointPoor);
 		else SetCurrentPoint(6, RivalFormatTigerMouthPoor, 17, RivalChipPoor, 8, RivalFormatChipPoor, 8, RivalSinglePointPoor);
-		AddRecord(n, n + 10, n - 1, 0, 0, 2);
+		AddRecord(n, n + 10, n - 1, 0, 0, 2, isAddScore);
 		spa[who].Chip++;
 		break;
 		//右、左、下都有棋子
@@ -63,7 +63,7 @@ void AI1::RecordSpecialPoint(int row1, int row2, int who)
 			Score[row1][row2] = PointStyle[14];
 		}
 		else SetCurrentPoint(7, RivalFormatEyePoor, 2, RivalTigerMouthPoor, 6, RivalFormatTigerMouthPoor, 17, RivalChipPoor);
-		AddRecord(n, n + 1, n - 1, n + 10, 0, 3);
+		AddRecord(n, n + 1, n - 1, n + 10, 0, 3, isAddScore);
 		spa[who].Chip--;
 		spa[who].TigerMouth++;
 		break;
@@ -71,20 +71,20 @@ void AI1::RecordSpecialPoint(int row1, int row2, int who)
 	case 8:
 		if (who == PlayerNumber) SetCurrentPoint(5, MyFormatChipPoor, 15, MySinglePointPoor);
 		else SetCurrentPoint(8, RivalFormatChipPoor, 8, RivalSinglePointPoor);
-		AddRecord(n, n + 10, n + 1, n - 1, 0, 5);
+		AddRecord(n, n + 10, n + 1, n - 1, 0, 5, isAddScore);
 		break;
 		//右、上都有棋子
 	case 9:
 		if (who == PlayerNumber) SetCurrentPoint(3, MyFormatTigerMouthPoor, 16, MyChipPoor, 5, MyFormatChipPoor, 15, MySinglePointPoor);
 		else SetCurrentPoint(6, RivalFormatTigerMouthPoor, 17, RivalChipPoor, 8, RivalFormatChipPoor, 8, RivalSinglePointPoor);
-		AddRecord(n, n + 1, n - 10, 0, 0, 2);
+		AddRecord(n, n + 1, n - 10, 0, 0, 2, isAddScore);
 		spa[who].Chip++;
 		break;
 		//左、上都有棋子
 	case 10:
 		if (who == PlayerNumber) SetCurrentPoint(3, MyFormatTigerMouthPoor, 16, MyChipPoor, 5, MyFormatChipPoor, 15, MySinglePointPoor);
 		else SetCurrentPoint(6, RivalFormatTigerMouthPoor, 17, RivalChipPoor, 8, RivalFormatChipPoor, 8, RivalSinglePointPoor);
-		AddRecord(n, n - 1, n - 10, 0, 0, 2);
+		AddRecord(n, n - 1, n - 10, 0, 0, 2, isAddScore);
 		spa[who].Chip++;
 		break;
 		//左、右、上都有棋子
@@ -95,7 +95,7 @@ void AI1::RecordSpecialPoint(int row1, int row2, int who)
 			Score[row1][row2] = PointStyle[14];
 		}
 		else SetCurrentPoint(7, RivalFormatEyePoor, 2, RivalTigerMouthPoor, 6, RivalFormatTigerMouthPoor, 17, RivalChipPoor);
-		AddRecord(n, n - 1, n + 1, n - 10, 0, 3);
+		AddRecord(n, n - 1, n + 1, n - 10, 0, 3, isAddScore);
 		spa[who].Chip--;
 		spa[who].TigerMouth++;
 		break;
@@ -103,7 +103,7 @@ void AI1::RecordSpecialPoint(int row1, int row2, int who)
 	case 12:
 		if (who == PlayerNumber) SetCurrentPoint(3, MyFormatTigerMouthPoor, 16, MyChipPoor, 5, MyFormatChipPoor, 15, MySinglePointPoor);
 		else SetCurrentPoint(6, RivalFormatTigerMouthPoor, 17, RivalChipPoor, 8, RivalFormatChipPoor, 8, RivalSinglePointPoor);
-		AddRecord(n, n + 10, n - 10, 0, 0, 2);
+		AddRecord(n, n + 10, n - 10, 0, 0, 2, isAddScore);
 		spa[who].Chip++;
 		break;
 		//上、下、右都有棋子
@@ -114,7 +114,7 @@ void AI1::RecordSpecialPoint(int row1, int row2, int who)
 			Score[row1][row2] = PointStyle[14];
 		}
 		else SetCurrentPoint(7, RivalFormatEyePoor, 2, RivalTigerMouthPoor, 6, RivalFormatTigerMouthPoor, 17, RivalChipPoor);
-		AddRecord(n, n - 10, n + 10, n + 1, 0, 3);
+		AddRecord(n, n - 10, n + 10, n + 1, 0, 3, isAddScore);
 		spa[who].Chip--;
 		spa[who].TigerMouth++;
 		break;
@@ -126,7 +126,7 @@ void AI1::RecordSpecialPoint(int row1, int row2, int who)
 			Score[row1][row2] = PointStyle[14];
 		}
 		else SetCurrentPoint(7, RivalFormatEyePoor, 2, RivalTigerMouthPoor, 6, RivalFormatTigerMouthPoor, 17, RivalChipPoor);
-		AddRecord(n, n - 10, n + 10, n - 1, 0, 3);
+		AddRecord(n, n - 10, n + 10, n - 1, 0, 3, isAddScore);
 		spa[who].Chip--;
 		spa[who].TigerMouth++;
 		break;
@@ -142,7 +142,7 @@ void AI1::RecordSpecialPoint(int row1, int row2, int who)
 			SetCurrentPoint(0, 0, 1, 0, 7, RivalFormatEyePoor, 2, RivalTigerMouthPoor);
 			Score[row1][row2] = PointStyle[1];
 		}
-		AddRecord(n, n - 1, n + 1, n - 10, n + 10, 4);
+		AddRecord(n, n - 1, n + 1, n - 10, n + 10, 4, isAddScore);
 		spa[who].TigerMouth--;
 		spa[who].Eye++;
 		break;
@@ -171,35 +171,35 @@ void AI1::SetCurrentPoint(int ThisFormatStyle, int ThisFormatScorePoor, int This
 }
 ///添加特殊点通用函数
 ///参数：n：特殊点位置  n1-n4：特殊点邻近的位置   amo：标记用
-void AI1::AddRecord(int n, int n1, int n2, int n3, int n4, int amo)
+void AI1::AddRecord(int n, int n1, int n2, int n3, int n4, int amo, bool isAddScore)
 {
-	if (n / 10 > 0 && n / 10 < 10 && n % 10 > 0) ResetScore(n / 10, n % 10, PointStyle[CurrentPointStyle], CurrentScorePoor);
+	if (n / 10 > 0 && n / 10 < 10 && n % 10 > 0) ResetScore(n / 10, n % 10, PointStyle[CurrentPointStyle], CurrentScorePoor, isAddScore);
 	switch (amo)
 	{
 	case 4:
-		if (n / 10 > 0 && n / 10 < 10 && n % 10 > 0) ResetScore(n / 10, n % 10, PointStyle[CurrentFormatPointStyle], CurrentFormatScorePoor);
+		if (n / 10 > 0 && n / 10 < 10 && n % 10 > 0) ResetScore(n / 10, n % 10, PointStyle[CurrentFormatPointStyle], CurrentFormatScorePoor, isAddScore);
 		break;
 	case 5:;
 	case 3:
-		if (n3 / 10 > 0 && n3 / 10 < 10 && n3 % 10 > 0) ResetScore(n3 / 10, n3 % 10, PointStyle[CurrentFormatPointStyle], CurrentFormatScorePoor);
+		if (n3 / 10 > 0 && n3 / 10 < 10 && n3 % 10 > 0) ResetScore(n3 / 10, n3 % 10, PointStyle[CurrentFormatPointStyle], CurrentFormatScorePoor, isAddScore);
 	case 2:
-		if (n2 / 10 > 0 && n2 / 10 < 10 && n2 % 10 > 0) ResetScore(n2 / 10, n2 % 10, PointStyle[CurrentFormatPointStyle], CurrentFormatScorePoor);
+		if (n2 / 10 > 0 && n2 / 10 < 10 && n2 % 10 > 0) ResetScore(n2 / 10, n2 % 10, PointStyle[CurrentFormatPointStyle], CurrentFormatScorePoor, isAddScore);
 	case 1:
-		if (n1 / 10 > 0 && n1 / 10 < 10 && n1 % 10 > 0) ResetScore(n1 / 10, n1 % 10, PointStyle[CurrentFormatPointStyle], CurrentFormatScorePoor); break;
+		if (n1 / 10 > 0 && n1 / 10 < 10 && n1 % 10 > 0) ResetScore(n1 / 10, n1 % 10, PointStyle[CurrentFormatPointStyle], CurrentFormatScorePoor, isAddScore); break;
 	}
 	if (amo < 5)
 	{
-		if (n / 10 > 0 && n / 10 < 10 && n % 10 > 0) ResetScore(n / 10, n % 10, PointStyle[LastSpecialPointStyle], LastSpecialScorePoor, false);
+		if (n / 10 > 0 && n / 10 < 10 && n % 10 > 0) ResetScore(n / 10, n % 10, PointStyle[LastSpecialPointStyle], LastSpecialScorePoor, !isAddScore);
 		switch (amo)
 		{
 		case 4:
-			if (n4 / 10 > 0 && n4 / 10 < 10 && n4 % 10 > 0 && cross[n4 / 10][n4 % 10] == 0) ResetScore(n4 / 10, n4 % 10, PointStyle[LastFormatPointStyle], LastFormatScorePoor, false);
+			if (n4 / 10 > 0 && n4 / 10 < 10 && n4 % 10 > 0 && cross[n4 / 10][n4 % 10] == 0) ResetScore(n4 / 10, n4 % 10, PointStyle[LastFormatPointStyle], LastFormatScorePoor, !isAddScore);
 		case 3:
-			if (n3 / 10 > 0 && n3 / 10 < 10 && n3 % 10 > 0 && cross[n3 / 10][n3 % 10] == 0) ResetScore(n3 / 10, n3 % 10, PointStyle[LastFormatPointStyle], LastFormatScorePoor, false);
+			if (n3 / 10 > 0 && n3 / 10 < 10 && n3 % 10 > 0 && cross[n3 / 10][n3 % 10] == 0) ResetScore(n3 / 10, n3 % 10, PointStyle[LastFormatPointStyle], LastFormatScorePoor, !isAddScore);
 		case 2:
-			if (n2 / 10 > 0 && n2 / 10 < 10 && n2 % 10 > 0 && cross[n2 / 10][n2 % 10] == 0) ResetScore(n2 / 10, n2 % 10, PointStyle[LastFormatPointStyle], LastFormatScorePoor, false);
+			if (n2 / 10 > 0 && n2 / 10 < 10 && n2 % 10 > 0 && cross[n2 / 10][n2 % 10] == 0) ResetScore(n2 / 10, n2 % 10, PointStyle[LastFormatPointStyle], LastFormatScorePoor, !isAddScore);
 		case 1:
-			if (n1 / 10 > 0 && n1 / 10 < 10 && n1 % 10 > 0 && cross[n1 / 10][n1 % 10] == 0) ResetScore(n1 / 10, n1 % 10, PointStyle[LastFormatPointStyle], LastFormatScorePoor, false);
+			if (n1 / 10 > 0 && n1 / 10 < 10 && n1 % 10 > 0 && cross[n1 / 10][n1 % 10] == 0) ResetScore(n1 / 10, n1 % 10, PointStyle[LastFormatPointStyle], LastFormatScorePoor, !isAddScore);
 		}
 	}
 }

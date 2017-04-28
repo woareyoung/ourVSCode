@@ -45,8 +45,7 @@ AI1::AI1()
 	MaxStepNumber = 15;//构建回归方程的出发条件
 	CorrectRate = 0.15;//进攻性能修正系数
 
-	Step = new STEP;
-	InitializeD();
+	Step = NULL;
 }
 ///初始化数据
 void AI1::InitializeD()
@@ -73,20 +72,24 @@ void AI1::InitializeD()
 	}
 	AttackPerformance = 1;//初始化对手进攻性能
 	///清空链表
-	if (Step->Number > 0)
+	if (Step != NULL)
 	{
-		STEP *p = Step->next;
+		STEP *p;
+		p = Step->next;
 		delete Step;
 		while (p != NULL)
 		{
-			delete Step;
 			Step = p;
 			p = Step->next;
+			delete Step;
 		}
 	}
-	if (Step == NULL) Step = new STEP;
-	Step->Number = 1;
-	Step->ScoreRate = 0;
-	Step->next = NULL;
-	SSS = Step;
+	if (Step == NULL)
+	{
+		Step = new STEP;
+		Step->Number = 1;
+		Step->ScoreRate = 0;
+		Step->next = NULL;
+		SSS = Step;
+	}
 }
