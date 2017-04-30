@@ -115,6 +115,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			else
 			{
 				SendMessageA((HWND)lParam, WM_SETTEXT, (WPARAM)NULL, LPARAM("使用AI"));
+				CB.Player1AI = NULL;
 				CB.Player1isAI = false;
 			}
 			break;
@@ -129,6 +130,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			else
 			{
 				SendMessageA((HWND)lParam, WM_SETTEXT, (WPARAM)NULL, LPARAM("使用AI"));
+				CB.Player2AI = NULL;
 				CB.Player2isAI = false;
 			}
 			break;
