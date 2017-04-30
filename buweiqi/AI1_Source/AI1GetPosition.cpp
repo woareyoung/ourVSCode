@@ -11,9 +11,9 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		InitializeD();
 		return;
 	}
-	CalculatePerf(line, column);//分析对手并预测
 	OT = (onTurn == 1 || onTurn == -1) ? 1 : 2;
 	PlayerNumber = OT == 1 ? 2 : 1;//设置该AI的玩家编号
+//	CalculatePerf(line, column);//分析对手并预测（未写完，先不要调用）
 	cross[line][column] = OT;//先更新棋盘信息数组
 	///按比例缩小分值
 	if (line < 3 || line > 7 || column < 3 || column > 7) RateResetScore(0.3);
@@ -51,6 +51,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 ///控制台显示信息函数
 void AI1::Display(int n, int line, int column)
 {
+	/*
 	_cprintf("Player %d:  line:%d  column:%d\n\t", n, line, column);
 	for (int i = 0; i < 10; )
 	{
@@ -63,4 +64,5 @@ void AI1::Display(int n, int line, int column)
 		if (++i < 10) _cprintf("%d\t", i);
 	}
 	_cprintf("\n");
+	*/
 }

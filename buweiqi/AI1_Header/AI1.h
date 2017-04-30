@@ -68,7 +68,8 @@ private:
 	///在Record.cpp文件中
 	void RecordStep(int line, int column);//用于记录对手数据
 	///在Clear.cpp文件中
-	void ClearLimb();//清除无用的分支
+	void ClearLimb(int usefulPointLine, int usefulPointColumn);//清除无用的分支
+	void ClearChild(CHAIN *child);//清除无用的子树
 };
 
 

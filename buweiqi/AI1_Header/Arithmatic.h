@@ -38,6 +38,8 @@ class Arithmatic
 public:
 	int StepNumber;//记录对手下了多少步
 	int MaxStepNumber;//当下够了MaxStepNumber步后构建回归方程
+	int MaxParallel;//每一步预测的可能性的最大值
+	int MaxNext;//树的最大深度
 	double a;//回归方程常数项
 	double b;//回归方程斜率
 	double _x;//x平均值，x指代第几步
@@ -50,6 +52,7 @@ public:
 	STEP *Step;//静态记录头结点
 	STEP *SSS;//动态尾结点记录
 	CHAIN *HeadChain;//动态头结点
+	CHAIN *TailParallel;//平行链的尾结点
 };
 
 #endif // ARITHMATIC_H_INCLUDED

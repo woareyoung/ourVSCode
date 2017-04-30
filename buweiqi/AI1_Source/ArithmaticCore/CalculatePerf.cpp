@@ -3,6 +3,7 @@
 ///记录数据
 void AI1::CalculatePerf(int line, int column)
 {
+	ClearLimb(line, column);//删除无用的预测分支
 	GetMaxScorePosition();//获取棋盘最大分值
 	RecordStep(line, column);//记录对手下棋数据
 	if (StepNumber < MaxStepNumber)
@@ -11,5 +12,5 @@ void AI1::CalculatePerf(int line, int column)
 	else if ((StepNumber - MaxStepNumber) % 5 == 0) BulidRegressionEquation();
 	///根据回归方程确定进攻性能
 	if (StepNumber > MaxStepNumber - 1) AttackPerformance = (StepNumber + 1) * b + a;
-	Forecast(1);
+//	Forecast(1);
 }
