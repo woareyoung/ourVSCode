@@ -248,7 +248,7 @@ void SelectFun()
 	ShowWindow(CB.SelectAI, SW_SHOW);//设置窗口可视
 	int line, column;//用于检查AI是否已完成（即可以进行下棋了）
 	///检查AI1
-	if (!ShowSelect1)
+	if (!ShowSelect1 && CB.Player1AI != &CB.ai1 && CB.Player2AI != &CB.ai1)
 	{
 		line = CB.line;
 		column = CB.column;
@@ -260,7 +260,7 @@ void SelectFun()
 		}
 	}
 	///检查AI2
-	if (!ShowSelect2)
+	if (!ShowSelect2 && CB.Player1AI != &CB.ai2 && CB.Player2AI != &CB.ai2)
 	{
 		CB.line = line;
 		CB.column = column;
@@ -272,7 +272,7 @@ void SelectFun()
 		}
 	}
 	///检查AI3
-	if (!ShowSelect3)
+	if (!ShowSelect3 && CB.Player1AI != &CB.ai3 && CB.Player2AI != &CB.ai3)
 	{
 		CB.line = line;
 		CB.column = column;
