@@ -54,7 +54,7 @@ AI1::AI1()
 ///初始化数据
 void AI1::InitializeD()
 {
-	ClearLimb(NULL);
+	ClearLimb(0, 0);
 	a = 0;//初始化常数项
 	b = 0;//初始化斜率
 	int i, j;
