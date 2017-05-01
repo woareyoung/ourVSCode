@@ -8,5 +8,6 @@ void AI1::RecordStep(int line, int column)
 	STEP *S = new STEP;//创建结点
 	SSS->next = S;
 	S->Number = SSS->Number + 1;//设置将下一步的步数
+	S->next = NULL;
 	SSS = S;//记录动态尾结点
 }

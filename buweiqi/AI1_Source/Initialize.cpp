@@ -48,8 +48,8 @@ AI1::AI1()
 	MaxParallel = 5;//每一步预测5种可能性
 	MaxNext = 10;//设置树最大深度为10层
 
-	Step = NULL;
-	TailParallel = NULL;
+	StepHead = NULL;
+	HeadChain = NULL;
 }
 ///初始化数据
 void AI1::InitializeD()
@@ -77,23 +77,25 @@ void AI1::InitializeD()
 	}
 	AttackPerformance = 1;//初始化对手进攻性能
 	///清空链表
-	if (Step != NULL)
+	if (StepHead != NULL)
 	{
-		STEP *p = Step->next;
-		delete Step;
+		STEP *p;
+		p = StepHead->next;
+		delete StepHead;
 		while (p != NULL)
 		{
-			delete Step;
-			Step = p;
-			p = Step->next;
+			StepHead = p;
+			p = StepHead->next;
+			delete StepHead;
 		}
+		StepHead = NULL;
 	}
-	if(Step == NULL)
+	if(StepHead == NULL)
 	{
-		Step = new STEP;
-		Step->Number = 1;
-		Step->ScoreRate = 0;
-		Step->next = NULL;
-		SSS = Step;
+		StepHead = new STEP;
+		StepHead->Number = 1;
+		StepHead->ScoreRate = 0;
+		StepHead->next = NULL;
+		SSS = StepHead;
 	}
 }

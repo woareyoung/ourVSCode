@@ -17,7 +17,7 @@ void AI1::CalculateX()
 ///计算y平均值
 void AI1::CalculateY()
 {
-	STEP *s = Step;
+	STEP *s = StepHead;
 	_y = 0;
 	while (s->ScoreRate != 0)
 	{
@@ -34,7 +34,7 @@ void AI1::CalculateA()
 ///计算回归方程斜率
 void AI1::CalculateB()
 {
-	STEP *s = Step;
+	STEP *s = StepHead;
 	double Parent = 0;//分母
 	double Son = 0;//分子
 	while (s->ScoreRate != 0)

@@ -49,7 +49,7 @@ public:
 	double CorrectRate;//修正系数
 	SPECIALPOINTAMOUNT spa[3];//下标0没用，1、2对应玩家1、玩家2
 	POINTSCORE PoS;//0表示缺口、1表示虎口、2表示眼
-	STEP *Step;//静态记录头结点
+	STEP *StepHead;//静态记录头结点
 	STEP *SSS;//动态尾结点记录
 	CHAIN *HeadChain;//动态头结点
 	CHAIN *TailParallel;//平行链的尾结点

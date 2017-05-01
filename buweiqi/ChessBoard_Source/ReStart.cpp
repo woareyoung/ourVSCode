@@ -23,6 +23,8 @@ void ChessBoard::ReStart()
 	ai3.GetPosition(line, column, 0);
 	line = 0;
 	column = 0;
+	Player1AI = NULL;
+	Player2AI = NULL;
 
 	PostMessage(RootHwnd, WM_PAINT, (WPARAM)NULL, (LPARAM)NULL);
 
