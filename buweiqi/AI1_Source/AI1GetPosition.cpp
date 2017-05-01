@@ -13,7 +13,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 	}
 	OT = (onTurn == 1 || onTurn == -1) ? 1 : 2;
 	PlayerNumber = OT == 1 ? 2 : 1;//设置该AI的玩家编号
-//	CalculatePerf(line, column);//分析对手并预测（未写完，先不要调用）
+	CalculatePerf(line, column);//分析对手并预测（未写完，先不要调用）
 	cross[line][column] = OT;//先更新棋盘信息数组
 	///按比例缩小分值
 	if (line < 3 || line > 7 || column < 3 || column > 7) RateResetScore(0.3);

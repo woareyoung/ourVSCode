@@ -115,6 +115,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			else
 			{
 				SendMessageA((HWND)lParam, WM_SETTEXT, (WPARAM)NULL, LPARAM("使用AI"));
+				CB.Player1AI = NULL;
 				CB.Player1isAI = false;
 			}
 			break;
@@ -129,6 +130,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			else
 			{
 				SendMessageA((HWND)lParam, WM_SETTEXT, (WPARAM)NULL, LPARAM("使用AI"));
+				CB.Player2AI = NULL;
 				CB.Player2isAI = false;
 			}
 			break;
@@ -246,9 +248,9 @@ void SelectFun()
 	GetWindowRect(CB.RootHwnd, &CB.MainWinRect);//获取主窗口在屏幕中的位置
 	MoveWindow(CB.SelectAI, CB.MainWinRect.left + (CB.RootWidth - 250) / 2, CB.MainWinRect.top + (CB.RootHeight - 300) / 2, 250, 300, false);//改变窗口位置和大小
 	ShowWindow(CB.SelectAI, SW_SHOW);//设置窗口可视
-	int line, column;//用于检查AI是否已完成（即可以进行下棋了）
+	int line = CB.line, column = CB.column;//用于检查AI是否已完成（即可以进行下棋了）
 	///检查AI1
-	if (!ShowSelect1)
+	if(CB.Player1AI != &CB.ai1 && CB.Player2AI != &CB.ai1)
 	{
 		line = CB.line;
 		column = CB.column;
@@ -260,7 +262,7 @@ void SelectFun()
 		}
 	}
 	///检查AI2
-	if (!ShowSelect2)
+	if(CB.Player1AI != &CB.ai2 && CB.Player2AI != &CB.ai2)
 	{
 		CB.line = line;
 		CB.column = column;
@@ -272,7 +274,7 @@ void SelectFun()
 		}
 	}
 	///检查AI3
-	if (!ShowSelect3)
+	if(CB.Player1AI != &CB.ai3 && CB.Player2AI != &CB.ai3)
 	{
 		CB.line = line;
 		CB.column = column;
