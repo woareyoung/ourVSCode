@@ -18,11 +18,18 @@
 #define maxLimit 32767
 #define minLimit -32767
 
+#define Black 1;
+#define White 2;
+#define NoChess 4;
+#define Edge 8;
+
 #define isParent 1
 #define isSiblings 2
 
 #define isMax 0
 #define isMin 1
+
+#define getRival(onTurn) (onTurn == isWhite ? isBlack : isWhite)
 
 typedef struct tagDIRECTION
 {
@@ -97,6 +104,7 @@ public:
 	int MinScore();
 	int getMinScore(int& tempLine, int& tempColumn);
 	int singleLayer();
+
 };
 
 #endif // AI2_H_INCLUDED

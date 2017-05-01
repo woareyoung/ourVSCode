@@ -44,17 +44,12 @@ AI1::AI1()
 	BoundryRate = 0.3;//预测界限
 	MaxStepNumber = 15;//构建回归方程的出发条件
 	CorrectRate = 0.15;//进攻性能修正系数
-	
-	MaxParallel = 5;//每一步预测5种可能性
-	MaxNext = 10;//设置树最大深度为10层
 
 	Step = NULL;
-	TailParallel = NULL;
 }
 ///初始化数据
 void AI1::InitializeD()
 {
-	ClearLimb(0, 0);
 	a = 0;//初始化常数项
 	b = 0;//初始化斜率
 	int i, j;
@@ -83,17 +78,14 @@ void AI1::InitializeD()
 		delete Step;
 		while (p != NULL)
 		{
-			delete Step;
 			Step = p;
 			p = Step->next;
+			delete Step;
 		}
 	}
-	if(Step == NULL)
-	{
-		Step = new STEP;
-		Step->Number = 1;
-		Step->ScoreRate = 0;
-		Step->next = NULL;
-		SSS = Step;
-	}
+	if (Step == NULL) Step = new STEP;
+	Step->Number = 1;
+	Step->ScoreRate = 0;
+	Step->next = NULL;
+	SSS = Step;
 }

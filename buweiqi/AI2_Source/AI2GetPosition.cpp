@@ -23,7 +23,7 @@ void AI2::GetPosition(int& line, int& column, int onTurn)
 	this->chessCount++;
 	// 注意传递进来的onTurn参数是对方的，而不是己方的。
 	Rival = (onTurn == isBlack || onTurn == isAI1onTurn) ? isBlack : isWhite;
-	turn2Who = (Rival == isWhite ? isBlack : isWhite);
+	turn2Who = getRival(Rival);
 	PlayerId = turn2Who;
 	cross[line][column] = Rival;
 	chessScore[line][column] = minLimit;
