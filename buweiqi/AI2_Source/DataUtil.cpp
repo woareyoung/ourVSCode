@@ -1,12 +1,11 @@
-#include "../stdafx.h"
 #include "../AI2_Header/AI2.h"
 
 void AI2::initAllArray() {
 	this->chessCount = 0;
-	this->PlayerId = isWhite;
+	this->PlayerId = White;
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 10; j++) {
-			cross[i][j] = 4;
+			cross[i][j] = NoChess;
 		}
 	}
 	resetGo2DeadStatus();

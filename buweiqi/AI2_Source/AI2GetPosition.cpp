@@ -26,7 +26,7 @@ void AI2::GetPosition(int& line, int& column, int onTurn)
 	turn2Who = getRival(Rival);
 	PlayerId = turn2Who;
 	cross[line][column] = Rival;
-	chessScore[line][column] = minLimit;
+	//chessScore[line][column] = minLimit;
 
 	// 设置遍历的深度
 	int temp = maxandmin(1);
@@ -34,6 +34,8 @@ void AI2::GetPosition(int& line, int& column, int onTurn)
 	column = temp % 100;
 	cross[line][column] = turn2Who;
 	this->chessCount++;
+	// 将计算出的位置的分数设为最小值
+	//chessScore[line][column] = minLimit;
 	_cprintf("**************This is chess score*******(%d, %d)***********\n", line, column);
 	for (int i = 1; i < 10; i++)
 	{
@@ -41,7 +43,11 @@ void AI2::GetPosition(int& line, int& column, int onTurn)
 			_cprintf("%d\t", chessScore[i][j]);
 		_cprintf("\n");
 	}
-	// 将计算出的位置的分数设为最小值
-	chessScore[line][column] = minLimit;
-
+	_cprintf("**************This is chess cross*******(%d, %d)***********\n", line, column);
+	for (int i = 1; i < 10; i++)
+	{
+		for (int j = 1; j < 10; j++)
+			_cprintf("%d\t", cross[i][j]);
+		_cprintf("\n");
+	}
 }

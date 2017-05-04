@@ -1,3 +1,4 @@
+#include "./stdafx.h"
 #include "./AI2_Header/AI2.h"
 
 /**
@@ -18,16 +19,16 @@ int patterns_B[] = //BLACK方模式
 	// 开始标志位,4个需要匹配的点，分数
 	PATTERN, 4, 60,
 	// 下面看不懂的看下种子填充算法
-	-1, 0,White | Edge, // 	o 			白子 
-	1, 0, White | Edge, //o	$ *     白子 当前 空位
-	0,-1, White | Edge, // 	o 			白子 
+	-1, 0,White | Edge, // 	o 				白子/边缘 
+	1, 0, White | Edge, //o	$ *     白子/边缘	  当前	空位
+	0,-1, White | Edge, // 	o 				白子/边缘 
 	0,1, NoChess,
 
 	/*********************************************
 	十字围杀，三角围杀，边角围杀都包含
 	**********************************************/
 	PATTERN, 4, 50,
-	-1, -1,Black | Edge, //  #				黑子
+	-1, -1,Black | Edge, //   #				黑子
 	1, -1,Black | Edge,  //#  *  $		黑子 空位 当前
 	0,-1, NoChess,       //   #				黑子
 	0,-2,Black | Edge,
@@ -50,7 +51,7 @@ int patterns_W[] =
 	-1, 0, Black | Edge,
 	1, 0, Black | Edge,
 	0,-1, Black | Edge,
-	0,1, Black,
+	0,1, NoChess,
 
 
 	PATTERN, 4, 50,
@@ -254,7 +255,12 @@ void AI2::Pattern(int *patAdd, int times) {
 							1、采用累加分的方法进行处理
 							2、需要注意该着子点是否是死棋点
 					*******************************************/
+					_cprintf("**************match up***********\n");
 					// 对于当前匹配到的着子点的环境进行分析
+					// 如果当前位置不为空的话，就直接跳出。
+					if (cross[x][y] != NoChess) {
+						goto mismatch;
+					}
 					// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
 					cross[x][y] = turn2Who;
 					if (isGo2Dead(x, y, turn2Who)) {
@@ -263,15 +269,17 @@ void AI2::Pattern(int *patAdd, int times) {
 						// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
 						goto mismatch;
 					}
-					// 临时设置当前获得的位置为我方着子点，判断是否是敌方的自杀点
+					// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
 					cross[x][y] = Rival;
 					if (isGo2Dead(x, y, Rival)) {
 						cross[x][y] = NoChess;
-						// 如果是敌方的自杀点的话，这里就不进行加分处理了   -.-！！！
+						// 如果是敌方的自杀点的话，这里就置零   -.-！！！
+						chessScore[x][y] = 0;
 						goto mismatch;
 					}
-					// 这里什么都没有匹配到，所以进行重置
+					// 这里既不是我方自杀点，也不是敌方自杀点
 					cross[x][y] = NoChess;
+					_cprintf("add score = %d\n", score);
 					chessScore[x][y] += score;// 这里匹配到了一个模板，这个模板的位置就是这个
 				}
 			mismatch:

@@ -19,12 +19,11 @@ int AI2::maxandmin(int depth)
 	{
 		if (PlayerId == White) {
 			turn2Who = tempArrayW[i];
-			Rival = (tempArrayW[i] == isWhite ? isBlack : isWhite);
 		}
 		else if (PlayerId == Black) {
 			turn2Who = tempArrayB[i];
-			Rival = (tempArrayB[i] == isWhite ? isBlack : isWhite);
 		}
+		Rival = getRival(turn2Who);
 		temp = singleLayer();
 	}
 	return temp;
@@ -121,12 +120,12 @@ void AI2::Revalute()
 	// 初始化棋盘的分数
 	initChessScore();
 	// 估值并加分
-//	chessStatusShaped();// 十字围杀
-//	AcrossCorners();// 边角围杀
-//	Tirangle();// 三角围杀
+	//	chessStatusShaped();// 十字围杀
+	//	AcrossCorners();// 边角围杀
+	//	Tirangle();// 三角围杀
 
-	startPattern();
 	// 这里进行模板匹配
+	startPattern();
 }
 
 int AI2::FindPosition() {
@@ -135,7 +134,7 @@ int AI2::FindPosition() {
 
 	for (int i = 1; i < 10; i++) {
 		for (int j = 1; j < 1; j++) {
-			if (chessScore[i][j] == minLimit) 
+			if (cross[i][j] != NoChess || chessScore[i][j] == minLimit)
 				continue;
 			// 对于当前匹配到的着子点的环境进行分析
 			// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
@@ -144,14 +143,14 @@ int AI2::FindPosition() {
 				chessScore[x][y] = minLimit;
 				cross[x][y] = NoChess;
 				// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
-				goto Pos;
+				continue;
 			}
 			// 临时设置当前获得的位置为我方着子点，判断是否是敌方的自杀点
 			cross[x][y] = Rival;
 			if (isGo2Dead(x, y, Rival)) {
 				cross[x][y] = NoChess;
 				// 如果是敌方的自杀点的话，这里就不进行加分处理了   -.-！！！
-				goto Pos;
+				continue;
 			}
 			// 这里什么都没有匹配到，所以进行重置
 			cross[x][y] = NoChess;

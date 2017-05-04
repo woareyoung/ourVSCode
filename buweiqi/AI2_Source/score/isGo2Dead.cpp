@@ -81,7 +81,7 @@ DIRECTION direction_8[] = { { -1, 0 },{ 0, 1 },{ 1, 0 },{ 0, -1 },{ -1, 1 },{ 1,
 bool AI2::isGo2Dead(int line, int column, int type)
 {
 	int player = type;//记录己方的编号（是1还是2）
-	int rival = player == 1 ? 2 : 1;//记录对方的编号（是1还是2）
+	int rival = getRival(player);//记录对方的编号（是1还是2）
 	for (int i = 0; i < 4; i++) Position[i] = false;
 	for (int i = 0; i < 4; i++)
 	{
@@ -117,7 +117,7 @@ bool AI2::Besieg(int RivalLine, int RivalColumn, int player, int rival)
 		&& isGo2DeadStatus[RivalLine - 1][RivalColumn] == false)
 		tie[0] = Besieg(RivalLine - 1, RivalColumn, player, rival);
 	//若对方棋子的上方没有棋子，直接返回false
-	else if (cross[RivalLine - 1][RivalColumn] == 0 && RivalLine - 1 > 0) return false;
+	else if (cross[RivalLine - 1][RivalColumn] == NoChess && RivalLine - 1 > 0) return false;
 	//若对方棋子的上方有己方的棋子或已到边缘
 	else tie[0] = true;
 	//若对方棋子的下方有对方的棋子且未到下边缘
@@ -125,7 +125,7 @@ bool AI2::Besieg(int RivalLine, int RivalColumn, int player, int rival)
 		&& isGo2DeadStatus[RivalLine + 1][RivalColumn] == false)
 		tie[1] = Besieg(RivalLine + 1, RivalColumn, player, rival);
 	//若对方棋子的下方没有棋子
-	else if (cross[RivalLine + 1][RivalColumn] == 0 && RivalLine + 1 < 10) return false;
+	else if (cross[RivalLine + 1][RivalColumn] == NoChess && RivalLine + 1 < 10) return false;
 	//若对方棋子的下方有己方的棋子或已到边缘
 	else tie[1] = true;
 	//若对方棋子的右方有对方的棋子且未到右边缘
@@ -133,7 +133,7 @@ bool AI2::Besieg(int RivalLine, int RivalColumn, int player, int rival)
 		&& isGo2DeadStatus[RivalLine][RivalColumn + 1] == false)
 		tie[2] = Besieg(RivalLine, RivalColumn + 1, player, rival);
 	//若对方棋子的右方没有棋子
-	else if (cross[RivalLine][RivalColumn + 1] == 0 && RivalColumn + 1 < 10) return false;
+	else if (cross[RivalLine][RivalColumn + 1] == NoChess && RivalColumn + 1 < 10) return false;
 	//若对方棋子的右方有己方的棋子或已到边缘
 	else tie[2] = true;
 	//若对方棋子的左方有对方的棋子且未到左边缘
@@ -141,7 +141,7 @@ bool AI2::Besieg(int RivalLine, int RivalColumn, int player, int rival)
 		&& isGo2DeadStatus[RivalLine][RivalColumn - 1] == false)
 		tie[3] = Besieg(RivalLine, RivalColumn - 1, player, rival);
 	//若对方棋子的左方没有棋子
-	else if (cross[RivalLine][RivalColumn - 1] == 0 && RivalColumn - 1 > 0) return false;
+	else if (cross[RivalLine][RivalColumn - 1] == NoChess && RivalColumn - 1 > 0) return false;
 	//若对方棋子的左方有己方的棋子或已到边缘
 	else tie[3] = true;
 	if (tie[0] && tie[1] && tie[2] && tie[3]) return true;
@@ -175,7 +175,7 @@ bool AI2::IsDeadChess(int stack[][2], int len, int type)
 	int x, y;
 	int tempCount = 0;
 	int tie[4] = { false,false,false,false };
-	for (int i = 0; i<len; i++)
+	for (int i = 0; i < len; i++)
 	{
 		x = stack[i][0];
 		y = stack[i][1];
@@ -253,7 +253,7 @@ bool AI2::IsDeadChess(int stack[][2], int len, int type)
 */
 void AI2::AddDeadChessScore(int stack[][2], int len)
 {
-	for (int i = 0; i<len; i++)
+	for (int i = 0; i < len; i++)
 	{
 		chessScore[stack[i][0]][stack[i][1]] = minLimit;
 		_cprintf("----------dead chess position:  line=%d, column=%d\n", stack[i][0], stack[i][1]);
