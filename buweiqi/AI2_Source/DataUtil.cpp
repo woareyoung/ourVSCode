@@ -6,7 +6,7 @@ void AI2::initAllArray() {
 	this->PlayerId = isWhite;
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 10; j++) {
-			cross[i][j] = 0;
+			cross[i][j] = 4;
 		}
 	}
 	resetGo2DeadStatus();

@@ -77,7 +77,7 @@ void AI1::InitializeD()
 	}
 	AttackPerformance = 1;//初始化对手进攻性能
 	///清空链表
-	if (Step != NULL)
+	if (StepHead != NULL)
 	{
 		STEP *p;
 		p = StepHead->next;

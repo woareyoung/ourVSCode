@@ -177,7 +177,6 @@
     <ClCompile Include="AI2_Source\DataUtil.cpp" />
     <ClCompile Include="AI2_Source\AI2GetPosition.cpp" />
     <ClCompile Include="AI2_Source\MaxandMinFunction.cpp" />
-    <ClCompile Include="AI2_Source\Score.cpp" />
     <ClCompile Include="AI2_Source\score\cornerScan.cpp" />
     <ClCompile Include="AI2_Source\score\crossShapeScan.cpp" />
     <ClCompile Include="AI2_Source\score\isGo2Dead.cpp" />
@@ -194,6 +193,7 @@
     <ClCompile Include="ChessBoard_Source\util\int2String.cpp" />
     <ClCompile Include="ChessBoard_Source\util\recursion.cpp" />
     <ClCompile Include="ChessBoard_Source\WinOrLose.cpp" />
+    <ClCompile Include="pattern.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

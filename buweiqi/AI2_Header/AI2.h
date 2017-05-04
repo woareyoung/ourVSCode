@@ -18,16 +18,22 @@
 #define maxLimit 32767
 #define minLimit -32767
 
-#define Black 1;
-#define White 2;
-#define NoChess 4;
-#define Edge 8;
-
 #define isParent 1
 #define isSiblings 2
 
 #define isMax 0
 #define isMin 1
+
+// 用于匹配模式
+#define Black 1 // 黑子
+#define White 2// 白子
+#define NoChess 4// 没有棋子
+#define Edge 8 // 边界点
+#define PATTERN 13// 匹配开始
+#define PATTEND 10// 匹配结束
+// 判断棋子是否落在棋盘内
+#define on1board(x) (1 <= (x) && (x) < 10)
+#define onboard(x, y) (on1board(x) && on1board(y))  //棋子落在棋盘里
 
 #define getRival(onTurn) (onTurn == isWhite ? isBlack : isWhite)
 
@@ -80,7 +86,7 @@ public:
 	void AddDeadChessScore(int stack[][2], int len);
 	bool IsDeadChess(int stack[][2], int len, int type);
 	int isFinal();
-	
+
 	// 判断是否是死棋位
 	bool isGo2Dead(int line, int column, int type);
 	void setStatus(int RivalLine, int RivalColumn);
@@ -99,12 +105,17 @@ public:
 	// 博弈树部分
 	void Revalute();
 	int maxandmin(int depth);
-	int MaxScore();
-	void getMaxScore(int& tempLine, int& tempColumn);
-	int MinScore();
-	int getMinScore(int& tempLine, int& tempColumn);
 	int singleLayer();
+	int DealWithScore(bool isEqual);
+	void getMaxScore(int& tempLine, int& tempColumn);
+	void getMinScore(int& tempLine, int& tempColumn);
 
+	// 匹配函数
+	void startPattern();
+	void Pattern(int *patAdd, int times);
+
+	// 当没有匹配到的时候获取一个合适的位置
+	int FindPosition();
 };
 
 #endif // AI2_H_INCLUDED

@@ -32,11 +32,8 @@ void AI2::GetPosition(int& line, int& column, int onTurn)
 	int temp = maxandmin(1);
 	line = temp / 100;
 	column = temp % 100;
-	// 将计算出的位置的分数设为最小值
-	chessScore[line][column] = minLimit;
 	cross[line][column] = turn2Who;
 	this->chessCount++;
-
 	_cprintf("**************This is chess score*******(%d, %d)***********\n", line, column);
 	for (int i = 1; i < 10; i++)
 	{
@@ -44,4 +41,7 @@ void AI2::GetPosition(int& line, int& column, int onTurn)
 			_cprintf("%d\t", chessScore[i][j]);
 		_cprintf("\n");
 	}
+	// 将计算出的位置的分数设为最小值
+	chessScore[line][column] = minLimit;
+
 }
