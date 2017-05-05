@@ -177,11 +177,8 @@
     <ClCompile Include="AI2_Source\DataUtil.cpp" />
     <ClCompile Include="AI2_Source\AI2GetPosition.cpp" />
     <ClCompile Include="AI2_Source\MaxandMinFunction.cpp" />
-    <ClCompile Include="AI2_Source\score\cornerScan.cpp" />
-    <ClCompile Include="AI2_Source\score\crossShapeScan.cpp" />
     <ClCompile Include="AI2_Source\score\isGo2Dead.cpp" />
     <ClCompile Include="AI2_Source\score\priority.cpp" />
-    <ClCompile Include="AI2_Source\score\triangleScan.cpp" />
     <ClCompile Include="AI3_Source\AI3GetPosition.cpp" />
     <ClCompile Include="buweiqi.cpp" />
     <ClCompile Include="ChessBoard_Source\InitData.cpp" />

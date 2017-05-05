@@ -71,21 +71,6 @@ public:
 	// 获取最后着子的位置
 	void GetPosition(int &line, int &column, int onTurn);
 
-	// 对角
-	void AcrossCorners();
-	void ACScan(int line, int column, int line1, int column1, int line2, int column2);
-
-	// 三角
-	void Tirangle();
-	void UTirangle();
-	void LTirangle();
-	void DTirangle();
-	void RTirangle();
-
-	// 十字
-	void chessStatusShaped();
-	void JudgeCShape(int line, int column);
-
 	// 是否构成死棋
 	void isGo2Dead(int type);
 	void AddDeadChessScore(int stack[][2], int len);

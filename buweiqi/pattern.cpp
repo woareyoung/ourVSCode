@@ -45,16 +45,22 @@ int patterns_B[] = //BLACK方模式
 	0, 1,NoChess,	//        空位
 	1, 0,NoChess,	//
 
-					/*********************************************
-					我方的十字围杀，三角围杀，边角围杀都包含
-					我方构建围杀阵是第二优先级
-					这是主动构成围杀阵(缺二构成围杀阵)
-					**********************************************/
+	/*********************************************
+	我方的十字围杀，三角围杀，边角围杀都包含
+	我方构建围杀阵是第二优先级
+	这是主动构成围杀阵(缺二构成围杀阵)
+	**********************************************/
 	PATTERN, 4, 30,
 	-1, -1,Black | Edge, //		 黑子
 	1, -1,Black | Edge,  //	空位 空位 当前
 	0,-1, NoChess,       // 	 黑子
 	0,-2,NoChess,
+
+	PATTERN, 4, 30,
+	-1, -1,Black | Edge, //		 空位
+	1, -1,NoChess,  	//	黑子 空位 当前
+	0,-1, NoChess,       // 	 黑子
+	0,-2,Black | Edge,
 
 	/*********************************************
 	匹配自杀点
@@ -64,6 +70,21 @@ int patterns_B[] = //BLACK方模式
 	1, -1,Black | Edge,  //	黑子 白子 当前
 	0,-1, White,       	// 	 	黑子
 	0,-2,Black | Edge,
+
+	/*********************************************
+	缺三
+	**********************************************/
+	PATTERN, 4, 20,
+	-1, -1,NoChess | Edge, 		//		 	空位
+	1, -1,Black,  				//	空位		空位 	当前
+	0,-1, NoChess | Edge,        //		 	黑子
+	0,-2, NoChess | Edge,
+
+	PATTERN, 4, 20,
+	-1, -1,NoChess | Edge, 		//		 	空位
+	1, -1,NoChess | Edge,  		//	黑子 	空位 	当前
+	0,-1, NoChess | Edge,        //		 	空位
+	0,-2, Black,
 
 	PATTEND //模式结束
 };
@@ -95,11 +116,29 @@ int patterns_W[] =
 	0,-1, NoChess,
 	0,1, NoChess,
 
+	PATTERN, 4, 30,
+	-1, -1,White | Edge,
+	1, -1,NoChess,
+	0,-1, NoChess,
+	0,-2,White | Edge,
+
 	PATTERN, 4, minLimit,
 	-1, -1,White | Edge,
 	1, -1,White | Edge,
 	0,-1, Black,
 	0,-2,White | Edge,
+
+	PATTERN, 4, 20,
+	-1, -1,NoChess | Edge,
+	1, -1, White,
+	0,-1, NoChess | Edge,
+	0,-2, NoChess | Edge,
+
+	PATTERN, 4, 20,
+	-1, -1,NoChess | Edge,
+	1, -1,NoChess | Edge,
+	0,-1, NoChess | Edge,
+	0,-2, White,
 
 	PATTEND
 };
@@ -257,7 +296,7 @@ void AI2::Pattern(int *patAdd, int times) {
 	register int x, y, j;// xy是匹配到的空位，J使用用来控制模板遍历的结束标识符
 	register int *is, *iis;// 指针，用于模板位置的指向
 	register int xs, ys;
-	Pos emptyPos[2];
+	Pos emptyPos[3];
 	int start = 0;
 	int score;
 	int *patterns = patAdd;
@@ -303,6 +342,11 @@ void AI2::Pattern(int *patAdd, int times) {
 					//如果执行到这个地方来了，我们就匹配到一个模版
 					// 对于匹配到的模板，我们需要进行模板环境的判断
 					// 1、是否被围杀，2、是否围杀别人
+
+					/******************************************
+					判断当前匹配到的空位是否是敌方的自杀点，
+					如果是的话，就把该点的分数设置为0，跳过匹配模式
+					*******************************************/
 					for (int i = 0; i < start; ++i) {
 						// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
 						cross[emptyPos[i].line][emptyPos[i].column] = Rival;

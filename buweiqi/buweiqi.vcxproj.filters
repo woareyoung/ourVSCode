@@ -140,19 +140,10 @@
     <ClCompile Include="AI2_Source\DataUtil.cpp">
       <Filter>Source Files\AI2_Source</Filter>
     </ClCompile>
-    <ClCompile Include="AI2_Source\score\cornerScan.cpp">
-      <Filter>Source Files\AI2_Source\score</Filter>
-    </ClCompile>
-    <ClCompile Include="AI2_Source\score\triangleScan.cpp">
-      <Filter>Source Files\AI2_Source\score</Filter>
-    </ClCompile>
     <ClCompile Include="AI2_Source\score\priority.cpp">
       <Filter>Source Files\AI2_Source\score</Filter>
     </ClCompile>
     <ClCompile Include="AI2_Source\score\isGo2Dead.cpp">
-      <Filter>Source Files\AI2_Source\score</Filter>
-    </ClCompile>
-    <ClCompile Include="AI2_Source\score\crossShapeScan.cpp">
       <Filter>Source Files\AI2_Source\score</Filter>
     </ClCompile>
     <ClCompile Include="AI1_Source\UpdateScore.cpp">
