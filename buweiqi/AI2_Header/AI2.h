@@ -43,6 +43,11 @@ typedef struct tagDIRECTION
 	int y_offset;
 } DIRECTION;
 
+struct Pos {
+	int line;
+	int column;
+};
+
 class AI2 : public AI, public AIPlayer
 {
 private:

@@ -51,10 +51,19 @@ int patterns_B[] = //BLACK方模式
 					这是主动构成围杀阵(缺二构成围杀阵)
 					**********************************************/
 	PATTERN, 4, 30,
-	-1, 0, Black | Edge,	//		黑子/边界
-	1, 0, Black | Edge,		// 空位	当前位置	空位
-	0,-1, NoChess,			//		黑子/边界
-	0,1, NoChess,			//
+	-1, -1,Black | Edge, //		 黑子
+	1, -1,Black | Edge,  //	空位 空位 当前
+	0,-1, NoChess,       // 	 黑子
+	0,-2,NoChess,
+
+	/*********************************************
+	匹配自杀点
+	**********************************************/
+	PATTERN, 4, minLimit,
+	-1, -1,Black | Edge, //		 黑子
+	1, -1,Black | Edge,  //	黑子 白子 当前
+	0,-1, White,       	// 	 	黑子
+	0,-2,Black | Edge,
 
 	PATTEND //模式结束
 };
@@ -85,6 +94,12 @@ int patterns_W[] =
 	1, 0, White | Edge,
 	0,-1, NoChess,
 	0,1, NoChess,
+
+	PATTERN, 4, minLimit,
+	-1, -1,White | Edge,
+	1, -1,White | Edge,
+	0,-1, Black,
+	0,-2,White | Edge,
 
 	PATTEND
 };
@@ -242,6 +257,8 @@ void AI2::Pattern(int *patAdd, int times) {
 	register int x, y, j;// xy是匹配到的空位，J使用用来控制模板遍历的结束标识符
 	register int *is, *iis;// 指针，用于模板位置的指向
 	register int xs, ys;
+	Pos emptyPos[2];
+	int start = 0;
 	int score;
 	int *patterns = patAdd;
 	// 遍历整一个模板
@@ -252,6 +269,7 @@ void AI2::Pattern(int *patAdd, int times) {
 			{
 				if (NoChess == cross[x][y])
 				{
+					start = 0;
 					// 遍历模板的第一块内容
 					for (iis = is + 1, j = *iis++, score = *iis++; j; --j)//首次循环 
 					{
@@ -259,7 +277,24 @@ void AI2::Pattern(int *patAdd, int times) {
 						ys = *iis++;
 						// 棋子在棋盘内
 						if (onboard(x + xs, y + ys)) {
-							if (0 == (cross[x + xs][y + ys] & *iis++)) goto mismatch;//不相同的
+							if (0 == (cross[x + xs][y + ys] & *iis++)) {
+								goto mismatch;//不相同的
+							}
+							else
+							{
+								if (cross[x + xs][y + ys] == NoChess) {
+									// 假如当前空白点的分数值为0的时候，就直接跳过
+									// 因为分数为0表示当前空白点的位置是敌方自杀点，没必要理会
+									if (chessScore[x + xs][y + ys] == 0) {
+										goto mismatch;
+									}
+									else {
+										emptyPos[start].line = x + xs;
+										emptyPos[start].column = y + ys;
+										++start;
+									}
+								}
+							}
 						}
 						else {
 							if (0 == (Edge & *iis++)) goto mismatch;//不是边界
@@ -268,7 +303,19 @@ void AI2::Pattern(int *patAdd, int times) {
 					//如果执行到这个地方来了，我们就匹配到一个模版
 					// 对于匹配到的模板，我们需要进行模板环境的判断
 					// 1、是否被围杀，2、是否围杀别人
-
+					for (int i = 0; i < start; ++i) {
+						// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
+						cross[emptyPos[i].line][emptyPos[i].column] = Rival;
+						bool flag = isGo2Dead(emptyPos[i].line, emptyPos[i].column, Rival);
+						if (flag) {
+							cross[emptyPos[i].line][emptyPos[i].column] = NoChess;
+							// 如果是敌方的自杀点的话，这里就置零   -.-！！！
+							chessScore[emptyPos[i].line][emptyPos[i].column] = 0;
+							goto mismatch;
+						}
+						// 这里既不是我方自杀点，也不是敌方自杀点
+						cross[emptyPos[i].line][emptyPos[i].column] = NoChess;
+					}
 					/******************************************
 					这里有一个逻辑需要处理：
 					假如一个点被匹配到多次的话，如何处理？

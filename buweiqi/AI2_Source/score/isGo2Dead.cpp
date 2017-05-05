@@ -85,10 +85,10 @@ bool AI2::isGo2Dead(int line, int column, int type)
 	for (int i = 0; i < 4; i++) Position[i] = false;
 	for (int i = 0; i < 4; i++)
 	{
-		if (cross[line + direction_8[i].x_offset][column + direction_8[i].y_offset] == Rival)
+		if (cross[line + direction_8[i].x_offset][column + direction_8[i].y_offset] == rival)
 		{
 			reduceRecursionTimes();
-			if (Besieg(line + direction_8[i].x_offset, column + direction_8[i].y_offset, turn2Who, Rival))
+			if (Besieg(line + direction_8[i].x_offset, column + direction_8[i].y_offset, turn2Who, rival))
 				return true;
 			Position[i] = true;
 		}
@@ -100,7 +100,7 @@ bool AI2::isGo2Dead(int line, int column, int type)
 		else if (cross[line + direction_8[i].x_offset][column + direction_8[i].y_offset] == turn2Who)
 		{
 			reduceRecursionTimes();
-			Position[i] = Besieg(line, column, Rival, turn2Who);
+			Position[i] = Besieg(line, column, rival, turn2Who);
 		}
 	}
 	return Position[0] && Position[1] && Position[2] && Position[3];
