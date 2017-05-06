@@ -44,7 +44,12 @@ int patterns_B[] = //BLACK方模式
 	0, -1,Edge,		//  边界 当前位置  空位
 	0, 1,NoChess,	//        空位
 	1, 0,NoChess,	//
-
+/*
+	PATTERN, 3, 70,
+	-1, 0,Edge|NoChess,		//   空位&边界   当前位置  
+	-1, 1,White|Edge,		//		白子		空位&边界 	
+	0, 1,NoChess|Edge,	  
+*/
 	/*********************************************
 	我方的十字围杀，三角围杀，边角围杀都包含
 	我方构建围杀阵是第二优先级
@@ -65,11 +70,13 @@ int patterns_B[] = //BLACK方模式
 	/*********************************************
 	匹配自杀点
 	**********************************************/
+	/*
 	PATTERN, 4, minLimit,
 	-1, -1,Black | Edge, //		 黑子
 	1, -1,Black | Edge,  //	黑子 白子 当前
 	0,-1, White,       	// 	 	黑子
 	0,-2,Black | Edge,
+	*/
 
 	/*********************************************
 	缺三
@@ -109,6 +116,12 @@ int patterns_W[] =
 	0, -1,Edge,
 	0, 1,NoChess,
 	1, 0,NoChess,
+/*
+PATTERN, 3, 70,
+-1, 0,Edge | NoChess,
+-1, 1,White | Edge,
+0, 1,NoChess | Edge,
+*/
 
 	PATTERN, 4, 30,
 	-1, 0,White | Edge,
@@ -121,13 +134,13 @@ int patterns_W[] =
 	1, -1,NoChess,
 	0,-1, NoChess,
 	0,-2,White | Edge,
-
+/*
 	PATTERN, 4, minLimit,
 	-1, -1,White | Edge,
 	1, -1,White | Edge,
 	0,-1, Black,
 	0,-2,White | Edge,
-
+*/
 	PATTERN, 4, 20,
 	-1, -1,NoChess | Edge,
 	1, -1, White,
@@ -296,6 +309,7 @@ void AI2::Pattern(int *patAdd, int times) {
 	register int x, y, j;// xy是匹配到的空位，J使用用来控制模板遍历的结束标识符
 	register int *is, *iis;// 指针，用于模板位置的指向
 	register int xs, ys;
+	int mainColor = NoChess;
 	Pos emptyPos[3];
 	int start = 0;
 	int score;
@@ -333,6 +347,9 @@ void AI2::Pattern(int *patAdd, int times) {
 										++start;
 									}
 								}
+								else {
+									mainColor = cross[x + xs][y + ys];
+								}
 							}
 						}
 						else {
@@ -347,15 +364,31 @@ void AI2::Pattern(int *patAdd, int times) {
 					判断当前匹配到的空位是否是敌方的自杀点，
 					如果是的话，就把该点的分数设置为0，跳过匹配模式
 					*******************************************/
+					// 如果当前位置不为空的话，就直接跳出。
+					if (cross[x][y] != NoChess) {
+						goto mismatch;
+					}
 					for (int i = 0; i < start; ++i) {
-						// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
-						cross[emptyPos[i].line][emptyPos[i].column] = Rival;
-						bool flag = isGo2Dead(emptyPos[i].line, emptyPos[i].column, Rival);
-						if (flag) {
-							cross[emptyPos[i].line][emptyPos[i].column] = NoChess;
-							// 如果是敌方的自杀点的话，这里就置零   -.-！！！
-							chessScore[emptyPos[i].line][emptyPos[i].column] = 0;
-							goto mismatch;
+						if (mainColor == Rival) {
+							// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
+							cross[emptyPos[i].line][emptyPos[i].column] = Rival;
+							bool flag = isGo2Dead(emptyPos[i].line, emptyPos[i].column, Rival);
+							if (flag) {
+								cross[emptyPos[i].line][emptyPos[i].column] = NoChess;
+								// 如果是敌方的自杀点的话，这里就置零   -.-！！！
+								chessScore[emptyPos[i].line][emptyPos[i].column] = 0;
+								goto mismatch;
+							}
+						}
+						else if (mainColor == turn2Who) {
+							// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
+							cross[x][y] = turn2Who;
+							if (isGo2Dead(x, y, turn2Who)) {
+								chessScore[x][y] = minLimit;
+								cross[x][y] = NoChess;
+								// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
+								goto mismatch;
+							}
 						}
 						// 这里既不是我方自杀点，也不是敌方自杀点
 						cross[emptyPos[i].line][emptyPos[i].column] = NoChess;
@@ -366,12 +399,7 @@ void AI2::Pattern(int *patAdd, int times) {
 					1、采用累加分的方法进行处理
 					2、需要注意该着子点是否是死棋点
 					*******************************************/
-					_cprintf("**************match up***********\n");
 					// 对于当前匹配到的着子点的环境进行分析
-					// 如果当前位置不为空的话，就直接跳出。
-					if (cross[x][y] != NoChess) {
-						goto mismatch;
-					}
 					// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
 					cross[x][y] = turn2Who;
 					if (isGo2Dead(x, y, turn2Who)) {
@@ -381,6 +409,7 @@ void AI2::Pattern(int *patAdd, int times) {
 						goto mismatch;
 					}
 					// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
+					if (cross[x][y] == NoChess && chessScore[x][y] == 0) goto mismatch;
 					cross[x][y] = Rival;
 					if (isGo2Dead(x, y, Rival)) {
 						cross[x][y] = NoChess;
@@ -390,7 +419,6 @@ void AI2::Pattern(int *patAdd, int times) {
 					}
 					// 这里既不是我方自杀点，也不是敌方自杀点
 					cross[x][y] = NoChess;
-					_cprintf("add score = %d\n", score);
 					chessScore[x][y] += score;// 这里匹配到了一个模板，这个模板的位置就是这个
 				}
 			mismatch:

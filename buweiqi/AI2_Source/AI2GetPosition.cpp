@@ -16,26 +16,32 @@ void AI2::GetPosition(int& line, int& column, int onTurn)
 		// 这里是重新开始游戏的数据重置过程
 		line++;
 		column++;
-		resetGo2DeadStatus();
 		initAllArray();
+		initChessScore(true);
+		resetGo2DeadStatus();
 		return;
 	}
+	/******************************************
+	添加敌方着子点到我方棋盘上
+	*******************************************/
 	this->chessCount++;
 	// 注意传递进来的onTurn参数是对方的，而不是己方的。
-	Rival = (onTurn == isBlack || onTurn == isAI1onTurn) ? isBlack : isWhite;
-	turn2Who = getRival(Rival);
+	Rival = (onTurn == Black || onTurn == isAI1onTurn) ? Black : White;
+	this->turn2Who = getRival(Rival);
+	this->PlayerId = turn2Who;
 	PlayerId = turn2Who;
 	cross[line][column] = Rival;
-	//chessScore[line][column] = minLimit;
 
+	/******************************************
+	我方着子
+	*******************************************/
+	ScanChessBroad();
 	// 设置遍历的深度
 	int temp = maxandmin(1);
 	line = temp / 100;
 	column = temp % 100;
 	cross[line][column] = turn2Who;
-	this->chessCount++;
 	// 将计算出的位置的分数设为最小值
-	//chessScore[line][column] = minLimit;
 	_cprintf("**************This is chess score*******(%d, %d)***********\n", line, column);
 	for (int i = 1; i < 10; i++)
 	{

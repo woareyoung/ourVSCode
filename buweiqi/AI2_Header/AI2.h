@@ -4,17 +4,6 @@
 #include "../chessBoard_Header/AI.h"
 #include "AIPlayer.h"
 
-#define cornerScore 120 // 边角分数
-#define cornerScoreFull 160 // 完整构成边角的分数
-#define tirangleScore1 60 // 三角分数
-#define tirangleScore2 120 // 三角分数
-#define tirangleScore3 140 // 三角分数
-#define crossShaped1 40 // 十字分数
-#define crossShaped2 80 // 十字分数
-#define crossShaped3  120// 十字分数
-#define crossShaped4 160 // 十字分数
-#define goodTigersMouth 120  // 优虎口，表示被包围的敌方棋子中只有1~2个
-#define badTigersMouth -120 // 劣虎口，表示被包围圈内都是敌方棋子
 #define maxLimit 32767
 #define minLimit -32767
 
@@ -32,10 +21,10 @@
 #define PATTERN 13// 匹配开始
 #define PATTEND 10// 匹配结束
 // 判断棋子是否落在棋盘内
-#define on1board(x) (1 <= (x) && (x) < 10)
+#define on1board(x) (0 < (x) && (x) < 10)
 #define onboard(x, y) (on1board(x) && on1board(y))  //棋子落在棋盘里
 
-#define getRival(onTurn) (onTurn == isWhite ? isBlack : isWhite)
+#define getRival(onTurn) (onTurn == White ? Black : White)
 
 typedef struct tagDIRECTION
 {
@@ -58,11 +47,10 @@ private:
 	int chessScore[10][10];
 	// isGo2Dead标志数组
 	bool isGo2DeadStatus[10][10];
-	// 边角数组
-	int cornerArray[12];
 	int chessCount;
 	bool Position[4];
 	void resetGo2DeadStatus();
+	void ScanChessBroad();
 public:
 	AI2()
 	{
@@ -70,12 +58,7 @@ public:
 	}
 	// 获取最后着子的位置
 	void GetPosition(int &line, int &column, int onTurn);
-
-	// 是否构成死棋
-	void isGo2Dead(int type);
-	void AddDeadChessScore(int stack[][2], int len);
-	bool IsDeadChess(int stack[][2], int len, int type);
-	int isFinal();
+	bool isFinal();
 
 	// 判断是否是死棋位
 	bool isGo2Dead(int line, int column, int type);
@@ -89,7 +72,7 @@ public:
 	void GoodTigersMouth();
 
 	// 初始化数组
-	void initChessScore();
+	void initChessScore(bool isFirst);
 	void initAllArray();
 
 	// 博弈树部分
