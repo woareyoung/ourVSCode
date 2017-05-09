@@ -18,12 +18,9 @@
 #define White 2// 白子
 #define NoChess 4// 没有棋子
 #define Edge 8 // 边界点
-#define PATTERN 13// 匹配开始
-#define PATTEND 10// 匹配结束
 // 判断棋子是否落在棋盘内
-#define on1board(x) (0 < (x) && (x) < 10)
-#define onboard(x, y) (on1board(x) && on1board(y))  //棋子落在棋盘里
-
+#define isOnChessBoard(x) (0 < (x) && (x) < 10)
+#define OnChessBoard(x, y) (isOnChessBoard(x) && isOnChessBoard(y))  //棋子落在棋盘里
 #define getRival(onTurn) (onTurn == White ? Black : White)
 
 typedef struct tagDIRECTION
