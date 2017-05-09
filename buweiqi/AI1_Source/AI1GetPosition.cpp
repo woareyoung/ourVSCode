@@ -51,7 +51,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 ///控制台显示信息函数
 void AI1::Display(int n, int line, int column)
 {
-	/*
+
 	_cprintf("Player %d:  line:%d  column:%d\n\t", n, line, column);
 	for (int i = 0; i < 10; )
 	{
@@ -64,5 +64,5 @@ void AI1::Display(int n, int line, int column)
 		if (++i < 10) _cprintf("%d\t", i);
 	}
 	_cprintf("\n");
-	*/
+
 }

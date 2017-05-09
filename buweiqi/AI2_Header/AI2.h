@@ -85,7 +85,13 @@ public:
 
 	// 匹配函数
 	void startPattern();
-	void Pattern(int *patAdd, int times);
+	void Pattern(int *PatternType);
+	void (AI2::*Reverse[10])(DIRECTION*);
+	void reverse(DIRECTION *PatternType);
+	void reverseXY(DIRECTION *PatternType);
+	void reverse_Y(DIRECTION *PatternType);
+	void reverse_X(DIRECTION *PatternType);
+	void reverse_X_Y(DIRECTION *PatternType);
 
 	// 当没有匹配到的时候获取一个合适的位置
 	int FindPosition();

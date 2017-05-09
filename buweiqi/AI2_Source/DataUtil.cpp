@@ -7,6 +7,21 @@ void AI2::initAllArray() {
 			cross[i][j] = NoChess;
 		}
 	}
+	void(AI2::*temp[])(DIRECTION*) = {
+		nullptr,//(X,Y)     纯粹只是添加进来凑数而已
+		&AI2::reverse,//(X,Y)
+		&AI2::reverse_Y,//(X,-Y)
+		&AI2::reverse_X,//(-X,-Y)
+		&AI2::reverse_Y,//(-X,Y)
+		&AI2::reverseXY,//(Y,-X)
+		&AI2::reverse_Y,//(Y,X)
+		&AI2::reverse_X,//(-Y,X)
+		&AI2::reverse_Y,//(-Y,-X)
+		&AI2::reverse_X_Y//(X,Y)
+	};
+	for (int i = 0; i < 10; i++) {
+		Reverse[i] = temp[i];
+	}
 }
 
 void AI2::initChessScore(bool isFirst)
@@ -55,8 +70,8 @@ bool AI2::isFinal() {
 				NoughtCount++;
 			}
 		}
-						
-	return NoughtCount+minLimitCount == emptyCount;
+
+	return NoughtCount + minLimitCount == emptyCount;
 }
 
 void AI2::resetGo2DeadStatus() {
@@ -96,7 +111,7 @@ void AI2::ScanChessBroad() {
 					// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
 					goto mismatch;
 				}
-			}	
+			}
 		mismatch:;
 		}
 	}
