@@ -185,7 +185,7 @@
     <ClCompile Include="AI1_Source\AI1GetPosition.cpp">
       <Filter>Source Files\AI1_Source</Filter>
     </ClCompile>
-    <ClCompile Include="pattern.cpp">
+    <ClCompile Include="AI2_Source\pattern.cpp">
       <Filter>Source Files\AI2_Source</Filter>
     </ClCompile>
   </ItemGroup>

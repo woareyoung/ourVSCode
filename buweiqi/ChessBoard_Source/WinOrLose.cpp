@@ -66,8 +66,10 @@ bool ChessBoard::WinOrLose()
 bool ChessBoard::Check(int OriLine, int OriColumn, int CLine, int CColumn, int player, int i)
 {
 	int rival = player == 1 ? 2 : 1;
+	//若己方棋子已到边缘
+	if (CColumn == 0 || CColumn == 10 || CLine == 0 || CLine == 10) Position[i] = true;
 	//若有对方的一个棋子
-	if (cross[CLine][CColumn] == rival)
+	else if (cross[CLine][CColumn] == rival)
 	{
 		reduceRecursionTimes();
 		if (Besieged(CLine, CColumn, player, rival))
@@ -78,8 +80,6 @@ bool ChessBoard::Check(int OriLine, int OriColumn, int CLine, int CColumn, int p
 		}
 		Position[i] = true;
 	}
-	//若己方棋子已到边缘
-	else if (CColumn == 0 || CColumn == 10 || CLine == 0 || CLine == 10) Position[i] = true;
 	//若有己方的棋子
 	else if (cross[CLine][CColumn] == player)
 	{

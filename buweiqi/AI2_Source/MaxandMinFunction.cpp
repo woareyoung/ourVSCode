@@ -134,8 +134,8 @@ int AI2::FindPosition() {
 	register int x = 0;
 	register int y = 0;
 
-	for (int i = 1; i < 10; i++) {
-		for (int j = 1; j < 10; j++) {
+	for (register int i = 1; i < 10; i++) {
+		for (register int j = 1; j < 10; j++) {
 			x = i;
 			y = j;
 			if (cross[x][y] != NoChess || chessScore[x][y] == minLimit) continue;
