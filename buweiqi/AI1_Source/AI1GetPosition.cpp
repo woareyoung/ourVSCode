@@ -11,14 +11,17 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		InitializeD();
 		return;
 	}
-	else if (onTurn == 100)
+	else if (onTurn == 100 || onTurn == 200)
 	{
-		UpdateScore(line, column, 1, false);
-		return;
-	}
-	else if (onTurn == 200)
-	{
-		UpdateScore(line, column, 2, false);
+		if (PlayerNumber == 3 - onTurn / 100)
+		{
+			STEP *s = SSS;
+			SSS = SSS->pre;
+			SSS->next = NULL;
+			delete s;
+			s = NULL;
+		}
+		UpdateScore(line, column, onTurn / 100, false);
 		return;
 	}
 	OT = (onTurn == 1 || onTurn == -1) ? 1 : 2;

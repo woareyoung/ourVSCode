@@ -9,5 +9,6 @@ void AI1::RecordStep(int line, int column)
 	SSS->next = S;
 	S->Number = SSS->Number + 1;//设置将下一步的步数
 	S->next = NULL;
+	S->pre = SSS;
 	SSS = S;//记录动态尾结点
 }

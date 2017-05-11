@@ -14,6 +14,7 @@ struct STEP
 	double ScoreRate;//该位置的分值百分比（与最大分值的比值）
 	int Number;//第几步
 	STEP *next;//指向下一步
+	STEP *pre;//指向上一步
 };
 ///记录预测到的可能性链条
 struct CHAIN

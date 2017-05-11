@@ -81,12 +81,16 @@ void AI1::InitializeD()
 	{
 		STEP *p;
 		p = StepHead->next;
+		p->pre = NULL;
 		delete StepHead;
+		StepHead = NULL;
 		while (p != NULL)
 		{
 			StepHead = p;
 			p = StepHead->next;
+			p->pre = NULL;
 			delete StepHead;
+			StepHead = NULL;
 		}
 		StepHead = NULL;
 	}
@@ -96,6 +100,7 @@ void AI1::InitializeD()
 		StepHead->Number = 1;
 		StepHead->ScoreRate = 0;
 		StepHead->next = NULL;
+		StepHead->pre = NULL;
 		SSS = StepHead;
 	}
 }
