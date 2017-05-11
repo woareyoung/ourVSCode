@@ -331,8 +331,8 @@ void Select()
 	ShowSelect1 = false;//是否显示AI
 	ShowSelect2 = false;//是否显示AI
 	ShowSelect3 = false;//是否显示AI
-	if (Type == isPlay1onTurn) CB.onTurn = isAI1onTurn;
-	else if (Type == isPlay2onTurn) CB.onTurn = isAI2onTurn;
+	if (Type == CB.onTurn) CB.onTurn = isAI1onTurn;
+	else if (Type == CB.onTurn) CB.onTurn = isAI2onTurn;
 	if (CB.Start == true && (CB.onTurn == isAI1onTurn ? 1 : 2) == Type) CB.PaintChess();
 }
 LRESULT CALLBACK WndProcB(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
