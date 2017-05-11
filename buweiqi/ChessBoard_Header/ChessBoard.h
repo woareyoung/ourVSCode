@@ -17,8 +17,11 @@ public:
 	///在InitData.cpp文件中
 	ChessBoard();//构造函数
 	void Init_cross();//初始化棋盘状态数组
+	void Init_Pace();//初始化下棋记录
 	///在PaintBoard.cpp文件中
 	void PaintBoard();//画棋盘
+	void BackPace();//回退一步功能函数
+	void TipPlayer(int Type);//轮到谁的提示窗口
 	///在PaintTimer.cpp文件中
 	void PaintTimer(HWND All, HWND Round, int Player, bool FirstPrint = false);//输出时间信息
 	///在PaintChess.cpp文件中

@@ -11,6 +11,16 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		InitializeD();
 		return;
 	}
+	else if (onTurn == 100)
+	{
+		UpdateScore(line, column, 1, false);
+		return;
+	}
+	else if (onTurn == 200)
+	{
+		UpdateScore(line, column, 2, false);
+		return;
+	}
 	OT = (onTurn == 1 || onTurn == -1) ? 1 : 2;
 	PlayerNumber = OT == 1 ? 2 : 1;//设置该AI的玩家编号
 	CalculatePerf(line, column);//分析对手并预测（未写完，先不要调用）

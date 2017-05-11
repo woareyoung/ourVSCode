@@ -9,6 +9,7 @@ void ChessBoard::ReStart()
 	else MessageBox(RootHwnd, _T("恭喜玩家2（白子）胜出"), _T("凯旋"), MB_OK);
 
 	Init_cross();
+	Init_Pace();
 	onTurn = 1;
 	Winner = 0;
 	AllTime1 = 900;//总时长15分钟

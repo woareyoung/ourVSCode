@@ -11,6 +11,7 @@
 #define AI_1 4
 #define AI_2 5
 #define AI_3 6
+#define TURNBACK 7
 
 ChessBoard CB;
 HCURSOR UPARROWcursor;//竖直向上箭头的光标图像
@@ -117,6 +118,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 				SendMessageA((HWND)lParam, WM_SETTEXT, (WPARAM)NULL, LPARAM("使用AI"));
 				CB.Player1AI = NULL;
 				CB.Player1isAI = false;
+				if (CB.onTurn == -1) CB.onTurn = 1;
+				else if (CB.onTurn == -2) CB.onTurn = 2;
 			}
 			break;
 			//玩家2使用了AI
@@ -132,6 +135,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 				SendMessageA((HWND)lParam, WM_SETTEXT, (WPARAM)NULL, LPARAM("使用AI"));
 				CB.Player2AI = NULL;
 				CB.Player2isAI = false;
+				if (CB.onTurn == -1) CB.onTurn = 1;
+				else if (CB.onTurn == -2) CB.onTurn = 2;
 			}
 			break;
 			//开始游戏按钮按下
@@ -151,6 +156,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 				CB.TimeHandle = CreateThread(NULL, 0, TimerProc, NULL, 0, NULL);
 			}
 			break;
+		case TURNBACK:CB.BackPace(); break;
 		}
 		break;
 	case WM_CREATE://创建窗口组件
@@ -178,6 +184,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		CB.BlackChess = (HBITMAP)LoadImage(NULL, _T("Image/BlackChess.bmp"), IMAGE_BITMAP, 200, 200, LR_LOADFROMFILE);
 		CB.WhiteChess = (HBITMAP)LoadImage(NULL, _T("Image/WhiteChess.bmp"), IMAGE_BITMAP, 200, 200, LR_LOADFROMFILE);//LR_LOADMAP3DCOLORS
 		CB.Tips = (HBITMAP)LoadImage(NULL, _T("Image/Tips.bmp"), IMAGE_BITMAP, 126, 126, LR_LOADFROMFILE);
+		CB.BackHwnd = CreateWindow(_T("Button"), _T("回退一步"), WS_CHILD | WS_VISIBLE | ES_CENTER, CB.Base + CB.ChessDiameter * 50 / 125 + 50, CB.ChessDiameter * 60 / 200, 100, 40, hwnd, (HMENU)TURNBACK, CB.hInst, NULL);
 		PostMessage(hwnd, WM_PAINT, (WPARAM)NULL, (LPARAM)NULL);
 		break;
 	case WM_MOUSEMOVE://鼠标移动消息

@@ -97,21 +97,29 @@ void ChessBoard::PaintChess()
 ///实行画棋子
 void ChessBoard::PaintAChess(int type)
 {
+	//添加到记录
+	if (Tail == NULL)
+	{
+		Tail = new PACE;
+		Tail->line = line;
+		Tail->column = column;
+		Tail->player = type;
+		Tail->next = NULL;
+		Tail->perior = NULL;
+	}
+	else
+	{
+		PACE *p = new PACE;
+		p->line = line;
+		p->column = column;
+		p->player = type;
+		p->next = NULL;
+		p->perior = Tail;
+		Tail->next = p;
+		Tail = p;
+	}
 	cross[line][column] = type;//将从AI程序获取到的行和列数记录到line和column
-	if (type == isBlack)
-	{
-		ShowWindow(TurnToBlack, SW_HIDE);
-		ShowWindow(TurnToWhite, SW_SHOW);
-		UpdateWindow(TurnToWhite);
-		Round2 = 60;
-	}
-	else if (type == isWhite)
-	{
-		ShowWindow(TurnToWhite, SW_HIDE);
-		ShowWindow(TurnToBlack, SW_SHOW);
-		UpdateWindow(TurnToBlack);
-		Round1 = 60;
-	}
+	TipPlayer(type);
 	RePaint();
 }
 ///获取下棋位置

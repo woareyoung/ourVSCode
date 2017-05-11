@@ -33,6 +33,7 @@ ChessBoard::ChessBoard()
 		CrossCross[i] = i * ChessDiameter;
 	}
 	Init_cross();
+	Init_Pace();
 }
 ///初始化棋盘状态数组
 void ChessBoard::Init_cross()
@@ -42,5 +43,18 @@ void ChessBoard::Init_cross()
 		for (j = 0; j < 10; j++) {
 			cross[i][j] = 0;
 		}
+	}
+}
+///初始化下棋记录
+void ChessBoard::Init_Pace()
+{
+	if (Tail == NULL) return;
+	PACE *p = Tail;
+	while (p != NULL)
+	{
+		Tail = Tail->perior;
+		delete p;
+		p = NULL;
+		p = Tail;
 	}
 }

@@ -6,6 +6,7 @@
 class WindowHwnd
 {
 public:
+	HWND BackHwnd;//回退一步按钮
 	HWND RootHwnd;//应用程序主窗口
 	HWND TimerAll1Hwnd;//玩家1总时间信息
 	HWND TimerAll2Hwnd;//玩家2总时间信息
