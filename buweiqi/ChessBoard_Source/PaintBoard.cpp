@@ -72,15 +72,15 @@ void ChessBoard::BackPace()
 		delete p;
 		p = NULL;
 		Tail->next = NULL;
-		if (Player1AI == &ai1) Player1AI->GetPosition(line, column, 100);
-		else if(Player2AI == &ai1) Player1AI->GetPosition(line, column, 200);
+		if (Player1isAI) Player1AI->GetPosition(line, column, 100);
+		if (Player2isAI) Player2AI->GetPosition(line, column, 200);
 		line = Tail->line;
 		column = Tail->column;
 		//如果两方都是玩家，则回退一步
 	case false:
 		cross[Tail->line][Tail->column] = 0;
-		if (Player1AI == &ai1) Player1AI->GetPosition(line, column, 100);
-		else if (Player2AI == &ai1) Player1AI->GetPosition(line, column, 200);
+		if (Player1isAI) Player1AI->GetPosition(line, column, 100);
+		if (Player2isAI) Player2AI->GetPosition(line, column, 200);
 		if (Tail->perior == NULL)
 		{
 			delete Tail;
