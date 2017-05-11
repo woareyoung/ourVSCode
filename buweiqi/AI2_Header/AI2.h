@@ -34,6 +34,16 @@ struct Pos {
 	int column;
 };
 
+struct goodMove {
+	int line;
+	int column;
+	int Score;
+	bool operator < (const goodMove &A) const
+	{
+		return A.Score < Score;// 从大到小排序
+	}
+};
+
 class AI2 : public AI, public AIPlayer
 {
 private:
@@ -44,6 +54,9 @@ private:
 	int chessScore[10][10];
 	// isGo2Dead标志数组
 	bool isGo2DeadStatus[10][10];
+	// 当前好的着子点的数组集合
+	goodMove goodMoves[81];
+	int MovePointer;// 当前好的着子点的数量
 	int chessCount;
 	bool Position[4];
 	void resetGo2DeadStatus();
@@ -71,6 +84,9 @@ public:
 	// 初始化数组
 	void initChessScore(bool isFirst);
 	void initAllArray();
+	bool isContaint(goodMove move);
+	int getMaxScoreNum(int judge);
+	int random(double start, double end);
 
 	// 博弈树部分
 	void Revalute();

@@ -1,5 +1,6 @@
 #include "../stdafx.h"
 #include "../AI2_Header/AI2.h"
+#include <algorithm>
 /**
 * [AI2::maxandmin 极大极小函数]
 * @param depth 		执行的深度
@@ -55,7 +56,7 @@ int AI2::DealWithScore(bool isEqual) {
 		goto Find;
 	}
 	/************************************************
-	匹配不成功，重新选择一个寻找最佳点
+	匹配不成功，也没有分数最高的，重新选择一个寻找最佳点
 	*************************************************/
 	return FindPosition();
 Find:
@@ -64,6 +65,27 @@ Find:
 
 void AI2::getMaxScore(int& tempLine, int& tempColumn)
 {
+	/*
+	if (MovePointer == 0) {
+		return;
+	}
+	bool flag = true;
+	int sum = getMaxScoreNum(goodMoves[0].Score);
+	int ran;
+	int i, j;
+	while (flag)
+	{
+		ran = random(0, sum--);
+		i = goodMoves[ran].line;
+		j = goodMoves[ran].column;
+		flag = isGo2Dead(i, j, turn2Who);
+		goodMoves[ran] = { 0,0,0 };
+		std::sort(goodMoves, goodMoves + MovePointer);
+		--MovePointer;
+	}
+	tempLine = goodMoves[ran].line;
+	tempColumn = goodMoves[ran].column;
+	*/
 	bool isFirst = true;
 	for (int i = 1; i < 10; i++)
 	{
@@ -85,6 +107,7 @@ void AI2::getMaxScore(int& tempLine, int& tempColumn)
 			}
 		}
 	}
+
 }
 
 void AI2::getMinScore(int& tempLine, int& tempColumn)
@@ -124,7 +147,7 @@ void AI2::Revalute()
 	else {
 		initChessScore(false);
 	}
-	
+
 	// 估值并加分
 	// 这里进行模板匹配
 	startPattern();
@@ -155,7 +178,7 @@ int AI2::FindPosition() {
 				chessScore[x][y] = 0;
 				goto empty;
 			}
-empty:
+		empty:
 			// 这里什么都没有匹配到，所以进行重置
 			cross[x][y] = NoChess;
 		}
