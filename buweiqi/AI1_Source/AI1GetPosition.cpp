@@ -24,17 +24,29 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		UpdateScore(line, column, onTurn / 100, false);
 		return;
 	}
+	bool abc = true;
 	OT = (onTurn == 1 || onTurn == -1) ? 1 : 2;
 	PlayerNumber = OT == 1 ? 2 : 1;//设置该AI的玩家编号
-	CalculatePerf(line, column);//分析对手并预测（未写完，先不要调用）
-	cross[line][column] = OT;//先更新棋盘信息数组
-	///按比例缩小分值
-	if (line < 3 || line > 7 || column < 3 || column > 7) RateResetScore(0.3);
-	else RateResetScore(0.5);
-	UpdateScore(line, column, OT);//更新分值
-	if (line != 0) Display(OT, line, column);//输出棋盘分值
+	if (line != 0 && column != 0)
+	{
+		CalculatePerf(line, column);//分析对手
+		cross[line][column] = OT;//先更新棋盘信息数组
+		///按比例缩小分值
+		if (line < 3 || line > 7 || column < 3 || column > 7) RateResetScore(0.78);
+		else RateResetScore(0.92);
+		UpdateScore(line, column, OT, true);
+		Display(OT, line, column);
+	}
+	if (line == 0 || column == 0)
+	{
+		GetMaxScorePosition();
+		line = MaxScorePosition / 10;
+		column = MaxScorePosition % 10;
+		cross[line][column] = PlayerNumber;
+		abc = false;
+	}
 	///若是死棋位置则一直循环，直到不是死棋位置
-	while (true)
+	while (abc)
 	{
 		GetMaxScorePosition();
 		line = MaxScorePosition / 10;
