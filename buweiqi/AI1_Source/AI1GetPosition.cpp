@@ -13,31 +13,22 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 	}
 	else if (onTurn == 100 || onTurn == 200)
 	{
-		if (PlayerNumber == 3 - onTurn / 100)
-		{
-			STEP *s = SSS;
-			SSS = SSS->pre;
-			SSS->next = NULL;
-			delete s;
-			s = NULL;
-		}
 		UpdateScore(line, column, onTurn / 100, false);
 		return;
 	}
 	bool abc = true;
 	OT = (onTurn == 1 || onTurn == -1) ? 1 : 2;
-	PlayerNumber = OT == 1 ? 2 : 1;//设置该AI的玩家编号
+	PlayerNumber = 3 - OT;//设置该AI的玩家编号
 	if (line != 0 && column != 0)
 	{
-		CalculatePerf(line, column);//分析对手
 		cross[line][column] = OT;//先更新棋盘信息数组
 		///按比例缩小分值
 		if (line < 3 || line > 7 || column < 3 || column > 7) RateResetScore(0.78);
 		else RateResetScore(0.92);
 		UpdateScore(line, column, OT, true);
-		Display(OT, line, column);
+//		Display(OT, line, column);
 	}
-	if (line == 0 || column == 0)
+	else
 	{
 		GetMaxScorePosition();
 		line = MaxScorePosition / 10;
@@ -71,12 +62,12 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		else break;
 	}
 	UpdateScore(line, column, PlayerNumber);
-	Display(PlayerNumber, line, column);//输出棋盘分值
+//	Display(PlayerNumber, line, column);
 }
 ///控制台显示信息函数
 void AI1::Display(int n, int line, int column)
 {
-
+	
 	_cprintf("Player %d:  line:%d  column:%d\n\t", n, line, column);
 	for (int i = 0; i < 10; )
 	{
@@ -89,5 +80,5 @@ void AI1::Display(int n, int line, int column)
 		if (++i < 10) _cprintf("%d\t", i);
 	}
 	_cprintf("\n");
-
+	
 }

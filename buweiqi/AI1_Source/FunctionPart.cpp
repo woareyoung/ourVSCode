@@ -1,14 +1,31 @@
 #include "../stdafx.h"
 #include "../AI1_Header/AI1.h"
-///获取特定位置的四个方向的棋子数量，参数who：所需查看的棋子所属的玩家编号
-int AI1::GetChessAmount(int row1, int row2, int who)
+///获取特定位置的四个方向的棋子数量（包括边界）
+///参数who：所需查看的棋子所属的玩家编号
+int AI1::GetChessAmount(int row1, int row2, int who, int &num)
 {
-	int num = 0;
-	if (cross[row1][row2 + 1] == who || row2 + 1 == 10) num += 1;//右
-	if (cross[row1][row2 - 1] == who || row2 - 1 == 0) num += 2;//左
-	if (cross[row1 + 1][row2] == who || row1 + 1 == 10) num += 4;//下
-	if (cross[row1 - 1][row2] == who || row1 - 1 == 0) num += 8;//上
-	return num;
+	int amount = 0;
+	if (cross[row1][row2 + 1] == who || row2 + 1 == 10)
+	{
+		num += 1;//右
+		amount++;
+	}
+	if (cross[row1][row2 - 1] == who || row2 - 1 == 0)
+	{
+		num += 2;//左
+		amount++;
+	}
+	if (cross[row1 + 1][row2] == who || row1 + 1 == 10)
+	{
+		num += 4;//下
+		amount++;
+	}
+	if (cross[row1 - 1][row2] == who || row1 - 1 == 0)
+	{
+		num += 8;//上
+		amount++;
+	}
+	return amount;
 }
 ///获取最大分值的位置
 void AI1::GetMaxScorePosition()

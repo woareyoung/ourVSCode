@@ -10,7 +10,7 @@ bool AI1::DeadCheck(int line, int column, int who)
 	//检查左边
 	if (CheckPosition(line, column, line, column - 1, player, Position[0])) return true;
 	//检查右边
-	if (CheckPosition(line, column, line, column + 1, player, Position[1])) return true;
+	if (CheckPosition(line, column, line, column + 1, player, Position[1]))  return true;
 	//检查上边
 	if (CheckPosition(line, column, line - 1, column, player, Position[2])) return true;
 	//检查下边
@@ -21,16 +21,16 @@ bool AI1::DeadCheck(int line, int column, int who)
 bool AI1::CheckPosition(int OriLine, int OriColumn, int CLine, int CColumn, int player, bool &Position)
 {
 	int rival = player == 1 ? 2 : 1;
+	//若己方棋子已到边缘
+	if (CColumn == 0 || CColumn == 10 || CLine == 0 || CLine == 10) Position = true;
 	//若有对方的一个棋子
-	if (cross[CLine][CColumn] == rival)
+	else if (cross[CLine][CColumn] == rival)
 	{
 		reduceRecursionTimes();
 		if (Besieg(CLine, CColumn, player, rival))
 			return true;
 		Position = true;
 	}
-	//若己方棋子已到边缘
-	else if (CColumn == 0 || CColumn == 10 || CLine == 0 || CLine == 10) Position = true;
 	//若有己方的棋子
 	else if (cross[CLine][CColumn] == player)
 	{

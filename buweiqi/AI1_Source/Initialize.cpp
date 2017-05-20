@@ -1,6 +1,5 @@
 #include "../stdafx.h"
 #include "../AI1_Header/AI1.h"
-#include "../AI1_Header/Arithmatic.h"
 
 ///初始化数据
 AI1::AI1()
@@ -41,22 +40,10 @@ AI1::AI1()
 	MyFormatTigerMouthPoor = 3;//己方形成虎口
 	MyFormatEyePoor = 3;//己方形成眼
 
-	BoundryRate = 0.25;//预测界限
-	MaxStepNumber = 15;//构建回归方程的出发条件
-	CorrectRate = 0.15;//进攻性能修正系数
-	
-	MaxParallel = 3;//每一步预测5种可能性
-	MaxNext = 3;//设置树最大深度为15层
-
-	StepHead = NULL;
-	HeadChain = NULL;
 }
 ///初始化数据
 void AI1::InitializeD()
 {
-	ClearLimb(0, 0);
-	a = 0;//初始化常数项
-	b = 0;//初始化斜率
 	int i, j;
 	///初始化数组
 	for (i = 0; i < 10; i++)
@@ -68,40 +55,16 @@ void AI1::InitializeD()
 			Cross[i][j] = false;
 		}
 	}
-	Score[0][0] = -3;
+	Score[0][0] = PointStyle[1];
 	Score[1][1] = 2;
-	for (i = 1; i < 3; i++)
-	{
-		spa[i].Chip = 0;
-		spa[i].TigerMouth = 0;
-		spa[i].Eye = 0;
-	}
-	AttackPerformance = 1;//初始化对手进攻性能
-	///清空链表
-	if (StepHead != NULL)
-	{
-		STEP *p;
-		p = StepHead->next;
-		p->pre = NULL;
-		delete StepHead;
-		StepHead = NULL;
-		while (p != NULL)
-		{
-			StepHead = p;
-			p = StepHead->next;
-			p->pre = NULL;
-			delete StepHead;
-			StepHead = NULL;
-		}
-		StepHead = NULL;
-	}
-	if(StepHead == NULL)
-	{
-		StepHead = new STEP;
-		StepHead->Number = 1;
-		StepHead->ScoreRate = 0;
-		StepHead->next = NULL;
-		StepHead->pre = NULL;
-		SSS = StepHead;
-	}
+	Score[1][2] = 2;
+	Score[2][1] = 2;
+	Score[1][8] = 2;
+	Score[1][9] = 2;
+	Score[2][9] = 2;
+	Score[8][1] = 2;
+	Score[9][1] = 2;
+	Score[9][2] = 2;
+	Score[8][9] = 2;
+	Score[9][9] = 2;
 }
