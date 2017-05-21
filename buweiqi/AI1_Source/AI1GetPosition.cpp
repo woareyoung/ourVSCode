@@ -3,17 +3,27 @@
 ///获取下棋位置
 void AI1::GetPosition(int &line, int &column, int onTurn)
 {
-	//用于响应主窗口对AI的检查
-	if (onTurn == 0)
+	if (onTurn != 1 && onTurn != 2)
 	{
-		line++;
-		column++;
-		InitializeD();
-		return;
-	}
-	else if (onTurn == 100 || onTurn == 200)
-	{
-		UpdateScore(line, column, onTurn / 100, false);
+		//用于响应主窗口对AI的检查
+		if (onTurn == 0)
+		{
+			line++;
+			column++;
+			InitializeD();
+		}
+		else if (onTurn == 100 || onTurn == 200)
+		{
+			int play = onTurn / 100;
+			if (play == 3 - PlayerNumber)
+			{
+				UpdateScore(line, column, 3 - PlayerNumber, false);
+				///按比例缩小分值
+				if (line < 3 || line > 7 || column < 3 || column > 7) RateResetScore(0.78, false);
+				else RateResetScore(0.92, false);
+			}
+			else UpdateScore(line, column, play, false);
+		}
 		return;
 	}
 	bool abc = true;
