@@ -4,16 +4,16 @@
 void AI1::UpdateScore(int row1, int row2, int who, bool isAddScore)
 {
 	Score[row1][row2] = PointStyle[10];//设置下棋点为-5分
-	if (row1 != 0 && row2 > 0 && cross[row1][row2 - 1] == 0) RecordSpecialPoint(row1, row2 - 1, who, isAddScore);//查看下棋点的左边位置上的特殊点
+	if (row1 != 0 && row2 > 1 && cross[row1][row2 - 1] == 0) RecordSpecialPoint(row1, row2 - 1, who, isAddScore);//查看下棋点的左边位置上的特殊点
 	if (row1 != 0 && row2 < 9 && cross[row1][row2 + 1] == 0) RecordSpecialPoint(row1, row2 + 1, who, isAddScore);//查看下棋点的右边位置上的特殊点
-	if (row2 != 0 && row1 > 0 && cross[row1 - 1][row2] == 0) RecordSpecialPoint(row1 - 1, row2, who, isAddScore);//查看下棋点的上边位置上的特殊点
+	if (row2 != 0 && row1 > 1 && cross[row1 - 1][row2] == 0) RecordSpecialPoint(row1 - 1, row2, who, isAddScore);//查看下棋点的上边位置上的特殊点
 	if (row2 != 0 && row1 < 9 && cross[row1 + 1][row2] == 0) RecordSpecialPoint(row1 + 1, row2, who, isAddScore);//查看下棋点的下边位置上的特殊点
 }
 ///添加特殊点
 void AI1::RecordSpecialPoint(int row1, int row2, int who, bool isAddScore)
 {
-	int n = row1 * 10 + row2;
-	int sc = GetChessAmount(row1, row2, who);//查看特定位置周围有多少个“自己”的棋子
+	int n = row1 * 10 + row2, sc = 0;
+	GetChessAmount(row1, row2, who, sc);//查看特定位置周围有多少个“自己”的棋子
 	switch (sc)
 	{
 		//只有右边有棋子，前两个参数无意义
@@ -33,7 +33,6 @@ void AI1::RecordSpecialPoint(int row1, int row2, int who, bool isAddScore)
 		if (who == PlayerNumber) SetCurrentPoint(3, MyFormatTigerMouthPoor, 16, MyChipPoor, 5, MyFormatChipPoor, 15, MySinglePointPoor);
 		else SetCurrentPoint(6, RivalFormatTigerMouthPoor, 17, RivalChipPoor, 8, RivalFormatChipPoor, 8, RivalSinglePointPoor);
 		AddRecord(n, n + 10, n - 10, 0, 0, 2, isAddScore);
-		spa[who].Chip++;
 		break;
 		//只有下边有棋子，前两个参数无意义
 	case 4:
@@ -46,14 +45,12 @@ void AI1::RecordSpecialPoint(int row1, int row2, int who, bool isAddScore)
 		if (who == PlayerNumber) SetCurrentPoint(3, MyFormatTigerMouthPoor, 16, MyChipPoor, 5, MyFormatChipPoor, 15, MySinglePointPoor);
 		else SetCurrentPoint(6, RivalFormatTigerMouthPoor, 17, RivalChipPoor, 8, RivalFormatChipPoor, 8, RivalSinglePointPoor);
 		AddRecord(n, n + 10, n + 1, 0, 0, 2, isAddScore);
-		spa[who].Chip++;
 		break;
 		//下、左边都有棋子
 	case 6:
 		if (who == PlayerNumber) SetCurrentPoint(3, MyFormatTigerMouthPoor, 16, MyChipPoor, 5, MyFormatChipPoor, 15, MySinglePointPoor);
 		else SetCurrentPoint(6, RivalFormatTigerMouthPoor, 17, RivalChipPoor, 8, RivalFormatChipPoor, 8, RivalSinglePointPoor);
 		AddRecord(n, n + 10, n - 1, 0, 0, 2, isAddScore);
-		spa[who].Chip++;
 		break;
 		//右、左、下都有棋子
 	case 7:
@@ -64,8 +61,6 @@ void AI1::RecordSpecialPoint(int row1, int row2, int who, bool isAddScore)
 		}
 		else SetCurrentPoint(7, RivalFormatEyePoor, 2, RivalTigerMouthPoor, 6, RivalFormatTigerMouthPoor, 17, RivalChipPoor);
 		AddRecord(n, n + 1, n - 1, n + 10, 0, 3, isAddScore);
-		spa[who].Chip--;
-		spa[who].TigerMouth++;
 		break;
 		//只有上边有棋子，前两个参数无意义
 	case 8:
@@ -78,14 +73,12 @@ void AI1::RecordSpecialPoint(int row1, int row2, int who, bool isAddScore)
 		if (who == PlayerNumber) SetCurrentPoint(3, MyFormatTigerMouthPoor, 16, MyChipPoor, 5, MyFormatChipPoor, 15, MySinglePointPoor);
 		else SetCurrentPoint(6, RivalFormatTigerMouthPoor, 17, RivalChipPoor, 8, RivalFormatChipPoor, 8, RivalSinglePointPoor);
 		AddRecord(n, n + 1, n - 10, 0, 0, 2, isAddScore);
-		spa[who].Chip++;
 		break;
 		//左、上都有棋子
 	case 10:
 		if (who == PlayerNumber) SetCurrentPoint(3, MyFormatTigerMouthPoor, 16, MyChipPoor, 5, MyFormatChipPoor, 15, MySinglePointPoor);
 		else SetCurrentPoint(6, RivalFormatTigerMouthPoor, 17, RivalChipPoor, 8, RivalFormatChipPoor, 8, RivalSinglePointPoor);
 		AddRecord(n, n - 1, n - 10, 0, 0, 2, isAddScore);
-		spa[who].Chip++;
 		break;
 		//左、右、上都有棋子
 	case 11:
@@ -96,15 +89,12 @@ void AI1::RecordSpecialPoint(int row1, int row2, int who, bool isAddScore)
 		}
 		else SetCurrentPoint(7, RivalFormatEyePoor, 2, RivalTigerMouthPoor, 6, RivalFormatTigerMouthPoor, 17, RivalChipPoor);
 		AddRecord(n, n - 1, n + 1, n - 10, 0, 3, isAddScore);
-		spa[who].Chip--;
-		spa[who].TigerMouth++;
 		break;
 		//上、下都有棋子
 	case 12:
 		if (who == PlayerNumber) SetCurrentPoint(3, MyFormatTigerMouthPoor, 16, MyChipPoor, 5, MyFormatChipPoor, 15, MySinglePointPoor);
 		else SetCurrentPoint(6, RivalFormatTigerMouthPoor, 17, RivalChipPoor, 8, RivalFormatChipPoor, 8, RivalSinglePointPoor);
 		AddRecord(n, n + 10, n - 10, 0, 0, 2, isAddScore);
-		spa[who].Chip++;
 		break;
 		//上、下、右都有棋子
 	case 13:
@@ -115,8 +105,6 @@ void AI1::RecordSpecialPoint(int row1, int row2, int who, bool isAddScore)
 		}
 		else SetCurrentPoint(7, RivalFormatEyePoor, 2, RivalTigerMouthPoor, 6, RivalFormatTigerMouthPoor, 17, RivalChipPoor);
 		AddRecord(n, n - 10, n + 10, n + 1, 0, 3, isAddScore);
-		spa[who].Chip--;
-		spa[who].TigerMouth++;
 		break;
 		//上、下、左都有棋子
 	case 14:
@@ -127,8 +115,6 @@ void AI1::RecordSpecialPoint(int row1, int row2, int who, bool isAddScore)
 		}
 		else SetCurrentPoint(7, RivalFormatEyePoor, 2, RivalTigerMouthPoor, 6, RivalFormatTigerMouthPoor, 17, RivalChipPoor);
 		AddRecord(n, n - 10, n + 10, n - 1, 0, 3, isAddScore);
-		spa[who].Chip--;
-		spa[who].TigerMouth++;
 		break;
 		//上、下、左、右都有棋子
 	case 15:
@@ -143,8 +129,6 @@ void AI1::RecordSpecialPoint(int row1, int row2, int who, bool isAddScore)
 			Score[row1][row2] = PointStyle[1];
 		}
 		AddRecord(n, n - 1, n + 1, n - 10, n + 10, 4, isAddScore);
-		spa[who].TigerMouth--;
-		spa[who].Eye++;
 		break;
 	}
 }

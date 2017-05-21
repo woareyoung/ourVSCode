@@ -146,7 +146,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI1_Header\AI1.h" />
-    <ClInclude Include="AI1_Header\Arithmatic.h" />
     <ClInclude Include="AI1_Header\PointStyle.h" />
     <ClInclude Include="AI2_Header\AI2.h" />
     <ClInclude Include="AI2_Header\AIPlayer.h" />
@@ -155,19 +154,16 @@
     <ClInclude Include="ChessBoard_Header\AI.h" />
     <ClInclude Include="ChessBoard_Header\Chess.h" />
     <ClInclude Include="ChessBoard_Header\ChessBoard.h" />
+    <ClInclude Include="ChessBoard_Header\PACE_struct.h" />
     <ClInclude Include="ChessBoard_Header\PlayerInfo.h" />
     <ClInclude Include="ChessBoard_Header\WindowHwnd.h" />
     <ClInclude Include="ChessBoard_Header\WindowSize.h" />
+    <ClInclude Include="FileSystem_Header\FileSystem.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AI1_Source\ArithmaticCore\BuildEquation.cpp" />
-    <ClCompile Include="AI1_Source\ArithmaticCore\CalculatePerf.cpp" />
-    <ClCompile Include="AI1_Source\ArithmaticCore\Clear.cpp" />
-    <ClCompile Include="AI1_Source\ArithmaticCore\Forecast.cpp" />
-    <ClCompile Include="AI1_Source\ArithmaticCore\Record.cpp" />
     <ClCompile Include="AI1_Source\DeadCheck.cpp" />
     <ClCompile Include="AI1_Source\FunctionPart.cpp" />
     <ClCompile Include="AI1_Source\AI1GetPosition.cpp" />

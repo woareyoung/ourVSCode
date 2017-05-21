@@ -43,8 +43,8 @@
     <Filter Include="Source Files\AI2_Source\score">
       <UniqueIdentifier>{77d6d7df-64ed-4970-bc65-d10c19f048ee}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\AI1_Source\ArithmaticCore">
-      <UniqueIdentifier>{ec5c4621-2399-4cd4-ae02-a93963a99550}</UniqueIdentifier>
+    <Filter Include="Header Files\FileSystem_Header">
+      <UniqueIdentifier>{9ada9bfa-a985-4765-a2d4-6c6024fb91a2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -96,8 +96,11 @@
     <ClInclude Include="AI1_Header\PointStyle.h">
       <Filter>Header Files\AI1_Header</Filter>
     </ClInclude>
-    <ClInclude Include="AI1_Header\Arithmatic.h">
-      <Filter>Header Files\AI1_Header</Filter>
+    <ClInclude Include="ChessBoard_Header\PACE_struct.h">
+      <Filter>Header Files\ChessBoard_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem_Header\FileSystem.h">
+      <Filter>Header Files\FileSystem_Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -160,21 +163,6 @@
     </ClCompile>
     <ClCompile Include="AI1_Source\DeadCheck.cpp">
       <Filter>Source Files\AI1_Source</Filter>
-    </ClCompile>
-    <ClCompile Include="AI1_Source\ArithmaticCore\Record.cpp">
-      <Filter>Source Files\AI1_Source\ArithmaticCore</Filter>
-    </ClCompile>
-    <ClCompile Include="AI1_Source\ArithmaticCore\Forecast.cpp">
-      <Filter>Source Files\AI1_Source\ArithmaticCore</Filter>
-    </ClCompile>
-    <ClCompile Include="AI1_Source\ArithmaticCore\Clear.cpp">
-      <Filter>Source Files\AI1_Source\ArithmaticCore</Filter>
-    </ClCompile>
-    <ClCompile Include="AI1_Source\ArithmaticCore\CalculatePerf.cpp">
-      <Filter>Source Files\AI1_Source\ArithmaticCore</Filter>
-    </ClCompile>
-    <ClCompile Include="AI1_Source\ArithmaticCore\BuildEquation.cpp">
-      <Filter>Source Files\AI1_Source\ArithmaticCore</Filter>
     </ClCompile>
     <ClCompile Include="AI2_Source\AI2GetPosition.cpp">
       <Filter>Source Files\AI2_Source</Filter>

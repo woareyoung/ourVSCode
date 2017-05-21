@@ -32,11 +32,11 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 	if (line != 0 && column != 0)
 	{
 		cross[line][column] = OT;//先更新棋盘信息数组
-		///按比例缩小分值
+								 ///按比例缩小分值
 		if (line < 3 || line > 7 || column < 3 || column > 7) RateResetScore(0.78);
 		else RateResetScore(0.92);
 		UpdateScore(line, column, OT, true);
-//		Display(OT, line, column);
+		//		Display(OT, line, column);
 	}
 	else
 	{
@@ -72,12 +72,12 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		else break;
 	}
 	UpdateScore(line, column, PlayerNumber);
-//	Display(PlayerNumber, line, column);
+	//	Display(PlayerNumber, line, column);
 }
 ///控制台显示信息函数
 void AI1::Display(int n, int line, int column)
 {
-	
+
 	_cprintf("Player %d:  line:%d  column:%d\n\t", n, line, column);
 	for (int i = 0; i < 10; )
 	{
@@ -90,5 +90,5 @@ void AI1::Display(int n, int line, int column)
 		if (++i < 10) _cprintf("%d\t", i);
 	}
 	_cprintf("\n");
-	
+
 }
