@@ -46,6 +46,9 @@
     <Filter Include="Header Files\FileSystem_Header">
       <UniqueIdentifier>{9ada9bfa-a985-4765-a2d4-6c6024fb91a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\FileSystem_Source">
+      <UniqueIdentifier>{edb2cbeb-a855-407b-9696-fca6f7266fce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -96,11 +99,11 @@
     <ClInclude Include="AI1_Header\PointStyle.h">
       <Filter>Header Files\AI1_Header</Filter>
     </ClInclude>
-    <ClInclude Include="ChessBoard_Header\PACE_struct.h">
-      <Filter>Header Files\ChessBoard_Header</Filter>
-    </ClInclude>
     <ClInclude Include="FileSystem_Header\FileSystem.h">
       <Filter>Header Files\FileSystem_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ChessBoard_Header\SIP.h">
+      <Filter>Header Files\ChessBoard_Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +178,18 @@
     </ClCompile>
     <ClCompile Include="AI2_Source\pattern.cpp">
       <Filter>Source Files\AI2_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ChessBoard_Source\AddList.cpp">
+      <Filter>Source Files\ChessBoard_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem_Source\AddMemory.cpp">
+      <Filter>Source Files\FileSystem_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem_Source\Init.cpp">
+      <Filter>Source Files\FileSystem_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem_Source\Match.cpp">
+      <Filter>Source Files\FileSystem_Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
