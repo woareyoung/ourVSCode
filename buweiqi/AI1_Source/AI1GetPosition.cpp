@@ -3,7 +3,7 @@
 ///获取下棋位置
 void AI1::GetPosition(int &line, int &column, int onTurn)
 {
-	if (onTurn != 1 && onTurn != 2)
+	if (onTurn != 1 && onTurn != -1 && onTurn != 2 && onTurn != -2)
 	{
 		//用于响应主窗口对AI的检查
 		if (onTurn == 0)

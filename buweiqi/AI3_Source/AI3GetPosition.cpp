@@ -4,7 +4,7 @@
 void AI3::GetPosition(int &line, int &column, int onTurn)
 {
 	//接收到界面的远程命令
-	if (onTurn != 1 && onTurn != 2)
+	if (onTurn != 1 && onTurn != -1 && onTurn != 2 && onTurn != -2)
 	{
 		//用于响应主窗口对AI的检查
 		if (onTurn == 0) {}
