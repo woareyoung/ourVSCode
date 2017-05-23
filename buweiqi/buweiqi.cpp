@@ -245,6 +245,8 @@ DWORD WINAPI TimerProc(PVOID pParam)
 				CB.PaintTimer(CB.Timer2A, CB.Timer2R, 2);
 			}
 		}
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
 	}
 	return 0;
 }
