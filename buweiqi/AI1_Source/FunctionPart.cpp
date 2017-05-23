@@ -47,3 +47,11 @@ void AI1::GetMaxScorePosition()
 		}
 	}
 }
+///¼ÇÂ¼ÆåÅÌÊı¾İ
+void AI1::MemoryData(int line, int column)
+{
+	if (line < 5 && column > 5) Qua.FirstQuadrant++;
+	else if (line < 5 && column < 5) Qua.SecondQuadrant++;
+	else if (line > 5 && column < 5) Qua.ThirdQuadrant++;
+	else if (line > 5 && column > 5) Qua.ForthQuadrant++;
+}

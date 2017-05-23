@@ -4,13 +4,10 @@
 
 void ChessBoard::AddSituationList()
 {
-	if (line < 5 && column > 5) FirstQuadrant++;
-	else if (line < 5 && column < 5) SecondQuadrant++;
-	else if (line > 5 && column < 5) ThirdQuadrant++;
-	else if (line > 5 && column > 5) ForthQuadrant++;
-	int maxQuadrant = GetMaxQuadrant();//获取最多棋子的象限
-	int i, j;
-	double value;
+	if (line < 5 && column > 5) Qua.FirstQuadrant++;
+	else if (line < 5 && column < 5) Qua.SecondQuadrant++;
+	else if (line > 5 && column < 5) Qua.ThirdQuadrant++;
+	else if (line > 5 && column > 5) Qua.ForthQuadrant++;
 	///新建结点
 	if (TempTail == NULL)
 	{
@@ -28,8 +25,12 @@ void ChessBoard::AddSituationList()
 		TempTail->next = NULL;
 	}
 	TempTail->Line[0] = line * 10 + column;//记录本次走棋位置
+
+	int maxQuadrant = Qua.GetMaxQuadrant();//获取最多棋子的象限
+	int i, j;
+	double value;
 	//如果最多棋子的是第一象限
-	if (maxQuadrant == FirstQuadrant)
+	if (maxQuadrant == Qua.FirstQuadrant)
 	{
 		for (i = 1; i < 10; i++)
 		{
@@ -43,7 +44,7 @@ void ChessBoard::AddSituationList()
 		}
 	}
 	//如果最多棋子的是第二象限
-	else if (maxQuadrant == SecondQuadrant)
+	else if (maxQuadrant == Qua.SecondQuadrant)
 	{
 		for (i = 1; i < 10; i++)
 		{
@@ -57,7 +58,7 @@ void ChessBoard::AddSituationList()
 		}
 	}
 	//如果最多棋子的是第三象限
-	else if (maxQuadrant == ThirdQuadrant)
+	else if (maxQuadrant == Qua.ThirdQuadrant)
 	{
 		for (i = 9; i > 0; i--)
 		{
@@ -71,7 +72,7 @@ void ChessBoard::AddSituationList()
 		}
 	}
 	//如果最多棋子的是第四象限
-	else if (maxQuadrant == ForthQuadrant)
+	else if (maxQuadrant == Qua.ForthQuadrant)
 	{
 		for (i = 9; i > 0; i--)
 		{
@@ -111,6 +112,7 @@ void ChessBoard::AddList(int type)
 	}
 	AddSituationList();
 }
+/*
 ///获取棋子数最多的象限
 int Chess::GetMaxQuadrant()
 {
@@ -119,4 +121,4 @@ int Chess::GetMaxQuadrant()
 	if (ThirdQuadrant > max) max = ThirdQuadrant;
 	if (ForthQuadrant > max) max = ForthQuadrant;
 	return max;
-}
+}*/

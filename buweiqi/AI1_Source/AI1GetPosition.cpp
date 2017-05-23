@@ -46,13 +46,16 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		cross[line][column] = PlayerNumber;
 		abc = false;
 	}
-	int NextPace = MatchMemory();
-	if (NextPace != 0)
+	if (abc)
 	{
-		abc = false;
-		line = NextPace / 10;
-		column = NextPace % 10;
-		cross[line][column] = PlayerNumber;
+		int NextPace = MatchMemory();
+		if (NextPace != 0)
+		{
+			abc = false;
+			line = NextPace / 10;
+			column = NextPace % 10;
+			cross[line][column] = PlayerNumber;
+		}
 	}
 	///若是死棋位置则一直循环，直到不是死棋位置
 	while (abc)
@@ -79,6 +82,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		}
 		else break;
 	}
+	cross[line][0] = 1;
 	UpdateScore(line, column, PlayerNumber);
 	//	Display(PlayerNumber, line, column);
 }

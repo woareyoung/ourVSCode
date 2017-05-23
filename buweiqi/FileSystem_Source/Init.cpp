@@ -2,14 +2,14 @@
 
 FileSystem::FileSystem()
 {
+}
+FileSystem::FileSystem(char *FileName)
+{
 	OpenFile(AIMemoryFileName, AIMemory);
 	OpenFile(TempFileName, TempFile);
 	OpenFile(TempHouse1Name, TempHouse1);
 	OpenFile(TempHouse2Name, TempHouse2);
 	NowTempHouse = &AIMemory;
-}
-FileSystem::FileSystem(char *FileName)
-{
 	OpenFile(FileName, MatchFile);
 }
 ///打开文件

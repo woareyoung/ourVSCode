@@ -2,6 +2,7 @@
 ///将本局游戏记录到总记忆库
 void FileSystem::AddMemory(SITUATION *header, int Winner)
 {
+	OpenFile(AIMemoryFileName, AIMemory);
 	SITUATION *s = header;
 	AIMemory.seekg(0, std::ios::end);
 	int i;
@@ -33,7 +34,7 @@ void FileSystem::AddMemory(SITUATION *header, int Winner)
 			s = s->next;
 		}
 	}
-	CloseFile();
+	AIMemory.close();
 }
 ///对数值进行小数与整数部分的交换
 double FileSystem::DigitalChange(double num)

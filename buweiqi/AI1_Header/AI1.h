@@ -9,6 +9,7 @@
 #include "../chessBoard_Header/AI.h"
 #include "PointStyle.h"
 #include "../FileSystem_Header/FileSystem.h"
+#include "../ChessBoard_Header/SIP.h"
 
 ///AI类
 class AI1 : public AI, private PointStyle
@@ -17,24 +18,26 @@ public:
 	AI1();//构造函数
 	void GetPosition(int &line, int &column, int onTurn);//获取下棋位置
 	void InitializeD();
-
+	FileSystem FileIO;
+	QUADRANT Qua;
 private:
 	int OT;//不想再想名字了，在GetPosition.cpp文件中使用
 
 	//记录各交叉点的值，数组访问从“1”开始，访问顺序为“先行后列”，
 	//“0”表示没有棋子，“1”表示黑子，“2”表示白子
-	int cross[10][10];//棋盘状态
 	bool Cross[10][10];//遍历标识
-	double PointStyle[18];//记录每种特殊点类型的分值
+	int cross[10][10];//棋盘状态
 	int PlayerNumber;//记录该AI是玩家1还是玩家2
-	double Score[10][10];//记录每个位置上的分值
 	int MaxScorePosition;//最大分值的位置
+	double PointStyle[18];//记录每种特殊点类型的分值
+	double Score[10][10];//记录每个位置上的分值
 	double MaxScore;//记录最大分值
 
 	void Display(int n, int line, int column);
 	///各功能函数 集中在FunctionPart.cpp文件中
 	int GetChessAmount(int row1, int row2, int who, int &num);//查看特定位置的四个方向有多少个棋子
 	void GetMaxScorePosition();//获取最大分值的位置
+	void MemoryData(int line, int column);//记录数据
 
 	///更新位置分值所用函数 集中在UpdateScore.cpp文件中
 	//更新棋盘位置分值，参数：行，列，附加参数
@@ -58,7 +61,7 @@ private:
 
 	///在MatchMemory.cpp文件中
 	int MatchMemory();//搜索记忆中出现当前盘面状况的应对
-	void GetChessBoardStatus(FileSystem &FileIO);//获取当前盘面状况
+	void GetChessBoardStatus();//获取当前盘面状况
 };
 
 
