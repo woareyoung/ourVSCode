@@ -5,18 +5,18 @@ void FileSystem::Match(SITUATION &StatusQuo, int player)
 	int i;
 	SITUATION situa;
 	TempFile.close();
-	remove(TempFileName);
+	remove(TempFileName.data());
 	OpenFile(TempFileName, TempFile);
 	if (NowTempHouse == &TempHouse1)
 	{
 		TempHouse2.close();
-		remove(TempHouse2Name);
+		remove(TempHouse2Name.data());
 		OpenFile(TempHouse2Name, TempHouse2);
 	}
 	else
 	{
 		TempHouse1.close();
-		remove(TempHouse1Name);
+		remove(TempHouse1Name.data());
 		OpenFile(TempHouse1Name, TempHouse1);
 	}
 	situa.Line[0] = StatusQuo.Line[0];
@@ -45,7 +45,7 @@ void FileSystem::Match(SITUATION &StatusQuo, int player)
 }
 ///将符合当前盘面状况的记忆转移到临时辅助记忆库文件
 ///或将未出现过的盘面转移到临时源库文件
-void FileSystem::AddFile(std::fstream &fst, char* filename)
+void FileSystem::AddFile(std::fstream &fst, std::string filename)
 {
 	fst.seekg(0, std::ios::end);//将文件指针移动到文件末尾
 	for (int i = 0; i < 10; i++)

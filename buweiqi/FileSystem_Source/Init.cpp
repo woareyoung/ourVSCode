@@ -2,18 +2,13 @@
 
 FileSystem::FileSystem()
 {
-}
-FileSystem::FileSystem(char *FileName)
-{
-	OpenFile(AIMemoryFileName, AIMemory);
-	OpenFile(TempFileName, TempFile);
-	OpenFile(TempHouse1Name, TempHouse1);
-	OpenFile(TempHouse2Name, TempHouse2);
-	NowTempHouse = &AIMemory;
-	OpenFile(FileName, MatchFile);
+	AIMemoryFileName = "AIMemory.txt";//总记忆库文件（即内容只增加不减少的文件）
+	TempFileName = "TempFile.txt";//临时辅助记忆库文件（记录与当前盘面状况一模一样的记忆）
+	TempHouse1Name = "TempHouse1.txt";//临时记忆库文件
+	TempHouse2Name = "TempHouse2.txt";//临时记忆库文件
 }
 ///打开文件
-void FileSystem::OpenFile(char *FileName, std::fstream &f)
+void FileSystem::OpenFile(std::string FileName, std::fstream &f)
 {
 	f.open(FileName, std::ios::out | std::ios::in);//用这种打开方式时，当文件不存在时打开文件失败
 	if (!f)
@@ -36,11 +31,10 @@ void FileSystem::CloseFile()
 	TempFile.close();
 	TempHouse1.close();
 	TempHouse2.close();
-	remove(TempHouse1Name);
-	remove(TempHouse2Name);
-	remove(TempFileName);
+	remove(TempHouse1Name.data());
+	remove(TempHouse2Name.data());
+	remove(TempFileName.data());
 }
 FileSystem::~FileSystem()
 {
-	MatchFile.close();
 }

@@ -4,13 +4,13 @@ int AI1::MatchMemory()
 {
 	double NextPace;
 	GetChessBoardStatus();
-	FileIO.MatchFile.seekg(0, std::ios::end);
-	NextPace = FileIO.MatchFile.tellg();
+	FS.TempFile.seekg(0, std::ios::end);
+	NextPace = FS.TempFile.tellg();
 	if (NextPace == 0) return 0;
-	FileIO.MatchFile.seekg(0);
+	FS.TempFile.seekg(0);
 	for (int i = 0; i < 10; i++)
 	{
-		FileIO.MatchFile >> NextPace;
+		FS.TempFile >> NextPace;
 	}
 	return NextPace;
 }
@@ -74,7 +74,5 @@ void AI1::GetChessBoardStatus()
 			}
 		}
 	}
-	FileIO.Match(NowStatus, PlayerNumber);
-	FileIO.MatchFile.close();
-	FileIO.OpenFile("TempFile.txt", FileIO.MatchFile);
+	FS.Match(NowStatus, PlayerNumber);
 }

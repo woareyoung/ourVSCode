@@ -32,3 +32,8 @@ struct QUADRANT
 		return max;
 	}
 };
+
+struct FileName
+{
+
+};

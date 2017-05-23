@@ -39,11 +39,15 @@ AI1::AI1()
 	MyFormatChipPoor = 1.7;//己方形成缺口
 	MyFormatTigerMouthPoor = 3;//己方形成虎口
 	MyFormatEyePoor = 3;//己方形成眼
-
 }
 ///初始化数据
 void AI1::InitializeD()
 {
+	FS.OpenFile(FS.AIMemoryFileName, FS.AIMemory);
+	FS.OpenFile(FS.TempFileName, FS.TempFile);
+	FS.OpenFile(FS.TempHouse1Name, FS.TempHouse1);
+	FS.OpenFile(FS.TempHouse2Name, FS.TempHouse2);
+	FS.NowTempHouse = &FS.AIMemory;
 	int i, j;
 	///初始化数组
 	for (i = 0; i < 10; i++)
