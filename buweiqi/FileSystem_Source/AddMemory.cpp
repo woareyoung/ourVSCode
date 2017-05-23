@@ -33,7 +33,7 @@ void FileSystem::AddMemory(SITUATION *header, int Winner)
 			s = s->next;
 		}
 	}
-	CloseFile();//存好记忆后关闭文件关联
+	CloseFile();
 }
 ///对数值进行小数与整数部分的交换
 double FileSystem::DigitalChange(double num)

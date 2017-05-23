@@ -28,7 +28,7 @@ void ChessBoard::AddSituationList()
 		TempTail->next = NULL;
 	}
 	TempTail->Line[0] = line * 10 + column;//记录本次走棋位置
-										   //如果最多棋子的是第一象限
+	//如果最多棋子的是第一象限
 	if (maxQuadrant == FirstQuadrant)
 	{
 		for (i = 1; i < 10; i++)

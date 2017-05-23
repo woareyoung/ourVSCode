@@ -12,6 +12,8 @@ public:
 	std::fstream TempHouse2;//关联临时记忆库文件
 	std::fstream *NowTempHouse;//当前临时源记忆库
 
+	std::fstream MatchFile;//用于AI对文件读取的入口
+
 	char *AIMemoryFileName = "AIMemory.txt";//总记忆库文件（即内容只增加不减少的文件）
 	char *TempFileName = "TempFile.txt";//临时辅助记忆库文件（记录与当前盘面状况一模一样的记忆）
 	char *TempHouse1Name = "TempHouse1.txt";//临时记忆库文件
@@ -19,6 +21,8 @@ public:
 	double value[10];//用于暂存从文件读取到的数值
 
 	FileSystem();//构造函数
+	FileSystem(char *FileName);//构造函数
+	~FileSystem();//析构函数
 	/*
 	param[FileName]:需要打开的文件名
 	param[f]:关联此文件的文件流对象

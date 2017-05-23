@@ -8,6 +8,10 @@ FileSystem::FileSystem()
 	OpenFile(TempHouse2Name, TempHouse2);
 	NowTempHouse = &AIMemory;
 }
+FileSystem::FileSystem(char *FileName)
+{
+	OpenFile(FileName, MatchFile);
+}
 ///打开文件
 void FileSystem::OpenFile(char *FileName, std::fstream &f)
 {
@@ -35,4 +39,8 @@ void FileSystem::CloseFile()
 	remove(TempHouse1Name);
 	remove(TempHouse2Name);
 	remove(TempFileName);
+}
+FileSystem::~FileSystem()
+{
+	MatchFile.close();
 }

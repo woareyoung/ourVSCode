@@ -5,8 +5,11 @@
 #include <time.h>
 #include <stdlib.h>
 #include <conio.h>
+#include <math.h>
 #include "../chessBoard_Header/AI.h"
 #include "PointStyle.h"
+#include "../FileSystem_Header/FileSystem.h"
+
 ///AI类
 class AI1 : public AI, private PointStyle
 {
@@ -18,8 +21,8 @@ public:
 private:
 	int OT;//不想再想名字了，在GetPosition.cpp文件中使用
 
-		   //记录各交叉点的值，数组访问从“1”开始，访问顺序为“先行后列”，
-		   //“0”表示没有棋子，“1”表示黑子，“2”表示白子
+	//记录各交叉点的值，数组访问从“1”开始，访问顺序为“先行后列”，
+	//“0”表示没有棋子，“1”表示黑子，“2”表示白子
 	int cross[10][10];//棋盘状态
 	bool Cross[10][10];//遍历标识
 	double PointStyle[18];//记录每种特殊点类型的分值
@@ -33,8 +36,8 @@ private:
 	int GetChessAmount(int row1, int row2, int who, int &num);//查看特定位置的四个方向有多少个棋子
 	void GetMaxScorePosition();//获取最大分值的位置
 
-							   ///更新位置分值所用函数 集中在UpdateScore.cpp文件中
-							   //更新棋盘位置分值，参数：行，列，附加参数
+	///更新位置分值所用函数 集中在UpdateScore.cpp文件中
+	//更新棋盘位置分值，参数：行，列，附加参数
 	void UpdateScore(int row1, int row2, int who, bool isAddScore = true);//调用RecordSpecialPoint()函数
 																		  //设置特殊点影响的分值
 	void ResetScore(int row1, int row2, int score, int NumberPoor = 100, bool isAddScore = true);//实行加分的函数
@@ -52,6 +55,10 @@ private:
 
 	///在RateResetScore.cpp文件中
 	void RateResetScore(float ResetRate, bool add = true);//按比例缩小分值，减少分差，精确定位
+
+	///在MatchMemory.cpp文件中
+	int MatchMemory();//搜索记忆中出现当前盘面状况的应对
+	void GetChessBoardStatus(FileSystem &FileIO);//获取当前盘面状况
 };
 
 

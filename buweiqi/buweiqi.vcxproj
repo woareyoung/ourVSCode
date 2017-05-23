@@ -168,6 +168,7 @@
     <ClCompile Include="AI1_Source\FunctionPart.cpp" />
     <ClCompile Include="AI1_Source\AI1GetPosition.cpp" />
     <ClCompile Include="AI1_Source\Initialize.cpp" />
+    <ClCompile Include="AI1_Source\MatchMemory.cpp" />
     <ClCompile Include="AI1_Source\RateResetScore.cpp" />
     <ClCompile Include="AI1_Source\UpdateScore.cpp" />
     <ClCompile Include="AI2_Source\DataUtil.cpp" />

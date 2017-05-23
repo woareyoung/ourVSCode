@@ -32,11 +32,11 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 	if (line != 0 && column != 0)
 	{
 		cross[line][column] = OT;//先更新棋盘信息数组
-								 ///按比例缩小分值
+		///按比例缩小分值
 		if (line < 3 || line > 7 || column < 3 || column > 7) RateResetScore(0.78);
 		else RateResetScore(0.92);
 		UpdateScore(line, column, OT, true);
-		//		Display(OT, line, column);
+		//Display(OT, line, column);
 	}
 	else
 	{
@@ -45,6 +45,14 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		column = MaxScorePosition % 10;
 		cross[line][column] = PlayerNumber;
 		abc = false;
+	}
+	int NextPace = MatchMemory();
+	if (NextPace != 0)
+	{
+		abc = false;
+		line = NextPace / 10;
+		column = NextPace % 10;
+		cross[line][column] = PlayerNumber;
 	}
 	///若是死棋位置则一直循环，直到不是死棋位置
 	while (abc)

@@ -191,6 +191,9 @@
     <ClCompile Include="FileSystem_Source\Match.cpp">
       <Filter>Source Files\FileSystem_Source</Filter>
     </ClCompile>
+    <ClCompile Include="AI1_Source\MatchMemory.cpp">
+      <Filter>Source Files\AI1_Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="buweiqi.rc">
