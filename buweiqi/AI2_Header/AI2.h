@@ -2,7 +2,12 @@
 #ifndef AI2_H_INCLUDED
 #define AI2_H_INCLUDED
 #include "../chessBoard_Header/AI.h"
-#include "AIPlayer.h"
+#include "../AI2_Header/AIPlayer.h"
+#include "../AI2_Header/DefaultChess.h"
+
+#define ChessInit 0
+#define ChessStart 1
+#define ChessEnd 10
 
 #define maxLimit 32767
 #define minLimit -32767
@@ -44,7 +49,7 @@ struct goodMove {
 	}
 };
 
-class AI2 : public AI, public AIPlayer
+class AI2 : public AI, public AIPlayer, public DefaultChess
 {
 private:
 	//记录各交叉点的值，数组访问从“1”开始，访问顺序为“先行后列”，
@@ -61,6 +66,7 @@ private:
 	bool Position[4];
 	void resetGo2DeadStatus();
 	void ScanChessBroad();
+	void rollback(int line, int column, int onTurn);
 public:
 	AI2()
 	{

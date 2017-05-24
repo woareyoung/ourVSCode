@@ -87,9 +87,9 @@ void AI1::InitializeD()
 		StepHead = NULL;
 		while (p != NULL)
 		{
+			p->pre = NULL;
 			StepHead = p;
 			p = StepHead->next;
-			p->pre = NULL;
 			delete StepHead;
 			StepHead = NULL;
 		}

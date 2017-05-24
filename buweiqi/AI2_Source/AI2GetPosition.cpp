@@ -21,6 +21,14 @@ void AI2::GetPosition(int& line, int& column, int onTurn)
 		resetGo2DeadStatus();
 		return;
 	}
+	else if (onTurn == 100 || onTurn == 200) // 响应来自主界面的回退
+	{
+		if (this->PlayerId == 3 - onTurn / 100)
+		{
+			rollback(line, column, onTurn / 100);
+		}
+		return;
+	}
 	/******************************************
 	添加敌方着子点到我方棋盘上
 	*******************************************/

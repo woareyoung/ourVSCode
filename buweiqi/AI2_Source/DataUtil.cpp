@@ -29,26 +29,13 @@ void AI2::initAllArray() {
 
 void AI2::initChessScore(bool isFirst)
 {
-	int temp[10][10] =
+	for (int i = ChessStart; i < ChessEnd; i++)
 	{
-		{ 0,0,0,0,0,0,0,0,0,0 },
-		{ 0,1,1,1,1,1,1,1,1,1 },
-		{ 0,1,2,2,2,2,2,2,2,1 },
-		{ 0,1,2,3,3,3,3,3,2,1 },
-		{ 0,1,2,3,4,4,4,3,2,1 },
-		{ 0,1,2,3,4,5,4,3,2,1 },
-		{ 0,1,2,3,4,4,4,3,2,1 },
-		{ 0,1,2,3,3,3,3,3,2,1 },
-		{ 0,1,2,2,2,2,2,2,2,1 },
-		{ 0,1,1,1,1,1,1,1,1,1 }
-	};
-	for (int i = 1; i < 10; i++)
-	{
-		for (int j = 1; j < 10; j++)
+		for (int j = ChessStart; j < ChessEnd; j++)
 		{
 			if (cross[i][j] == NoChess && chessScore[i][j] == minLimit) continue;
 			if (!isFirst && cross[i][j] == NoChess && chessScore[i][j] == 0) continue;
-			chessScore[i][j] = temp[i][j];
+			chessScore[i][j] = getDefaultChessScore(i, j);
 		}
 	}
 }
@@ -57,8 +44,8 @@ bool AI2::isFinal() {
 	int emptyCount = 0;
 	int minLimitCount = 0;
 	int NoughtCount = 0;
-	for (int i = 1; i < 10; i++)
-		for (int j = 1; j < 10; j++) {
+	for (int i = ChessStart; i < ChessEnd; i++)
+		for (int j = ChessStart; j < ChessEnd; j++) {
 			if (cross[i][j] == NoChess) {
 				emptyCount++;
 			}
@@ -78,16 +65,16 @@ bool AI2::isFinal() {
 }
 
 void AI2::resetGo2DeadStatus() {
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 10; j++) {
+	for (int i = ChessInit; i < ChessEnd; i++) {
+		for (int j = ChessInit; j < ChessEnd; j++) {
 			isGo2DeadStatus[i][j] = false;
 		}
 	}
 }
 
 void AI2::ScanChessBroad() {
-	for (int x = 0; x < 10; x++) {
-		for (int y = 0; y < 10; y++) {
+	for (int x = ChessInit; x < ChessEnd; x++) {
+		for (int y = ChessInit; y < ChessEnd; y++) {
 			if (cross[x][y] == NoChess) {
 				cross[x][y] = turn2Who;
 				if (isGo2Dead(x, y, turn2Who)) {
@@ -121,7 +108,7 @@ void AI2::ScanChessBroad() {
 }
 
 bool AI2::isContaint(goodMove move) {
-	for (int i = 0; i < MovePointer; ++i) {
+	for (int i = ChessInit; i < MovePointer; ++i) {
 		if (move.line == goodMoves[i].line && move.column == goodMoves[i].column
 			&& move.Score == goodMoves[i].Score) {
 			return true;
@@ -147,4 +134,14 @@ int AI2::getMaxScoreNum(int judge) {
 int AI2::random(double start, double end)
 {
 	return start + (end - start)*rand() / (RAND_MAX + 1.0);
+}
+
+void AI2::rollback(int line, int column,int onTurn) {
+	if (onTurn == PlayerId) {
+		--chessCount;
+	}
+	if (cross[line][column] != NoChess) {
+		cross[line][column] == NoChess;
+		chessScore[line][column] = getDefaultChessScore(line, column);
+	}
 }
