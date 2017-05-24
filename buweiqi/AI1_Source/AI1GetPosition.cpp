@@ -3,47 +3,59 @@
 ///获取下棋位置
 void AI1::GetPosition(int &line, int &column, int onTurn)
 {
-	//用于响应主窗口对AI的检查
-	if (onTurn == 0)
+	if (onTurn != 1 && onTurn != -1 && onTurn != 2 && onTurn != -2)
 	{
-		line++;
-		column++;
-		InitializeD();
-		return;
-	}
-	else if (onTurn == 100 || onTurn == 200)
-	{
-		if (PlayerNumber == 3 - onTurn / 100)
+		//用于响应主窗口对AI的检查
+		if (onTurn == 0)
 		{
-			STEP *s = SSS;
-			SSS = SSS->pre;
-			SSS->next = NULL;
-			delete s;
-			s = NULL;
+			line++;
+			column++;
+			InitializeD();
 		}
-		UpdateScore(line, column, onTurn / 100, false);
+		else if (onTurn == 100 || onTurn == 200)
+		{
+			int play = onTurn / 100;
+			if (play == 3 - PlayerNumber)
+			{
+				UpdateScore(line, column, 3 - PlayerNumber, false);
+				///按比例缩小分值
+				if (line < 3 || line > 7 || column < 3 || column > 7) RateResetScore(0.78, false);
+				else RateResetScore(0.92, false);
+			}
+			else UpdateScore(line, column, play, false);
+		}
 		return;
 	}
 	bool abc = true;
 	OT = (onTurn == 1 || onTurn == -1) ? 1 : 2;
-	PlayerNumber = OT == 1 ? 2 : 1;//设置该AI的玩家编号
+	PlayerNumber = 3 - OT;//设置该AI的玩家编号
 	if (line != 0 && column != 0)
 	{
-		CalculatePerf(line, column);//分析对手
 		cross[line][column] = OT;//先更新棋盘信息数组
 		///按比例缩小分值
 		if (line < 3 || line > 7 || column < 3 || column > 7) RateResetScore(0.78);
 		else RateResetScore(0.92);
 		UpdateScore(line, column, OT, true);
-		Display(OT, line, column);
+		//Display(OT, line, column);
 	}
-	if (line == 0 || column == 0)
+	else
 	{
 		GetMaxScorePosition();
 		line = MaxScorePosition / 10;
 		column = MaxScorePosition % 10;
 		cross[line][column] = PlayerNumber;
 		abc = false;
+	}
+	if (abc)
+	{
+		int NextPace = MatchMemory();
+		if (NextPace != 0)
+		{
+			abc = false;
+			line = NextPace / 10;
+			column = NextPace % 10;
+			cross[line][column] = PlayerNumber;
+		}
 	}
 	///若是死棋位置则一直循环，直到不是死棋位置
 	while (abc)
@@ -70,8 +82,9 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		}
 		else break;
 	}
+	cross[line][0] = 1;
 	UpdateScore(line, column, PlayerNumber);
-	Display(PlayerNumber, line, column);//输出棋盘分值
+	//	Display(PlayerNumber, line, column);
 }
 ///控制台显示信息函数
 void AI1::Display(int n, int line, int column)

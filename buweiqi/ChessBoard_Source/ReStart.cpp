@@ -7,7 +7,8 @@ void ChessBoard::ReStart()
 	if (Winner == isBlack)
 		MessageBox(RootHwnd, _T("¹§Ï²Íæ¼Ò1£¨ºÚ×Ó£©Ê¤³ö"), _T("¿­Ðý"), MB_OK);
 	else MessageBox(RootHwnd, _T("¹§Ï²Íæ¼Ò2£¨°××Ó£©Ê¤³ö"), _T("¿­Ðý"), MB_OK);
-
+	ai1.FS.CloseFile();
+	FileS.AddMemory(SituaHead, Winner);
 	Init_cross();
 	Init_Pace();
 	onTurn = 1;
@@ -26,7 +27,14 @@ void ChessBoard::ReStart()
 	column = 0;
 	Player1AI = NULL;
 	Player2AI = NULL;
-
+	Qua.FirstQuadrant = 0;
+	Qua.SecondQuadrant = 0;
+	Qua.ThirdQuadrant = 0;
+	Qua.ForthQuadrant = 0;
+	ai1.Qua.FirstQuadrant = 0;
+	ai1.Qua.SecondQuadrant = 0;
+	ai1.Qua.ThirdQuadrant = 0;
+	ai1.Qua.ForthQuadrant = 0;
 	PostMessage(RootHwnd, WM_PAINT, (WPARAM)NULL, (LPARAM)NULL);
 
 	SendMessageA(Player1UseAI, WM_SETTEXT, (WPARAM)NULL, LPARAM("Ê¹ÓÃAI"));

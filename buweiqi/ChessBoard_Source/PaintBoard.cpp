@@ -62,6 +62,7 @@ void ChessBoard::BackPace()
 	if (!Start) return;//如果未开始游戏，按钮无效
 	if (Tail == NULL) return;
 	PACE *p;
+	SITUATION *s;
 	switch (Player1isAI || Player2isAI)
 	{
 		//如果有一方是AI，则回退两步
@@ -70,12 +71,15 @@ void ChessBoard::BackPace()
 		p = Tail;
 		Tail = Tail->perior;
 		delete p;
-		p = NULL;
 		Tail->next = NULL;
 		if (Player1isAI) Player1AI->GetPosition(line, column, 100);
 		if (Player2isAI) Player2AI->GetPosition(line, column, 200);
 		line = Tail->line;
 		column = Tail->column;
+		s = TempTail;
+		TempTail = TempTail->prior;
+		delete s;
+		TempTail->next = NULL;
 		//如果两方都是玩家，则回退一步
 	case false:
 		cross[Tail->line][Tail->column] = 0;
@@ -87,37 +91,24 @@ void ChessBoard::BackPace()
 			Tail = NULL;
 			line = 0;
 			column = 0;
-			TipPlayer(isWhite);
+			delete TempTail;
+			TempTail = NULL;
+			for (int i = 0; i < 11; i++) TempTail->Line[i] = 0;
 		}
 		else
 		{
 			p = Tail;
 			Tail = Tail->perior;
 			delete p;
-			p = NULL;
 			Tail->next = NULL;
 			line = Tail->line;
 			column = Tail->column;
-			TipPlayer(Tail->player);
+			s = TempTail;
+			TempTail = TempTail->prior;
+			delete s;
+			TempTail->next = NULL;
 		}
 		break;
 	}
 	RePaint();
-}
-void ChessBoard::TipPlayer(int Type)
-{
-	if (Type == isBlack)
-	{
-		ShowWindow(TurnToBlack, SW_HIDE);
-		ShowWindow(TurnToWhite, SW_SHOW);
-		UpdateWindow(TurnToWhite);
-		Round2 = 60;
-	}
-	else if (Type == isWhite)
-	{
-		ShowWindow(TurnToWhite, SW_HIDE);
-		ShowWindow(TurnToBlack, SW_SHOW);
-		UpdateWindow(TurnToBlack);
-		Round1 = 60;
-	}
 }

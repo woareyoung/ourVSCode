@@ -146,7 +146,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI1_Header\AI1.h" />
-    <ClInclude Include="AI1_Header\Arithmatic.h" />
     <ClInclude Include="AI1_Header\PointStyle.h" />
     <ClInclude Include="AI2_Header\AI2.h" />
     <ClInclude Include="AI2_Header\AIPlayer.h" />
@@ -157,22 +156,20 @@
     <ClInclude Include="ChessBoard_Header\Chess.h" />
     <ClInclude Include="ChessBoard_Header\ChessBoard.h" />
     <ClInclude Include="ChessBoard_Header\PlayerInfo.h" />
+    <ClInclude Include="ChessBoard_Header\SIP.h" />
     <ClInclude Include="ChessBoard_Header\WindowHwnd.h" />
     <ClInclude Include="ChessBoard_Header\WindowSize.h" />
+    <ClInclude Include="FileSystem_Header\FileSystem.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AI1_Source\ArithmaticCore\BuildEquation.cpp" />
-    <ClCompile Include="AI1_Source\ArithmaticCore\CalculatePerf.cpp" />
-    <ClCompile Include="AI1_Source\ArithmaticCore\Clear.cpp" />
-    <ClCompile Include="AI1_Source\ArithmaticCore\Forecast.cpp" />
-    <ClCompile Include="AI1_Source\ArithmaticCore\Record.cpp" />
     <ClCompile Include="AI1_Source\DeadCheck.cpp" />
     <ClCompile Include="AI1_Source\FunctionPart.cpp" />
     <ClCompile Include="AI1_Source\AI1GetPosition.cpp" />
     <ClCompile Include="AI1_Source\Initialize.cpp" />
+    <ClCompile Include="AI1_Source\MatchMemory.cpp" />
     <ClCompile Include="AI1_Source\RateResetScore.cpp" />
     <ClCompile Include="AI1_Source\UpdateScore.cpp" />
     <ClCompile Include="AI2_Source\DataUtil.cpp" />
@@ -184,6 +181,7 @@
     <ClCompile Include="AI2_Source\pattern.cpp" />
     <ClCompile Include="AI3_Source\AI3GetPosition.cpp" />
     <ClCompile Include="buweiqi.cpp" />
+    <ClCompile Include="ChessBoard_Source\AddList.cpp" />
     <ClCompile Include="ChessBoard_Source\InitData.cpp" />
     <ClCompile Include="ChessBoard_Source\PaintBoard.cpp" />
     <ClCompile Include="ChessBoard_Source\PaintChess.cpp" />
@@ -193,6 +191,9 @@
     <ClCompile Include="ChessBoard_Source\util\int2String.cpp" />
     <ClCompile Include="ChessBoard_Source\util\recursion.cpp" />
     <ClCompile Include="ChessBoard_Source\WinOrLose.cpp" />
+    <ClCompile Include="FileSystem_Source\AddMemory.cpp" />
+    <ClCompile Include="FileSystem_Source\Init.cpp" />
+    <ClCompile Include="FileSystem_Source\Match.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

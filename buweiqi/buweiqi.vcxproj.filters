@@ -40,11 +40,14 @@
     <Filter Include="Source Files\ChessBoard_Source\util">
       <UniqueIdentifier>{20eed19a-c71a-41ef-af70-b5cd738497c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\AI1_Source\ArithmaticCore">
-      <UniqueIdentifier>{ec5c4621-2399-4cd4-ae02-a93963a99550}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\AI2_Source\function">
+    <Filter Include="Source Files\AI2_Source\score">
       <UniqueIdentifier>{77d6d7df-64ed-4970-bc65-d10c19f048ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FileSystem_Header">
+      <UniqueIdentifier>{9ada9bfa-a985-4765-a2d4-6c6024fb91a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FileSystem_Source">
+      <UniqueIdentifier>{edb2cbeb-a855-407b-9696-fca6f7266fce}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -96,11 +99,11 @@
     <ClInclude Include="AI1_Header\PointStyle.h">
       <Filter>Header Files\AI1_Header</Filter>
     </ClInclude>
-    <ClInclude Include="AI1_Header\Arithmatic.h">
-      <Filter>Header Files\AI1_Header</Filter>
+    <ClInclude Include="FileSystem_Header\FileSystem.h">
+      <Filter>Header Files\FileSystem_Header</Filter>
     </ClInclude>
-    <ClInclude Include="AI2_Header\DefaultChess.h">
-      <Filter>Header Files\AI2_Header</Filter>
+    <ClInclude Include="ChessBoard_Header\SIP.h">
+      <Filter>Header Files\ChessBoard_Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -143,6 +146,12 @@
     <ClCompile Include="AI2_Source\DataUtil.cpp">
       <Filter>Source Files\AI2_Source</Filter>
     </ClCompile>
+    <ClCompile Include="AI2_Source\score\priority.cpp">
+      <Filter>Source Files\AI2_Source\score</Filter>
+    </ClCompile>
+    <ClCompile Include="AI2_Source\score\isGo2Dead.cpp">
+      <Filter>Source Files\AI2_Source\score</Filter>
+    </ClCompile>
     <ClCompile Include="AI1_Source\UpdateScore.cpp">
       <Filter>Source Files\AI1_Source</Filter>
     </ClCompile>
@@ -158,21 +167,6 @@
     <ClCompile Include="AI1_Source\DeadCheck.cpp">
       <Filter>Source Files\AI1_Source</Filter>
     </ClCompile>
-    <ClCompile Include="AI1_Source\ArithmaticCore\Record.cpp">
-      <Filter>Source Files\AI1_Source\ArithmaticCore</Filter>
-    </ClCompile>
-    <ClCompile Include="AI1_Source\ArithmaticCore\Forecast.cpp">
-      <Filter>Source Files\AI1_Source\ArithmaticCore</Filter>
-    </ClCompile>
-    <ClCompile Include="AI1_Source\ArithmaticCore\Clear.cpp">
-      <Filter>Source Files\AI1_Source\ArithmaticCore</Filter>
-    </ClCompile>
-    <ClCompile Include="AI1_Source\ArithmaticCore\CalculatePerf.cpp">
-      <Filter>Source Files\AI1_Source\ArithmaticCore</Filter>
-    </ClCompile>
-    <ClCompile Include="AI1_Source\ArithmaticCore\BuildEquation.cpp">
-      <Filter>Source Files\AI1_Source\ArithmaticCore</Filter>
-    </ClCompile>
     <ClCompile Include="AI2_Source\AI2GetPosition.cpp">
       <Filter>Source Files\AI2_Source</Filter>
     </ClCompile>
@@ -185,14 +179,20 @@
     <ClCompile Include="AI2_Source\pattern.cpp">
       <Filter>Source Files\AI2_Source</Filter>
     </ClCompile>
-    <ClCompile Include="AI2_Source\function\DefaultChess.cpp">
-      <Filter>Source Files\AI2_Source\function</Filter>
+    <ClCompile Include="ChessBoard_Source\AddList.cpp">
+      <Filter>Source Files\ChessBoard_Source</Filter>
     </ClCompile>
-    <ClCompile Include="AI2_Source\function\isGo2Dead.cpp">
-      <Filter>Source Files\AI2_Source\function</Filter>
+    <ClCompile Include="FileSystem_Source\AddMemory.cpp">
+      <Filter>Source Files\FileSystem_Source</Filter>
     </ClCompile>
-    <ClCompile Include="AI2_Source\function\priority.cpp">
-      <Filter>Source Files\AI2_Source\function</Filter>
+    <ClCompile Include="FileSystem_Source\Init.cpp">
+      <Filter>Source Files\FileSystem_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem_Source\Match.cpp">
+      <Filter>Source Files\FileSystem_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AI1_Source\MatchMemory.cpp">
+      <Filter>Source Files\AI1_Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

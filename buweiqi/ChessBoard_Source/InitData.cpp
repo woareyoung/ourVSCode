@@ -7,7 +7,7 @@ ChessBoard::ChessBoard()
 	RootHeight = 768 * 550 / GetSystemMetrics(SM_CYSCREEN);//获取屏幕高度并设置窗体高度
 	Base = RootWidth > RootHeight ? RootHeight : RootWidth;//设置窗体内容规模以适应不同平台
 	ChessDiameter = Base / 10;//设置棋子直径，也是棋盘中每个格子的边长
-							  ///默认没有使用AI
+	///默认没有使用AI
 	Player1isAI = false;
 	Player2isAI = false;
 	line = 0;
@@ -32,6 +32,9 @@ ChessBoard::ChessBoard()
 	{
 		CrossCross[i] = i * ChessDiameter;
 	}
+	Tail == NULL;
+	SituaHead = NULL;
+	TempTail = NULL;
 	Init_cross();
 	Init_Pace();
 }
@@ -48,7 +51,6 @@ void ChessBoard::Init_cross()
 ///初始化下棋记录
 void ChessBoard::Init_Pace()
 {
-	if (Tail == NULL) return;
 	PACE *p = Tail;
 	while (p != NULL)
 	{
@@ -56,5 +58,13 @@ void ChessBoard::Init_Pace()
 		delete p;
 		p = NULL;
 		p = Tail;
+	}
+	SITUATION *s = SituaHead;
+	while (p != NULL)
+	{
+		SituaHead = SituaHead->next;
+		delete s;
+		s = NULL;
+		s = SituaHead;
 	}
 }
