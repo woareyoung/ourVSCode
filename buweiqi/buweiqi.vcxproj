@@ -149,6 +149,7 @@
     <ClInclude Include="AI1_Header\PointStyle.h" />
     <ClInclude Include="AI2_Header\AI2.h" />
     <ClInclude Include="AI2_Header\AIPlayer.h" />
+    <ClInclude Include="AI2_Header\DefaultChess.h" />
     <ClInclude Include="AI3_Header\AI3.h" />
     <ClInclude Include="buweiqi.h" />
     <ClInclude Include="ChessBoard_Header\AI.h" />
@@ -173,10 +174,11 @@
     <ClCompile Include="AI1_Source\UpdateScore.cpp" />
     <ClCompile Include="AI2_Source\DataUtil.cpp" />
     <ClCompile Include="AI2_Source\AI2GetPosition.cpp" />
+    <ClCompile Include="AI2_Source\function\DefaultChess.cpp" />
+    <ClCompile Include="AI2_Source\function\isGo2Dead.cpp" />
+    <ClCompile Include="AI2_Source\function\priority.cpp" />
     <ClCompile Include="AI2_Source\MaxandMinFunction.cpp" />
     <ClCompile Include="AI2_Source\pattern.cpp" />
-    <ClCompile Include="AI2_Source\score\isGo2Dead.cpp" />
-    <ClCompile Include="AI2_Source\score\priority.cpp" />
     <ClCompile Include="AI3_Source\AI3GetPosition.cpp" />
     <ClCompile Include="buweiqi.cpp" />
     <ClCompile Include="ChessBoard_Source\AddList.cpp" />

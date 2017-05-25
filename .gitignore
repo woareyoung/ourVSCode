@@ -222,3 +222,7 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+
+*.VC.db
+
+buweiqi.VC.VC.opendb
