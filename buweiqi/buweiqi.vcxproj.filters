@@ -167,6 +167,21 @@
     <ClCompile Include="AI1_Source\DeadCheck.cpp">
       <Filter>Source Files\AI1_Source</Filter>
     </ClCompile>
+    <ClCompile Include="AI1_Source\ArithmaticCore\Record.cpp">
+      <Filter>Source Files\AI1_Source\ArithmaticCore</Filter>
+    </ClCompile>
+    <ClCompile Include="AI1_Source\ArithmaticCore\Forecast.cpp">
+      <Filter>Source Files\AI1_Source\ArithmaticCore</Filter>
+    </ClCompile>
+    <ClCompile Include="AI1_Source\ArithmaticCore\Clear.cpp">
+      <Filter>Source Files\AI1_Source\ArithmaticCore</Filter>
+    </ClCompile>
+    <ClCompile Include="AI1_Source\ArithmaticCore\CalculatePerf.cpp">
+      <Filter>Source Files\AI1_Source\ArithmaticCore</Filter>
+    </ClCompile>
+    <ClCompile Include="AI1_Source\ArithmaticCore\BuildEquation.cpp">
+      <Filter>Source Files\AI1_Source\ArithmaticCore</Filter>
+    </ClCompile>
     <ClCompile Include="AI2_Source\AI2GetPosition.cpp">
       <Filter>Source Files\AI2_Source</Filter>
     </ClCompile>
