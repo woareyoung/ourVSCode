@@ -223,6 +223,7 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 
+*.db
 *.VC.db
-
+*.suo
 buweiqi.VC.VC.opendb
