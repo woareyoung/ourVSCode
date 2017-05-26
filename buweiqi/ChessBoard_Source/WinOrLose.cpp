@@ -13,7 +13,7 @@ bool ChessBoard::WinOrLose()
 	for (i = 0; i < 4; i++) Position[i] = false;
 	int player;//记录己方的编号（是1还是2）
 	int rival;//记录对方的编号（是1还是2）
-			  //onTurn的值是先变化了再调用该函数（WinOrLose）的
+	//onTurn的值是先变化了再调用该函数（WinOrLose）的
 	if (onTurn == isPlay1onTurn || onTurn == isAI1onTurn)
 	{
 		player = isWhite;

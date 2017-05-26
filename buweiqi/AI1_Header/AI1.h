@@ -60,6 +60,7 @@ private:
 	///在MatchMemory.cpp文件中
 	int MatchMemory();//搜索记忆中出现当前盘面状况的应对
 	void GetChessBoardStatus();//获取当前盘面状况
+	void Statistic(int line, int column);//统计局面各象限棋子数
 };
 
 

@@ -14,7 +14,13 @@ int AI1::MatchMemory()
 	}
 	return NextPace;
 }
-
+void AI1::Statistic(int line, int column)
+{
+	if (line > 5 && column < 5) Qua.FirstQuadrant++;
+	else if (line < 5 && column < 5) Qua.SecondQuadrant++;
+	else if (line < 5 && column > 5) Qua.ThirdQuadrant++;
+	else if (line > 5 && column > 5) Qua.ForthQuadrant++;
+}
 void AI1::GetChessBoardStatus()
 {
 	SITUATION NowStatus;

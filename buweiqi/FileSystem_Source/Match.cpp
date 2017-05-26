@@ -5,18 +5,18 @@ void FileSystem::Match(SITUATION &StatusQuo, int player)
 	int i;
 	SITUATION situa;
 	TempFile.close();
-	remove(TempFileName.data());
+	remove(TempFileName.c_str());
 	OpenFile(TempFileName, TempFile);
 	if (NowTempHouse == &TempHouse1)
 	{
 		TempHouse2.close();
-		remove(TempHouse2Name.data());
+		remove(TempHouse2Name.c_str());
 		OpenFile(TempHouse2Name, TempHouse2);
 	}
 	else
 	{
 		TempHouse1.close();
-		remove(TempHouse1Name.data());
+		remove(TempHouse1Name.c_str());
 		OpenFile(TempHouse1Name, TempHouse1);
 	}
 	situa.Line[0] = StatusQuo.Line[0];

@@ -3,7 +3,6 @@
 ///游戏结束
 void ChessBoard::ReStart()
 {
-	CloseHandle(TimeHandle);
 	if (Winner == isBlack)
 		MessageBox(RootHwnd, _T("恭喜玩家1（黑子）胜出"), _T("凯旋"), MB_OK);
 	else MessageBox(RootHwnd, _T("恭喜玩家2（白子）胜出"), _T("凯旋"), MB_OK);

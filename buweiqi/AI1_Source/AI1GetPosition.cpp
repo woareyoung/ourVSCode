@@ -48,6 +48,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 	}
 	if (abc)
 	{
+		Statistic(line, column);
 		int NextPace = MatchMemory();
 		if (NextPace != 0)
 		{
@@ -83,6 +84,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		else break;
 	}
 	cross[line][0] = 1;
+	Statistic(line, column);
 	UpdateScore(line, column, PlayerNumber);
 	//	Display(PlayerNumber, line, column);
 }

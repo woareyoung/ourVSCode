@@ -6,8 +6,8 @@ void ChessBoard::PaintBoard()
 	int i, j;
 	SelectObject(hdcBuffer, Board);
 	StretchBlt(hdc, 0, 0, Base, Base, hdcBuffer, 0, 0, 500, 500, SRCCOPY);//将兼容设备复制到显示设备上
-																		  //用于重绘
-																		  //画棋子
+	//用于重绘
+	//画棋子
 	for (i = 1; i < 10; i++)
 	{
 		for (j = 1; j < 10; j++)

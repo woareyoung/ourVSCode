@@ -29,7 +29,7 @@ public:
 	HWND SelectAI2;//选择AI2按钮，在选择AI窗口中
 	HWND SelectAI3;//选择AI3按钮，在选择AI窗口中
 	HINSTANCE hInst;//应用程序实例句柄
-	HANDLE TimeHandle;//计时器线程
+	HANDLE AnoHandle;//计时器线程
 	bool PrintTime;
 
 	RECT MainWinRect;//记录主窗口位置
