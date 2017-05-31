@@ -24,7 +24,6 @@ private:
 	//记录各交叉点的值，数组访问从“1”开始，访问顺序为“先行后列”，
 	//“0”表示没有棋子，“1”表示黑子，“2”表示白子
 	bool Cross[10][10];//遍历标识
-	int cross[10][10];//棋盘状态
 	int PlayerNumber;//记录该AI是玩家1还是玩家2
 	int MaxScorePosition;//最大分值的位置
 	double PointStyle[18];//记录每种特殊点类型的分值
@@ -56,11 +55,6 @@ private:
 
 	///在RateResetScore.cpp文件中
 	void RateResetScore(float ResetRate, bool add = true);//按比例缩小分值，减少分差，精确定位
-
-	///在MatchMemory.cpp文件中
-	int MatchMemory();//搜索记忆中出现当前盘面状况的应对
-	void GetChessBoardStatus();//获取当前盘面状况
-	void Statistic(int line, int column);//统计局面各象限棋子数
 };
 
 

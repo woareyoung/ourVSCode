@@ -26,6 +26,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		}
 		return;
 	}
+	CurrentRound++;
 	bool abc = true;
 	OT = (onTurn == 1 || onTurn == -1) ? 1 : 2;
 	PlayerNumber = 3 - OT;//设置该AI的玩家编号
@@ -86,6 +87,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 	cross[line][0] = 1;
 	Statistic(line, column);
 	UpdateScore(line, column, PlayerNumber);
+	CurrentRound++;
 	//	Display(PlayerNumber, line, column);
 }
 ///控制台显示信息函数

@@ -49,6 +49,9 @@
     <Filter Include="Source Files\FileSystem_Source">
       <UniqueIdentifier>{edb2cbeb-a855-407b-9696-fca6f7266fce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\MainAI_Source">
+      <UniqueIdentifier>{3915d4eb-5eaf-4416-b34a-3d6413f4bc77}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -105,6 +108,9 @@
     <ClInclude Include="ChessBoard_Header\SIP.h">
       <Filter>Header Files\ChessBoard_Header</Filter>
     </ClInclude>
+    <ClInclude Include="AI2_Header\DefaultChess.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -146,12 +152,6 @@
     <ClCompile Include="AI2_Source\DataUtil.cpp">
       <Filter>Source Files\AI2_Source</Filter>
     </ClCompile>
-    <ClCompile Include="AI2_Source\score\priority.cpp">
-      <Filter>Source Files\AI2_Source\score</Filter>
-    </ClCompile>
-    <ClCompile Include="AI2_Source\score\isGo2Dead.cpp">
-      <Filter>Source Files\AI2_Source\score</Filter>
-    </ClCompile>
     <ClCompile Include="AI1_Source\UpdateScore.cpp">
       <Filter>Source Files\AI1_Source</Filter>
     </ClCompile>
@@ -166,21 +166,6 @@
     </ClCompile>
     <ClCompile Include="AI1_Source\DeadCheck.cpp">
       <Filter>Source Files\AI1_Source</Filter>
-    </ClCompile>
-    <ClCompile Include="AI1_Source\ArithmaticCore\Record.cpp">
-      <Filter>Source Files\AI1_Source\ArithmaticCore</Filter>
-    </ClCompile>
-    <ClCompile Include="AI1_Source\ArithmaticCore\Forecast.cpp">
-      <Filter>Source Files\AI1_Source\ArithmaticCore</Filter>
-    </ClCompile>
-    <ClCompile Include="AI1_Source\ArithmaticCore\Clear.cpp">
-      <Filter>Source Files\AI1_Source\ArithmaticCore</Filter>
-    </ClCompile>
-    <ClCompile Include="AI1_Source\ArithmaticCore\CalculatePerf.cpp">
-      <Filter>Source Files\AI1_Source\ArithmaticCore</Filter>
-    </ClCompile>
-    <ClCompile Include="AI1_Source\ArithmaticCore\BuildEquation.cpp">
-      <Filter>Source Files\AI1_Source\ArithmaticCore</Filter>
     </ClCompile>
     <ClCompile Include="AI2_Source\AI2GetPosition.cpp">
       <Filter>Source Files\AI2_Source</Filter>
@@ -206,8 +191,17 @@
     <ClCompile Include="FileSystem_Source\Match.cpp">
       <Filter>Source Files\FileSystem_Source</Filter>
     </ClCompile>
-    <ClCompile Include="AI1_Source\MatchMemory.cpp">
-      <Filter>Source Files\AI1_Source</Filter>
+    <ClCompile Include="AI2_Source\function\DefaultChess.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AI2_Source\function\isGo2Dead.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AI2_Source\function\priority.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainAI_Source\MatchMemory.cpp">
+      <Filter>Source Files\MainAI_Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

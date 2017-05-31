@@ -2,39 +2,40 @@
 ///将本局游戏记录到总记忆库
 void FileSystem::AddMemory(SITUATION *header, int Winner)
 {
-	OpenFile(AIMemoryFileName, AIMemory);
+	int i, j;
 	SITUATION *s = header;
-	AIMemory.seekg(0, std::ios::end);
-	int i;
 	if (Winner == 1)
 	{
-		while (s->next != NULL)
+		for (j = 1; s->next != NULL; j++)
 		{
+			OpenFile(FN.ForeName + std::to_string(j) + FN.TXT, TempFile);
 			for (i = 1; i < 10; i++)
 			{
-				if (i == 6) AIMemory << std::endl;
-				AIMemory << s->Line[i] << " ";
+				if (i == 6) TempFile << std::endl;
+				TempFile << s->Line[i] << " ";
 			}
-			AIMemory << s->next->Line[0] << std::endl;
+			TempFile << s->next->Line[0] << std::endl;
 			s = s->next;
+			TempFile.close();
 		}
 	}
 	else
 	{
-		while (s->next != NULL)
+		for (j = 1; s->next != NULL; j++)
 		{
+			OpenFile(FN.ForeName + std::to_string(j) + FN.TXT, TempFile);
 			for (i = 1; i < 10; i++)
 			{
 				///将小数与整数部分调转
 				value[i] = DigitalChange(s->Line[i]);
-				AIMemory << value[i] << " ";
-				if (i == 5) AIMemory << std::endl;
+				TempFile << value[i] << " ";
+				if (i == 5) TempFile << std::endl;
 			}
-			AIMemory << s->next->Line[0] << std::endl;
+			TempFile << s->next->Line[0] << std::endl;
 			s = s->next;
+			TempFile.close();
 		}
 	}
-	AIMemory.close();
 }
 ///对数值进行小数与整数部分的交换
 double FileSystem::DigitalChange(double num)

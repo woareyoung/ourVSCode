@@ -1,6 +1,6 @@
-#include "../AI1_Header/AI1.h"
+#include "../ChessBoard_Header/AI.h"
 
-int AI1::MatchMemory()
+int AI::MatchMemory()
 {
 	double NextPace;
 	GetChessBoardStatus();
@@ -14,18 +14,18 @@ int AI1::MatchMemory()
 	}
 	return NextPace;
 }
-void AI1::Statistic(int line, int column)
+void AI::Statistic(int line, int column)
 {
 	if (line > 5 && column < 5) Qua.FirstQuadrant++;
 	else if (line < 5 && column < 5) Qua.SecondQuadrant++;
 	else if (line < 5 && column > 5) Qua.ThirdQuadrant++;
 	else if (line > 5 && column > 5) Qua.ForthQuadrant++;
 }
-void AI1::GetChessBoardStatus()
+void AI::GetChessBoardStatus()
 {
 	SITUATION NowStatus;
 	int maxQuadrant = Qua.GetMaxQuadrant();//获取最多棋子的象限
-	int rival = 3 - PlayerNumber;
+	int rival = 3 - player;
 	int i, j;
 	//如果最多棋子的是第一象限
 	if (maxQuadrant == Qua.FirstQuadrant)
@@ -39,7 +39,7 @@ void AI1::GetChessBoardStatus()
 			}
 			for (j = 9; j > 0; j--)
 			{
-				if (cross[i][j] == PlayerNumber) NowStatus.Line[i] += pow(2, 10 - j);
+				if (cross[i][j] == player) NowStatus.Line[i] += pow(2, 10 - j);
 				else if (cross[i][j] == rival) NowStatus.Line[i] += pow(2, 10 - j) / 10000;
 			}
 		}
@@ -51,7 +51,7 @@ void AI1::GetChessBoardStatus()
 		{
 			for (j = 1; j < 10; j++)
 			{
-				if (cross[i][j] == PlayerNumber) NowStatus.Line[i] += pow(2, j);
+				if (cross[i][j] == player) NowStatus.Line[i] += pow(2, j);
 				else if (cross[i][j] == rival) NowStatus.Line[i] += pow(2, j) / 10000;
 			}
 		}
@@ -63,7 +63,7 @@ void AI1::GetChessBoardStatus()
 		{
 			for (j = 1; j < 10; j++)
 			{
-				if (cross[i][j] == PlayerNumber) NowStatus.Line[10 - i] += pow(2, j);
+				if (cross[i][j] == player) NowStatus.Line[10 - i] += pow(2, j);
 				else if (cross[i][j] == rival) NowStatus.Line[10 - i] += pow(2, j) / 10000;
 			}
 		}
@@ -75,10 +75,10 @@ void AI1::GetChessBoardStatus()
 		{
 			for (j = 9; j > 0; j--)
 			{
-				if (cross[i][j] == PlayerNumber) NowStatus.Line[10 - i] += pow(2, 10 - j);
+				if (cross[i][j] == player) NowStatus.Line[10 - i] += pow(2, 10 - j);
 				else if (cross[i][j] == rival) NowStatus.Line[10 - i] += pow(2, 10 - j) / 10000;
 			}
 		}
 	}
-	FS.Match(NowStatus, PlayerNumber);
+	FS.Match(NowStatus, player);
 }

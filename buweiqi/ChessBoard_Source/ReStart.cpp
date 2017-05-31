@@ -26,10 +26,12 @@ void ChessBoard::ReStart()
 	column = 0;
 	Player1AI = NULL;
 	Player2AI = NULL;
+	///界面的Quadrant对象
 	Qua.FirstQuadrant = 0;
 	Qua.SecondQuadrant = 0;
 	Qua.ThirdQuadrant = 0;
 	Qua.ForthQuadrant = 0;
+	///AI的Quadrant对象
 	ai1.Qua.FirstQuadrant = 0;
 	ai1.Qua.SecondQuadrant = 0;
 	ai1.Qua.ThirdQuadrant = 0;

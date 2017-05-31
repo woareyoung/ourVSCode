@@ -169,7 +169,6 @@
     <ClCompile Include="AI1_Source\FunctionPart.cpp" />
     <ClCompile Include="AI1_Source\AI1GetPosition.cpp" />
     <ClCompile Include="AI1_Source\Initialize.cpp" />
-    <ClCompile Include="AI1_Source\MatchMemory.cpp" />
     <ClCompile Include="AI1_Source\RateResetScore.cpp" />
     <ClCompile Include="AI1_Source\UpdateScore.cpp" />
     <ClCompile Include="AI2_Source\DataUtil.cpp" />
@@ -194,6 +193,7 @@
     <ClCompile Include="FileSystem_Source\AddMemory.cpp" />
     <ClCompile Include="FileSystem_Source\Init.cpp" />
     <ClCompile Include="FileSystem_Source\Match.cpp" />
+    <ClCompile Include="MainAI_Source\MatchMemory.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

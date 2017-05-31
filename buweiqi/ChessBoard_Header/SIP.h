@@ -35,5 +35,6 @@ struct QUADRANT
 
 struct FileName
 {
-
+	std::string TXT = ".txt";
+	std::string ForeName = "Round";
 };
