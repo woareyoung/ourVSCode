@@ -1,7 +1,9 @@
 #include "../FileSystem_Header/FileSystem.h"
 ///匹配当前盘面状况的记忆
-void FileSystem::Match(SITUATION &StatusQuo, int player, int round)
+NEXTPACE* FileSystem::Match(SITUATION &StatusQuo, int player, int round)
 {
+	NEXTPACE *np = NULL;
+	NEXTPACE *temp = np;
 	int i;
 	SITUATION situa;
 	OpenFile(FN.ForeName + std::to_string(round) + FN.TXT, TempFile);
@@ -21,6 +23,22 @@ void FileSystem::Match(SITUATION &StatusQuo, int player, int round)
 				for (; i < 10; i++) TempFile >> value[i];
 				break;
 			}
+			else if (i == 8)
+			{
+				if (np == NULL)
+				{
+					temp = new NEXTPACE;
+					TempFile >> temp->site;
+				}
+				else
+				{
+					temp->next = new NEXTPACE;
+					temp = temp->next;
+					TempFile >> temp->site;
+				}
+			}
 		}
 	}
+	TempFile.close();
+	return np;
 }

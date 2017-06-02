@@ -24,11 +24,11 @@ private:
 	//记录各交叉点的值，数组访问从“1”开始，访问顺序为“先行后列”，
 	//“0”表示没有棋子，“1”表示黑子，“2”表示白子
 	bool Cross[10][10];//遍历标识
-	int PlayerNumber;//记录该AI是玩家1还是玩家2
 	int MaxScorePosition;//最大分值的位置
 	double PointStyle[18];//记录每种特殊点类型的分值
 	double Score[10][10];//记录每个位置上的分值
 	double MaxScore;//记录最大分值
+	NEXTPACE* np;//获取下一步的可能性的链表
 
 	void Display(int n, int line, int column);
 	///各功能函数 集中在FunctionPart.cpp文件中

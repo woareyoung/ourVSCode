@@ -6,7 +6,6 @@ void ChessBoard::ReStart()
 	if (Winner == isBlack)
 		MessageBox(RootHwnd, _T("¹§Ï²Íæ¼Ò1£¨ºÚ×Ó£©Ê¤³ö"), _T("¿­Ðý"), MB_OK);
 	else MessageBox(RootHwnd, _T("¹§Ï²Íæ¼Ò2£¨°××Ó£©Ê¤³ö"), _T("¿­Ðý"), MB_OK);
-	ai1.FS.CloseFile();
 	FileS.AddMemory(SituaHead, Winner);
 	Init_cross();
 	Init_Pace();

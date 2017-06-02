@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 ///用于界面记录历史走棋
 struct PACE
 {
@@ -35,6 +36,13 @@ struct QUADRANT
 
 struct FileName
 {
+	std::string AIMemory = "AIMemory.txt";
 	std::string TXT = ".txt";
-	std::string ForeName = "Round";
+	std::string ForeName = "AIMemory\\Round";
+};
+
+struct NEXTPACE
+{
+	int site;
+	NEXTPACE *next;
 };

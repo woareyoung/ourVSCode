@@ -7,8 +7,8 @@
 class FileSystem
 {
 public:
-	std::fstream TempFile;
-	FileName FN;
+	std::fstream TempFile;//临时文件对象
+	FileName FN;//文件名结构体
 	double value[10];//用于暂存从文件读取到的数值
 
 	/*
@@ -29,5 +29,10 @@ public:
 	param[StatusQuo]:记录当前盘面状况的结构体
 	param[player]:匹配记忆的玩家是玩家1还是玩家2
 	*/
-	void Match(SITUATION &StatusQuo, int player, int round);//查找符合当前棋盘状态的记忆库的文件流地址
+	NEXTPACE* Match(SITUATION &StatusQuo, int player, int round);//查找符合当前棋盘状态的记忆库的文件流地址
+	/*
+	param[sit]:盘面状况
+	param[change]:是否需要将数值转换
+	*/
+	bool Repeat(SITUATION *sit, bool change = false);//查看是否重复 若是，返回true
 };

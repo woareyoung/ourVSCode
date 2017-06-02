@@ -32,7 +32,7 @@ ChessBoard::ChessBoard()
 	{
 		CrossCross[i] = i * ChessDiameter;
 	}
-	Tail == NULL;
+	Tail = NULL;
 	SituaHead = NULL;
 	TempTail = NULL;
 	Init_cross();
