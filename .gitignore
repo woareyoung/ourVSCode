@@ -227,3 +227,5 @@ ModelManifest.xml
 *.VC.db
 *.suo
 buweiqi.VC.VC.opendb
+.vs/buweiqi/v14/.suo
+
