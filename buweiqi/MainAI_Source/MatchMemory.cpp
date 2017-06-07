@@ -10,7 +10,7 @@ void AI::Statistic(int line, int column)
 NEXTPACE* AI::MatchMemory(int line, int column)
 {
 	SITUATION NowStatus;
-	Statistic(line, column);
+	Statistic(line, column);//先统计当前局面
 	int maxQuadrant = Qua.GetMaxQuadrant();//获取最多棋子的象限
 	int rival = 3 - PlayerId;
 	int i, j;
@@ -26,8 +26,8 @@ NEXTPACE* AI::MatchMemory(int line, int column)
 			}
 			for (j = 9; j > 0; j--)
 			{
-				if (cross[i][j] == PlayerId) NowStatus.Line[i] += pow(2, 10 - j);
-				else if (cross[i][j] == rival) NowStatus.Line[i] += pow(2, 10 - j) / 10000;
+				if (cross[i][j] == PlayerId) NowStatus.Line[i] += pow(2, 10 - j) * 10000;
+				else if (cross[i][j] == rival) NowStatus.Line[i] += pow(2, 10 - j);
 			}
 		}
 	}
@@ -38,8 +38,8 @@ NEXTPACE* AI::MatchMemory(int line, int column)
 		{
 			for (j = 1; j < 10; j++)
 			{
-				if (cross[i][j] == PlayerId) NowStatus.Line[i] += pow(2, j);
-				else if (cross[i][j] == rival) NowStatus.Line[i] += pow(2, j) / 10000;
+				if (cross[i][j] == PlayerId) NowStatus.Line[i] += pow(2, j) * 10000;
+				else if (cross[i][j] == rival) NowStatus.Line[i] += pow(2, j);
 			}
 		}
 	}
@@ -50,8 +50,8 @@ NEXTPACE* AI::MatchMemory(int line, int column)
 		{
 			for (j = 1; j < 10; j++)
 			{
-				if (cross[i][j] == PlayerId) NowStatus.Line[10 - i] += pow(2, j);
-				else if (cross[i][j] == rival) NowStatus.Line[10 - i] += pow(2, j) / 10000;
+				if (cross[i][j] == PlayerId) NowStatus.Line[10 - i] += pow(2, j) * 10000;
+				else if (cross[i][j] == rival) NowStatus.Line[10 - i] += pow(2, j);
 			}
 		}
 	}
@@ -62,8 +62,8 @@ NEXTPACE* AI::MatchMemory(int line, int column)
 		{
 			for (j = 9; j > 0; j--)
 			{
-				if (cross[i][j] == PlayerId) NowStatus.Line[10 - i] += pow(2, 10 - j);
-				else if (cross[i][j] == rival) NowStatus.Line[10 - i] += pow(2, 10 - j) / 10000;
+				if (cross[i][j] == PlayerId) NowStatus.Line[10 - i] += pow(2, 10 - j) * 10000;
+				else if (cross[i][j] == rival) NowStatus.Line[10 - i] += pow(2, 10 - j);
 			}
 		}
 	}

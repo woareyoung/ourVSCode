@@ -12,7 +12,7 @@ struct PACE
 ///记录当前盘面状况
 struct SITUATION
 {
-	double Line[10] = { 0 };//9行的记录（其中数组第0个记录下棋的位置）
+	int Line[10] = { 0 };//9行的记录（其中数组第0个记录下棋的位置）
 	SITUATION *next;
 	SITUATION *prior;
 };
@@ -36,7 +36,6 @@ struct QUADRANT
 
 struct FileName
 {
-	std::string AIMemory = "AIMemory.txt";
 	std::string TXT = ".txt";
 	std::string ForeName = "AIMemory\\Round";
 };

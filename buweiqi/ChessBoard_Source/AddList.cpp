@@ -37,8 +37,8 @@ void ChessBoard::AddSituationList()
 			value = 0;
 			for (j = 9; j > 0; j--)
 			{
-				if (cross[i][j] == 1) value += pow(2, 10 - j);
-				else if (cross[i][j] == 2) value += pow(2, 10 - j) / 10000;
+				if (cross[i][j] == 1) value += pow(2, 10 - j) * 10000;
+				else if (cross[i][j] == 2) value += pow(2, 10 - j);
 			}
 			TempTail->Line[i] = value;
 		}
@@ -51,8 +51,8 @@ void ChessBoard::AddSituationList()
 			value = 0;
 			for (j = 1; j < 10; j++)
 			{
-				if (cross[i][j] == 1) value += pow(2, j);
-				else if (cross[i][j] == 2) value += pow(2, j) / 10000;
+				if (cross[i][j] == 1) value += pow(2, j) * 10000;
+				else if (cross[i][j] == 2) value += pow(2, j);
 			}
 			TempTail->Line[i] = value;
 		}
@@ -65,8 +65,8 @@ void ChessBoard::AddSituationList()
 			value = 0;
 			for (j = 1; j < 10; j++)
 			{
-				if (cross[i][j] == 1) value += pow(2, j);
-				else if (cross[i][j] == 2) value += pow(2, j) / 10000;
+				if (cross[i][j] == 1) value += pow(2, j) * 10000;
+				else if (cross[i][j] == 2) value += pow(2, j);
 			}
 			TempTail->Line[i] = value;
 		}
@@ -79,8 +79,8 @@ void ChessBoard::AddSituationList()
 			value = 0;
 			for (j = 9; j > 0; j--)
 			{
-				if (cross[i][j] == 1) value += pow(2, 10 - j);
-				else if (cross[i][j] == 2) value += pow(2, 10 - j) / 10000;
+				if (cross[i][j] == 1) value += pow(2, 10 - j) * 10000;
+				else if (cross[i][j] == 2) value += pow(2, 10 - j);
 			}
 			TempTail->Line[i] = value;
 		}

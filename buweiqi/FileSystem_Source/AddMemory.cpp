@@ -4,11 +4,13 @@ void FileSystem::AddMemory(SITUATION *header, int Winner)
 {
 	int i, j;
 	SITUATION *s = header;
+	std::string name;
 	if (Winner == 1)
 	{
 		for (j = 1; s->next != NULL; j++, s = s->next)
 		{
-			OpenFile(FN.ForeName + std::to_string(j) + FN.TXT, TempFile);
+			name = FN.ForeName + std::to_string(j) + FN.TXT;
+			OpenFile(name, TempFile);
 			//如果当前盘面已重复，则跳过
 			if (Repeat(s))
 			{
@@ -30,7 +32,8 @@ void FileSystem::AddMemory(SITUATION *header, int Winner)
 	{
 		for (j = 1; s->next != NULL; j++, s = s->next)
 		{
-			OpenFile(FN.ForeName + std::to_string(j) + FN.TXT, TempFile);
+			name = FN.ForeName + std::to_string(j) + FN.TXT;
+			OpenFile(name, TempFile);
 			//如果已经重复，则忽略
 			if (Repeat(s, true))
 			{
@@ -50,20 +53,20 @@ void FileSystem::AddMemory(SITUATION *header, int Winner)
 		}
 	}
 }
-///对数值进行小数与整数部分的交换
-double FileSystem::DigitalChange(double num)
+///对数值进行高位与低位部分的交换
+int FileSystem::DigitalChange(int num)
 {
-	double help1;
+	int help1;
 	int help2;
-	help2 = num; //获取整数部分
-	help1 = num - help2; //获取小数部分
-	return help1 * 10000 + (double)help2 / 10000;
+	help2 = num / 10000; //获取高位
+	help1 = num % 10000; //获取低位
+	return help1 * 10000 + help2;
 }
 ///查看是否重复
 bool FileSystem::Repeat(SITUATION* sit, bool change)
 {
 	int i;
-	double temp;
+	int temp;//临时变量
 	bool repeat = false;
 	TempFile.seekg(0);
 	//存到临时变量中
