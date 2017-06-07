@@ -9,7 +9,7 @@ class FileSystem
 public:
 	std::fstream TempFile;//临时文件对象
 	FileName FN;//文件名结构体
-	double value[10];//用于暂存从文件读取到的数值
+	int value[10];//用于暂存从文件读取到的数值
 
 	/*
 	param[FileName]:需要打开的文件名
