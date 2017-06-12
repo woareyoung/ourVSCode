@@ -40,6 +40,8 @@ void FileSystem::AddMemory(SITUATION *header, int Winner)
 				TempFile.close();
 				continue;
 			}
+			TempFile.close();
+			OpenFile(name, TempFile);
 			//如果没有重复，则记录下来
 			for (i = 1; i < 10; i++)
 			{

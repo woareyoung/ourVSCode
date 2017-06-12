@@ -10,6 +10,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		{
 			line++;
 			column++;
+			CurrentRound = 0;
 			InitializeD();
 		}
 		//ÍËÒ»²½²Ù×÷
