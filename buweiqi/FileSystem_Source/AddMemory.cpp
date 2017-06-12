@@ -40,6 +40,7 @@ void FileSystem::AddMemory(SITUATION *header, int Winner)
 				TempFile.close();
 				continue;
 			}
+			//由于读文件内容读到末尾时，文件对象就失效了，所以重新打开文件
 			TempFile.close();
 			OpenFile(name, TempFile);
 			//如果没有重复，则记录下来
