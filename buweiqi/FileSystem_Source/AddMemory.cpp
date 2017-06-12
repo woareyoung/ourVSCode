@@ -43,6 +43,7 @@ void FileSystem::AddMemory(SITUATION *header, int Winner)
 			//由于读文件内容读到末尾时，文件对象就失效了，所以重新打开文件
 			TempFile.close();
 			OpenFile(name, TempFile);
+			TempFile.seekg(0, std::ios::end);
 			//如果没有重复，则记录下来
 			for (i = 1; i < 10; i++)
 			{
