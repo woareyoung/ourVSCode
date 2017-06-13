@@ -17,8 +17,11 @@ void FileSystem::AddMemory(SITUATION *header, int Winner)
 				TempFile.close();
 				continue;
 			}
+			//由于读文件内容读到末尾时，文件对象就失效了，所以重新打开文件
+			TempFile.close();
+			OpenFile(name, TempFile);
+			TempFile.seekg(0, std::ios::end);
 			//如果没有重复，则记录下来
-			TempFile.seekg(0);
 			for (i = 1; i < 10; i++)
 			{
 				if (i == 6) TempFile << std::endl;
@@ -47,7 +50,7 @@ void FileSystem::AddMemory(SITUATION *header, int Winner)
 			//如果没有重复，则记录下来
 			for (i = 1; i < 10; i++)
 			{
-				//将小数与整数部分调转
+				//将高位与低位部分调转
 				value[i] = DigitalChange(s->Line[i]);
 				TempFile << value[i] << " ";
 				if (i == 5) TempFile << std::endl;
@@ -89,12 +92,16 @@ bool FileSystem::Repeat(SITUATION* sit, bool change)
 			//如果有不相等的，就读取到下一记录
 			if (temp != value[i])
 			{
-				for (; i < 10; i++) TempFile >> temp;
+				for (; i < 11; i++) TempFile >> temp;
 				repeat = false;
 				break;
 			}
 		}
-		if (repeat) return true;
+		if (repeat)
+		{
+			TempFile >> temp;
+			return true;
+		}
 	}
 	return false;
 }
