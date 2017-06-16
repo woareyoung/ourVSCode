@@ -25,9 +25,9 @@ void FileSystem::AddMemory(SITUATION *header, int Winner)
 			for (i = 1; i < 10; i++)
 			{
 				if (i == 6) TempFile << std::endl;
-				TempFile << s->Line[i] << " ";
+				TempFile << value[i] << " ";
 			}
-			TempFile << s->next->Line[0] << std::endl;
+			TempFile << value[0] << std::endl;
 			TempFile.close();
 		}
 	}
@@ -50,12 +50,10 @@ void FileSystem::AddMemory(SITUATION *header, int Winner)
 			//如果没有重复，则记录下来
 			for (i = 1; i < 10; i++)
 			{
-				//将高位与低位部分调转
-				value[i] = DigitalChange(s->Line[i]);
 				TempFile << value[i] << " ";
 				if (i == 5) TempFile << std::endl;
 			}
-			TempFile << s->next->Line[0] << std::endl;
+			TempFile << value[0] << std::endl;
 			TempFile.close();
 		}
 	}
@@ -77,14 +75,15 @@ bool FileSystem::Repeat(SITUATION* sit, bool change)
 	bool repeat = false;
 	TempFile.seekg(0);
 	//存到临时变量中
-	for (i = 0; i < 10; i++)
+	for (i = 1; i < 10; i++)
 	{
 		if(change) value[i] = DigitalChange(sit->Line[i]);
 		else value[i] = sit->Line[i];
 	}
+	value[0] = sit->Line[0];
 	//一直循环，直到文件结尾
 	while (!TempFile.eof())
-	{
+	{ 
 		repeat = true;
 		for (i = 1; i < 10; i++)
 		{
@@ -92,16 +91,12 @@ bool FileSystem::Repeat(SITUATION* sit, bool change)
 			//如果有不相等的，就读取到下一记录
 			if (temp != value[i])
 			{
-				for (; i < 11; i++) TempFile >> temp;
+				for (; i < 10; i++) TempFile >> temp;
 				repeat = false;
 				break;
 			}
 		}
-		if (repeat)
-		{
-			TempFile >> temp;
-			return true;
-		}
+		if (repeat) return true;
 	}
 	return false;
 }

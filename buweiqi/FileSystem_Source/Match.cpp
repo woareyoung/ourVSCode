@@ -14,6 +14,7 @@ NEXTPACE* FileSystem::Match(SITUATION &StatusQuo, int player, int round)
 		for (i = 1; i < 10; i++) situa.Line[i] = DigitalChange(StatusQuo.Line[i]);
 	}
 	else for (i = 1; i < 10; i++) situa.Line[i] = StatusQuo.Line[i];
+	TempFile.seekg(0);
 	while (!TempFile.eof())//循环直到文件末尾
 	{
 		for (i = 0; i < 9; i++)
