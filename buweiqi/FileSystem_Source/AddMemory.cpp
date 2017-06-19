@@ -78,18 +78,18 @@ bool FileSystem::Repeat(SITUATION* sit, bool change)
 	for (i = 1; i < 10; i++)
 	{
 		if(change) value[i] = DigitalChange(sit->Line[i]);
-		else value[i] = sit->Line[i];
+ 		else value[i] = sit->Line[i];
 	}
 	value[0] = sit->Line[0];
 	//一直循环，直到文件结尾
 	while (!TempFile.eof())
 	{ 
 		repeat = true;
-		for (i = 1; i < 10; i++)
+		for (i = 1; i < 11; i++)
 		{
-			TempFile >> temp;
+ 			TempFile >> temp;
 			//如果有不相等的，就读取到下一记录
-			if (temp != value[i])
+			if ((i != 10 && temp != value[i]) || (i == 10 && temp != value[0]))
 			{
 				for (; i < 10; i++) TempFile >> temp;
 				repeat = false;

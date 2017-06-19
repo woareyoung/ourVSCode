@@ -1,5 +1,6 @@
 #include "../stdafx.h"
 #include "../ChessBoard_Header/ChessBoard.h"
+#include "../ChessBoard_Header/Chess.h"
 
 ChessBoard::ChessBoard()
 {
@@ -67,4 +68,20 @@ void ChessBoard::Init_Pace()
 		s = NULL;
 		s = SituaHead;
 	}
+}
+
+void Chess::ClearSitua()
+{
+	SITUATION *temp, *tem;
+	if(SituaHead->next != NULL)
+		temp = SituaHead->next;
+	else return;//如果链表为空，就退出函数
+	while (temp != NULL)
+	{
+		tem = temp->next;
+		delete temp;
+		temp = tem;
+	}
+	SituaHead = NULL;
+	SituaHead = NULL;
 }

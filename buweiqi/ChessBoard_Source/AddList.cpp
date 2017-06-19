@@ -9,7 +9,7 @@ void ChessBoard::AddSituationList()
 	else if (line > 5 && column < 5) Qua.ThirdQuadrant++;
 	else if (line > 5 && column > 5) Qua.ForthQuadrant++;
 	///新建结点
-	if (TempTail == NULL)
+	if (SituaHead == NULL)
 	{
 		TempTail = new SITUATION;
 		TempTail->next = NULL;
@@ -112,13 +112,3 @@ void ChessBoard::AddList(int type)
 	}
 	AddSituationList();
 }
-/*
-///获取棋子数最多的象限
-int Chess::GetMaxQuadrant()
-{
-	int max = FirstQuadrant;
-	if (SecondQuadrant > max) max = SecondQuadrant;
-	if (ThirdQuadrant > max) max = ThirdQuadrant;
-	if (ForthQuadrant > max) max = ForthQuadrant;
-	return max;
-}*/

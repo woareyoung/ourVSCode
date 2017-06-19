@@ -7,6 +7,7 @@ void ChessBoard::ReStart()
 		MessageBox(RootHwnd, _T("¹§Ï²Íæ¼Ò1£¨ºÚ×Ó£©Ê¤³ö"), _T("¿­Ðý"), MB_OK);
 	else MessageBox(RootHwnd, _T("¹§Ï²Íæ¼Ò2£¨°××Ó£©Ê¤³ö"), _T("¿­Ðý"), MB_OK);
 	FileS.AddMemory(SituaHead, Winner);
+	ClearSitua();//Çå¿ÕÁ´±í
 	Init_cross();
 	Init_Pace();
 	onTurn = 1;

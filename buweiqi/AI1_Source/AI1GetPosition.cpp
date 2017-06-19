@@ -29,10 +29,15 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		}
 		return;
 	}
-	CurrentRound++;
 	bool abc = true;
 	OT = (onTurn == 1 || onTurn == -1) ? 1 : 2;
 	PlayerId = 3 - OT;//设置该AI的玩家编号
+	if (CurrentRound == 0)
+	{
+		if (PlayerId == 2) CurrentRound = 2;
+		else CurrentRound = 1;
+	}
+	else CurrentRound++;
 	//如果是正常下棋，则作出棋盘状态的改变
 	if (line != 0 && column != 0)
 	{
