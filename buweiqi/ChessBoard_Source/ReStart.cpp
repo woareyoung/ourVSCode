@@ -19,9 +19,6 @@ void ChessBoard::ReStart()
 	Start = false;
 	Player1isAI = false;
 	Player2isAI = false;
-	ai1.GetPosition(line, column, 0);
-	ai2.GetPosition(line, column, 0);
-	ai3.GetPosition(line, column, 0);
 	line = 0;
 	column = 0;
 	Player1AI = NULL;
@@ -31,11 +28,6 @@ void ChessBoard::ReStart()
 	Qua.SecondQuadrant = 0;
 	Qua.ThirdQuadrant = 0;
 	Qua.ForthQuadrant = 0;
-	///AI的Quadrant对象
-	ai1.Qua.FirstQuadrant = 0;
-	ai1.Qua.SecondQuadrant = 0;
-	ai1.Qua.ThirdQuadrant = 0;
-	ai1.Qua.ForthQuadrant = 0;
 	PostMessage(RootHwnd, WM_PAINT, (WPARAM)NULL, (LPARAM)NULL);
 
 	SendMessageA(Player1UseAI, WM_SETTEXT, (WPARAM)NULL, LPARAM("使用AI"));

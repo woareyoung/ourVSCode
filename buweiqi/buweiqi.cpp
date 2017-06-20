@@ -267,7 +267,23 @@ void SelectFun()
 	GetWindowRect(CB.RootHwnd, &CB.MainWinRect);//获取主窗口在屏幕中的位置
 	MoveWindow(CB.SelectAI, CB.MainWinRect.left + (CB.RootWidth - 250) / 2, CB.MainWinRect.top + (CB.RootHeight - 300) / 2, 250, 300, false);//改变窗口位置和大小
 	ShowWindow(CB.SelectAI, SW_SHOW);//设置窗口可视
-	int line = CB.line, column = CB.column;//用于检查AI是否已完成（即可以进行下棋了）
+//	int line = CB.line, column = CB.column;//用于检查AI是否已完成（即可以进行下棋了）
+	if (CB.CanSelectAI1)
+	{
+		ShowWindow(CB.SelectAI1, SW_SHOW);
+		ShowSelect1 = true;
+	}
+	if (CB.CanSelectAI2)
+	{
+		ShowWindow(CB.SelectAI2, SW_SHOW);
+		ShowSelect2 = true;
+	}
+	if (CB.CanSelectAI3)
+	{
+		ShowWindow(CB.SelectAI3, SW_SHOW);
+		ShowSelect3 = true;
+	}
+	/*
 	///检查AI1
 	if(CB.Player1AI != &CB.ai1 && CB.Player2AI != &CB.ai1)
 	{
@@ -306,7 +322,7 @@ void SelectFun()
 	}
 	//-------//
 	CB.line = line;
-	CB.column = column;
+	CB.column = column;*/
 	UpdateWindow(CB.SelectAI);
 }
 ///选择AI之后的处理
@@ -322,9 +338,9 @@ void Select()
 	case 1:
 		switch (Num)
 		{
-		case 1:CB.Player1AI = &CB.ai1; break;
-		case 2:CB.Player1AI = &CB.ai2; break;
-		case 3:CB.Player1AI = &CB.ai3; break;
+			case 1:CB.Player1AI = &CB.ai1;break;
+			case 2:CB.Player1AI = &CB.ai2;break;
+			case 3:CB.Player1AI = &CB.ai3;break;
 		}
 		CB.Player1isAI = true;
 		SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI"));
@@ -332,14 +348,17 @@ void Select()
 	case 2:
 		switch (Num)
 		{
-		case 1:CB.Player2AI = &CB.ai1; break;
-		case 2:CB.Player2AI = &CB.ai2; break;
-		case 3:CB.Player2AI = &CB.ai3; break;
+			case 1:CB.Player2AI = &CB.ai11; break;
+			case 2:CB.Player2AI = &CB.ai22; break;
+			case 3:CB.Player2AI = &CB.ai33; break;
 		}
 		CB.Player2isAI = true;
 		SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI"));
 		break;
 	}
+	///初始化AI数据
+	if (CB.Player1AI != NULL) CB.Player1AI->GetPosition(Num, Type, 0);
+	if (CB.Player2AI != NULL) CB.Player2AI->GetPosition(Num, Type, 0);
 	ShowSelect1 = false;//是否显示AI
 	ShowSelect2 = false;//是否显示AI
 	ShowSelect3 = false;//是否显示AI

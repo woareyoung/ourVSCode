@@ -1,6 +1,9 @@
 #include "../stdafx.h"
 #include "../ChessBoard_Header/ChessBoard.h"
 #include "../ChessBoard_Header/Chess.h"
+#include "../AI1_Header/AI1.h"
+#include "../AI2_Header/AI2.h"
+#include "../AI3_Header/AI3.h"
 
 ChessBoard::ChessBoard()
 {
@@ -21,7 +24,7 @@ ChessBoard::ChessBoard()
 	onTurn = 1;//轮到谁
 	Winner = 0;//胜利者
 	PrintTime = true;//是否需要输出时间
-					 ///结构体，保存区域
+	///结构体，保存区域
 	rect.left = 0;
 	rect.top = 0;
 	rect.right = Base;
@@ -38,6 +41,22 @@ ChessBoard::ChessBoard()
 	TempTail = NULL;
 	Init_cross();
 	Init_Pace();
+	///默认AI不可选
+	CanSelectAI1 = false;
+	CanSelectAI2 = false;
+	CanSelectAI3 = false;
+	///检测AI是否可以使用
+	//使用0号命令检查
+	ai1.GetPosition(line, column, 0);
+	if (line != 0) CanSelectAI1 = true;
+	line = 0;
+	ai2.GetPosition(line, column, 0);
+	if (line != 0) CanSelectAI2 = true;
+	line = 0;
+	ai3.GetPosition(line, column, 0);
+	if (line != 0) CanSelectAI3 = true;
+	line = 0;
+	column = 0;
 }
 ///初始化棋盘状态数组
 void ChessBoard::Init_cross()
@@ -48,6 +67,8 @@ void ChessBoard::Init_cross()
 			cross[i][j] = 0;
 		}
 	}
+	Player1AI = NULL;
+	Player2AI = NULL;
 }
 ///初始化下棋记录
 void ChessBoard::Init_Pace()
