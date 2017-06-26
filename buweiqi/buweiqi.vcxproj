@@ -175,7 +175,6 @@
     <ClCompile Include="AI2_Source\AI2GetPosition.cpp" />
     <ClCompile Include="AI2_Source\function\DefaultChess.cpp" />
     <ClCompile Include="AI2_Source\function\isGo2Dead.cpp" />
-    <ClCompile Include="AI2_Source\function\priority.cpp" />
     <ClCompile Include="AI2_Source\MaxandMinFunction.cpp" />
     <ClCompile Include="AI2_Source\pattern.cpp" />
     <ClCompile Include="AI3_Source\AI3GetPosition.cpp" />
