@@ -141,7 +141,7 @@ void AI2::rollback(int line, int column,int onTurn) {
 		--chessCount;
 	}
 	if (cross[line][column] != NoChess) {
-		cross[line][column] == NoChess;
+		cross[line][column] = NoChess;
 		chessScore[line][column] = getDefaultChessScore(line, column);
 	}
 }

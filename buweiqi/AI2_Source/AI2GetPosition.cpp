@@ -25,14 +25,6 @@ void AI2::GetPosition(int& line, int& column, int onTurn)
 		//回退一步的命令，对数据进行回退。（100为玩家1，200为玩家2，line与column为回退的位置）
 		else if (onTurn == 100 || onTurn == 200)
 		{
-
-		}
-		return;
-	}
-	else if (onTurn == 100 || onTurn == 200) // 响应来自主界面的回退
-	{
-		if (this->PlayerId == 3 - onTurn / 100)
-		{
 			rollback(line, column, onTurn / 100);
 		}
 		return;
