@@ -31,9 +31,7 @@ public:
 	HINSTANCE hInst;//应用程序实例句柄
 	HANDLE AnoHandle;//计时器线程
 	bool PrintTime;
-
 	RECT MainWinRect;//记录主窗口位置
-
 	HDC hdcBuffer;//缓冲
 	HBITMAP hBitMap;//内存位图
 	RECT rect;//矩形坐标
@@ -43,6 +41,10 @@ public:
 	HBITMAP WhiteChess;//保存白子的图片
 	HBITMAP Board;//保存棋盘的图片
 	HBITMAP Tips;//保存提示位图
+	//是否可以选AI
+	bool CanSelectAI1;
+	bool CanSelectAI2;
+	bool CanSelectAI3;
 };
 
 

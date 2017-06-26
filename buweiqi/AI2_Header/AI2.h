@@ -16,7 +16,7 @@
 #define isSiblings 2
 
 #define isMax 0
-#define isMin 1
+#define isMin 1gitgit
 
 // 用于匹配模式
 #define Black 1 // 黑子

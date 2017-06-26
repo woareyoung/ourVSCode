@@ -40,9 +40,6 @@
     <Filter Include="Source Files\ChessBoard_Source\util">
       <UniqueIdentifier>{20eed19a-c71a-41ef-af70-b5cd738497c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\AI2_Source\score">
-      <UniqueIdentifier>{77d6d7df-64ed-4970-bc65-d10c19f048ee}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\FileSystem_Header">
       <UniqueIdentifier>{9ada9bfa-a985-4765-a2d4-6c6024fb91a2}</UniqueIdentifier>
     </Filter>
@@ -191,17 +188,14 @@
     <ClCompile Include="FileSystem_Source\Match.cpp">
       <Filter>Source Files\FileSystem_Source</Filter>
     </ClCompile>
-    <ClCompile Include="AI2_Source\function\DefaultChess.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AI2_Source\function\isGo2Dead.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AI2_Source\function\priority.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MainAI_Source\MatchMemory.cpp">
       <Filter>Source Files\MainAI_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AI2_Source\function\DefaultChess.cpp">
+      <Filter>Source Files\AI2_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AI2_Source\function\isGo2Dead.cpp">
+      <Filter>Source Files\AI2_Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

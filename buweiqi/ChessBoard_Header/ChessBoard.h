@@ -47,6 +47,10 @@ public:
 
 	AI *Player1AI;
 	AI *Player2AI;
+	
+	AI1 ai11;
+	AI2 ai22;
+	AI3 ai33;
 	AI1 ai1;
 	AI2 ai2;
 	AI3 ai3;
