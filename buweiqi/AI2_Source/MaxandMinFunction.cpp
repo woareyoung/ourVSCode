@@ -156,9 +156,38 @@ void AI2::Revalute()
 int AI2::FindPosition() {
 	register int x = 0;
 	register int y = 0;
-
-	for (register int i = 1; i < 10; i++) {
-		for (register int j = 1; j < 10; j++) {
+	register int i; 
+	register int j;
+	bool Notloop = false;//是否断开循环
+	//扫描棋盘，判断是否只有死棋
+	for (i = 1; i < 10; i++)
+	{
+		for (j = 1; j < 10; j++)
+		{	
+			//如果不是空位，则扫描下一个位置
+			if (cross[i][j] != NoChess) continue;
+			//如果不是死棋，意味着棋局还没结束，则终止循环
+			if (chessScore[i][j] != minLimit)
+			{
+				Notloop = true;
+				break;
+			}
+			//如果扫描到一个死棋位置
+			else
+			{
+				x = i;
+				y = j;
+			}
+		}
+		if (Notloop) break;
+	}
+	//如果棋盘上只剩下死棋，则返回一个空位
+	if(i == 10 && j == 10)
+	{
+		return x * 100 + y;
+	}
+	for (i = 1; i < 10; i++) {
+		for (j = 1; j < 10; j++) {
 			x = i;
 			y = j;
 			if (cross[x][y] != NoChess || chessScore[x][y] == minLimit) continue;
