@@ -26,8 +26,8 @@ std::shared_ptr<NEXTPACE> AI::MatchMemory(int line, int column)
 			}
 			for (j = 9; j > 0; j--)
 			{
-				if (cross[i][j] == PlayerId) NowStatus.Line[i] += pow(2, 10 - j) * 10000;
-				else if (cross[i][j] == rival) NowStatus.Line[i] += pow(2, 10 - j);
+				if (cross[i][j] == PlayerId) NowStatus.Line[i] += (int)(pow(2, 10 - j) * 10000);
+				else if (cross[i][j] == rival) NowStatus.Line[i] += (int)pow(2, 10 - j);
 			}
 		}
 	}
@@ -38,8 +38,8 @@ std::shared_ptr<NEXTPACE> AI::MatchMemory(int line, int column)
 		{
 			for (j = 1; j < 10; ++j)
 			{
-				if (cross[i][j] == PlayerId) NowStatus.Line[i] += pow(2, j) * 10000;
-				else if (cross[i][j] == rival) NowStatus.Line[i] += pow(2, j);
+				if (cross[i][j] == PlayerId) NowStatus.Line[i] += (int)(pow(2, j) * 10000);
+				else if (cross[i][j] == rival) NowStatus.Line[i] += (int)pow(2, j);
 			}
 		}
 	}
@@ -50,8 +50,8 @@ std::shared_ptr<NEXTPACE> AI::MatchMemory(int line, int column)
 		{
 			for (j = 1; j < 10; ++j)
 			{
-				if (cross[i][j] == PlayerId) NowStatus.Line[10 - i] += pow(2, j) * 10000;
-				else if (cross[i][j] == rival) NowStatus.Line[10 - i] += pow(2, j);
+				if (cross[i][j] == PlayerId) NowStatus.Line[10 - i] += (int)(pow(2, j) * 10000);
+				else if (cross[i][j] == rival) NowStatus.Line[10 - i] += (int)pow(2, j);
 			}
 		}
 	}
@@ -62,8 +62,8 @@ std::shared_ptr<NEXTPACE> AI::MatchMemory(int line, int column)
 		{
 			for (j = 9; j > 0; j--)
 			{
-				if (cross[i][j] == PlayerId) NowStatus.Line[10 - i] += pow(2, 10 - j) * 10000;
-				else if (cross[i][j] == rival) NowStatus.Line[10 - i] += pow(2, 10 - j);
+				if (cross[i][j] == PlayerId) NowStatus.Line[10 - i] += (int)(pow(2, 10 - j) * 10000);
+				else if (cross[i][j] == rival) NowStatus.Line[10 - i] += (int)pow(2, 10 - j);
 			}
 		}
 	}
