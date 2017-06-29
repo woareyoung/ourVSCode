@@ -9,15 +9,15 @@ bool AI2::isGo2Dead(int line, int column, int type)
 	int player = type;//记录己方的编号（是1还是2）
 	int rival = getRival(player);//记录对方的编号（是1还是2）
 	auto reduceRecursionTimes = [&]() -> void {
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 10; ++i)
 		{
 			if (isGo2DeadStatus[i][0] == true)
-				for (int j = 0; j < 10; j++)
+				for (int j = 0; j < 10; ++j)
 					isGo2DeadStatus[i][j] = false;
 		}
 	};
-	for (int i = 0; i < 4; i++) Position[i] = false;
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; ++i) Position[i] = false;
+	for (int i = 0; i < 4; ++i)
 	{
 		if (cross[line + direction_8[i].x_offset][column + direction_8[i].y_offset] == rival)
 		{

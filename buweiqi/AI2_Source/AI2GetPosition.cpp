@@ -52,16 +52,16 @@ void AI2::GetPosition(int& line, int& column, int onTurn)
 	// 将计算出的位置的分数设为最小值
 /*
 	_cprintf("**************This is chess score*******(%d, %d)***********\n", line, column);
-	for (int i = 1; i < 10; i++)
+	for (int i = 1; i < 10; ++i)
 	{
-		for (int j = 1; j < 10; j++)
+		for (int j = 1; j < 10; ++j)
 			_cprintf("%d\t", chessScore[i][j]);
 		_cprintf("\n");
 	}
 	_cprintf("**************This is chess cross*******(%d, %d)***********\n", line, column);
-	for (int i = 1; i < 10; i++)
+	for (int i = 1; i < 10; ++i)
 	{
-		for (int j = 1; j < 10; j++)
+		for (int j = 1; j < 10; ++j)
 			_cprintf("%d\t", cross[i][j]);
 		_cprintf("\n");
 	}

@@ -22,7 +22,7 @@ public:
 		参数line：下棋的位置（行）
 		参数column：下棋的位置（列）
 	*/
-	NEXTPACE* MatchMemory(int line, int column);//匹配记忆
+	std::shared_ptr<NEXTPACE> MatchMemory(int line, int column);//匹配记忆
 	/*
 		参数line：下棋的位置（行）
 		参数column：下棋的位置（列）

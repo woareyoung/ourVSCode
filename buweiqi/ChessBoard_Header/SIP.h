@@ -1,20 +1,22 @@
 #pragma once
 #include <string>
+#include <memory>
+#include <iostream>
 ///用于界面记录历史走棋
 struct PACE
 {
 	int line;
 	int column;
 	int player;
-	PACE *next;
-	PACE *perior;
+	std::shared_ptr<PACE> next;
+	std::shared_ptr<PACE> perior;
 };
 ///记录当前盘面状况
 struct SITUATION
 {
 	int Line[10] = { 0 };//9行的记录（其中数组第0个记录下棋的位置）
-	SITUATION *next;
-	SITUATION *prior;
+	std::shared_ptr<SITUATION> next;
+	std::shared_ptr<SITUATION> prior;
 };
 ///
 struct QUADRANT
@@ -43,5 +45,5 @@ struct FileName
 struct NEXTPACE
 {
 	int site;
-	NEXTPACE *next;
+	std::shared_ptr<NEXTPACE> next;
 };

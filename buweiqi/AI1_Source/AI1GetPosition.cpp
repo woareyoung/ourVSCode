@@ -109,7 +109,7 @@ void AI1::Display(int n, int line, int column)
 	_cprintf("Player %d:  line:%d  column:%d\n\t", n, line, column);
 	for (int i = 0; i < 10; )
 	{
-		for (int j = 1; j < 10; j++)
+		for (int j = 1; j < 10; ++j)
 		{
 			if (i == 0) _cprintf("%d\t", j);
 			else _cprintf("%.2f\t", Score[i][j]);

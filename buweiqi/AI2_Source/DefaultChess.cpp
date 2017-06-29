@@ -15,9 +15,9 @@ DefaultChess::DefaultChess()
 		{ 0,1,2,2,2,2,2,2,2,1 },
 		{ 0,1,1,1,1,1,1,1,1,1 }
 	};
-	for (int i = 1; i < 10; i++)
+	for (int i = 1; i < 10; ++i)
 	{
-		for (int j = 1; j < 10; j++)
+		for (int j = 1; j < 10; ++j)
 		{
 			DefaultChessScore[i][j] = temp[i][j];
 		}

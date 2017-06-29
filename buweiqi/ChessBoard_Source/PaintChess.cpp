@@ -7,8 +7,8 @@ void ChessBoard::PaintChess()
 	switch (onTurn)
 	{
 	case isPlay1onTurn://画黑色棋子
-		for (int i = 0; i < 10; i++)
-			for (int j = 0; j < 10; j++)
+		for (int i = 0; i < 10; ++i)
+			for (int j = 0; j < 10; ++j)
 				Cross[i][j] = false;
 		if (cross[line][column] == 0)
 		{
@@ -27,8 +27,8 @@ void ChessBoard::PaintChess()
 		};
 		break;
 	case isPlay2onTurn://画白色棋子
-		for (int i = 0; i < 10; i++)
-			for (int j = 0; j < 10; j++)
+		for (int i = 0; i < 10; ++i)
+			for (int j = 0; j < 10; ++j)
 				Cross[i][j] = false;
 		if (cross[line][column] == 0)
 		{

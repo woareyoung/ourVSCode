@@ -76,7 +76,7 @@ void AI2::reverse(DIRECTION *PatternType) {
 */
 void AI2::reverseXY(DIRECTION *PatternType) {
 	register int temp;
-	for (register int i = 0; i < pattern_Sum; i++) {
+	for (register int i = 0; i < pattern_Sum; ++i) {
 		temp = (*PatternType).x_offset;
 		(*PatternType).x_offset = (*PatternType).y_offset;
 		(*PatternType).y_offset = temp;
@@ -89,7 +89,7 @@ void AI2::reverseXY(DIRECTION *PatternType) {
 * @param PatternType [匹配模式中棋子分布]
 */
 void AI2::reverse_Y(DIRECTION *PatternType) {
-	for (register int i = 0; i < pattern_Sum; i++) {
+	for (register int i = 0; i < pattern_Sum; ++i) {
 		(*PatternType).y_offset = -(*PatternType).y_offset;
 		++PatternType;
 	}
@@ -100,7 +100,7 @@ void AI2::reverse_Y(DIRECTION *PatternType) {
 * @param PatternType [匹配模式中棋子分布]
 */
 void AI2::reverse_X(DIRECTION *PatternType) {
-	for (register int i = 0; i < pattern_Sum; i++) {
+	for (register int i = 0; i < pattern_Sum; ++i) {
 		(*PatternType).x_offset = -(*PatternType).x_offset;
 		++PatternType;
 	}
@@ -112,7 +112,7 @@ void AI2::reverse_X(DIRECTION *PatternType) {
 */
 void AI2::reverse_X_Y(DIRECTION *PatternType) {
 	register int temp;
-	for (register int i = 0; i < pattern_Sum; i++) {
+	for (register int i = 0; i < pattern_Sum; ++i) {
 		temp = -(*PatternType).x_offset;
 		(*PatternType).x_offset = -(*PatternType).y_offset;
 		(*PatternType).y_offset = temp;
@@ -160,7 +160,7 @@ void AI2::Pattern(int *PatternType) {
 		for (y = 1; y < 10; ++y)
 		{
 			pointer = 0;
-			for (i = 0; i < pattern_Total; i++)
+			for (i = 0; i < pattern_Total; ++i)
 			{
 				j = pointer;
 				pointer += pattern_Count[i];

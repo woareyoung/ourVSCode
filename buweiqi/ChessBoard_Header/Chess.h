@@ -11,10 +11,10 @@ public:
 	///设置状态 在recursion.cpp文件中
 	void reduceRecursionTimes();
 	void setStatus(int RivalLine, int RivalColumn);
-	PACE *Tail;
+	std::shared_ptr<PACE> Tail;
 	FileSystem FileS;
-	SITUATION *SituaHead;
-	SITUATION *TempTail;
+	std::shared_ptr<SITUATION> SituaHead;
+	std::shared_ptr<SITUATION> TempTail;
 
 	QUADRANT Qua;
 	

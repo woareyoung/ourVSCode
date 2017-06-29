@@ -1,6 +1,8 @@
 #include "../ChessBoard_Header/Chess.h"
 #include "../ChessBoard_Header/ChessBoard.h"
 #include <math.h>
+#include <memory>
+#include <iostream>
 
 void ChessBoard::AddSituationList()
 {
@@ -11,14 +13,15 @@ void ChessBoard::AddSituationList()
 	///新建结点
 	if (SituaHead == NULL)
 	{
-		TempTail = new SITUATION;
+		TempTail = std::shared_ptr<SITUATION>(new SITUATION);
 		TempTail->next = NULL;
 		TempTail->prior = NULL;
 		SituaHead = TempTail;
 	}
 	else
 	{
-		SITUATION *s = new SITUATION;
+
+		std::shared_ptr<SITUATION> s = std::shared_ptr<SITUATION>(new SITUATION);
 		TempTail->next = s;
 		s->prior = TempTail;
 		TempTail = s;
@@ -32,7 +35,7 @@ void ChessBoard::AddSituationList()
 	//如果最多棋子的是第一象限
 	if (maxQuadrant == Qua.FirstQuadrant)
 	{
-		for (i = 1; i < 10; i++)
+		for (i = 1; i < 10; ++i)
 		{
 			value = 0;
 			for (j = 9; j > 0; j--)
@@ -46,10 +49,10 @@ void ChessBoard::AddSituationList()
 	//如果最多棋子的是第二象限
 	else if (maxQuadrant == Qua.SecondQuadrant)
 	{
-		for (i = 1; i < 10; i++)
+		for (i = 1; i < 10; ++i)
 		{
 			value = 0;
-			for (j = 1; j < 10; j++)
+			for (j = 1; j < 10; ++j)
 			{
 				if (cross[i][j] == 1) value += pow(2, j) * 10000;
 				else if (cross[i][j] == 2) value += pow(2, j);
@@ -63,7 +66,7 @@ void ChessBoard::AddSituationList()
 		for (i = 9; i > 0; i--)
 		{
 			value = 0;
-			for (j = 1; j < 10; j++)
+			for (j = 1; j < 10; ++j)
 			{
 				if (cross[i][j] == 1) value += pow(2, j) * 10000;
 				else if (cross[i][j] == 2) value += pow(2, j);
@@ -92,7 +95,7 @@ void ChessBoard::AddList(int type)
 	//添加到记录
 	if (Tail == NULL)
 	{
-		Tail = new PACE;
+		Tail = std::shared_ptr<PACE>(new PACE);
 		Tail->line = line;
 		Tail->column = column;
 		Tail->player = type;
@@ -101,7 +104,7 @@ void ChessBoard::AddList(int type)
 	}
 	else
 	{
-		PACE *p = new PACE;
+		std::shared_ptr<PACE> p = std::shared_ptr<PACE>(new PACE);
 		p->line = line;
 		p->column = column;
 		p->player = type;

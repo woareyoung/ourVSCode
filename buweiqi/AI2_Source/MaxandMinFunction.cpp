@@ -16,7 +16,7 @@ int AI2::maxandmin(int depth)
 		1,2,1,2,1,2,1,2,1,2
 	};
 	int temp;
-	for (int i = 0; i < depth; i++)
+	for (int i = 0; i < depth; ++i)
 	{
 		if (PlayerId == White) {
 			turn2Who = tempArrayW[i];
@@ -66,9 +66,9 @@ Find:
 void AI2::getMaxScore(int& tempLine, int& tempColumn)
 {
 	bool isFirst = true;
-	for (int i = 1; i < 10; i++)
+	for (int i = 1; i < 10; ++i)
 	{
-		for (int j = 1; j < 10; j++)
+		for (int j = 1; j < 10; ++j)
 		{
 			// 这里需要修改
 			if (chessScore[i][j] == minLimit || cross[i][j] != NoChess) continue;
@@ -92,9 +92,9 @@ void AI2::getMaxScore(int& tempLine, int& tempColumn)
 void AI2::getMinScore(int& tempLine, int& tempColumn)
 {
 	bool isFirst = true;
-	for (int i = 1; i < 10; i++)
+	for (int i = 1; i < 10; ++i)
 	{
-		for (int j = 1; j < 10; j++)
+		for (int j = 1; j < 10; ++j)
 		{
 			// 这里需要修改
 			if (chessScore[i][j] == minLimit || cross[i][j] != NoChess) continue;
@@ -139,9 +139,9 @@ int AI2::FindPosition() {
 	register int j;
 	bool Notloop = false;//是否断开循环
 	//扫描棋盘，判断是否只有死棋
-	for (i = 1; i < 10; i++)
+	for (i = 1; i < 10; ++i)
 	{
-		for (j = 1; j < 10; j++)
+		for (j = 1; j < 10; ++j)
 		{	
 			//如果不是空位，则扫描下一个位置
 			if (cross[i][j] != NoChess) continue;
@@ -165,8 +165,8 @@ int AI2::FindPosition() {
 	{
 		return x * 100 + y;
 	}
-	for (i = 1; i < 10; i++) {
-		for (j = 1; j < 10; j++) {
+	for (i = 1; i < 10; ++i) {
+		for (j = 1; j < 10; ++j) {
 			x = i;
 			y = j;
 			if (cross[x][y] != NoChess || chessScore[x][y] == minLimit) continue;

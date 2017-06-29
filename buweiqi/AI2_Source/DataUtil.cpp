@@ -1,9 +1,9 @@
 #include "../AI2_Header/AI2.h"
 #include <cstdlib>
 void AI2::initAllArray() {
-	for (int i = ChessStart; i < ChessEnd; i++) {
+	for (int i = ChessStart; i < ChessEnd; ++i) {
 		this->goodMoves[i - 1] = { 0,0,0 };
-		for (int j = ChessStart; j < ChessEnd; j++) {
+		for (int j = ChessStart; j < ChessEnd; ++j) {
 			cross[i][j] = NoChess;
 		}
 	}
@@ -20,16 +20,16 @@ void AI2::initAllArray() {
 		&AI2::reverse_Y,//(-Y,-X)
 		&AI2::reverse_X_Y//(X,Y)
 	};
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 10; ++i) {
 		Reverse[i] = temp[i];
 	}
 }
 
 void AI2::initChessScore(bool isFirst)
 {
-	for (int i = ChessStart; i < ChessEnd; i++)
+	for (int i = ChessStart; i < ChessEnd; ++i)
 	{
-		for (int j = ChessStart; j < ChessEnd; j++)
+		for (int j = ChessStart; j < ChessEnd; ++j)
 		{
 			if (cross[i][j] == NoChess && chessScore[i][j] == minLimit) continue;
 			if (!isFirst && cross[i][j] == NoChess && chessScore[i][j] == 0) continue;
@@ -42,8 +42,8 @@ bool AI2::isFinal() {
 	int emptyCount = 0;
 	int minLimitCount = 0;
 	int NoughtCount = 0;
-	for (int i = ChessStart; i < ChessEnd; i++)
-		for (int j = ChessStart; j < ChessEnd; j++) {
+	for (int i = ChessStart; i < ChessEnd; ++i)
+		for (int j = ChessStart; j < ChessEnd; ++j) {
 			if (cross[i][j] == NoChess) {
 				emptyCount++;
 			}

@@ -7,9 +7,9 @@ void AI1::RateResetScore(float ResetRate, bool add)
 	int i, j;
 	if (add)
 	{
-		for (i = 1; i < 10; i++)
+		for (i = 1; i < 10; ++i)
 		{
-			for (j = 1; j < 10; j++)
+			for (j = 1; j < 10; ++j)
 			{
 				if (Score[i][j] > 1) Score[i][j] *= ResetRate;
 			}
@@ -17,9 +17,9 @@ void AI1::RateResetScore(float ResetRate, bool add)
 	}
 	else
 	{
-		for (i = 1; i < 10; i++)
+		for (i = 1; i < 10; ++i)
 		{
-			for (j = 1; j < 10; j++)
+			for (j = 1; j < 10; ++j)
 			{
 				if (Score[i][j] > 1) Score[i][j] /= ResetRate;
 			}

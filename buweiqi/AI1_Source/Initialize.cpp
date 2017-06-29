@@ -45,9 +45,9 @@ void AI1::InitializeD()
 {
 	int i, j;
 	///初始化数组
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < 10; ++i)
 	{
-		for (j = 0; j < 10; j++)
+		for (j = 0; j < 10; ++j)
 		{
 			Score[i][j] = 1;
 			cross[i][j] = 0.0;

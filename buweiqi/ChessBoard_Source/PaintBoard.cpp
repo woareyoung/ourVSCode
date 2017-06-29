@@ -8,9 +8,9 @@ void ChessBoard::PaintBoard()
 	StretchBlt(hdc, 0, 0, Base, Base, hdcBuffer, 0, 0, 500, 500, SRCCOPY);//将兼容设备复制到显示设备上
 	//用于重绘
 	//画棋子
-	for (i = 1; i < 10; i++)
+	for (i = 1; i < 10; ++i)
 	{
-		for (j = 1; j < 10; j++)
+		for (j = 1; j < 10; ++j)
 		{
 			// 黑子
 			if (cross[i][j] == isBlack)
@@ -38,9 +38,9 @@ void ChessBoard::showChessBroadInfoOnDOS()
 	int countB = 0;
 	int countW = 0;
 	_cprintf("------------------Chess Broad---------------------\n");
-	for (int i = 1; i < 10; i++)
+	for (int i = 1; i < 10; ++i)
 	{
-		for (int j = 1; j < 10; j++)
+		for (int j = 1; j < 10; ++j)
 		{
 			_cprintf("%d\t", cross[i][j]);
 			if (cross[i][j] == isWhite)
@@ -61,8 +61,8 @@ void ChessBoard::BackPace()
 {
 	if (!Start) return;//如果未开始游戏，按钮无效
 	if (Tail == NULL) return;
-	PACE *p;
-	SITUATION *s;
+	std::shared_ptr<PACE> p;
+	std::shared_ptr<SITUATION> s;
 	switch (Player1isAI || Player2isAI)
 	{
 		//如果有一方是AI，则回退两步
@@ -70,7 +70,8 @@ void ChessBoard::BackPace()
 		cross[Tail->line][Tail->column] = 0;
 		p = Tail;
 		Tail = Tail->perior;
-		delete p;
+		// delete p;
+		p = nullptr;
 		Tail->next = NULL;
 		if (Player1isAI) Player1AI->GetPosition(line, column, 100);
 		if (Player2isAI) Player2AI->GetPosition(line, column, 200);
@@ -78,7 +79,8 @@ void ChessBoard::BackPace()
 		column = Tail->column;
 		s = TempTail;
 		TempTail = TempTail->prior;
-		delete s;
+		// delete s;
+		s = nullptr;
 		TempTail->next = NULL;
 		//如果两方都是玩家，则回退一步
 	case false:
@@ -87,25 +89,27 @@ void ChessBoard::BackPace()
 		if (Player2isAI) Player2AI->GetPosition(line, column, 200);
 		if (Tail->perior == NULL)
 		{
-			delete Tail;
-			Tail = NULL;
+			// delete Tail;
+			Tail = nullptr;
 			line = 0;
 			column = 0;
-			delete TempTail;
-			TempTail = NULL;
-			for (int i = 0; i < 11; i++) TempTail->Line[i] = 0;
+			// delete TempTail;
+			TempTail = nullptr;
+			for (int i = 0; i < 11; ++i) TempTail->Line[i] = 0;
 		}
 		else
 		{
 			p = Tail;
 			Tail = Tail->perior;
-			delete p;
+			// delete p;
+			p = nullptr;
 			Tail->next = NULL;
 			line = Tail->line;
 			column = Tail->column;
 			s = TempTail;
 			TempTail = TempTail->prior;
-			delete s;
+			// delete s;
+			s = nullptr;
 			TempTail->next = NULL;
 		}
 		break;

@@ -4,6 +4,8 @@
 #include "../AI1_Header/AI1.h"
 #include "../AI2_Header/AI2.h"
 #include "../AI3_Header/AI3.h"
+#include <memory>
+#include <iostream>
 
 ChessBoard::ChessBoard()
 {
@@ -32,7 +34,7 @@ ChessBoard::ChessBoard()
 	///创建灰色画刷并保存
 	int i;
 	//设置每个交叉点的坐标值
-	for (i = 1; i < 10; i++)
+	for (i = 1; i < 10; ++i)
 	{
 		CrossCross[i] = i * ChessDiameter;
 	}
@@ -62,8 +64,8 @@ ChessBoard::ChessBoard()
 void ChessBoard::Init_cross()
 {
 	int i, j;
-	for (i = 0; i < 10; i++) {
-		for (j = 0; j < 10; j++) {
+	for (i = 0; i < 10; ++i) {
+		for (j = 0; j < 10; ++j) {
 			cross[i][j] = 0;
 		}
 	}
@@ -73,34 +75,34 @@ void ChessBoard::Init_cross()
 ///初始化下棋记录
 void ChessBoard::Init_Pace()
 {
-	PACE *p = Tail;
+	std::shared_ptr<PACE> p = Tail;
 	while (p != NULL)
 	{
 		Tail = Tail->perior;
-		delete p;
-		p = NULL;
+		// delete p;
+		p = nullptr;
 		p = Tail;
 	}
-	SITUATION *s = SituaHead;
+	std::shared_ptr<SITUATION> s = SituaHead;
 	while (p != NULL)
 	{
 		SituaHead = SituaHead->next;
-		delete s;
-		s = NULL;
+		// delete s;
+		s = nullptr;
 		s = SituaHead;
 	}
 }
 
 void Chess::ClearSitua()
 {
-	SITUATION *temp, *tem;
+	std::shared_ptr<SITUATION> temp, tem;
 	if(SituaHead->next != NULL)
 		temp = SituaHead->next;
 	else return;//如果链表为空，就退出函数
 	while (temp != NULL)
 	{
 		tem = temp->next;
-		delete temp;
+		// delete temp;
 		temp = tem;
 	}
 	SituaHead = NULL;

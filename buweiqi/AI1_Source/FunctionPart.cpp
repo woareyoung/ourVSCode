@@ -35,9 +35,9 @@ void AI1::GetMaxScorePosition()
 	while (ran == 0 || ran % 10 == 0) ran = rand() % 89 + 11;
 	MaxScore = Score[ran / 10][ran % 10];
 	MaxScorePosition = ran;
-	for (i = 1; i < 10; i++)
+	for (i = 1; i < 10; ++i)
 	{
-		for (j = 1; j < 10; j++)
+		for (j = 1; j < 10; ++j)
 		{
 			if (MaxScore < Score[i][j])
 			{

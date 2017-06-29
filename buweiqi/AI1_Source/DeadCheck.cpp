@@ -21,6 +21,14 @@ bool AI1::DeadCheck(int line, int column, int who)
 bool AI1::CheckPosition(int OriLine, int OriColumn, int CLine, int CColumn, int player, bool &Position)
 {
 	int rival = player == 1 ? 2 : 1;
+	auto reduceRecursionTimes = [&]() -> void {
+		for (int i = 0; i < 10; ++i)
+		{
+			if (Cross[i][0] == true)
+				for (int j = 0; j < 10; ++j)
+					Cross[i][j] = false;
+		}
+	};
 	//若己方棋子已到边缘
 	if (CColumn == 0 || CColumn == 10 || CLine == 0 || CLine == 10) Position = true;
 	//若有对方的一个棋子
@@ -67,13 +75,4 @@ bool AI1::BesiegePosition(int RivalLine, int RivalColumn, int player, int rival,
 	//若对方棋子的某方向有己方的棋子或已到边缘
 	else tie = true;
 	return true;
-}
-void AI1::reduceRecursionTimes()
-{
-	for (int i = 0; i < 10; i++)
-	{
-		if (Cross[i][0] == true)
-			for (int j = 0; j < 10; j++)
-				Cross[i][j] = false;
-	}
 }

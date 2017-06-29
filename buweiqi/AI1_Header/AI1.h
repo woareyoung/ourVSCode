@@ -28,7 +28,7 @@ private:
 	double PointStyle[18];//记录每种特殊点类型的分值
 	double Score[10][10];//记录每个位置上的分值
 	double MaxScore;//记录最大分值
-	NEXTPACE* np;//获取下一步的可能性的链表
+	std::shared_ptr<NEXTPACE> np;//获取下一步的可能性的链表
 
 	void Display(int n, int line, int column);
 	///各功能函数 集中在FunctionPart.cpp文件中
@@ -62,7 +62,6 @@ private:
 	bool CheckPosition(int OriLine, int OriColumn, int CLine, int CColumn, int player, bool &Position);
 	bool Besieg(int RivalLine, int RivalColumn, int player, int rival);
 	bool BesiegePosition(int RivalLine, int RivalColumn, int player, int rival, bool &tie);
-	void reduceRecursionTimes();
 
 	///在RateResetScore.cpp文件中
 	void RateResetScore(float ResetRate, bool add = true);//按比例缩小分值，减少分差，精确定位

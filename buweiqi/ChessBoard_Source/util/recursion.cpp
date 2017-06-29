@@ -7,10 +7,10 @@
 */
 void Chess::reduceRecursionTimes()
 {
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 10; ++i)
 	{
 		if (Cross[i][0] == true)
-			for (int j = 0; j < 10; j++)
+			for (int j = 0; j < 10; ++j)
 				Cross[i][j] = false;
 	}
 }
