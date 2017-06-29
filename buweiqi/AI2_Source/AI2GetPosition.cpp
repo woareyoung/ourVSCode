@@ -46,8 +46,8 @@ void AI2::GetPosition(int& line, int& column, int onTurn)
 	ScanChessBroad();
 	// 设置遍历的深度
 	int temp = maxandmin(1);
-	line = temp / 100;
-	column = temp % 100;
+	line = getLine(temp);
+	column = getColumn(temp);
 	cross[line][column] = turn2Who;
 	// 将计算出的位置的分数设为最小值
 /*

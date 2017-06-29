@@ -65,27 +65,6 @@ Find:
 
 void AI2::getMaxScore(int& tempLine, int& tempColumn)
 {
-	/*
-	if (MovePointer == 0) {
-		return;
-	}
-	bool flag = true;
-	int sum = getMaxScoreNum(goodMoves[0].Score);
-	int ran;
-	int i, j;
-	while (flag)
-	{
-		ran = random(0, sum--);
-		i = goodMoves[ran].line;
-		j = goodMoves[ran].column;
-		flag = isGo2Dead(i, j, turn2Who);
-		goodMoves[ran] = { 0,0,0 };
-		std::sort(goodMoves, goodMoves + MovePointer);
-		--MovePointer;
-	}
-	tempLine = goodMoves[ran].line;
-	tempColumn = goodMoves[ran].column;
-	*/
 	bool isFirst = true;
 	for (int i = 1; i < 10; i++)
 	{

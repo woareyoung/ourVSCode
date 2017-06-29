@@ -1,4 +1,4 @@
-#include "../../AI2_Header/DefaultChess.h"
+#include "../AI2_Header/DefaultChess.h"
 
 DefaultChess::DefaultChess()
 {

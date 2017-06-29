@@ -2,8 +2,11 @@
 #ifndef AI2_H_INCLUDED
 #define AI2_H_INCLUDED
 #include "../chessBoard_Header/AI.h"
-#include "../AI2_Header/AIPlayer.h"
-#include "../AI2_Header/DefaultChess.h"
+#include "AIPlayer.h"
+#include "DefaultChess.h"
+#include <iostream>
+#include <vector>
+#include <set>
 
 #define ChessInit 0
 #define ChessStart 1
@@ -16,7 +19,10 @@
 #define isSiblings 2
 
 #define isMax 0
-#define isMin 1gitgit
+#define isMin 1
+
+#define pass (-1)
+#define no_move (-2)
 
 // 用于匹配模式
 #define Black 1 // 黑子
@@ -26,7 +32,11 @@
 // 判断棋子是否落在棋盘内
 #define isOnChessBoard(x) (0 < (x) && (x) < 10)
 #define OnChessBoard(x, y) (isOnChessBoard(x) && isOnChessBoard(y))  //棋子落在棋盘里
+
 #define getRival(onTurn) (onTurn == White ? Black : White)
+
+#define getLine(temp) (temp / 100)
+#define getColumn(temp) (temp % 100)
 
 typedef struct tagDIRECTION
 {
@@ -54,7 +64,11 @@ class AI2 : public AI, public AIPlayer, public DefaultChess
 private:
 	//记录各交叉点的值，数组访问从“1”开始，访问顺序为“先行后列”，
 	//“0”表示没有棋子，“1”表示黑子，“2”表示白子
-	int cross[10][10];
+	mutable unsigned int cross[10][10];
+	mutable int depth;
+	unsigned int previous_board_hash_value;
+	std::set<unsigned int> all_hash_values;
+
 	// 分数
 	int chessScore[10][10];
 	// isGo2Dead标志数组
@@ -68,7 +82,7 @@ private:
 	void ScanChessBroad();
 	void rollback(int line, int column, int onTurn);
 public:
-	AI2()
+	AI2() : chessCount(0), MovePointer(0)
 	{
 		initAllArray();
 	}
@@ -78,14 +92,7 @@ public:
 
 	// 判断是否是死棋位
 	bool isGo2Dead(int line, int column, int type);
-	void setStatus(int RivalLine, int RivalColumn);
-	void reduceRecursionTimes();
 	bool Besieg(int RivalLine, int RivalColumn, int player, int rival);
-
-	int priority_score(int scoreBase, int scorePRI, int type);
-
-	// 优虎口
-	void GoodTigersMouth();
 
 	// 初始化数组
 	void initChessScore(bool isFirst);
@@ -101,6 +108,35 @@ public:
 	int DealWithScore(bool isEqual);
 	void getMaxScore(int& tempLine, int& tempColumn);
 	void getMinScore(int& tempLine, int& tempColumn);
+
+	template<typename RandomEngine>
+	void do_random_move(RandomEngine* engine)
+	{
+		auto moves = get_moves();
+		attest(! moves.empty());
+		std::uniform_int_distribution<std::size_t> move_ind(0, moves.size() - 1);
+		auto move = moves[move_ind(*engine)];
+		do_move(move);
+	}
+
+	virtual std::vector<int> get_moves() const
+	{
+		std::vector<int> moves;
+		if (depth > 1000) {
+			return moves;
+		}
+
+		for (int i = ChessStart; i < ChessEnd; ++i) {
+		for (int j = ChessStart; j < ChessEnd; ++j) {
+				
+		}}
+
+//		if (moves.empty() && opponent_has_move) {
+//			moves.push_back(pass);
+//		}
+
+		return moves;
+	}
 
 	// 匹配函数
 	void startPattern();

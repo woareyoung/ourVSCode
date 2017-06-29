@@ -1,11 +1,9 @@
 #include "../AI2_Header/AI2.h"
 #include <cstdlib>
 void AI2::initAllArray() {
-	this->chessCount = 0;
-	this->MovePointer = 0;
-	for (int i = 1; i < 10; i++) {
+	for (int i = ChessStart; i < ChessEnd; i++) {
 		this->goodMoves[i - 1] = { 0,0,0 };
-		for (int j = 1; j < 10; j++) {
+		for (int j = ChessStart; j < ChessEnd; j++) {
 			cross[i][j] = NoChess;
 		}
 	}
@@ -60,20 +58,21 @@ bool AI2::isFinal() {
 				NoughtCount++;
 			}
 		}
+
 	return NoughtCount + minLimitCount == emptyCount;
 }
 
 void AI2::resetGo2DeadStatus() {
-	for (int i = ChessInit; i < ChessEnd; i++) {
-		for (int j = ChessInit; j < ChessEnd; j++) {
+	for (register int i = ChessInit; i < ChessEnd; ++i) {
+		for (register int j = ChessInit; j < ChessEnd; ++j) {
 			isGo2DeadStatus[i][j] = false;
 		}
 	}
 }
 
 void AI2::ScanChessBroad() {
-	for (int x = ChessStart; x < ChessEnd; x++) {
-		for (int y = ChessStart; y < ChessEnd; y++) {
+	for (int x = ChessStart; x < ChessEnd; ++x) {
+		for (int y = ChessStart; y < ChessEnd; ++y) {
 			if (cross[x][y] == NoChess) {
 				cross[x][y] = turn2Who;
 				if (isGo2Dead(x, y, turn2Who)) {
@@ -131,7 +130,7 @@ int AI2::getMaxScoreNum(int judge) {
 
 int AI2::random(double start, double end)
 {
-	return start + (end - start)*rand() / (RAND_MAX + 1.0);
+	return (int)(start + (end - start)*rand() / (RAND_MAX + 1.0));
 }
 
 void AI2::rollback(int line, int column,int onTurn) {

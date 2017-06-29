@@ -1,4 +1,4 @@
-#include "../../AI2_Header/AI2.h"
+#include "../AI2_Header/AI2.h"
 
 DIRECTION direction_8[] = { { -1, 0 },{ 0, 1 },{ 1, 0 },{ 0, -1 },{ -1, 1 },{ 1, 1 },{ 1, -1 },{ -1, -1 } };
 /**
@@ -8,6 +8,14 @@ bool AI2::isGo2Dead(int line, int column, int type)
 {
 	int player = type;//记录己方的编号（是1还是2）
 	int rival = getRival(player);//记录对方的编号（是1还是2）
+	auto reduceRecursionTimes = [&]() -> void {
+		for (int i = 0; i < 10; i++)
+		{
+			if (isGo2DeadStatus[i][0] == true)
+				for (int j = 0; j < 10; j++)
+					isGo2DeadStatus[i][j] = false;
+		}
+	};
 	for (int i = 0; i < 4; i++) Position[i] = false;
 	for (int i = 0; i < 4; i++)
 	{
@@ -36,6 +44,10 @@ bool AI2::Besieg(int RivalLine, int RivalColumn, int player, int rival)
 {
 	bool tie[4] = { false, false, false, false };
 	// 设置Cross数组状态
+	auto setStatus = [&](int RivalLine, int RivalColumn) -> void {
+		isGo2DeadStatus[RivalLine][RivalColumn] = true;
+		isGo2DeadStatus[RivalLine][0] = true;//下标为0的那一行如果为true则初始化，否则不用初始化
+	};
 	setStatus(RivalLine, RivalColumn);
 
 	//若对方棋子的上方有对方的棋子且未到上边缘
@@ -74,18 +86,4 @@ bool AI2::Besieg(int RivalLine, int RivalColumn, int player, int rival)
 	return false;
 }
 
-void AI2::reduceRecursionTimes()
-{
-	for (int i = 0; i < 10; i++)
-	{
-		if (isGo2DeadStatus[i][0] == true)
-			for (int j = 0; j < 10; j++)
-				isGo2DeadStatus[i][j] = false;
-	}
-}
 
-void AI2::setStatus(int RivalLine, int RivalColumn)
-{
-	isGo2DeadStatus[RivalLine][RivalColumn] = true;
-	isGo2DeadStatus[RivalLine][0] = true;//下标为0的那一行如果为true则初始化，否则不用初始化
-}

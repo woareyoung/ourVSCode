@@ -40,7 +40,7 @@ void ChessBoard::AddSituationList()
 				if (cross[i][j] == 1) value += pow(2, 10 - j) * 10000;
 				else if (cross[i][j] == 2) value += pow(2, 10 - j);
 			}
-			TempTail->Line[i] = value;
+			TempTail->Line[i] = (int)value;
 		}
 	}
 	//如果最多棋子的是第二象限
@@ -54,7 +54,7 @@ void ChessBoard::AddSituationList()
 				if (cross[i][j] == 1) value += pow(2, j) * 10000;
 				else if (cross[i][j] == 2) value += pow(2, j);
 			}
-			TempTail->Line[i] = value;
+			TempTail->Line[i] = (int)value;
 		}
 	}
 	//如果最多棋子的是第三象限
@@ -68,7 +68,7 @@ void ChessBoard::AddSituationList()
 				if (cross[i][j] == 1) value += pow(2, j) * 10000;
 				else if (cross[i][j] == 2) value += pow(2, j);
 			}
-			TempTail->Line[i] = value;
+			TempTail->Line[i] = (int)value;
 		}
 	}
 	//如果最多棋子的是第四象限
@@ -82,7 +82,7 @@ void ChessBoard::AddSituationList()
 				if (cross[i][j] == 1) value += pow(2, 10 - j) * 10000;
 				else if (cross[i][j] == 2) value += pow(2, 10 - j);
 			}
-			TempTail->Line[i] = value;
+			TempTail->Line[i] = (int)value;
 		}
 	}
 }
