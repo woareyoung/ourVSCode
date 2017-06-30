@@ -108,6 +108,9 @@
     <ClInclude Include="AI2_Header\DefaultChess.h">
       <Filter>Header Files\AI2_Header</Filter>
     </ClInclude>
+    <ClInclude Include="AI2_Header\MCTS.h">
+      <Filter>Header Files\AI2_Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="buweiqi.cpp">
@@ -187,9 +190,6 @@
     </ClCompile>
     <ClCompile Include="MainAI_Source\MatchMemory.cpp">
       <Filter>Source Files\MainAI_Source</Filter>
-    </ClCompile>
-    <ClCompile Include="AI2_Source\DefaultChess.cpp">
-      <Filter>Source Files\AI2_Source</Filter>
     </ClCompile>
     <ClCompile Include="AI2_Source\isGo2Dead.cpp">
       <Filter>Source Files\AI2_Source</Filter>

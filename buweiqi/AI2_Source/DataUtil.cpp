@@ -62,14 +62,6 @@ bool AI2::isFinal() {
 	return NoughtCount + minLimitCount == emptyCount;
 }
 
-void AI2::resetGo2DeadStatus() {
-	for (register int i = ChessInit; i < ChessEnd; ++i) {
-		for (register int j = ChessInit; j < ChessEnd; ++j) {
-			isGo2DeadStatus[i][j] = false;
-		}
-	}
-}
-
 void AI2::ScanChessBroad() {
 	for (int x = ChessStart; x < ChessEnd; ++x) {
 		for (int y = ChessStart; y < ChessEnd; ++y) {
@@ -128,17 +120,3 @@ int AI2::getMaxScoreNum(int judge) {
 	return i;
 }
 
-int AI2::random(double start, double end)
-{
-	return (int)(start + (end - start)*rand() / (RAND_MAX + 1.0));
-}
-
-void AI2::rollback(int line, int column,int onTurn) {
-	if (onTurn == PlayerId) {
-		--chessCount;
-	}
-	if (cross[line][column] != NoChess) {
-		cross[line][column] = NoChess;
-		chessScore[line][column] = getDefaultChessScore(line, column);
-	}
-}
