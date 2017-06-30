@@ -6,7 +6,7 @@ int pattern_Total = 11;
 // 匹配的次数
 int pattern_Sum = 44;
 // 模式分数尺度
-int pattern_Score[] = { 60,50,40,35,35,30,30,25,2520,20 };
+int pattern_Score[] = { 60,50,40,35,35,30,30,25,25,20,20 };
 // 分数说明：
 // 对方自杀点且非我方自杀点的分数为0，我方自杀点为minLitmit。
 

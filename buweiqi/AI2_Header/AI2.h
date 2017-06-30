@@ -75,9 +75,25 @@ private:
 	int MovePointer;// 当前好的着子点的数量
 	int chessCount;
 	bool Position[4];
-	void resetGo2DeadStatus();
+
+	void resetGo2DeadStatus() {
+		for (register int i = ChessInit; i < ChessEnd; ++i) {
+			for (register int j = ChessInit; j < ChessEnd; ++j) {
+				isGo2DeadStatus[i][j] = false;
+			}
+		}
+	}
+
 	void ScanChessBroad();
-	void rollback(int line, int column, int onTurn);
+	void rollback(int line, int column, int onTurn) {
+		if (onTurn == PlayerId) {
+			--chessCount;
+		}
+		if (cross[line][column] != NoChess) {
+			cross[line][column] = NoChess;
+			chessScore[line][column] = getDefaultChessScore(line, column);
+		}
+	}
 public:
 	AI2() : chessCount(0), MovePointer(0)
 	{
@@ -96,7 +112,10 @@ public:
 	void initAllArray();
 	bool isContaint(goodMove move);
 	int getMaxScoreNum(int judge);
-	int random(double start, double end);
+
+	int random(double start, double end) {
+		return (int)(start + (end - start)*rand() / (RAND_MAX + 1.0));
+	}
 
 	// 博弈树部分
 	void Revalute();
