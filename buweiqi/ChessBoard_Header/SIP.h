@@ -21,10 +21,10 @@ struct SITUATION
 ///
 struct QUADRANT
 {
-	int FirstQuadrant = 0;//第一象限棋子数
-	int SecondQuadrant = 0;//第二象限棋子数
-	int ThirdQuadrant = 0;//第三象限棋子数
-	int ForthQuadrant = 0;//第四象限棋子数
+	int FirstQuadrant = 0;//第一区域棋子数（对应坐标系中的第三象限）
+	int SecondQuadrant = 0;//第二区域棋子数（对应坐标系中的第二象限）
+	int ThirdQuadrant = 0;//第三区域棋子数（对应坐标系中的第一象限）
+	int ForthQuadrant = 0;//第四区域棋子数（对应坐标系中的第四象限）
 	///获取棋子数最多的象限
 	int GetMaxQuadrant()
 	{

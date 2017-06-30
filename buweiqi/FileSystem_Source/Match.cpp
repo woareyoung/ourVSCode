@@ -17,8 +17,7 @@ std::shared_ptr<NEXTPACE> FileSystem::Match(SITUATION &StatusQuo, int player, in
 			TempFile >> value[i];
 			if (situa.Line[i] != value[i])//只要有一个数据不相同，则匹配下一条记录
 			{
-				for (; i < 10; ++i) 
-					TempFile >> value[0];
+				for (; i < 10; ++i) TempFile >> value[0];
 				break;
 			}
 			else if (i == 9)
@@ -139,10 +138,29 @@ std::shared_ptr<NEXTPACE> FileSystem::UnPack(int value)
 //比较两个数值，查看文件棋谱是否包含当前状况
 bool FileSystem::Compare(int FileValue, int CurrentValue, std::shared_ptr<NEXTPACE> head, std::shared_ptr<NEXTPACE> rear)
 {
-	std::shared_ptr<NEXTPACE> np2 = UnPack(CurrentValue);//获取“子集”
-	if (np2 == nullptr) return true;//任何集合包含空集
 	std::shared_ptr<NEXTPACE> np1 = UnPack(FileValue);//获取“全集”
-	if (np1 == nullptr) return false;
+	std::shared_ptr<NEXTPACE> np2 = UnPack(CurrentValue);//获取“子集”
+	//任何集合包含空集
+	if (np2 == nullptr && np1 != nullptr)
+	{
+		ConnectList(rear, np1);
+		ClearList(np1);
+		return true;
+	}
+	else if (np1 == nullptr && np2 != nullptr)
+	{
+		ClearList(np1);
+		ClearList(np2);
+		head = nullptr;
+		rear = nullptr;
+		return false;
+	}
+	else if (np1 == nullptr && np2 == nullptr)
+	{
+		head = nullptr;
+		rear = nullptr;
+		return true;
+	}
 	std::shared_ptr<NEXTPACE> temp2 = np2;
 	std::shared_ptr<NEXTPACE> temp1 = np1;
 	while(temp1 != nullptr && temp2 != nullptr)
@@ -176,19 +194,23 @@ bool FileSystem::Compare(int FileValue, int CurrentValue, std::shared_ptr<NEXTPA
 			temp1 = temp1->next;
 		}
 	}
-	while (temp1 != nullptr)
-	{
-		if (rear->site < 1) rear->site = temp1->site;
-		else
-		{
-			rear->next = std::shared_ptr<NEXTPACE>(new NEXTPACE);
-			rear = rear->next;
-			rear->next = nullptr;
-			rear->site = temp1->site;
-		}
-		temp1 = temp1->next;
-	}
+	ConnectList(rear, temp1);
 	ClearList(np1);//清空链表
 	ClearList(np2);
 	return true;
+}
+void FileSystem::ConnectList(std::shared_ptr<NEXTPACE> Aim, std::shared_ptr<NEXTPACE> Source)
+{
+	while (Source != nullptr)
+	{
+		if (Aim->site < 1) Aim->site = Source->site;
+		else
+		{
+			Aim->next = std::shared_ptr<NEXTPACE>(new NEXTPACE);
+			Aim = Aim->next;
+			Aim->next = nullptr;
+			Aim->site = Source->site;
+		}
+		Source = Source->next;
+	}
 }

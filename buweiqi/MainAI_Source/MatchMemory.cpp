@@ -2,9 +2,9 @@
 
 void AI::Statistic(int line, int column)
 {
-	if (line > 5 && column < 5) Qua.FirstQuadrant++;
+	if (line < 5 && column > 5) Qua.FirstQuadrant++;
 	else if (line < 5 && column < 5) Qua.SecondQuadrant++;
-	else if (line < 5 && column > 5) Qua.ThirdQuadrant++;
+	else if (line > 5 && column < 5) Qua.ThirdQuadrant++;
 	else if (line > 5 && column > 5) Qua.ForthQuadrant++;
 }
 std::shared_ptr<NEXTPACE> AI::MatchMemory(int line, int column, bool &None)
@@ -23,8 +23,9 @@ std::shared_ptr<NEXTPACE> AI::MatchMemory(int line, int column, bool &None)
 			TempSum = 1;
 			for (j = 9; j > 0; j--)
 			{
-				if (cross[i][j] == PlayerId) NowStatus.Line[i] += pow(2, 10 - j) * 10000;
-				else if (cross[i][j] == rival) NowStatus.Line[i] += pow(2, 10 - j);
+				TempSum *= 2;
+				if (cross[i][j] == PlayerId) NowStatus.Line[i] += TempSum * 10000;
+				else if (cross[i][j] == rival) NowStatus.Line[i] += TempSum;
 			}
 		}
 	}
@@ -36,8 +37,9 @@ std::shared_ptr<NEXTPACE> AI::MatchMemory(int line, int column, bool &None)
 			TempSum = 1;
 			for (j = 1; j < 10; ++j)
 			{
-				if (cross[i][j] == PlayerId) NowStatus.Line[i] += pow(2, j) * 10000;
-				else if (cross[i][j] == rival) NowStatus.Line[i] += pow(2, j);
+				TempSum *= 2;
+				if (cross[i][j] == PlayerId) NowStatus.Line[i] += TempSum * 10000;
+				else if (cross[i][j] == rival) NowStatus.Line[i] += TempSum;
 			}
 		}
 	}
@@ -46,10 +48,12 @@ std::shared_ptr<NEXTPACE> AI::MatchMemory(int line, int column, bool &None)
 	{
 		for (i = 9; i > 0; i--)
 		{
+			TempSum = 1;
 			for (j = 1; j < 10; ++j)
 			{
-				if (cross[i][j] == PlayerId) NowStatus.Line[10 - i] += pow(2, j) * 10000;
-				else if (cross[i][j] == rival) NowStatus.Line[10 - i] += pow(2, j);
+				TempSum *= 2;
+				if (cross[i][j] == PlayerId) NowStatus.Line[10 - i] += TempSum * 10000;
+				else if (cross[i][j] == rival) NowStatus.Line[10 - i] += TempSum;
 			}
 		}
 	}
@@ -61,8 +65,9 @@ std::shared_ptr<NEXTPACE> AI::MatchMemory(int line, int column, bool &None)
 			TempSum = 1;
 			for (j = 9; j > 0; --j)
 			{
-				if (cross[i][j] == PlayerId) NowStatus.Line[10 - i] += pow(2, 10 - j) * 10000;
-				else if (cross[i][j] == rival) NowStatus.Line[10 - i] += pow(2, 10 - j);
+				TempSum *= 2;
+				if (cross[i][j] == PlayerId) NowStatus.Line[10 - i] += TempSum * 10000;
+				else if (cross[i][j] == rival) NowStatus.Line[10 - i] += TempSum;
 			}
 		}
 	}
@@ -76,7 +81,7 @@ std::shared_ptr<NEXTPACE> AI::MatchMemory(int line, int column, bool &None)
 	for (i = CurrentRound + 2; ; i = i + 2)
 	{
 		//没有一模一样的记录，则查询有没有含有当前盘面的“终盘”
-		if(CurrentNull > i) np = FS.GenerMatch(NowStatus, PlayerId, i);
+		if(i < 81) np = FS.GenerMatch(NowStatus, PlayerId, i);
 		else return nullptr;
 		if (np != nullptr)
 		{

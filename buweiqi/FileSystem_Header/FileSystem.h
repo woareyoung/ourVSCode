@@ -63,4 +63,9 @@ public:
 	param[HeadNode]:链表的头结点
 	*/
 	void ClearList(std::shared_ptr<NEXTPACE> HeadNode);//清空链表
+	/*将Source拼入Aim
+	param[Aim]:目的链表
+	param[Source]:源链表
+	*/
+	void ConnectList(std::shared_ptr<NEXTPACE> Aim, std::shared_ptr<NEXTPACE> Source);//链表接力
 };
