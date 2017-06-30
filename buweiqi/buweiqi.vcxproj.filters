@@ -108,8 +108,8 @@
     <ClInclude Include="AI2_Header\DefaultChess.h">
       <Filter>Header Files\AI2_Header</Filter>
     </ClInclude>
-    <ClInclude Include="AI2_Header\MCTS.h">
-      <Filter>Header Files\AI2_Header</Filter>
+    <ClInclude Include="AI3_Header\MCTS.h">
+      <Filter>Header Files\AI3_Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
