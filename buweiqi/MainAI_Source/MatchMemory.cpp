@@ -68,7 +68,7 @@ std::shared_ptr<NEXTPACE> AI::MatchMemory(int line, int column, bool &None)
 	}
 	std::shared_ptr<NEXTPACE> np = FS.Match(NowStatus, PlayerId, CurrentRound);
 	//如果有一模一样的记录，则直接跟着下
-	if (np != NULL)
+	if (np != nullptr)
 	{
 		None = false;
 		return np;
@@ -77,7 +77,7 @@ std::shared_ptr<NEXTPACE> AI::MatchMemory(int line, int column, bool &None)
 	{
 		//没有一模一样的记录，则查询有没有含有当前盘面的“终盘”
 		if(CurrentNull > i) np = FS.GenerMatch(NowStatus, PlayerId, i);
-		else return NULL;
+		else return nullptr;
 		if (np != nullptr)
 		{
 			None = true;
@@ -86,19 +86,17 @@ std::shared_ptr<NEXTPACE> AI::MatchMemory(int line, int column, bool &None)
 	}
 	None = true;
 	//如果什么都没有
-	return NULL;
+	return nullptr;
 }
 
 void AI::ClearList(std::shared_ptr<NEXTPACE> head)
 {
 	std::shared_ptr<NEXTPACE> temp = head->next;
-	// delete head;
 	head = nullptr;
-	while (temp != NULL)
+	while (temp != nullptr)
 	{
 		head = temp;
 		temp = temp->next;
-		// delete head;
 		head = nullptr;
 	}
 }

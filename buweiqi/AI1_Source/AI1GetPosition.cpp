@@ -68,13 +68,14 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		int NextPace;
 		np = MatchMemory(line, column, None);//获取对局记录中符合当前盘面的对应方法
 		//如果对局记录中有应对的方法
-		if (np != NULL)
+		if (np != nullptr)
 		{
 			if (None == false) NextPace = np->site;//获取下一步棋的位置
 			else NextPace = GetNextPace(np);
 			line = NextPace / 10;
 			column = NextPace % 10;
 			cross[line][column] = PlayerId;
+			abc = false;
 		}
 	}
 	///若是死棋位置则一直循环，直到不是死棋位置
@@ -114,7 +115,6 @@ int AI1::GetNextPace(std::shared_ptr<NEXTPACE> np)
 	int Max = cross[np->site / 10][np->site % 10];
 	int nextpace = np->site;
 	std::shared_ptr<NEXTPACE> temp = np->next;
-	// delete np;
 	np = nullptr;
 	while(temp != nullptr)
 	{
@@ -125,7 +125,6 @@ int AI1::GetNextPace(std::shared_ptr<NEXTPACE> np)
 		}
 		np = temp;
 		temp = temp->next;
-		// delete np;
 		np = nullptr;
 	}
 	return nextpace;

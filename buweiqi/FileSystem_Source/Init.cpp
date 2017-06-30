@@ -19,15 +19,13 @@ void FileSystem::OpenFile(std::string FileName, std::fstream &f)
 }
 void FileSystem::ClearList(std::shared_ptr<NEXTPACE> HeadNode)
 {
-	if (HeadNode == NULL) return;
+	if (HeadNode == nullptr) return;
 	std::shared_ptr<NEXTPACE> temp = HeadNode->next;
-	// delete HeadNode;
 	HeadNode = nullptr;
-	while(temp != NULL)
+	while(temp != nullptr)
 	{
 		HeadNode = temp;
 		temp = temp->next;
-		// delete HeadNode;
 		HeadNode = nullptr;
 	}
 }

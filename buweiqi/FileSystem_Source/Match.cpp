@@ -2,7 +2,7 @@
 ///匹配当前盘面状况的记忆
 std::shared_ptr<NEXTPACE> FileSystem::Match(SITUATION &StatusQuo, int player, int round)
 {
-	std::shared_ptr<NEXTPACE> np = NULL;//记录“下一步”应对方法的链表的头结点
+	std::shared_ptr<NEXTPACE> np = nullptr;//记录“下一步”应对方法的链表的头结点
 	std::shared_ptr<NEXTPACE> temp = np;
 	int i;
  	SITUATION situa;
@@ -23,17 +23,17 @@ std::shared_ptr<NEXTPACE> FileSystem::Match(SITUATION &StatusQuo, int player, in
 			}
 			else if (i == 9)
 			{
-				if (np == NULL)
+				if (np == nullptr)
 				{
 					temp = std::shared_ptr<NEXTPACE>(new NEXTPACE);
 					np = temp;
-					temp->next = NULL;
+					temp->next = nullptr;
 				}
 				else
 				{
 					temp->next = std::shared_ptr<NEXTPACE>(new NEXTPACE);
 					temp = temp->next;
-					temp->next = NULL;
+					temp->next = nullptr;
 				}
 				TempFile >> temp->site;
 			}
@@ -51,11 +51,9 @@ std::shared_ptr<NEXTPACE> FileSystem::GenerMatch(SITUATION &StatusQuo, int playe
 	int i, j;
 	for (i = 0; i < 10; i++) value[i] = 0;
 	std::shared_ptr<NEXTPACE> np = std::shared_ptr<NEXTPACE>(new NEXTPACE);//记录未下棋位置的链表的头结点
-	np->next = std::shared_ptr<NEXTPACE>(new NEXTPACE);//用两个结点标记链表是否有效
-	std::shared_ptr<NEXTPACE> tempHead = np->next;//动态头结点
+	std::shared_ptr<NEXTPACE> tempHead = np;//动态头结点
 	std::shared_ptr<NEXTPACE> tempRear = tempHead;//动态尾结点
-	tempHead->site = 0;
-	tempHead->next = NULL;
+	tempHead->next = nullptr;
 	np->site = 0;
 	while (!TempFile.eof())
 	{
@@ -65,17 +63,10 @@ std::shared_ptr<NEXTPACE> FileSystem::GenerMatch(SITUATION &StatusQuo, int playe
 			//包含当前盘面状况
 			if (Compare(value[i] / 10000, StatusQuo.Line[i] / 10000, tempHead, tempRear))
 			{
-				if (np->site == 0)
-				{
-					//第一个结点不要了
-					// delete np;
-					np = nullptr;
-					np = tempHead;
-				}
 				for (tempRear = tempHead; ; tempRear = tempRear->next)
 				{
 					tempRear->site += i * 10;//把每一个值加上“行号”
-					if (tempRear->next == NULL)
+					if (tempRear->next == nullptr)
 					{
 						tempRear->next = std::shared_ptr<NEXTPACE>(new NEXTPACE);
 						tempHead = tempRear->next;
@@ -89,36 +80,13 @@ std::shared_ptr<NEXTPACE> FileSystem::GenerMatch(SITUATION &StatusQuo, int playe
 			}
 			else
 			{
-				tempHead = np->next;
-				//链表只有一个结点（这种情况概率极少）
-				if (tempHead == NULL)
-				{
-					np->site = 0;
-					np->next = std::shared_ptr<NEXTPACE>(new NEXTPACE);
-					tempHead = np->next;
-					tempHead->next = nullptr;
-					tempRear = tempHead;
-					tempHead->site = 0;
-				}
-				//链表不止一个结点且第二个结点值大于0（即为有效链表）
-				else if (tempHead->site > 0)
-				{
-					ClearList(tempHead);//从第二个结点开始清空链表
-					np->next = std::shared_ptr<NEXTPACE>(new NEXTPACE);
-					tempHead = np->next;
-					tempHead->site = 0;
-					tempRear = tempHead;
-					np->site = 0;
-					np->next = nullptr;
-				}
-				//链表依然无效
-				else
-				{
-					tempHead = np->next;
-					tempRear = np->next;
-					tempHead->site = 0;
-					tempHead->next = nullptr;
-				}
+				//不符合条件，清空链表
+				ClearList(np);
+				np = std::shared_ptr<NEXTPACE>(new NEXTPACE);//记录未下棋位置的链表的头结点
+				tempHead = np;//动态头结点
+				tempRear = tempHead;//动态尾结点
+				tempHead->next = nullptr;
+				np->site = 0;
 				for (; i < 10; i++) TempFile >> value[0];
 				break;
 			}
@@ -127,16 +95,15 @@ std::shared_ptr<NEXTPACE> FileSystem::GenerMatch(SITUATION &StatusQuo, int playe
 	TempFile.close();
 	if (np->site == 0)
 	{
-		np->next = nullptr;
 		np = nullptr;
-		return NULL;
+		return nullptr;
 	}
 	return np;
 }
 ///将压缩的数值解压出来，并将列号从大到小排列
 std::shared_ptr<NEXTPACE> FileSystem::UnPack(int value)
 {
-	if (value == 0) return NULL;
+	if (value == 0) return nullptr;
 	std::shared_ptr<NEXTPACE> np = nullptr;
 	std::shared_ptr<NEXTPACE> temp = np;
 	int tempValue = 512;//2的9次方
@@ -149,17 +116,17 @@ std::shared_ptr<NEXTPACE> FileSystem::UnPack(int value)
 		}
 		else 
 		{
-			if (np == NULL) 
+			if (np == nullptr)
 			{
 				np = std::shared_ptr<NEXTPACE>(new NEXTPACE);
 				temp = np;
-				np->next = NULL;
+				np->next = nullptr;
 			}
 			else 
 			{
 				temp->next = std::shared_ptr<NEXTPACE>(new NEXTPACE);
 				temp = temp->next;
-				temp->next = NULL;
+				temp->next = nullptr;
 			}
 			temp->site = i;
 			value -= tempValue;
@@ -173,12 +140,12 @@ std::shared_ptr<NEXTPACE> FileSystem::UnPack(int value)
 bool FileSystem::Compare(int FileValue, int CurrentValue, std::shared_ptr<NEXTPACE> head, std::shared_ptr<NEXTPACE> rear)
 {
 	std::shared_ptr<NEXTPACE> np2 = UnPack(CurrentValue);//获取“子集”
-	if (np2 == NULL) return true;//任何集合包含空集
+	if (np2 == nullptr) return true;//任何集合包含空集
 	std::shared_ptr<NEXTPACE> np1 = UnPack(FileValue);//获取“全集”
-	if (np1 == NULL) return false;
+	if (np1 == nullptr) return false;
 	std::shared_ptr<NEXTPACE> temp2 = np2;
 	std::shared_ptr<NEXTPACE> temp1 = np1;
-	while(temp1 != NULL && temp2 != NULL)
+	while(temp1 != nullptr && temp2 != nullptr)
 	{
 		//若存在全集中没有子集中的元素，则返回false，表示不包含
 		if (temp1->site < temp2->site)
@@ -209,12 +176,16 @@ bool FileSystem::Compare(int FileValue, int CurrentValue, std::shared_ptr<NEXTPA
 			temp1 = temp1->next;
 		}
 	}
-	while (temp1 != NULL)
+	while (temp1 != nullptr)
 	{
-		rear->next = std::shared_ptr<NEXTPACE>(new NEXTPACE);
-		rear = rear->next;
-		rear->next = nullptr;
-		rear->site = temp1->site;
+		if (rear->site < 1) rear->site = temp1->site;
+		else
+		{
+			rear->next = std::shared_ptr<NEXTPACE>(new NEXTPACE);
+			rear = rear->next;
+			rear->next = nullptr;
+			rear->site = temp1->site;
+		}
 		temp1 = temp1->next;
 	}
 	ClearList(np1);//清空链表
