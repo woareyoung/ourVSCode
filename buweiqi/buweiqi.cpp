@@ -340,22 +340,21 @@ void Select()
 	case 1:
 		switch (Num)
 		{
-			case 1:CB.Player1AI = &CB.ai1;break;
-			case 2:CB.Player1AI = &CB.ai2;break;
-			case 3:CB.Player1AI = &CB.ai3;break;
+			case 1:CB.Player1AI = &CB.ai1; SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI1"));break;
+			case 2:CB.Player1AI = &CB.ai2; SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI2"));break;
+			case 3:CB.Player1AI = &CB.ai3; SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI3"));break;
 		}
 		CB.Player1isAI = true;
-		SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI"));
+		
 		break;
 	case 2:
 		switch (Num)
 		{
-			case 1:CB.Player2AI = &CB.ai11; break;
-			case 2:CB.Player2AI = &CB.ai22; break;
-			case 3:CB.Player2AI = &CB.ai33; break;
+			case 1:CB.Player2AI = &CB.ai11; SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI1"));break;
+			case 2:CB.Player2AI = &CB.ai22; SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI2"));break;
+			case 3:CB.Player2AI = &CB.ai33; SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI3"));break;
 		}
 		CB.Player2isAI = true;
-		SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI"));
 		break;
 	}
 	///初始化AI数据
