@@ -1,4 +1,5 @@
 #include "../ChessBoard_Header/AI.h"
+#define MAX_ROUND_K 81
 
 void AI::Statistic(int line, int column)
 {
@@ -81,7 +82,7 @@ std::shared_ptr<NEXTPACE> AI::MatchMemory(int line, int column, bool &None)
 	for (i = CurrentRound + 2; ; i = i + 2)
 	{
 		//没有一模一样的记录，则查询有没有含有当前盘面的“终盘”
-		if(i < 81) np = FS.GenerMatch(NowStatus, PlayerId, i);
+		if(i < MAX_ROUND_K + CurrentRound && i < 81) np = FS.GenerMatch(NowStatus, PlayerId, i);
 		else return nullptr;
 		if (np != nullptr)
 		{
