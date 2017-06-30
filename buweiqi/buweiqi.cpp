@@ -169,8 +169,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		CB.TimerRound2Hwnd = CreateWindow(_T("Static"), _T("回合剩余时间"), WS_CHILD | WS_VISIBLE | ES_CENTER, CB.Base + CB.ChessDiameter * 50 / 130, CB.ChessDiameter * 1610 / 200, 120, 17, hwnd, NULL, CB.hInst, NULL);
 		CB.Player1Hwnd = CreateWindow(_T("Static"), _T("Player1"), WS_CHILD | WS_VISIBLE | ES_CENTER, CB.Base + CB.ChessDiameter * 50 / 130, CB.ChessDiameter * 250 / 200, 200, 20, hwnd, NULL, CB.hInst, NULL);
 		CB.Player2Hwnd = CreateWindow(_T("Static"), _T("Player2"), WS_CHILD | WS_VISIBLE | ES_CENTER, CB.Base + CB.ChessDiameter * 50 / 130, CB.ChessDiameter * 1195 / 200, 200, 20, hwnd, NULL, CB.hInst, NULL);
-		CB.Player1UseAI = CreateWindow(_T("Button"), _T("使用AI"), WS_CHILD | WS_VISIBLE | ES_CENTER, CB.Base + CB.ChessDiameter * 155 / 120, CB.ChessDiameter * 365 / 200, 100, 30, hwnd, (HMENU)MID_ONE, CB.hInst, NULL);
-		CB.Player2UseAI = CreateWindow(_T("Button"), _T("使用AI"), WS_CHILD | WS_VISIBLE | ES_CENTER, CB.Base + CB.ChessDiameter * 155 / 120, CB.ChessDiameter * 1335 / 200, 100, 30, hwnd, (HMENU)MID_TWO, CB.hInst, NULL);
+		CB.Player1UseAI = CreateWindow(_T("Button"), _T("使用AI"), WS_CHILD | WS_VISIBLE | ES_CENTER, CB.Base + CB.ChessDiameter * 130 / 120, CB.ChessDiameter * 365 / 200, 130, 30, hwnd, (HMENU)MID_ONE, CB.hInst, NULL);
+		CB.Player2UseAI = CreateWindow(_T("Button"), _T("使用AI"), WS_CHILD | WS_VISIBLE | ES_CENTER, CB.Base + CB.ChessDiameter * 130 / 120, CB.ChessDiameter * 1335 / 200, 130, 30, hwnd, (HMENU)MID_TWO, CB.hInst, NULL);
 		CB.ChessBoardHwnd = CreateWindow(_T("Static"), NULL, WS_CHILD | WS_VISIBLE | ES_CENTER, 0, 0, CB.Base, CB.Base, hwnd, NULL, CB.hInst, NULL);
 		CB.StartGame = CreateWindow(_T("Button"), _T("开始游戏"), WS_CHILD | WS_VISIBLE | ES_CENTER, CB.Base + CB.ChessDiameter * 125 / 120, CB.ChessDiameter * 895 / 200, 130, 30, hwnd, (HMENU)MID_START, CB.hInst, NULL);
 		CB.Timer1A = CreateWindow(_T("Button"), NULL, WS_CHILD | WS_VISIBLE | ES_CENTER, CB.Base + CB.ChessDiameter * 50 / 125 + 130, CB.ChessDiameter * 520 / 200, 60, 20, hwnd, NULL, CB.hInst, NULL);
