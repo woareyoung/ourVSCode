@@ -150,7 +150,6 @@
     <ClInclude Include="AI2_Header\AI2.h" />
     <ClInclude Include="AI2_Header\AIPlayer.h" />
     <ClInclude Include="AI2_Header\DefaultChess.h" />
-    <ClInclude Include="AI2_Header\MCTS.h" />
     <ClInclude Include="AI3_Header\AI3.h" />
     <ClInclude Include="buweiqi.h" />
     <ClInclude Include="ChessBoard_Header\AI.h" />

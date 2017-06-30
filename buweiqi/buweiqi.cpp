@@ -26,7 +26,7 @@ LPARAM Param;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);//窗口过程函数
 LRESULT CALLBACK WndProcB(HWND, UINT, WPARAM, LPARAM);//窗口过程函数
-DWORD WINAPI MesProc(PVOID pParam);//消息函数
+//DWORD WINAPI MesProc(PVOID pParam);//消息函数
 DWORD WINAPI TimerProc(PVOID pParam);//计时器处理函数
 void SelectFun();//选择AI功能
 void Select();//选择之后的处理
@@ -154,7 +154,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 					CB.onTurn = isAI1onTurn;
 					CB.PaintChess();
 				}
-				CB.AnoHandle = CreateThread(NULL, 0, MesProc, NULL, 0, NULL);
+				CB.AnoHandle = CreateThread(NULL, 0, TimerProc, NULL, 0, NULL);
 			}
 			break;
 		case TURNBACK:CB.BackPace(); break;
@@ -215,7 +215,7 @@ DWORD WINAPI TimerProc(PVOID pParam)
 	double Count = GetTickCount();//现在的计数
 	double Interval = 1000;//时间间隔（单位：ms）
 	double Now = Count;//现在已记录的时间
-	while (true)
+	while (CB.Start)
 	{
 		Now = GetTickCount();//获取当前计时
 		if (Now - Count > Interval)
@@ -247,8 +247,10 @@ DWORD WINAPI TimerProc(PVOID pParam)
 			}
 		}
 	}
+	CloseHandle(CB.AnoHandle);
 	return 0;
 }
+/*
 DWORD WINAPI MesProc(PVOID pParam)
 {
 	HANDLE TimeHandle = CreateThread(NULL, 0, TimerProc, NULL, 0, NULL);
@@ -259,7 +261,7 @@ DWORD WINAPI MesProc(PVOID pParam)
 	}
 	CloseHandle(TimeHandle);
 	return 0;
-}
+}*/
 ///响应选择AI
 void SelectFun()
 {

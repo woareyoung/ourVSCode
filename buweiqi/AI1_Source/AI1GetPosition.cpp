@@ -11,6 +11,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 			line++;
 			column++;
 			CurrentRound = 0;
+			CurrentNull = 81;
 			InitializeD();
 		}
 		//退一步操作
@@ -37,7 +38,11 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		if (PlayerId == 2) CurrentRound = 2;
 		else CurrentRound = 1;
 	}
-	else CurrentRound++;
+	else
+	{
+		CurrentRound++;
+		CurrentNull--;
+	}
 	//如果是正常下棋，则作出棋盘状态的改变
 	if (line != 0 && column != 0)
 	{
@@ -59,13 +64,14 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 	}
 	if (abc)
 	{
+		bool None;
 		int NextPace;
-		np = MatchMemory(line, column);//获取对局记录中符合当前盘面的对应方法
+		np = MatchMemory(line, column, None);//获取对局记录中符合当前盘面的对应方法
 		//如果对局记录中有应对的方法
 		if (np != NULL)
 		{
-			NextPace = np->site;//获取下一步棋的位置
-			abc = false;
+			if (None == false) NextPace = np->site;//获取下一步棋的位置
+			else NextPace = GetNextPace(np);
 			line = NextPace / 10;
 			column = NextPace % 10;
 			cross[line][column] = PlayerId;
@@ -100,23 +106,27 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 	Statistic(line, column);
 	UpdateScore(line, column, PlayerId);
 	CurrentRound++;
-	//	Display(PlayerNumber, line, column);
+	CurrentNull--;
 }
-///控制台显示信息函数
-void AI1::Display(int n, int line, int column)
+///从链表中选取最高分的结点
+int AI1::GetNextPace(std::shared_ptr<NEXTPACE> np)
 {
-	/*
-	_cprintf("Player %d:  line:%d  column:%d\n\t", n, line, column);
-	for (int i = 0; i < 10; )
+	int Max = cross[np->site / 10][np->site % 10];
+	int nextpace = np->site;
+	std::shared_ptr<NEXTPACE> temp = np->next;
+	// delete np;
+	np = nullptr;
+	while(temp != nullptr)
 	{
-		for (int j = 1; j < 10; ++j)
+		if (cross[temp->site / 10][temp->site % 10] > Max)
 		{
-			if (i == 0) _cprintf("%d\t", j);
-			else _cprintf("%.2f\t", Score[i][j]);
-			if (j == 9) _cprintf("\n");
+			Max = cross[temp->site / 10][temp->site % 10];
+			nextpace = temp->site;
 		}
-		if (++i < 10) _cprintf("%d\t", i);
+		np = temp;
+		temp = temp->next;
+		// delete np;
+		np = nullptr;
 	}
-	_cprintf("\n");
-	*/
+	return nextpace;
 }

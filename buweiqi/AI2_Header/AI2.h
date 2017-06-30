@@ -65,9 +65,6 @@ private:
 	//记录各交叉点的值，数组访问从“1”开始，访问顺序为“先行后列”，
 	//“0”表示没有棋子，“1”表示黑子，“2”表示白子
 	mutable unsigned int cross[10][10];
-	mutable int depth;
-	unsigned int previous_board_hash_value;
-	std::set<unsigned int> all_hash_values;
 
 	// 分数
 	int chessScore[10][10];
@@ -108,35 +105,6 @@ public:
 	int DealWithScore(bool isEqual);
 	void getMaxScore(int& tempLine, int& tempColumn);
 	void getMinScore(int& tempLine, int& tempColumn);
-
-	template<typename RandomEngine>
-	void do_random_move(RandomEngine* engine)
-	{
-		auto moves = get_moves();
-		attest(! moves.empty());
-		std::uniform_int_distribution<std::size_t> move_ind(0, moves.size() - 1);
-		auto move = moves[move_ind(*engine)];
-		do_move(move);
-	}
-
-	virtual std::vector<int> get_moves() const
-	{
-		std::vector<int> moves;
-		if (depth > 1000) {
-			return moves;
-		}
-
-		for (int i = ChessStart; i < ChessEnd; ++i) {
-		for (int j = ChessStart; j < ChessEnd; ++j) {
-				
-		}}
-
-//		if (moves.empty() && opponent_has_move) {
-//			moves.push_back(pass);
-//		}
-
-		return moves;
-	}
 
 	// 匹配函数
 	void startPattern();

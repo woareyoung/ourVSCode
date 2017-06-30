@@ -30,7 +30,7 @@ private:
 	double MaxScore;//记录最大分值
 	std::shared_ptr<NEXTPACE> np;//获取下一步的可能性的链表
 
-	void Display(int n, int line, int column);
+	int GetNextPace(std::shared_ptr<NEXTPACE> np);
 	///各功能函数 集中在FunctionPart.cpp文件中
 	/*
 		param[row1]:行
