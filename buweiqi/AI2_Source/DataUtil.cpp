@@ -96,16 +96,6 @@ void AI2::ScanChessBroad() {
 	}
 }
 
-bool AI2::isContaint(goodMove move) {
-	for (int i = ChessInit; i < MovePointer; ++i) {
-		if (move.line == goodMoves[i].line && move.column == goodMoves[i].column
-			&& move.Score == goodMoves[i].Score) {
-			return true;
-		}
-	}
-	return false;
-}
-
 int AI2::getMaxScoreNum(int judge) {
 	register int i = 0;
 	if (MovePointer == 0) {

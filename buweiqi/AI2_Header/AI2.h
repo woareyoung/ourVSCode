@@ -6,7 +6,7 @@
 #include "DefaultChess.h"
 #include <iostream>
 #include <vector>
-#include <set>
+#include <algorithm>
 
 #define ChessInit 0
 #define ChessStart 1
@@ -21,9 +21,6 @@
 #define isMax 0
 #define isMin 1
 
-#define pass (-1)
-#define no_move (-2)
-
 // 用于匹配模式
 #define Black 1 // 黑子
 #define White 2// 白子
@@ -37,6 +34,8 @@
 
 #define getLine(temp) (temp / 100)
 #define getColumn(temp) (temp % 100)
+
+#define attest(expr) if (!(expr)) { _cprintf("翻车了窝\n"); }
 
 typedef struct tagDIRECTION
 {
@@ -61,7 +60,7 @@ struct goodMove {
 
 class AI2 : public AI, public AIPlayer, public DefaultChess
 {
-private:
+protected:
 	//记录各交叉点的值，数组访问从“1”开始，访问顺序为“先行后列”，
 	//“0”表示没有棋子，“1”表示黑子，“2”表示白子
 	mutable unsigned int cross[10][10];
@@ -99,6 +98,7 @@ public:
 	{
 		initAllArray();
 	}
+
 	// 获取最后着子的位置
 	void GetPosition(int &line, int &column, int onTurn);
 	bool isFinal();
@@ -110,14 +110,18 @@ public:
 	// 初始化数组
 	void initChessScore(bool isFirst);
 	void initAllArray();
-	bool isContaint(goodMove move);
+	bool isContaint(goodMove move) {
+		for (int i = ChessInit; i < MovePointer; ++i) {
+			if (move.line == goodMoves[i].line 
+				&& move.column == goodMoves[i].column
+				&& move.Score == goodMoves[i].Score) {
+				return true;
+			}
+		}
+		return false;
+	}
 	int getMaxScoreNum(int judge);
 
-	int random(double start, double end) {
-		return (int)(start + (end - start)*rand() / (RAND_MAX + 1.0));
-	}
-
-	// 博弈树部分
 	void Revalute();
 	int maxandmin(int depth);
 	int singleLayer();
@@ -128,6 +132,69 @@ public:
 	// 匹配函数
 	void startPattern();
 	void Pattern(int *PatternType);
+	bool checkEmptyPos(int& x, int& y, int& start, int& mainColor, Pos emptyPos[]) {
+		/******************************************
+		判断当前匹配到的空位是否是敌方的自杀点，
+		如果是的话，就把该点的分数设置为0，跳过匹配模式
+		*******************************************/
+		for (int i = 0; i < start; ++i) {
+			if (mainColor == Rival) {
+				// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
+				cross[emptyPos[i].line][emptyPos[i].column] = Rival;
+				if (isGo2Dead(emptyPos[i].line, emptyPos[i].column, Rival)) {
+					cross[emptyPos[i].line][emptyPos[i].column] = NoChess;
+					// 如果是敌方的自杀点的话，这里就置零   -.-！！！
+					chessScore[emptyPos[i].line][emptyPos[i].column] = 0;
+					return false;
+				}
+			}
+			else if (mainColor == turn2Who) {
+				// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
+				cross[x][y] = turn2Who;
+				if (isGo2Dead(x, y, turn2Who)) {
+					chessScore[x][y] = minLimit;
+					cross[x][y] = NoChess;
+					// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
+					return false;
+				}
+			}
+			// 这里既不是我方自杀点，也不是敌方自杀点
+			cross[emptyPos[i].line][emptyPos[i].column] = NoChess;
+		}
+	}
+	// 检查棋子是否有效，并对分析的结果进行相应的加分
+	bool checkStone(int& x, int& y) {
+		// 对于当前匹配到的着子点的环境进行分析
+		// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
+		cross[x][y] = turn2Who;
+		if (isGo2Dead(x, y, turn2Who)) {
+			chessScore[x][y] = minLimit;
+			cross[x][y] = NoChess;
+			// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
+			return false;
+		}
+		// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
+		if (cross[x][y] == NoChess && chessScore[x][y] == 0) return false;
+		cross[x][y] = Rival;
+		if (isGo2Dead(x, y, Rival)) {
+			cross[x][y] = NoChess;
+			// 如果是敌方的自杀点的话，这里就置零   -.-！！！
+			chessScore[x][y] = 0;
+			return false;
+		}
+		// 这里既不是我方自杀点，也不是敌方自杀点
+		cross[x][y] = NoChess;
+		return true;
+	}
+	void arraySort(int& x, int& y, int& score) {
+		if (!isContaint({ x,y,score })) {
+			goodMoves[MovePointer] = { x,y,score };
+			// 排序
+			std::sort(goodMoves, goodMoves + MovePointer);
+			MovePointer++;
+		}
+	}
+	// 填充数组进行变换
 	void (AI2::*Reverse[10])(DIRECTION*);
 	void reverse(DIRECTION *PatternType);
 	void reverseXY(DIRECTION *PatternType);
