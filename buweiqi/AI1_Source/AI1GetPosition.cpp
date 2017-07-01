@@ -72,8 +72,27 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		{
 			if (None == false) NextPace = np->site;//获取下一步棋的位置
 			else NextPace = GetNextPace(np);
-			line = NextPace / 10;
-			column = NextPace % 10;
+			int maxQ = Qua.GetMaxQuadrant();
+			if (maxQ == Qua.FirstQuadrant)
+			{
+				line = NextPace / 10;
+				column = 10 - NextPace % 10;
+			}
+			else if (maxQ == Qua.SecondQuadrant)
+			{
+				line = NextPace / 10;
+				column = NextPace % 10;
+			}
+			else if (maxQ == Qua.ThirdQuadrant)
+			{
+				line = 10 - NextPace / 10;
+				column = NextPace % 10;
+			}
+			else
+			{
+				line = 10 - NextPace / 10;
+				column = 10 - NextPace % 10;
+			}
 			cross[line][column] = PlayerId;
 			abc = false;
 		}
