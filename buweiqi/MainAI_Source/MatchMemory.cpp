@@ -1,5 +1,5 @@
 #include "../ChessBoard_Header/AI.h"
-#define MAX_ROUND_K 81
+#define MAX_ROUND_K 60
 
 void AI::Statistic(int line, int column)
 {
@@ -10,12 +10,48 @@ void AI::Statistic(int line, int column)
 }
 std::shared_ptr<NEXTPACE> AI::MatchMemory(int line, int column, bool &None)
 {
-	SITUATION NowStatus;
 	Statistic(line, column);//先统计当前局面
 	int maxQuadrant = Qua.GetMaxQuadrant();//获取最多棋子的象限
+	int i;
+	GetCurrentStatus(maxQuadrant);
+	std::shared_ptr<NEXTPACE> np = FS.Match(NowStatus, PlayerId, CurrentRound);
+	//如果有一模一样的记录，则直接跟着下
+	if (np != nullptr)
+	{
+		None = false;
+		return np;
+	}
+	for (i = CurrentRound > MAX_ROUND_K ? CurrentRound : MAX_ROUND_K; ; i = i + 2)
+	{
+		//没有一模一样的记录，则查询有没有含有当前盘面的“终盘”
+		if(i < 81) np = FS.GenerMatch(NowStatus, PlayerId, i);
+		else return nullptr;
+		if (np != nullptr)
+		{
+			None = true;
+			return np;
+		}
+	}
+	None = true;
+	//如果什么都没有
+	return nullptr;
+}
+
+void AI::ClearList(std::shared_ptr<NEXTPACE> head)
+{
+	std::shared_ptr<NEXTPACE> temp = head->next;
+	head = nullptr;
+	while (temp != nullptr)
+	{
+		head = temp;
+		temp = temp->next;
+		head = nullptr;
+	}
+}
+void AI::GetCurrentStatus(int maxQuadrant)
+{
 	int rival = 3 - PlayerId;
-	int i, j;
-	int TempSum;
+	int TempSum, i, j;
 	//如果最多棋子的是第一象限
 	if (maxQuadrant == Qua.FirstQuadrant)
 	{
@@ -71,38 +107,5 @@ std::shared_ptr<NEXTPACE> AI::MatchMemory(int line, int column, bool &None)
 				else if (cross[i][j] == rival) NowStatus.Line[10 - i] += TempSum;
 			}
 		}
-	}
-	std::shared_ptr<NEXTPACE> np = FS.Match(NowStatus, PlayerId, CurrentRound);
-	//如果有一模一样的记录，则直接跟着下
-	if (np != nullptr)
-	{
-		None = false;
-		return np;
-	}
-	for (i = CurrentRound + 2; ; i = i + 2)
-	{
-		//没有一模一样的记录，则查询有没有含有当前盘面的“终盘”
-		if(i < MAX_ROUND_K + CurrentRound && i < 81) np = FS.GenerMatch(NowStatus, PlayerId, i);
-		else return nullptr;
-		if (np != nullptr)
-		{
-			None = true;
-			return np;
-		}
-	}
-	None = true;
-	//如果什么都没有
-	return nullptr;
-}
-
-void AI::ClearList(std::shared_ptr<NEXTPACE> head)
-{
-	std::shared_ptr<NEXTPACE> temp = head->next;
-	head = nullptr;
-	while (temp != nullptr)
-	{
-		head = temp;
-		temp = temp->next;
-		head = nullptr;
 	}
 }

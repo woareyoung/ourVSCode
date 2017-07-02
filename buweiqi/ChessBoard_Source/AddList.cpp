@@ -31,17 +31,20 @@ void ChessBoard::AddSituationList()
 
 	int maxQuadrant = Qua.GetMaxQuadrant();//获取最多棋子的象限
 	int i, j;
-	double value;
+	int value;
+	int nnn;
 	//如果最多棋子的是第一象限
 	if (maxQuadrant == Qua.FirstQuadrant)
 	{
 		for (i = 1; i < 10; ++i)
 		{
 			value = 0;
+			nnn = 1;
 			for (j = 9; j > 0; j--)
 			{
-				if (cross[i][j] == 1) value += pow(2, 10 - j) * 10000;
-				else if (cross[i][j] == 2) value += pow(2, 10 - j);
+				nnn *= 2;
+				if (cross[i][j] == 1) value += nnn * 10000;
+				else if (cross[i][j] == 2) value += nnn;
 			}
 			TempTail->Line[i] = (int)value;
 		}
@@ -52,10 +55,12 @@ void ChessBoard::AddSituationList()
 		for (i = 1; i < 10; ++i)
 		{
 			value = 0;
+			nnn = 1;
 			for (j = 1; j < 10; ++j)
 			{
-				if (cross[i][j] == 1) value += pow(2, j) * 10000;
-				else if (cross[i][j] == 2) value += pow(2, j);
+				nnn *= 2;
+				if (cross[i][j] == 1) value += nnn * 10000;
+				else if (cross[i][j] == 2) value += nnn;
 			}
 			TempTail->Line[i] = (int)value;
 		}
@@ -66,10 +71,12 @@ void ChessBoard::AddSituationList()
 		for (i = 9; i > 0; i--)
 		{
 			value = 0;
+			nnn = 1;
 			for (j = 1; j < 10; ++j)
 			{
-				if (cross[i][j] == 1) value += pow(2, j) * 10000;
-				else if (cross[i][j] == 2) value += pow(2, j);
+				nnn *= 2;
+				if (cross[i][j] == 1) value += nnn * 10000;
+				else if (cross[i][j] == 2) value += nnn;
 			}
 			TempTail->Line[i] = (int)value;
 		}
@@ -80,10 +87,12 @@ void ChessBoard::AddSituationList()
 		for (i = 9; i > 0; i--)
 		{
 			value = 0;
+			nnn = 1;
 			for (j = 9; j > 0; j--)
 			{
-				if (cross[i][j] == 1) value += pow(2, 10 - j) * 10000;
-				else if (cross[i][j] == 2) value += pow(2, 10 - j);
+				nnn *= 2;
+				if (cross[i][j] == 1) value += nnn * 10000;
+				else if (cross[i][j] == 2) value += nnn;
 			}
 			TempTail->Line[i] = (int)value;
 		}

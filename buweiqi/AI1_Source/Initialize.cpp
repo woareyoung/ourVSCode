@@ -64,11 +64,13 @@ void AI1::InitializeD()
 	Score[8][1] = 2;
 	Score[9][1] = 2;
 	Score[9][2] = 2;
-	Score[8][9] = 3;
+	Score[8][9] = 2;
 	Score[9][9] = 2;
 
 	Qua.FirstQuadrant = 0;
 	Qua.SecondQuadrant = 0;
 	Qua.ThirdQuadrant = 0;
 	Qua.ForthQuadrant = 0;
+
+	Similar = 0;
 }
