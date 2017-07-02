@@ -11,40 +11,7 @@
 //
 // 使用了根的并行化技术
 // Uses the "root parallelization" technique [1].
-//
-// This game engine can play any game defined by a state like this:
-/*
 
-class GameState
-{
-public:
-typedef int Move;
-static const Move no_move = ...
-
-void do_move(Move move);
-template<typename RandomEngine>
-void do_random_move(*engine);
-bool has_moves() const;
-std::vector<Move> get_moves() const;
-
-// Returns a value in {0, 0.5, 1}.
-// This should not be an evaluation function, because it will only be
-// called for finished games. Return 0.5 to indicate a draw.
-double get_result(int current_player_to_move) const;
-
-int player_to_move;
-
-// ...
-private:
-// ...
-};
-
-*/
-//
-// See the examples for more details. Given a suitable State, the
-// following function (tries to) compute the best move for the
-// player to move.
-//
 
 namespace MCTS
 {
@@ -164,7 +131,6 @@ namespace MCTS
 		std::string indent_string(int indent) const;// 缩进字符串
 
 		Node(const Node&);
-		Node& operator = (const Node&);
 
 		double UCT_score;
 	};
@@ -280,10 +246,7 @@ namespace MCTS
 	void Node<State>::update(double result)
 	{
 		visits++;
-
 		wins += result;
-		//double my_wins = wins.load();
-		//while ( ! wins.compare_exchange_strong(my_wins, my_wins + result));
 	}
 
 	template<typename State>
@@ -346,8 +309,6 @@ namespace MCTS
 #endif
 		}
 
-		// Will support more players later.
-		// 将会支持更多的玩家
 		attest(root_state.player_to_move == 1 || root_state.player_to_move == 2);
 		// root指针管理一个对象。
 		auto root = std::unique_ptr<Node<State>>(new Node<State>(root_state));
@@ -363,15 +324,12 @@ namespace MCTS
 			auto node = root.get();
 			State state = root_state;
 
-			// Select a path through the tree to a leaf node.
 			// 选择一条直达叶子的路径
 			while (!node->has_untried_moves() && node->has_children()) {
 				node = node->select_child_UCT();
 				state.do_move(node->move);
 			}
 
-			// If we are not already at the final state, expand the
-			// tree with a new node and move there.
 			// 如果我们还没有处于最后状态，那么用一个新节点展开树并移动到那里。 
 			if (node->has_untried_moves()) {
 				auto move = node->get_untried_move(&random_engine);
@@ -379,15 +337,12 @@ namespace MCTS
 				node = node->add_child(move, state);
 			}
 
-			// We now play randomly until the game ends.
-			// 我们现在随意玩直到游戏结束。 
+			// 循环知道结束。
 			while (state.has_moves()) {
 				state.do_random_move(&random_engine);
 			}
 
-			// We have now reached a final state. Backpropagate the result
-			// 我们已经到达了树的根结点了，这个时候我们递归会根结点
-			// up the tree to the root node.
+			// 我们已经到达了树的根结点了，这个时候我们递归回根结点
 			while (node != nullptr) {
 				node->update(state.get_result(node->player_to_move));
 				node = node->parent;
@@ -424,8 +379,6 @@ namespace MCTS
 	{
 		using namespace std;
 
-		// Will support more players later.
-		// 以后会支持更多的玩家
 		attest(root_state.player_to_move == 1 || root_state.player_to_move == 2);
 
 		auto moves = root_state.get_moves();
@@ -438,7 +391,6 @@ namespace MCTS
 		double start_time = ::omp_get_wtime();
 #endif
 
-		// Start all jobs to compute trees.
 		// 分发所有的任务去计算树——这里采用的是异步线程的方式来处理树
 		vector<future<unique_ptr<Node<State>>>> root_futures;
 		ComputeOptions job_options = options;
@@ -452,7 +404,6 @@ namespace MCTS
 			root_futures.push_back(std::async(std::launch::async, func));
 		}
 
-		// Collect the results.
 		// 搜集结果
 		vector<unique_ptr<Node<State>>> roots;
 		for (int t = 0; t < options.number_of_threads; ++t) {
@@ -460,7 +411,6 @@ namespace MCTS
 			roots.push_back(std::move(root_futures[t].get()));
 		}
 
-		// Merge the children of all root nodes.
 		// 合并所有根结点的孩子结点
 		map<typename State::Move, int> visits;
 		map<typename State::Move, double> wins;
@@ -474,7 +424,6 @@ namespace MCTS
 			}
 		}
 
-		// Find the node with the highest score.
 		// 寻找最高分的结点
 		double best_score = -1;
 		typename State::Move best_move = typename State::Move();
