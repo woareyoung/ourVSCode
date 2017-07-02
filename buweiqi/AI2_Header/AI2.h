@@ -161,6 +161,7 @@ public:
 			// 这里既不是我方自杀点，也不是敌方自杀点
 			cross[emptyPos[i].line][emptyPos[i].column] = NoChess;
 		}
+		return true;
 	}
 	// 检查棋子是否有效，并对分析的结果进行相应的加分
 	bool checkStone(int& x, int& y) {
