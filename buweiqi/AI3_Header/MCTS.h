@@ -36,7 +36,7 @@ namespace MCTS
 	* @param options 创建树的参数设置，包含多线程和深度
 	*/
 	template<typename State>
-	typename State::Move compute_move(const State root_state,
+	int compute_move(const State root_state,
 		const ComputeOptions options = ComputeOptions());
 }
 //
@@ -59,6 +59,10 @@ namespace MCTS
 #include <string>
 #include <thread>
 #include <vector>
+#include <conio.h>
+
+#define pass (-2)
+#define no_move (-1)
 
 #ifdef USE_OPENMP
 #include <omp.h>
@@ -72,33 +76,20 @@ namespace MCTS
 	using std::vector;
 	using std::size_t;
 
-	static void check(bool expr, const char* message);
-	static void assertion_failed(const char* expr, const char* file, int line);
+#define showInfoOnDOS(expr) _cprintf("showInfoOnDOS: %c .\n", expr);
 
-#define attest(expr) if (!(expr)) { ::MCTS::assertion_failed(#expr, __FILE__, __LINE__); }
-#ifndef NDEBUG
-#define dattest(expr) if (!(expr)) { ::MCTS::assertion_failed(#expr, __FILE__, __LINE__); }
-#else
-#define dattest(expr) ((void)0)
-#endif
-
-	//
 	// 这个类是用于构建蒙卡洛树的，蒙卡洛树的根结点由用户创建，剩余的其他的结点都是直接添加的。
-	// This class is used to build the game tree. The root is created by the users and
-	// the rest of the tree is created by add_node.
-	//
 	template<typename State>
 	class Node
 	{
 	public:
-		typedef typename State::Move Move;// 移动位置，坐标轴
 
 		Node(const State& state);
 		~Node();
 
 		bool has_untried_moves() const;// 是否还有未曾尝试过的着子方法
 		template<typename RandomEngine>
-		Move get_untried_move(RandomEngine* engine) const;// 随机获取未曾尝试过的着子方法
+		int get_untried_move(RandomEngine* engine) const;// 随机获取未曾尝试过的着子方法
 		Node* best_child() const;
 
 		bool has_children() const// 是否还有子节点
@@ -107,26 +98,24 @@ namespace MCTS
 		}
 
 		Node* select_child_UCT() const;
-		Node* add_child(const Move& move, const State& state);
+		Node* add_child(const int& move, const State& state);
 		void update(double result);
 
 		std::string to_string() const;
 		std::string tree_to_string(int max_depth = 1000000, int indent = 0) const;
 
-		const Move move;
+		const int move;
 		Node* const parent;
 		const int player_to_move;
 
-		//std::atomic<double> wins;
-		//std::atomic<int> visits;
 		double wins;// 估分
 		int visits;// 访问次数
 
-		std::vector<Move> moves;// 这是移动路径
+		std::vector<int> moves;// 这是移动路径
 		std::vector<Node*> children; // 这是子节点
 
 	private:
-		Node(const State& state, const Move& move, Node* parent);
+		Node(const State& state, const int& move, Node* parent);
 
 		std::string indent_string(int indent) const;// 缩进字符串
 
@@ -142,23 +131,23 @@ namespace MCTS
 
 	template<typename State>
 	Node<State>::Node(const State& state) :
-		move(State::no_move),
+		move(no_move),
 		parent(nullptr),
-		player_to_move(state.player_to_move),
+		player_to_move(state->player_to_move),
 		wins(0),
 		visits(0),
-		moves(state.get_moves()),
+		moves(state->get_moves()),
 		UCT_score(0)
 	{ }
 
 	template<typename State>
-	Node<State>::Node(const State& state, const Move& move_, Node* parent_) :
+	Node<State>::Node(const State& state, const int& move_, Node* parent_) :
 		move(move_),
 		parent(parent_),
-		player_to_move(state.player_to_move),
+		player_to_move(state->player_to_move),
 		wins(0),
 		visits(0),
-		moves(state.get_moves()),
+		moves(state->get_moves()),
 		UCT_score(0)
 	{ }
 
@@ -179,9 +168,9 @@ namespace MCTS
 	// 获取未曾尝试过的着子点
 	template<typename State>
 	template<typename RandomEngine>
-	typename State::Move Node<State>::get_untried_move(RandomEngine* engine) const
+	int Node<State>::get_untried_move(RandomEngine* engine) const
 	{
-		attest(!moves.empty());
+		// showInfoOnDOS(!moves.empty());
 		// 给定[0, move.size() - 1]范围初始化分布类
 		std::uniform_int_distribution<std::size_t> moves_distribution(0, moves.size() - 1);
 		return moves[moves_distribution(*engine)];
@@ -191,8 +180,8 @@ namespace MCTS
 	template<typename State>
 	Node<State>* Node<State>::best_child() const
 	{
-		attest(moves.empty());
-		attest(!children.empty());
+		// showInfoOnDOS(moves.empty());
+		// showInfoOnDOS(!children.empty());
 
 		return *std::max_element(children.begin(), children.end(),
 			[](Node* a, Node* b) { return a->visits < b->visits; });;
@@ -206,7 +195,7 @@ namespace MCTS
 	template<typename State>
 	Node<State>* Node<State>::select_child_UCT() const
 	{
-		attest(!children.empty());// 如果子节点不为空的话……
+		// showInfoOnDOS(!children.empty());// 如果子节点不为空的话……
 		for (auto child : children) {
 			child->UCT_score = double(child->wins) / double(child->visits) +
 				2.0 * std::sqrt(std::log(double(this->visits)) / child->visits);
@@ -222,18 +211,18 @@ namespace MCTS
 	* @param state 当前棋盘的状态（局势）
 	*/
 	template<typename State>
-	Node<State>* Node<State>::add_child(const Move& move, const State& state)
+	Node<State>* Node<State>::add_child(const int& move, const State& state)
 	{
 		// 新建新的结点，将新的结点添加到children中，并判断children数组是否为空
 		auto node = new Node(state, move, this);
 		children.push_back(node);
-		attest(!children.empty());
+		// showInfoOnDOS(!children.empty());
 
 		// 从第一个着子点开始
 		auto itr = moves.begin();
 		// 重新修改着子点数组的大小
 		for (; itr != moves.end() && *itr != move; ++itr);
-		attest(itr != moves.end());
+		// showInfoOnDOS(itr != moves.end());
 		moves.erase(itr);// 从moves数组中删除move元素
 		return node;
 	}
@@ -302,15 +291,10 @@ namespace MCTS
 	{
 		std::mt19937_64 random_engine(initial_seed);// 随机函数
 
-		attest(options.max_iterations >= 0 || options.max_time >= 0);
-		if (options.max_time >= 0) {
-#ifndef USE_OPENMP
-			throw std::runtime_error("ComputeOptions::max_time requires OpenMP.");
-#endif
-		}
+													// showInfoOnDOS(options.max_iterations >= 0 || options.max_time >= 0);
 
-		attest(root_state.player_to_move == 1 || root_state.player_to_move == 2);
-		// root指针管理一个对象。
+													// showInfoOnDOS(root_state->player_to_move == 1 || root_state->player_to_move == 2);
+													// root指针管理一个对象。
 		auto root = std::unique_ptr<Node<State>>(new Node<State>(root_state));
 
 #ifdef USE_OPENMP
@@ -329,24 +313,24 @@ namespace MCTS
 			// --------------------------这里有问题-------------------------
 			while (!node->has_untried_moves() && node->has_children()) {
 				node = node->select_child_UCT();
-				state.do_move(node->move);
+				state->do_move(node->move);
 			}
 
 			// 如果我们还没有处于最后状态，那么用一个新节点展开树并移动到那里。 
 			if (node->has_untried_moves()) {
 				auto move = node->get_untried_move(&random_engine);
-				state.do_move(move);
+				state->do_move(move);
 				node = node->add_child(move, state);
 			}
 
 			// 循环直到结束。
-			while (state.has_moves()) {
-				state.do_random_move(&random_engine);
+			while (state->has_moves()) {
+				state->do_random_move(&random_engine);
 			}
 
 			// 我们已经到达了树的根结点了，这个时候我们递归回根结点
 			while (node != nullptr) {
-				node->update(state.get_result(node->player_to_move));
+				node->update(state->get_result(node->player_to_move));
 				node = node->parent;
 			}
 
@@ -376,15 +360,15 @@ namespace MCTS
 	* @return 返回最优的着子点
 	*/
 	template<typename State>
-	typename State::Move compute_move(const State root_state,
+	int compute_move(const State root_state,
 		const ComputeOptions options)
 	{
 		using namespace std;
 
-		attest(root_state.player_to_move == 1 || root_state.player_to_move == 2);
+		// showInfoOnDOS(root_state->player_to_move == 1 || root_state->player_to_move == 2);
 
-		auto moves = root_state.get_moves();
-		attest(moves.size() > 0);
+		auto moves = root_state->get_moves();
+		// showInfoOnDOS(moves.size() > 0);
 		if (moves.size() == 1) {
 			return moves[0];
 		}
@@ -414,8 +398,8 @@ namespace MCTS
 		}
 
 		// 合并所有根结点的孩子结点
-		map<typename State::Move, int> visits;
-		map<typename State::Move, double> wins;
+		map<int, int> visits;
+		map<int, double> wins;
 		long long games_played = 0;
 		for (int t = 0; t < options.number_of_threads; ++t) {
 			auto root = roots[t].get();
@@ -428,7 +412,7 @@ namespace MCTS
 
 		// 寻找最高分的结点
 		double best_score = -1;
-		typename State::Move best_move = typename State::Move();
+		int best_move = int();
 		for (auto itr : visits) {
 			auto move = itr.first;
 			double v = itr.second;
@@ -442,7 +426,7 @@ namespace MCTS
 			}
 
 			if (options.verbose) {
-				cerr << "Move: " << itr.first
+				cerr << "MOVE: " << itr.first
 					<< " (" << setw(2) << right << int(100.0 * v / double(games_played) + 0.5) << "% visits)"
 					<< " (" << setw(2) << right << int(100.0 * w / v + 0.5) << "% wins)" << endl;
 			}
@@ -457,46 +441,7 @@ namespace MCTS
 				<< " (" << 100.0 * best_wins / best_visits << "% wins)" << endl;
 		}
 
-#ifdef USE_OPENMP
-		if (options.verbose) {
-			double time = ::omp_get_wtime();
-			std::cerr << games_played << " games played in " << double(time - start_time) << " s. "
-				<< "(" << double(games_played) / (time - start_time) << " / second, "
-				<< options.number_of_threads << " parallel jobs)." << endl;
-		}
-#endif
-
 		return best_move;
-	}
-
-	/////////////////////////////////////////////////////////
-	/////////////////////////////////////////////////////////
-
-
-	static void check(bool expr, const char* message)
-	{
-		if (!expr) {
-			throw std::invalid_argument(message);
-		}
-	}
-
-
-	// 声明失败
-	static void assertion_failed(const char* expr, const char* file_cstr, int line)
-	{
-		using namespace std;
-
-		// Extract the file name only.
-		string file(file_cstr);
-		auto pos = file.find_last_of("/\\");
-		if (pos == string::npos) {
-			pos = 0;
-		}
-		file = file.substr(pos + 1);  // Returns empty string if pos + 1 == length.
-
-		stringstream sout;
-		sout << "Assertion failed: " << expr << " in " << file << ":" << line << ".";
-		throw runtime_error(sout.str().c_str());
 	}
 
 }

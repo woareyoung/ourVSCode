@@ -129,7 +129,7 @@ public:
 	int getMaxScoreNum(int judge);
 
 	void Revalute();
-	int maxandmin(int depth);
+	virtual int maxandmin(int depth);
 	int singleLayer();
 	int DealWithScore(bool isEqual);
 	void getMaxScore(int& tempLine, int& tempColumn);

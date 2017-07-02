@@ -167,9 +167,6 @@
     <ClCompile Include="AI2_Source\AI2GetPosition.cpp">
       <Filter>Source Files\AI2_Source</Filter>
     </ClCompile>
-    <ClCompile Include="AI3_Source\AI3GetPosition.cpp">
-      <Filter>Source Files\AI3_Source</Filter>
-    </ClCompile>
     <ClCompile Include="AI1_Source\AI1GetPosition.cpp">
       <Filter>Source Files\AI1_Source</Filter>
     </ClCompile>

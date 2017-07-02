@@ -7,9 +7,6 @@
 #include <tuple>
 #include <set>
 
-#define pass (-2)
-#define no_move (-1)
-
 class AI3 : public AI2
 {
 private:
@@ -18,18 +15,31 @@ private:
 	unsigned int previous_board_hash_value;
 	std::set<unsigned int> all_hash_values;
 
-	// 事实上，这个是Turn2who
-	typedef int Move;
-	Move player_to_move;
 public:
+	int player_to_move;
 	mutable int depth;
-	AI3() : depth(0), previous_board_hash_value(0)
+	AI3() :
+		depth(0),
+		previous_board_hash_value(0)
 	{
 		all_hash_values.insert(compute_hash_value());
 	}
 
+	AI3(unsigned int b[][ChessEnd]) :
+		player_to_move(PlayerId),
+		previous_board_hash_value(0),
+		depth(0)
+	{
+		for (int i = ChessInit; i < ChessEnd; ++i) {
+			for (int j = ChessInit; j < ChessEnd; ++j) {
+				board[i][j] = b[i][j];
+				simulatorScore[i][j] = chessScore[i][j];
+			}
+		}
+	}
+
 	// 轮到下一方进行着子
-	virtual void do_move(Move move)
+	virtual void do_move(int move)
 	{
 		depth++;
 
@@ -42,16 +52,13 @@ public:
 
 		int i, j;
 		std::tie(i, j) = ind_to_ij(move);// 元组
-		attest(is_move_possible(i, j));
+										 // showInfoOnDOS(is_move_possible(i, j));
 
 		board[i][j] = player_to_move;
 
 		// 我们在所有捕获之前保存棋子的哈希值，以方便检查。
 		previous_board_hash_value = compute_hash_value();
 		all_hash_values.insert(previous_board_hash_value);
-
-		// 现在的着子点一定是可行的。
-		attest(board[i][j] == player_to_move);
 
 		// Next player
 		// 轮到下一个玩家着子
@@ -60,14 +67,14 @@ public:
 
 	static int ij_to_ind(int i, int j)
 	{
-		attest(i >= ChessStart && j >= ChessStart && i < ChessEnd && j < ChessEnd);
+		// showInfoOnDOS(i >= ChessStart && j >= ChessStart && i < ChessEnd && j < ChessEnd);
 		return 100 * i + j;
 	}
 
 
 	static std::pair<int, int> ind_to_ij(int ind)
 	{
-		attest(ind >= 0 && ind < 910);
+		// showInfoOnDOS(ind >= 0 && ind < 910);
 		return std::make_pair(ind / 100, ind % 100);
 	}
 
@@ -90,7 +97,7 @@ public:
 		// 调用Pattern对当前局面进行处理
 		const_cast<AI3*>(this)->Revalute();
 		auto moves = get_moves();
-		attest(!moves.empty());
+		// showInfoOnDOS(!moves.empty());
 		std::uniform_int_distribution<std::size_t> move_ind(0, moves.size() - 1);
 		auto move = moves[move_ind(*engine)];
 		do_move(move);
@@ -103,12 +110,12 @@ public:
 	}
 
 	// 从可着子的着子点集合中获取一个着子点
-	virtual std::vector<Move> get_moves() const
+	virtual std::vector<int> get_moves() const
 	{
 		// 下面是搜集所有可能的着子点。
-		std::vector<Move> moves;
+		std::vector<int> moves;
 		if (depth > 1000) {
-			attest(false);
+			// showInfoOnDOS(false);
 			return moves;
 		}
 		bool opponent_has_move = false;
@@ -161,7 +168,6 @@ public:
 		// 如果赢者是当前移动的
 		return winner == current_player_to_move ? 0.0 : 1.0;
 	}
-
 
 	virtual bool checkEmptyPos(int& x, int& y, int& start, int& mainColor, Pos emptyPos[])  override {
 		/******************************************
@@ -257,9 +263,23 @@ public:
 			return false;
 		}
 	}
-
-	void predict() {
-		
+	virtual int maxandmin(int depth) override {
+		return predict();
+	}
+	int predict() {
+		MCTS::ComputeOptions options;
+		options.max_time = 15;
+		options.number_of_threads = 3;
+		auto state_copy = new AI3(cross);
+		std::future<int> best_move = std::async(std::launch::async, [state_copy, options]()
+		{
+			return MCTS::compute_move(state_copy, options);
+		});
+		std::future_status status;
+		do {
+			status = best_move.wait_for(std::chrono::seconds(1));
+		} while (status != std::future_status::ready);
+		return best_move.get();
 	}
 };
 
