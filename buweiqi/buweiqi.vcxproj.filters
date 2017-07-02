@@ -111,6 +111,9 @@
     <ClInclude Include="AI3_Header\MCTS.h">
       <Filter>Header Files\AI3_Header</Filter>
     </ClInclude>
+    <ClInclude Include="ChessBoard_Header\WinCheck.h">
+      <Filter>Header Files\ChessBoard_Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="buweiqi.cpp">
@@ -132,9 +135,6 @@
       <Filter>Source Files\ChessBoard_Source</Filter>
     </ClCompile>
     <ClCompile Include="ChessBoard_Source\ReStart.cpp">
-      <Filter>Source Files\ChessBoard_Source</Filter>
-    </ClCompile>
-    <ClCompile Include="ChessBoard_Source\WinOrLose.cpp">
       <Filter>Source Files\ChessBoard_Source</Filter>
     </ClCompile>
     <ClCompile Include="ChessBoard_Source\util\recursion.cpp">

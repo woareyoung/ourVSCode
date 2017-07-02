@@ -158,6 +158,7 @@
     <ClInclude Include="ChessBoard_Header\ChessBoard.h" />
     <ClInclude Include="ChessBoard_Header\PlayerInfo.h" />
     <ClInclude Include="ChessBoard_Header\SIP.h" />
+    <ClInclude Include="ChessBoard_Header\WinCheck.h" />
     <ClInclude Include="ChessBoard_Header\WindowHwnd.h" />
     <ClInclude Include="ChessBoard_Header\WindowSize.h" />
     <ClInclude Include="FileSystem_Header\FileSystem.h" />
@@ -188,7 +189,6 @@
     <ClCompile Include="ChessBoard_Source\ReStart.cpp" />
     <ClCompile Include="ChessBoard_Source\util\int2String.cpp" />
     <ClCompile Include="ChessBoard_Source\util\recursion.cpp" />
-    <ClCompile Include="ChessBoard_Source\WinOrLose.cpp" />
     <ClCompile Include="FileSystem_Source\AddMemory.cpp" />
     <ClCompile Include="FileSystem_Source\Init.cpp" />
     <ClCompile Include="FileSystem_Source\Match.cpp" />
