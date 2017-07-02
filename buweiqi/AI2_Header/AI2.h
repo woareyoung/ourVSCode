@@ -35,8 +35,6 @@
 #define getLine(temp) (temp / 100)
 #define getColumn(temp) (temp % 100)
 
-#define attest(expr) if (!(expr)) { _cprintf("翻车了窝\n"); }
-
 typedef struct tagDIRECTION
 {
 	int x_offset;
@@ -60,6 +58,14 @@ struct goodMove {
 
 class AI2 : public AI, public AIPlayer, public DefaultChess
 {
+private:
+	// 填充数组进行变换
+	void (AI2::*Reverse[10])(DIRECTION*);
+	void reverse(DIRECTION *PatternType);
+	void reverseXY(DIRECTION *PatternType);
+	void reverse_Y(DIRECTION *PatternType);
+	void reverse_X(DIRECTION *PatternType);
+	void reverse_X_Y(DIRECTION *PatternType);
 protected:
 	//记录各交叉点的值，数组访问从“1”开始，访问顺序为“先行后列”，
 	//“0”表示没有棋子，“1”表示黑子，“2”表示白子
@@ -132,7 +138,7 @@ public:
 	// 匹配函数
 	void startPattern();
 	void Pattern(int *PatternType);
-	bool checkEmptyPos(int& x, int& y, int& start, int& mainColor, Pos emptyPos[]) {
+	virtual bool checkEmptyPos(int& x, int& y, int& start, int& mainColor, Pos emptyPos[]) {
 		/******************************************
 		判断当前匹配到的空位是否是敌方的自杀点，
 		如果是的话，就把该点的分数设置为0，跳过匹配模式
@@ -164,7 +170,7 @@ public:
 		return true;
 	}
 	// 检查棋子是否有效，并对分析的结果进行相应的加分
-	bool checkStone(int& x, int& y) {
+	virtual bool checkStone(int& x, int& y) {
 		// 对于当前匹配到的着子点的环境进行分析
 		// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
 		cross[x][y] = turn2Who;
@@ -195,13 +201,6 @@ public:
 			MovePointer++;
 		}
 	}
-	// 填充数组进行变换
-	void (AI2::*Reverse[10])(DIRECTION*);
-	void reverse(DIRECTION *PatternType);
-	void reverseXY(DIRECTION *PatternType);
-	void reverse_Y(DIRECTION *PatternType);
-	void reverse_X(DIRECTION *PatternType);
-	void reverse_X_Y(DIRECTION *PatternType);
 
 	// 当没有匹配到的时候获取一个合适的位置
 	int FindPosition();

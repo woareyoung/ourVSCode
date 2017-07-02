@@ -33,29 +33,6 @@ void ChessBoard::PaintBoard()
 	}
 }
 
-void ChessBoard::showChessBroadInfoOnDOS()
-{
-	int countB = 0;
-	int countW = 0;
-	_cprintf("------------------Chess Broad---------------------\n");
-	for (int i = 1; i < 10; ++i)
-	{
-		for (int j = 1; j < 10; ++j)
-		{
-			_cprintf("%d\t", cross[i][j]);
-			if (cross[i][j] == isWhite)
-			{
-				countW++;
-			}
-			else if (cross[i][j] == isBlack)
-			{
-				countB++;
-			}
-		}
-		_cprintf("\n");
-	}
-	_cprintf("----Black:%d,White:%d----\n", countB, countW);
-}
 ///回退一步功能函数
 void ChessBoard::BackPace()
 {

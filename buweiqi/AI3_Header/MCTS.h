@@ -209,7 +209,7 @@ namespace MCTS
 		attest(!children.empty());// 如果子节点不为空的话……
 		for (auto child : children) {
 			child->UCT_score = double(child->wins) / double(child->visits) +
-				std::sqrt(2.0 * std::log(double(this->visits)) / child->visits);
+				2.0 * std::sqrt(std::log(double(this->visits)) / child->visits);
 		}
 
 		return *std::max_element(children.begin(), children.end(),
@@ -325,6 +325,8 @@ namespace MCTS
 			State state = root_state;
 
 			// 选择一条直达叶子的路径
+			// 判断是否还有其他的走步且结点是否有孩子结点，如果有的话就继续循环，直到最后。
+			// --------------------------这里有问题-------------------------
 			while (!node->has_untried_moves() && node->has_children()) {
 				node = node->select_child_UCT();
 				state.do_move(node->move);
@@ -337,7 +339,7 @@ namespace MCTS
 				node = node->add_child(move, state);
 			}
 
-			// 循环知道结束。
+			// 循环直到结束。
 			while (state.has_moves()) {
 				state.do_random_move(&random_engine);
 			}
