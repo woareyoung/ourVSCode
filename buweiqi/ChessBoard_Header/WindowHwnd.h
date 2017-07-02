@@ -105,11 +105,7 @@ public:
 		else
 		{
 			tempfile.seekg(0);
-			for (i = 0; i < 36; i++)
-			{
-				tempfile >> data[i];
-				if (i < 18) data[i] = 0;
-			}
+			for (i = 0; i < 36; i++) tempfile >> data[i];
 		}
 		if (winner == 1)
 		{

@@ -4,6 +4,7 @@
 #include "AI1_Header/AI1.h"
 #include "AI2_Header/AI2.h"
 #include "AI3_Header/AI3.h"
+#include <fstream>
 
 #define MID_ONE 1
 #define MID_TWO 2
@@ -207,6 +208,23 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		DeleteObject(CB.Tips);
 		DeleteObject(CB.CombatRecord);
 		PostQuitMessage(0);
+		int i, data[36];
+		std::fstream tempfile("CombatRecord.txt", std::ios::out | std::ios::in);
+		if (!tempfile) exit(0);
+		tempfile.seekg(0);
+		for (i = 0; i < 36; i++)
+		{
+			tempfile >> data[i];
+			if (i < 18) data[i] = 0;
+		}
+		tempfile.close();
+		tempfile.open("CombatRecord.txt", std::ios::out);
+		if (!tempfile) exit(0);
+		tempfile.seekg(0);
+		for (i = 0; i < 36; i++)
+		{
+			tempfile << data[i];
+		}
 		return 0;
 	}
 	return DefWindowProc(hwnd, message, wParam, lParam);
