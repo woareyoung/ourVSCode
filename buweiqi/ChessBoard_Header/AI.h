@@ -15,6 +15,7 @@ public:
 
 	FileSystem FS; //文件操作对象
 	QUADRANT Qua; //记录走棋纪录
+	SITUATION NowStatus;//当前盘面状况
 	int CurrentRound;//当前回合数
 	int CurrentNull;//空位数量
 
@@ -34,6 +35,10 @@ public:
 		参数head：链表的头结点
 	*/
 	void ClearList(std::shared_ptr<NEXTPACE> head);//清空链表
+	/*
+	    参数maxQuadrant：最大的棋子数
+	*/
+	void GetCurrentStatus(int maxQuadrant);//获取当前盘面压缩数据
 };
 
 #endif // AI_H_INCLUDED

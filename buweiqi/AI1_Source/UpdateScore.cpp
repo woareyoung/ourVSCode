@@ -141,7 +141,7 @@ void AI1::RecordSpecialPoint(int row1, int row2, int who, bool isAddScore)
 ///参数6：LastFormatScorePoore —— 前一步可形成的特殊点类型分值的层差分
 ///参数7：LastPointStyle —— 前一步形成的特殊点类型
 ///参数8：LastScorePoor —— 前一步形成的特殊点类型分值的层差分
-void AI1::SetCurrentPoint(int ThisFormatStyle, int ThisFormatScorePoor, int ThisSpecialStyle, int ThisSpecialScorePoor, int LastFormatStyle, int LastFormatScorePoore, int LastPointStyle, int LastScorePoor)
+void AI1::SetCurrentPoint(int ThisFormatStyle, double ThisFormatScorePoor, int ThisSpecialStyle, double ThisSpecialScorePoor, int LastFormatStyle, double LastFormatScorePoore, int LastPointStyle, double LastScorePoor)
 {
 	CurrentFormatPointStyle = ThisFormatStyle;
 	CurrentFormatScorePoor = ThisFormatScorePoor;
@@ -157,33 +157,33 @@ void AI1::SetCurrentPoint(int ThisFormatStyle, int ThisFormatScorePoor, int This
 ///参数：n：特殊点位置  n1-n4：特殊点邻近的位置   amo：标记用
 void AI1::AddRecord(int n, int n1, int n2, int n3, int n4, int amo, bool isAddScore)
 {
-	if (n / 10 > 0 && n / 10 < 10 && n % 10 > 0) ResetScore(n / 10, n % 10, PointStyle[CurrentPointStyle], CurrentScorePoor, isAddScore);
+	if (n / 10 > 0 && n / 10 < 10 && n % 10 > 0) ResetScore((int)(n / 10), n % 10, PointStyle[CurrentPointStyle], CurrentScorePoor, isAddScore);
 	switch (amo)
 	{
 	case 4:
-		if (n / 10 > 0 && n / 10 < 10 && n % 10 > 0) ResetScore(n / 10, n % 10, PointStyle[CurrentFormatPointStyle], CurrentFormatScorePoor, isAddScore);
+		if (n / 10 > 0 && n / 10 < 10 && n % 10 > 0) ResetScore((int)(n / 10), n % 10, PointStyle[CurrentFormatPointStyle], CurrentFormatScorePoor, isAddScore);
 		break;
 	case 5:;
 	case 3:
-		if (n3 / 10 > 0 && n3 / 10 < 10 && n3 % 10 > 0) ResetScore(n3 / 10, n3 % 10, PointStyle[CurrentFormatPointStyle], CurrentFormatScorePoor, isAddScore);
+		if (n3 / 10 > 0 && n3 / 10 < 10 && n3 % 10 > 0) ResetScore((int)(n3 / 10), n3 % 10, PointStyle[CurrentFormatPointStyle], CurrentFormatScorePoor, isAddScore);
 	case 2:
-		if (n2 / 10 > 0 && n2 / 10 < 10 && n2 % 10 > 0) ResetScore(n2 / 10, n2 % 10, PointStyle[CurrentFormatPointStyle], CurrentFormatScorePoor, isAddScore);
+		if (n2 / 10 > 0 && n2 / 10 < 10 && n2 % 10 > 0) ResetScore((int)(n2 / 10), n2 % 10, PointStyle[CurrentFormatPointStyle], CurrentFormatScorePoor, isAddScore);
 	case 1:
-		if (n1 / 10 > 0 && n1 / 10 < 10 && n1 % 10 > 0) ResetScore(n1 / 10, n1 % 10, PointStyle[CurrentFormatPointStyle], CurrentFormatScorePoor, isAddScore); break;
+		if (n1 / 10 > 0 && n1 / 10 < 10 && n1 % 10 > 0) ResetScore((int)(n1 / 10), n1 % 10, PointStyle[CurrentFormatPointStyle], CurrentFormatScorePoor, isAddScore); break;
 	}
 	if (amo < 5)
 	{
-		if (n / 10 > 0 && n / 10 < 10 && n % 10 > 0) ResetScore(n / 10, n % 10, PointStyle[LastSpecialPointStyle], LastSpecialScorePoor, !isAddScore);
+		if (n / 10 > 0 && n / 10 < 10 && n % 10 > 0) ResetScore((int)(n / 10), n % 10, PointStyle[LastSpecialPointStyle], LastSpecialScorePoor, !isAddScore);
 		switch (amo)
 		{
 		case 4:
-			if (n4 / 10 > 0 && n4 / 10 < 10 && n4 % 10 > 0 && cross[n4 / 10][n4 % 10] == 0) ResetScore(n4 / 10, n4 % 10, PointStyle[LastFormatPointStyle], LastFormatScorePoor, !isAddScore);
+			if (n4 / 10 > 0 && n4 / 10 < 10 && n4 % 10 > 0 && cross[n4 / 10][n4 % 10] == 0) ResetScore((int)(n4 / 10), n4 % 10, PointStyle[LastFormatPointStyle], LastFormatScorePoor, !isAddScore);
 		case 3:
-			if (n3 / 10 > 0 && n3 / 10 < 10 && n3 % 10 > 0 && cross[n3 / 10][n3 % 10] == 0) ResetScore(n3 / 10, n3 % 10, PointStyle[LastFormatPointStyle], LastFormatScorePoor, !isAddScore);
+			if (n3 / 10 > 0 && n3 / 10 < 10 && n3 % 10 > 0 && cross[n3 / 10][n3 % 10] == 0) ResetScore((int)(n3 / 10), n3 % 10, PointStyle[LastFormatPointStyle], LastFormatScorePoor, !isAddScore);
 		case 2:
-			if (n2 / 10 > 0 && n2 / 10 < 10 && n2 % 10 > 0 && cross[n2 / 10][n2 % 10] == 0) ResetScore(n2 / 10, n2 % 10, PointStyle[LastFormatPointStyle], LastFormatScorePoor, !isAddScore);
+			if (n2 / 10 > 0 && n2 / 10 < 10 && n2 % 10 > 0 && cross[n2 / 10][n2 % 10] == 0) ResetScore((int)(n2 / 10), n2 % 10, PointStyle[LastFormatPointStyle], LastFormatScorePoor, !isAddScore);
 		case 1:
-			if (n1 / 10 > 0 && n1 / 10 < 10 && n1 % 10 > 0 && cross[n1 / 10][n1 % 10] == 0) ResetScore(n1 / 10, n1 % 10, PointStyle[LastFormatPointStyle], LastFormatScorePoor, !isAddScore);
+			if (n1 / 10 > 0 && n1 / 10 < 10 && n1 % 10 > 0 && cross[n1 / 10][n1 % 10] == 0) ResetScore((int)(n1 / 10), n1 % 10, PointStyle[LastFormatPointStyle], LastFormatScorePoor, !isAddScore);
 		}
 	}
 }
@@ -193,7 +193,7 @@ void AI1::AddRecord(int n, int n1, int n2, int n3, int n4, int amo, bool isAddSc
 ///参数score：特殊点所在位置的分值
 ///参数NumberPoor：层差分
 ///参数isAddScore：是否加分（若true则加分，若false则减分）
-void AI1::ResetScore(int row1, int row2, int score, int NumberPoor, bool isAddScore)
+void AI1::ResetScore(int row1, int row2, double score, double NumberPoor, bool isAddScore)
 {
 	int angelx1, angelx2, angelx3, angelx4;//4个角的横坐标
 	int angely1, angely2, angely3, angely4;//4个角的纵坐标

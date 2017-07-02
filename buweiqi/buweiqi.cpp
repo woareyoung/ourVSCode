@@ -4,6 +4,7 @@
 #include "AI1_Header/AI1.h"
 #include "AI2_Header/AI2.h"
 #include "AI3_Header/AI3.h"
+#include <fstream>
 
 #define MID_ONE 1
 #define MID_TWO 2
@@ -12,6 +13,7 @@
 #define AI_2 5
 #define AI_3 6
 #define TURNBACK 7
+#define CHECK_RECORD 8
 
 ChessBoard CB;
 HCURSOR UPARROWcursor;//竖直向上箭头的光标图像
@@ -26,45 +28,33 @@ LPARAM Param;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);//窗口过程函数
 LRESULT CALLBACK WndProcB(HWND, UINT, WPARAM, LPARAM);//窗口过程函数
-//DWORD WINAPI MesProc(PVOID pParam);//消息函数
+LRESULT CALLBACK WndCombatRecord(HWND, UINT, WPARAM, LPARAM);//窗口过程函数
 DWORD WINAPI TimerProc(PVOID pParam);//计时器处理函数
 void SelectFun();//选择AI功能
 void Select();//选择之后的处理
+void InitWndClass(TCHAR szAppName[], WNDCLASS &wndclass, HINSTANCE hInstance, int callback);
+void SeeCombatRecord();
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	PSTR szCmdLine, int iCmdShow)
 {
 	CB.hInst = hInstance;
-	TCHAR szAppName[] = TEXT("NoGo");
 	UPARROWcursor = LoadCursor(NULL, IDC_UPARROW);
 	ARROWcursor = LoadCursor(NULL, IDC_ARROW);
 	///注册主程序窗口
 	WNDCLASS wndclass;
-
-	wndclass.style = CS_HREDRAW | CS_VREDRAW;
-	wndclass.lpfnWndProc = WndProc;
-	wndclass.cbClsExtra = 0;
-	wndclass.cbWndExtra = 0;
-	wndclass.hInstance = hInstance;
-	wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-	wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wndclass.hbrBackground = (HBRUSH)GetStockObject(LTGRAY_BRUSH);
-	wndclass.lpszMenuName = NULL;
-	wndclass.lpszClassName = szAppName;
+	TCHAR szAppName[] = TEXT("NoGo");
+	InitWndClass(szAppName, wndclass, hInstance, 1);
 	///注册组件窗口（选择AI的窗口）
 	WNDCLASS wndclassB;
-	wndclassB.style = CS_HREDRAW | CS_VREDRAW;
-	wndclassB.lpfnWndProc = WndProcB;
-	wndclassB.cbClsExtra = 0;
-	wndclassB.cbWndExtra = 0;
-	wndclassB.hInstance = hInstance;
-	wndclassB.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-	wndclassB.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wndclassB.hbrBackground = (HBRUSH)GetStockObject(LTGRAY_BRUSH);
-	wndclassB.lpszMenuName = NULL;
-	wndclassB.lpszClassName = _T("Select");
+	TCHAR szAppNameB[] = _T("Select");
+	InitWndClass(szAppNameB, wndclassB, hInstance, 2);
+	///注册组件窗口（对弈战绩的窗口）
+	WNDCLASS wndclassC;
+	TCHAR szAppNameC[] = _T("CombatRecord");
+	InitWndClass(szAppNameC, wndclassC, hInstance, 3);
 
-	if (!RegisterClass(&wndclass) || !RegisterClass(&wndclassB))
+	if (!RegisterClass(&wndclass) || !RegisterClass(&wndclassB) || !RegisterClass(&wndclassC))
 	{
 		MessageBox(NULL, _T("运行程序失败"),
 			szAppName, MB_ICONERROR);
@@ -88,7 +78,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	return msg.wParam;
 	
 }
-
+void InitWndClass(TCHAR szAppName[], WNDCLASS &wndclass, HINSTANCE hInstance, int callback)
+{
+	wndclass.style = CS_HREDRAW | CS_VREDRAW;
+	if(callback == 1) wndclass.lpfnWndProc = WndProc;
+	else if(callback == 2) wndclass.lpfnWndProc = WndProcB;
+	else wndclass.lpfnWndProc = WndCombatRecord;
+	wndclass.cbClsExtra = 0;
+	wndclass.cbWndExtra = 0;
+	wndclass.hInstance = hInstance;
+	wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+	wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wndclass.hbrBackground = (HBRUSH)GetStockObject(LTGRAY_BRUSH);
+	wndclass.lpszMenuName = NULL;
+	wndclass.lpszClassName = szAppName;
+}
 ///主窗口过程函数
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -96,11 +100,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_PAINT://重绘消息
 		BeginPaint(hwnd, &CB.ps);
-		//        HANDLE handle;
-		//        handle = CreateThread(NULL, 0, ThreadProc, NULL, 0, NULL);
 		CB.RePaint();
-		//        CloseHandle(handle);
-		//        Sleep(80);
 		EndPaint(hwnd, &CB.ps);
 		return 0;
 	case WM_COMMAND://窗口下组件的事件
@@ -158,6 +158,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			break;
 		case TURNBACK:CB.BackPace(); break;
+		case CHECK_RECORD:SeeCombatRecord(); break;
 		}
 		break;
 	case WM_CREATE://创建窗口组件
@@ -179,6 +180,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		CB.Timer2R = CreateWindow(_T("Button"), NULL, WS_CHILD | WS_VISIBLE | ES_CENTER, CB.Base + CB.ChessDiameter * 50 / 125 + 130, CB.ChessDiameter * 1610 / 200, 60, 20, hwnd, NULL, CB.hInst, NULL);
 		CB.TurnToBlack = CreateWindow(_T("Static"), _T("轮到玩家1下黑子"), WS_CHILD | WS_VISIBLE | ES_CENTER, CB.Base + CB.ChessDiameter * 150 / 130, CB.ChessDiameter * 780 / 200, 120, 17, hwnd, NULL, CB.hInst, NULL);
 		CB.TurnToWhite = CreateWindow(_T("Static"), _T("轮到玩家2下白子"), WS_CHILD | ES_CENTER, CB.Base + CB.ChessDiameter * 150 / 130, CB.ChessDiameter * 1060 / 200, 120, 17, hwnd, NULL, CB.hInst, NULL);
+		CB.CombatRecordButton = CreateWindow(_T("Button"), _T("战绩查询"), WS_CHILD | ES_CENTER | WS_VISIBLE, CB.Base + CB.ChessDiameter * 150 / 130, CB.ChessDiameter * 1750 / 200, 120, 30, hwnd, (HMENU)CHECK_RECORD, CB.hInst, NULL);
 		CB.PaintTimer(CB.Timer1A, CB.Timer1R, 1, true);
 		CB.PaintTimer(CB.Timer2A, CB.Timer2R, 2, true);
 		CB.Board = (HBITMAP)LoadImage(NULL, _T("Image/Board.bmp"), IMAGE_BITMAP, 500, 500, LR_LOADFROMFILE);
@@ -204,7 +206,25 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		DeleteObject(CB.BlackChess);
 		DeleteObject(CB.WhiteChess);
 		DeleteObject(CB.Tips);
+		DeleteObject(CB.CombatRecord);
 		PostQuitMessage(0);
+		int i, data[36];
+		std::fstream tempfile("CombatRecord.txt", std::ios::out | std::ios::in);
+		if (!tempfile) exit(0);
+		tempfile.seekg(0);
+		for (i = 0; i < 36; i++)
+		{
+			tempfile >> data[i];
+			if (i < 18) data[i] = 0;
+		}
+		tempfile.close();
+		tempfile.open("CombatRecord.txt", std::ios::out);
+		if (!tempfile) exit(0);
+		tempfile.seekg(0);
+		for (i = 0; i < 36; i++)
+		{
+			tempfile << data[i];
+		}
 		return 0;
 	}
 	return DefWindowProc(hwnd, message, wParam, lParam);
@@ -250,18 +270,6 @@ DWORD WINAPI TimerProc(PVOID pParam)
 	CloseHandle(CB.AnoHandle);
 	return 0;
 }
-/*
-DWORD WINAPI MesProc(PVOID pParam)
-{
-	HANDLE TimeHandle = CreateThread(NULL, 0, TimerProc, NULL, 0, NULL);
-	while (GetMessage(&msg, NULL, 0, 0) && CB.Start)
-	{
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
-	CloseHandle(TimeHandle);
-	return 0;
-}*/
 ///响应选择AI
 void SelectFun()
 {
@@ -269,7 +277,6 @@ void SelectFun()
 	GetWindowRect(CB.RootHwnd, &CB.MainWinRect);//获取主窗口在屏幕中的位置
 	MoveWindow(CB.SelectAI, CB.MainWinRect.left + (CB.RootWidth - 250) / 2, CB.MainWinRect.top + (CB.RootHeight - 300) / 2, 250, 300, false);//改变窗口位置和大小
 	ShowWindow(CB.SelectAI, SW_SHOW);//设置窗口可视
-//	int line = CB.line, column = CB.column;//用于检查AI是否已完成（即可以进行下棋了）
 	if (CB.CanSelectAI1)
 	{
 		ShowWindow(CB.SelectAI1, SW_SHOW);
@@ -285,46 +292,6 @@ void SelectFun()
 		ShowWindow(CB.SelectAI3, SW_SHOW);
 		ShowSelect3 = true;
 	}
-	/*
-	///检查AI1
-	if(CB.Player1AI != &CB.ai1 && CB.Player2AI != &CB.ai1)
-	{
-		line = CB.line;
-		column = CB.column;
-		CB.ai1.GetPosition(CB.line, CB.column, 0);
-		if (line != CB.line && column != CB.column)
-		{
-			ShowWindow(CB.SelectAI1, SW_SHOW);
-			ShowSelect1 = true;
-		}
-	}
-	///检查AI2
-	if(CB.Player1AI != &CB.ai2 && CB.Player2AI != &CB.ai2)
-	{
-		CB.line = line;
-		CB.column = column;
-		CB.ai2.GetPosition(CB.line, CB.column, 0);
-		if (line != CB.line && column != CB.column)
-		{
-			ShowWindow(CB.SelectAI2, SW_SHOW);
-			ShowSelect2 = true;
-		}
-	}
-	///检查AI3
-	if(CB.Player1AI != &CB.ai3 && CB.Player2AI != &CB.ai3)
-	{
-		CB.line = line;
-		CB.column = column;
-		CB.ai3.GetPosition(CB.line, CB.column, 0);
-		if (line != CB.line && column != CB.column)
-		{
-			ShowWindow(CB.SelectAI3, SW_SHOW);
-			ShowSelect3 = true;
-		}
-	}
-	//-------//
-	CB.line = line;
-	CB.column = column;*/
 	UpdateWindow(CB.SelectAI);
 }
 ///选择AI之后的处理
@@ -385,20 +352,11 @@ LRESULT CALLBACK WndProcB(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		switch (LOWORD(wParam))
 		{
 			//当选择了AI1
-		case AI_1:
-			Num = 1;
-			Select();
-			break;
+		case AI_1:Num = 1;Select();break;
 			//当选择了AI2
-		case AI_2:
-			Num = 2;
-			Select();
-			break;
+		case AI_2:Num = 2;Select();break;
 			//当选择了AI3
-		case AI_3:
-			Num = 3;
-			Select();
-			break;
+		case AI_3:Num = 3;Select();break;
 		}
 		break;
 	case WM_DESTROY:
@@ -406,4 +364,45 @@ LRESULT CALLBACK WndProcB(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	}
 	return DefWindowProc(hwnd, message, wParam, lParam);
+}
+LRESULT CALLBACK WndCombatRecord(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	switch (message)
+	{
+	case WM_PAINT:; break;
+	case WM_CREATE:
+		CB.CurrentCR = CreateWindow(_T("Static"), _T("当前战绩"), WS_CHILD | ES_CENTER | WS_VISIBLE, 110, 10, 200, 20, hwnd, NULL, CB.hInst, NULL);
+		CB.AllCR = CreateWindow(_T("Static"), _T("历史战绩"), WS_CHILD | ES_CENTER | WS_VISIBLE, 320, 10, 200, 20, hwnd, NULL, CB.hInst, NULL);
+		CB.CurrentWin = CreateWindow(_T("Static"), _T("胜"), WS_CHILD | ES_CENTER | WS_VISIBLE, 155, 40, 20, 20, hwnd, NULL, CB.hInst, NULL);
+		CB.CurrentLose = CreateWindow(_T("Static"), _T("负"), WS_CHILD | ES_CENTER | WS_VISIBLE, 233, 40, 20, 20, hwnd, NULL, CB.hInst, NULL);
+		CB.AllWin = CreateWindow(_T("Static"), _T("胜"), WS_CHILD | ES_CENTER | WS_VISIBLE, 365, 40, 20, 20, hwnd, NULL, CB.hInst, NULL);
+		CB.AllLose = CreateWindow(_T("Static"), _T("负"), WS_CHILD | ES_CENTER | WS_VISIBLE, 443, 40, 20, 20, hwnd, NULL, CB.hInst, NULL);
+		CB.AI1_VS_AI1 = CreateWindow(_T("Static"), _T("AI1 VS AI1"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 70, 100, 20, hwnd, NULL, CB.hInst, NULL);
+		CB.AI1_VS_AI2 = CreateWindow(_T("Static"), _T("AI1 VS AI2"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 100, 100, 20, hwnd, NULL, CB.hInst, NULL);
+		CB.AI1_VS_AI3 = CreateWindow(_T("Static"), _T("AI1 VS AI3"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 130, 100, 20, hwnd, NULL, CB.hInst, NULL);
+		CB.AI2_VS_AI1 = CreateWindow(_T("Static"), _T("AI2 VS AI1"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 160, 100, 20, hwnd, NULL, CB.hInst, NULL);
+		CB.AI2_VS_AI2 = CreateWindow(_T("Static"), _T("AI2 VS AI2"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 190, 100, 20, hwnd, NULL, CB.hInst, NULL);
+		CB.AI2_VS_AI3 = CreateWindow(_T("Static"), _T("AI2 VS AI3"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 220, 100, 20, hwnd, NULL, CB.hInst, NULL);
+		CB.AI3_VS_AI1 = CreateWindow(_T("Static"), _T("AI3 VS AI1"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 250, 100, 20, hwnd, NULL, CB.hInst, NULL);
+		CB.AI3_VS_AI2 = CreateWindow(_T("Static"), _T("AI3 VS AI2"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 280, 100, 20, hwnd, NULL, CB.hInst, NULL);
+		CB.AI3_VS_AI3 = CreateWindow(_T("Static"), _T("AI3 VS AI3"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 310, 100, 20, hwnd, NULL, CB.hInst, NULL);
+		int i;
+		for(i = 0; i < 9; i++) CB.DataHwnd[i] = CreateWindow(_T("Static"), _T("0"), WS_CHILD | ES_CENTER | WS_VISIBLE, 140, 70 + i * 30, 50, 20, hwnd, NULL, CB.hInst, NULL);
+		for (i = 0; i < 9; i++) CB.DataHwnd[i + 9] = CreateWindow(_T("Static"), _T("0"), WS_CHILD | ES_CENTER | WS_VISIBLE, 218, 70 + i * 30, 50, 20, hwnd, NULL, CB.hInst, NULL);
+		for (i = 0; i < 9; i++) CB.DataHwnd[i + 18] = CreateWindow(_T("Static"), _T("0"), WS_CHILD | ES_CENTER | WS_VISIBLE, 350, 70 + i * 30, 50, 20, hwnd, NULL, CB.hInst, NULL);
+		for (i = 0; i < 9; i++) CB.DataHwnd[i + 27] = CreateWindow(_T("Static"), _T("0"), WS_CHILD | ES_CENTER | WS_VISIBLE, 428, 70 + i * 30, 50, 20, hwnd, NULL, CB.hInst, NULL);
+		break;
+	case WM_DESTROY:
+		DestroyWindow(CB.CombatRecord);//删除窗口
+		break;
+	}
+	return DefWindowProc(hwnd, message, wParam, lParam);
+}
+void SeeCombatRecord()
+{
+	CB.CombatRecord = CreateWindow(_T("CombatRecord"), _T("战绩记录"), WS_MINIMIZEBOX | WS_SYSMENU, CB.RootWidth / 2 - 125, CB.RootHeight / 2 - 150, 250, 300, CB.RootHwnd, NULL, CB.hInst, NULL);
+	GetWindowRect(CB.RootHwnd, &CB.MainWinRect);//获取主窗口在屏幕中的位置
+	MoveWindow(CB.CombatRecord, CB.MainWinRect.left + (CB.RootWidth - 550) / 2, CB.MainWinRect.top + (CB.RootHeight - 370) / 2, 550, 370, false);//改变窗口位置和大小
+	ShowWindow(CB.CombatRecord, SW_SHOW);//设置窗口可视
+	CB.UpdateCRdata();
 }

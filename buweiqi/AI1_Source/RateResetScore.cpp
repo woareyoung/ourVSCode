@@ -2,7 +2,7 @@
 #include "../AI1_Header/AI1.h"
 
 ///应对“异常”状态的重设分
-void AI1::RateResetScore(float ResetRate, bool add)
+void AI1::RateResetScore(double ResetRate, bool add)
 {
 	int i, j;
 	if (add)

@@ -20,7 +20,7 @@ public:
 	void InitializeD();
 private:
 	int OT;//不想再想名字了，在GetPosition.cpp文件中使用
-
+	int Similar;//与过去输的局面相似的程度
 	//记录各交叉点的值，数组访问从“1”开始，访问顺序为“先行后列”，
 	//“0”表示没有棋子，“1”表示黑子，“2”表示白子
 	bool Cross[10][10];//遍历标识
@@ -28,9 +28,11 @@ private:
 	double PointStyle[18];//记录每种特殊点类型的分值
 	double Score[10][10];//记录每个位置上的分值
 	double MaxScore;//记录最大分值
+	
 	std::shared_ptr<NEXTPACE> np;//获取下一步的可能性的链表
 
 	int GetNextPace(std::shared_ptr<NEXTPACE> np);
+	void BackQua(int line, int column);
 	///各功能函数 集中在FunctionPart.cpp文件中
 	/*
 		param[row1]:行
@@ -51,11 +53,11 @@ private:
 	//更新棋盘位置分值，参数：行，列，是否加分
 	void UpdateScore(int row1, int row2, int who, bool isAddScore = true);//调用RecordSpecialPoint()函数
 	//设置特殊点影响的分值
-	void ResetScore(int row1, int row2, int score, int NumberPoor = 100, bool isAddScore = true);//实行加分的函数
+	void ResetScore(int row1, int row2, double score, double NumberPoor = 100, bool isAddScore = true);//实行加分的函数
 	//添加特殊点
 	void RecordSpecialPoint(int row1, int row2, int who, bool isAddScore = true);//用SetCurrentPoint()设置当前点，再调用AddRecord
 	void AddRecord(int n, int n1, int n2, int n3, int n4, int amo, bool isAddScore = true);
-	void SetCurrentPoint(int ThisFormatStyle, int ThisFormatScorePoor, int ThisSpecialStyle, int ThisSpecialScorePoorint, int LastFormatStyle = 0, int LastFormatScorePoore = 0, int LastSpecialPointStyle = 0, int LastSpecialScorePoor = 0);
+	void SetCurrentPoint(int ThisFormatStyle, double ThisFormatScorePoor, int ThisSpecialStyle, double ThisSpecialScorePoorint, int LastFormatStyle = 0, double LastFormatScorePoore = 0, int LastSpecialPointStyle = 0, double LastSpecialScorePoor = 0);
 
 	///判断是否是死棋位置   集中在DeadCheck.cpp文件中
 	bool DeadCheck(int line, int column, int who);
@@ -64,7 +66,7 @@ private:
 	bool BesiegePosition(int RivalLine, int RivalColumn, int player, int rival, bool &tie);
 
 	///在RateResetScore.cpp文件中
-	void RateResetScore(float ResetRate, bool add = true);//按比例缩小分值，减少分差，精确定位
+	void RateResetScore(double ResetRate, bool add = true);//按比例缩小分值，减少分差，精确定位
 };
 
 

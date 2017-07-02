@@ -47,7 +47,7 @@ std::shared_ptr<NEXTPACE> FileSystem::GenerMatch(SITUATION &StatusQuo, int playe
 	std::string name = FN.ForeName + std::to_string(round) + FN.TXT;
 	OpenFile(name, TempFile);
 	TempFile.seekg(0);
-	int i, j;
+	int i;
 	for (i = 0; i < 10; i++) value[i] = 0;
 	std::shared_ptr<NEXTPACE> np = std::shared_ptr<NEXTPACE>(new NEXTPACE);//记录未下棋位置的链表的头结点
 	std::shared_ptr<NEXTPACE> tempHead = np;//动态头结点

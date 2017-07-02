@@ -1,5 +1,6 @@
 #include "../stdafx.h"
 #include "../AI1_Header/AI1.h"
+#define MAX_SIMILAR 3 //设置同样的走棋达到连续3次后改变规律
 ///获取下棋位置
 void AI1::GetPosition(int &line, int &column, int onTurn)
 {
@@ -120,7 +121,29 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 			cross[line][column] = 0;
 			continue;
 		}
-		else break;
+		//先检查有没有“重蹈覆辙”
+		else
+		{
+			Statistic(line, column);
+			GetCurrentStatus(Qua.GetMaxQuadrant());
+			np = FS.Match(NowStatus, 3 - PlayerId, CurrentRound + 1);//搜索出同样的局面输的一方的下棋位置
+			if (np == nullptr)
+			{
+				BackQua(line, column);
+				break;
+			}
+			else Similar++;
+			ClearList(np);
+			if (Similar == MAX_SIMILAR)
+			{
+				Similar = 0;
+				BackQua(line, column);
+				Score[line][column] *= 0.75;
+				cross[line][column] = 0;
+				continue;
+			}
+			break;
+		}
 	}
 	cross[line][0] = 1;
 	Statistic(line, column);
@@ -147,4 +170,11 @@ int AI1::GetNextPace(std::shared_ptr<NEXTPACE> np)
 		np = nullptr;
 	}
 	return nextpace;
+}
+void AI1::BackQua(int line, int column)
+{
+	if (line < 5 && column > 5) Qua.FirstQuadrant--;
+	else if (line < 5 && column < 5) Qua.SecondQuadrant--;
+	else if (line > 5 && column < 5) Qua.ThirdQuadrant--;
+	else if (line > 5 && column > 5) Qua.ForthQuadrant--;
 }
