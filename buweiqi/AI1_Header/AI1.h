@@ -53,11 +53,11 @@ private:
 	//更新棋盘位置分值，参数：行，列，是否加分
 	void UpdateScore(int row1, int row2, int who, bool isAddScore = true);//调用RecordSpecialPoint()函数
 	//设置特殊点影响的分值
-	void ResetScore(int row1, int row2, int score, int NumberPoor = 100, bool isAddScore = true);//实行加分的函数
+	void ResetScore(int row1, int row2, double score, double NumberPoor = 100, bool isAddScore = true);//实行加分的函数
 	//添加特殊点
 	void RecordSpecialPoint(int row1, int row2, int who, bool isAddScore = true);//用SetCurrentPoint()设置当前点，再调用AddRecord
 	void AddRecord(int n, int n1, int n2, int n3, int n4, int amo, bool isAddScore = true);
-	void SetCurrentPoint(int ThisFormatStyle, int ThisFormatScorePoor, int ThisSpecialStyle, int ThisSpecialScorePoorint, int LastFormatStyle = 0, int LastFormatScorePoore = 0, int LastSpecialPointStyle = 0, int LastSpecialScorePoor = 0);
+	void SetCurrentPoint(int ThisFormatStyle, double ThisFormatScorePoor, int ThisSpecialStyle, double ThisSpecialScorePoorint, int LastFormatStyle = 0, double LastFormatScorePoore = 0, int LastSpecialPointStyle = 0, double LastSpecialScorePoor = 0);
 
 	///判断是否是死棋位置   集中在DeadCheck.cpp文件中
 	bool DeadCheck(int line, int column, int who);

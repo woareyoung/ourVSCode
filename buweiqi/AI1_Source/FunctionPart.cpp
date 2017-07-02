@@ -30,7 +30,7 @@ int AI1::GetChessAmount(int row1, int row2, int who, int &num)
 ///获取最大分值的位置
 void AI1::GetMaxScorePosition()
 {
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 	int ran = 0, i, j;
 	while (ran == 0 || ran % 10 == 0) ran = rand() % 89 + 11;
 	MaxScore = Score[ran / 10][ran % 10];

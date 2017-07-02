@@ -126,7 +126,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		{
 			Statistic(line, column);
 			GetCurrentStatus(Qua.GetMaxQuadrant());
-			np = FS.Match(NowStatus, PlayerId, CurrentRound + 1);//搜索出同样的局面输的一方的下棋位置
+			np = FS.Match(NowStatus, 3 - PlayerId, CurrentRound + 1);//搜索出同样的局面输的一方的下棋位置
 			if (np == nullptr)
 			{
 				BackQua(line, column);

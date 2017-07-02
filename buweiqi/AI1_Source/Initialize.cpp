@@ -50,7 +50,7 @@ void AI1::InitializeD()
 		for (j = 0; j < 10; ++j)
 		{
 			Score[i][j] = 1;
-			cross[i][j] = 0.0;
+			cross[i][j] = 0;
 			Cross[i][j] = false;
 		}
 	}
