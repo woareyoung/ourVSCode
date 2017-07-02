@@ -60,7 +60,7 @@ std::shared_ptr<NEXTPACE> FileSystem::GenerMatch(SITUATION &StatusQuo, int playe
 		{
 			TempFile >> value[i];
 			//包含当前盘面状况
-			if (CompareHigh(value[i] / 10000, StatusQuo.Line[i] / 10000, tempHead, tempRear) && CompareLow(value[i] % 10000, StatusQuo.Line[i] % 10000))
+			if (Compare(value[i] / 10000, StatusQuo.Line[i] / 10000, tempHead, tempRear))
 			{
 				for (tempRear = tempHead; ; tempRear = tempRear->next)
 				{
@@ -136,7 +136,7 @@ std::shared_ptr<NEXTPACE> FileSystem::UnPack(int value)
 	return np;
 }
 //比较两个数值，查看文件棋谱是否包含当前状况
-bool FileSystem::CompareHigh(int FileValue, int CurrentValue, std::shared_ptr<NEXTPACE> head, std::shared_ptr<NEXTPACE> rear)
+bool FileSystem::Compare(int FileValue, int CurrentValue, std::shared_ptr<NEXTPACE> head, std::shared_ptr<NEXTPACE> rear)
 {
 	std::shared_ptr<NEXTPACE> np1 = UnPack(FileValue);//获取“全集”
 	std::shared_ptr<NEXTPACE> np2 = UnPack(CurrentValue);//获取“子集”
@@ -213,44 +213,4 @@ void FileSystem::ConnectList(std::shared_ptr<NEXTPACE> Aim, std::shared_ptr<NEXT
 		}
 		Source = Source->next;
 	}
-}
-bool FileSystem::CompareLow(int FileValue, int CurrentValue)
-{
-	std::shared_ptr<NEXTPACE> np1 = UnPack(FileValue);//获取“全集”
-	std::shared_ptr<NEXTPACE> np2 = UnPack(CurrentValue);//获取“子集”
-	//任何集合包含空集
-	if (np2 == nullptr && np1 != nullptr)
-	{
-		ClearList(np1);
-		return true;
-	}
-	else if (np1 == nullptr && np2 != nullptr)
-	{
-		ClearList(np1);
-		ClearList(np2);
-		return false;
-	}
-	else if (np1 == nullptr && np2 == nullptr) return true;
-	std::shared_ptr<NEXTPACE> temp2 = np2;
-	std::shared_ptr<NEXTPACE> temp1 = np1;
-	while (temp1 != nullptr && temp2 != nullptr)
-	{
-		//若存在全集中没有子集中的元素，则返回false，表示不包含
-		if (temp1->site < temp2->site)
-		{
-			ClearList(np1);//清空链表
-			ClearList(np2);
-			return false;
-		}
-		//若子集中的元素也存在于全集中，则遍历下一个元素
-		else if (temp1->site == temp2->site)
-		{
-			temp1 = temp1->next;
-			temp2 = temp2->next;
-		}
-		else if (temp1->site > temp2->site) temp1 = temp1->next;
-	}
-	ClearList(np1);//清空链表
-	ClearList(np2);
-	return true;
 }

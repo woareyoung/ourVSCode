@@ -58,10 +58,7 @@ public:
 	param[head]:子集不存在的位置的链表头结点
 	param[rear]:子集不存在的位置的链表尾结点
 	*/
-	bool CompareHigh(int FileValue, int CurrentValue, std::shared_ptr<NEXTPACE> head, std::shared_ptr<NEXTPACE> rear);//比较两个数值，查看文件棋谱是否包含当前状况
-	//param[FileValue]:文件中的数值
-	//param[CurrentValue] : 当前盘面的数值
-	bool CompareLow(int FileValue, int CurrentValue);
+	bool Compare(int FileValue, int CurrentValue, std::shared_ptr<NEXTPACE> head, std::shared_ptr<NEXTPACE> rear);//比较两个数值，查看文件棋谱是否包含当前状况
 	/*
 	param[HeadNode]:链表的头结点
 	*/
