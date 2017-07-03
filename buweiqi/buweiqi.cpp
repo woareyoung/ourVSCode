@@ -30,6 +30,7 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);//窗口过程函数
 LRESULT CALLBACK WndProcB(HWND, UINT, WPARAM, LPARAM);//窗口过程函数
 LRESULT CALLBACK WndCombatRecord(HWND, UINT, WPARAM, LPARAM);//窗口过程函数
 DWORD WINAPI TimerProc(PVOID pParam);//计时器处理函数
+DWORD WINAPI PlayProc(PVOID pParam);//游戏处理函数
 void SelectFun();//选择AI功能
 void Select();//选择之后的处理
 void InitWndClass(TCHAR szAppName[], WNDCLASS &wndclass, HINSTANCE hInstance, int callback);
@@ -108,6 +109,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			//玩家1使用了AI
 		case MID_ONE:
+			if (CB.Start == true) break;
 			if (!CB.Player1isAI)
 			{
 				Type = 1;
@@ -125,6 +127,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 			//玩家2使用了AI
 		case MID_TWO:
+			if (CB.Start == true) break;
 			if (!CB.Player2isAI)
 			{
 				Type = 2;
@@ -149,12 +152,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 				CB.PrintTime = true;
 				SendMessageA((HWND)lParam, WM_SETTEXT, (WPARAM)NULL, LPARAM("正在游戏中"));
 				CB.Start = true;
-				if (CB.Player1isAI)
-				{
-					CB.onTurn = isAI1onTurn;
-					CB.PaintChess();
-				}
+				if (CB.Player1isAI) CB.onTurn = isAI1onTurn;
 				CB.AnoHandle = CreateThread(NULL, 0, TimerProc, NULL, 0, NULL);
+				CB.MainProcedureThead = CreateThread(NULL, 0, PlayProc, NULL, 0, NULL);
 			}
 			break;
 		case TURNBACK:CB.BackPace(); break;
@@ -199,7 +199,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			SetCursor(ARROWcursor);
 		break;
 	case WM_LBUTTONDOWN://鼠标左键事件
-		if (CB.Start == true && CB.GetPointPosition(lParam)) CB.PaintChess();
+		if (CB.Start == true)
+		{
+			CB.GetPointPosition(lParam);
+		}
 		break;
 	case WM_DESTROY:
 		DeleteObject(CB.Board);
@@ -270,6 +273,13 @@ DWORD WINAPI TimerProc(PVOID pParam)
 	CloseHandle(CB.AnoHandle);
 	return 0;
 }
+DWORD WINAPI PlayProc(PVOID pParam)
+{
+	while(CB.Start)
+		CB.PaintChess();
+	CloseHandle(CB.MainProcedureThead);
+	return 0;
+}
 ///响应选择AI
 void SelectFun()
 {
@@ -324,15 +334,13 @@ void Select()
 		CB.Player2isAI = true;
 		break;
 	}
+	if (Type == CB.onTurn) CB.onTurn = isAI1onTurn;
 	///初始化AI数据
 	if (CB.Player1AI != NULL) CB.Player1AI->GetPosition(Num, Type, 0);
 	if (CB.Player2AI != NULL) CB.Player2AI->GetPosition(Num, Type, 0);
 	ShowSelect1 = false;//是否显示AI
 	ShowSelect2 = false;//是否显示AI
 	ShowSelect3 = false;//是否显示AI
-	if (Type == CB.onTurn) CB.onTurn = isAI1onTurn;
-	else if (Type == CB.onTurn) CB.onTurn = isAI2onTurn;
-	if (CB.Start == true && (CB.onTurn == isAI1onTurn ? 1 : 2) == Type) CB.PaintChess();
 }
 LRESULT CALLBACK WndProcB(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
