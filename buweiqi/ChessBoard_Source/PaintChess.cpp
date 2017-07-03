@@ -9,42 +9,31 @@ void ChessBoard::PaintChess()
 	{
 	case isPlay1onTurn://画黑色棋子
 		if (cross[line][column] != 0) return;
-		for (int i = 0; i < 10; ++i)
-			for (int j = 0; j < 10; ++j)
-				Cross[i][j] = false;
-		if (cross[line][column] == 0)
+		if (Player2isAI == false)
+			onTurn = isPlay2onTurn;
+		else
+			onTurn = isAI2onTurn;
+		PaintAChess(1);
+		//若已分胜负，则结束游戏
+		if (WinCheck::WinOrLose(line, column, onTurn, Winner, cross))
 		{
-			if (Player2isAI == false)
-				onTurn = isPlay2onTurn;
-			else
-				onTurn = isAI2onTurn;
-			PaintAChess(1);
-			//若已分胜负，则结束游戏
-			if (WinCheck::WinOrLose(line, column, onTurn, Winner, Cross, cross))
-			{
-				ReStart();
-			}
-			else if (Player2isAI == true) PaintChess();
-		};
+			ReStart();
+		}
+		else if (Player2isAI == true) PaintChess();
 		break;
 	case isPlay2onTurn://画白色棋子
 		if (cross[line][column] != 0) return;
-		for (int i = 0; i < 10; ++i)
-			for (int j = 0; j < 10; ++j)
-				Cross[i][j] = false;
-		if (cross[line][column] == 0)
+		if (Player1isAI == false)
+			onTurn = isPlay1onTurn;
+		else
+			onTurn = isAI1onTurn;
+		PaintAChess(2);
+		//若已分胜负，则结束游戏
+		if (WinCheck::WinOrLose(line, column, onTurn, Winner, cross))
 		{
-			if (Player1isAI == false)
-				onTurn = isPlay1onTurn;
-			else
-				onTurn = isAI1onTurn;
-			PaintAChess(2);
-			//若已分胜负，则结束游戏
-			if (WinCheck::WinOrLose(line, column, onTurn, Winner, Cross, cross))
-			{
-				ReStart();
-			}
-		};
+			ReStart();
+		}
+		else if (Player2isAI == true) PaintChess();
 		break;
 		//画黑色棋子
 	case isAI1onTurn:
@@ -59,7 +48,7 @@ void ChessBoard::PaintChess()
 
 		PaintAChess(isBlack);
 		//若对方是电脑，则先判断有没有分出胜负
-		bool win = WinCheck::WinOrLose(line, column, onTurn, Winner, Cross, cross);
+		bool win = WinCheck::WinOrLose(line, column, onTurn, Winner, cross);
 		if (win || line == 0 || column == 0)
 		{
 			Winner = 2;
@@ -80,7 +69,7 @@ void ChessBoard::PaintChess()
 
 		PaintAChess(isWhite);
 		//若对方是电脑，则先判断有没有分出胜负
-		bool win = WinCheck::WinOrLose(line, column, onTurn, Winner, Cross, cross);
+		bool win = WinCheck::WinOrLose(line, column, onTurn, Winner, cross);
 		if (win || line == 0 || column == 0)
 		{
 			Winner = 1;
