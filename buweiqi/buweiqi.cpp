@@ -100,9 +100,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	switch (message)
 	{
 	case WM_PAINT://重绘消息
-		BeginPaint(hwnd, &CB.ps);
-		CB.RePaint();
-		EndPaint(hwnd, &CB.ps);
+		if (CB.Repaint)
+		{
+			BeginPaint(hwnd, &CB.ps);
+			CB.RePaint();
+			EndPaint(hwnd, &CB.ps);
+		}
 		return 0;
 	case WM_COMMAND://窗口下组件的事件
 		switch (LOWORD(wParam))
@@ -233,7 +236,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		tempfile.seekg(0);
 		for (i = 0; i < 36; i++)
 		{
-			tempfile << data[i];
+			tempfile << data[i] << " ";
+			if (i % 6 == 0) tempfile << std::endl;
 		}
 		return 0;
 	}

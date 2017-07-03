@@ -87,7 +87,9 @@ void ChessBoard::PaintAChess(int type)
 	AddList(type);
 	cross[line][column] = type;//将获取到的行和列数记录到line和column
 	DisplayOnTurn(type);
+	Repaint = false;
 	RePaint();
+	Repaint = true;
 }
 void ChessBoard::DisplayOnTurn(int type)
 {

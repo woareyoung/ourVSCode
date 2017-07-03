@@ -56,6 +56,7 @@ public:
 	HANDLE MainProcedureThead;//画棋子线程
 	bool PrintTime;
 	bool ControlLoop;//控制PaintChess()的循环
+	bool Repaint;//用于防止两条线程同时重绘
 	RECT MainWinRect;//记录主窗口位置
 	HDC hdcBuffer;//缓冲
 	HBITMAP hBitMap;//内存位图

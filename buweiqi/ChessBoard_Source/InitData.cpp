@@ -27,6 +27,7 @@ ChessBoard::ChessBoard()
 	onTurn = 1;//轮到谁
 	Winner = 0;//胜利者
 	PrintTime = true;//是否需要输出时间
+	Repaint = true;
 	///结构体，保存区域
 	rect.left = 0;
 	rect.top = 0;
