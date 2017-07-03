@@ -121,7 +121,7 @@ public:
 			else if (Player1 == 2)
 			{
 				if (Player2 == 1) { data[3]++; data[21]++; }
-				if (Player2 == 2) { data[4]++; data[22]++; }
+				else if (Player2 == 2) { data[4]++; data[22]++; }
 				else { data[5]++; data[23]++; }
 			}
 			else if (Player1 == 3)
@@ -142,7 +142,7 @@ public:
 			else if (Player1 == 2)
 			{
 				if (Player2 == 1) { data[12]++; data[30]++; }
-				if (Player2 == 2) { data[13]++; data[31]++; }
+				else if (Player2 == 2) { data[13]++; data[31]++; }
 				else { data[14]++; data[32]++; }
 			}
 			else if (Player1 == 3)

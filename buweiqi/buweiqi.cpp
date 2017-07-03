@@ -300,7 +300,7 @@ DWORD WINAPI PlayProc(PVOID pParam)
 			CB.CombatNumber++;
 			CB.Start = true;
 			CB.RePaint();
-			Sleep(100);
+			Sleep(200);
 		}
 	}
 	CloseHandle(CB.MainProcedureThead);
