@@ -28,6 +28,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 				else RateResetScore(0.92, false);
 			}
 			else UpdateScore(line, column, play, false);
+			if (Similar != 0) Similar--;
 		}
 		return;
 	}
@@ -52,7 +53,6 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		if (line < 3 || line > 7 || column < 3 || column > 7) RateResetScore(0.78);
 		else RateResetScore(0.92);
 		UpdateScore(line, column, OT, true);
-		//Display(OT, line, column);
 	}
 	//如果是第一步下棋
 	else

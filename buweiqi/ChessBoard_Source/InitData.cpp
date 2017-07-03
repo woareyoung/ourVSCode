@@ -60,6 +60,8 @@ ChessBoard::ChessBoard()
 	if (line != 0) CanSelectAI3 = true;
 	line = 0;
 	column = 0;
+	Player1AI = nullptr;
+	Player2AI = nullptr;
 }
 ///初始化棋盘状态数组
 void ChessBoard::Init_cross()
@@ -70,21 +72,25 @@ void ChessBoard::Init_cross()
 			cross[i][j] = 0;
 		}
 	}
-	Player1AI = nullptr;
-	Player2AI = nullptr;
 }
 ///初始化下棋记录
 void ChessBoard::Init_Pace()
 {
+	std::shared_ptr<SITUATION> s = nullptr;
+	std::shared_ptr<PACE> p = nullptr;
 	while (Tail->perior != nullptr)
 	{
+		p = Tail;
 		Tail = Tail->perior;
+		p = nullptr;
 		Tail->next = nullptr;
 	}
 	Tail = nullptr;
 	while (SituaHead->next != nullptr)
 	{
+		s = SituaHead;
 		SituaHead = SituaHead->next;
+		s = nullptr;
 		SituaHead->prior = nullptr;
 	}
 	SituaHead = nullptr;

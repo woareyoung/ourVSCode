@@ -286,8 +286,18 @@ DWORD WINAPI TimerProc(PVOID pParam)
 }
 DWORD WINAPI PlayProc(PVOID pParam)
 {
-	while(CB.Start)
+	CB.CombatNumber = 1;
+	while (CB.Start)
+	{
 		if(CB.ControlLoop) CB.PaintChess();
+		if (!CB.Start && CB.CombatNumber < MAX_COMBAT)
+		{
+			CB.CombatNumber++;
+			CB.Start = true;
+			CB.RePaint();
+			Sleep(100);
+		}
+	}
 	CloseHandle(CB.MainProcedureThead);
 	return 0;
 }

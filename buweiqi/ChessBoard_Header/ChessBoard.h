@@ -10,6 +10,7 @@
 #include "../AI2_Header/AI2.h"
 #include "../AI3_Header/AI3.h"
 #include<tchar.h>
+#include "../stdafx.h"
 
 class ChessBoard : public WindowSize, public WindowHwnd, public PlayerInfo, public Chess
 {
@@ -40,6 +41,7 @@ public:
 
 	POINT point;//用于保存鼠标位置
 	int onTurn;//轮到谁
+	int CombatNumber;
 
 	AI *Player1AI;
 	AI *Player2AI;

@@ -20,8 +20,7 @@ void ChessBoard::PaintChess()
 		if (chessInfo.WinOrLose(line, column, onTurn, Winner, cross))
 		{
 			ReStart();
-		}
-		;
+		};
 		break;
 	case isPlay2onTurn://»­°×É«Æå×Ó
 		if (line == 0 || column == 0) return;

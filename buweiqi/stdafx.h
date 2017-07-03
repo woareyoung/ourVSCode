@@ -29,4 +29,6 @@
 #define isWhite 2
 #define noChess 0
 
+#define MAX_COMBAT 1 //连续对局次数
+
 // TODO: reference additional headers your program requires here

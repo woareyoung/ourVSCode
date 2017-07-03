@@ -73,4 +73,5 @@ void AI1::InitializeD()
 	Qua.ForthQuadrant = 0;
 
 	Similar = 0;
+	np = nullptr;
 }
