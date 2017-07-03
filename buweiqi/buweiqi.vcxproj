@@ -187,7 +187,6 @@
     <ClCompile Include="ChessBoard_Source\RePaint.cpp" />
     <ClCompile Include="ChessBoard_Source\ReStart.cpp" />
     <ClCompile Include="ChessBoard_Source\util\int2String.cpp" />
-    <ClCompile Include="ChessBoard_Source\util\recursion.cpp" />
     <ClCompile Include="FileSystem_Source\AddMemory.cpp" />
     <ClCompile Include="FileSystem_Source\Init.cpp" />
     <ClCompile Include="FileSystem_Source\Match.cpp" />

@@ -7,15 +7,6 @@ namespace WinCheck {
 	bool Cross[10][10];
 	int cross[10][10];
 
-	void initData(bool C[10][10], int c[10][10]) {
-		for (int i = 0; i < 10; ++i) {
-			for (int j = 0; j < 10; ++j) {
-				Cross[i][j] = C[i][j];
-				cross[i][j] = c[i][j];
-			}
-		}
-	}
-
 	//判断对方的棋子是否被围死，两个参数表示对方棋子的位置
 	//该函数用于一堆棋子被围死的情况，用递归的方法检查一堆棋子的情况
 	//若棋子被围死，则返回true，只要棋子周围有一个空位就返回false
@@ -119,9 +110,18 @@ namespace WinCheck {
 	* 3、围死。基本思想：假设黑子下一个棋子，则判断该黑子周围的四个位置上有没有白子被围死，还有该黑子是否被围死
 	*/
 	//注：调用该函数（即下棋的玩家）的那个人或AI是“己方”
-	bool WinOrLose(int& line, int& column, int& onTurn, int& Winner, bool C[10][10], int c[10][10])
+	bool WinOrLose(int& line, int& column, int& onTurn, int& Winner, int c[10][10])
 	{
-		initData(C, c);
+		auto initArray = [](int c[10][10]) {
+			for (int i = 0; i < 10; ++i) {
+				for (int j = 0; j < 10; ++j) {
+					cross[i][j] = c[i][j];
+					Cross[i][j] = false;
+				}
+			}
+		};
+		initArray(c);
+		
 		int i;
 		for (i = 0; i < 4; ++i) Position[i] = false;
 		int player;//记录己方的编号（是1还是2）

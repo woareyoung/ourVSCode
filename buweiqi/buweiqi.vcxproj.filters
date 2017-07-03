@@ -137,9 +137,6 @@
     <ClCompile Include="ChessBoard_Source\ReStart.cpp">
       <Filter>Source Files\ChessBoard_Source</Filter>
     </ClCompile>
-    <ClCompile Include="ChessBoard_Source\util\recursion.cpp">
-      <Filter>Source Files\ChessBoard_Source\util</Filter>
-    </ClCompile>
     <ClCompile Include="ChessBoard_Source\util\int2String.cpp">
       <Filter>Source Files\ChessBoard_Source\util</Filter>
     </ClCompile>

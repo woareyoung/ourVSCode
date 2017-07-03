@@ -8,9 +8,6 @@ void ChessBoard::PaintChess()
 	switch (onTurn)
 	{
 	case isPlay1onTurn://画黑色棋子
-		for (int i = 0; i < 10; ++i)
-			for (int j = 0; j < 10; ++j)
-				Cross[i][j] = false;
 		if (cross[line][column] == 0)
 		{
 			if (Player2isAI == false)
@@ -19,7 +16,7 @@ void ChessBoard::PaintChess()
 				onTurn = isAI2onTurn;
 			PaintAChess(1);
 			//若已分胜负，则结束游戏
-			if (WinCheck::WinOrLose(line, column, onTurn, Winner, Cross, cross))
+			if (WinCheck::WinOrLose(line, column, onTurn, Winner, cross))
 			{
 				ReStart();
 			}
@@ -27,9 +24,6 @@ void ChessBoard::PaintChess()
 		};
 		break;
 	case isPlay2onTurn://画白色棋子
-		for (int i = 0; i < 10; ++i)
-			for (int j = 0; j < 10; ++j)
-				Cross[i][j] = false;
 		if (cross[line][column] == 0)
 		{
 			if (Player1isAI == false)
@@ -38,7 +32,7 @@ void ChessBoard::PaintChess()
 				onTurn = isAI1onTurn;
 			PaintAChess(2);
 			//若已分胜负，则结束游戏
-			if (WinCheck::WinOrLose(line, column, onTurn, Winner, Cross, cross))
+			if (WinCheck::WinOrLose(line, column, onTurn, Winner, cross))
 			{
 				ReStart();
 			}
@@ -58,7 +52,7 @@ void ChessBoard::PaintChess()
 
 		PaintAChess(isBlack);
 		//若对方是电脑，则先判断有没有分出胜负
-		bool win = WinCheck::WinOrLose(line, column, onTurn, Winner, Cross, cross);
+		bool win = WinCheck::WinOrLose(line, column, onTurn, Winner, cross);
 		if (Player2isAI == true && !win && line != 0 && column != 0)
 			PaintChess();//若对方是电脑，则递归
 		else if (win || line == 0 || column == 0)
@@ -81,7 +75,7 @@ void ChessBoard::PaintChess()
 
 		PaintAChess(isWhite);
 		//若对方是电脑，则先判断有没有分出胜负
-		bool win = WinCheck::WinOrLose(line, column, onTurn, Winner, Cross, cross);
+		bool win = WinCheck::WinOrLose(line, column, onTurn, Winner, cross);
 		if (Player1isAI == true && !win && line != 0 && column != 0)
 			PaintChess();//若对方是电脑，则递归
 		else if (win || line == 0 || column == 0)

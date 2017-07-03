@@ -38,44 +38,15 @@ public:
 		}
 	}
 
-	// 轮到下一方进行着子
-	virtual void do_move(int move)
-	{
-		depth++;
-
-		int opponent = 3 - player_to_move;
-
-		if (move == pass) {
-			player_to_move = opponent;
-			return;
-		}
-
-		int i, j;
-		std::tie(i, j) = ind_to_ij(move);// 元组
-										 // showInfoOnDOS(is_move_possible(i, j));
-
-		board[i][j] = player_to_move;
-
-		// 我们在所有捕获之前保存棋子的哈希值，以方便检查。
-		previous_board_hash_value = compute_hash_value();
-		all_hash_values.insert(previous_board_hash_value);
-
-		// Next player
-		// 轮到下一个玩家着子
-		player_to_move = getRival(player_to_move);
-	}
-
 	static int ij_to_ind(int i, int j)
 	{
-		// showInfoOnDOS(i >= ChessStart && j >= ChessStart && i < ChessEnd && j < ChessEnd);
-		return 100 * i + j;
+		return i >= ChessStart && j >= ChessStart && i < ChessEnd && j < ChessEnd ? 0 : 100 * i + j;
 	}
 
 
 	static std::pair<int, int> ind_to_ij(int ind)
 	{
-		// showInfoOnDOS(ind >= 0 && ind < 910);
-		return std::make_pair(ind / 100, ind % 100);
+		return ind >= 0 && ind < 910 ? std::make_pair(0, 0) : std::make_pair(ind / 100, ind % 100);
 	}
 
 	// 计算hash值
@@ -97,10 +68,37 @@ public:
 		// 调用Pattern对当前局面进行处理
 		const_cast<AI3*>(this)->Revalute();
 		auto moves = get_moves();
-		// showInfoOnDOS(!moves.empty());
+		if (moves.empty()) {
+			return;
+		}
 		std::uniform_int_distribution<std::size_t> move_ind(0, moves.size() - 1);
 		auto move = moves[move_ind(*engine)];
 		do_move(move);
+	}
+
+	// 轮到下一方进行着子
+	virtual void do_move(int move)
+	{
+		depth++;
+
+		int opponent = getRival(player_to_move);
+
+		if (move == pass) {
+			player_to_move = opponent;
+			return;
+		}
+
+		int i, j;
+		std::tie(i, j) = ind_to_ij(move);// 元组
+
+		board[i][j] = player_to_move;
+
+		// 我们在所有捕获之前保存棋子的哈希值，以方便检查。
+		previous_board_hash_value = compute_hash_value();
+		all_hash_values.insert(previous_board_hash_value);
+
+		// 轮到下一个玩家着子
+		player_to_move = getRival(player_to_move);
 	}
 
 	// 是否还有可着子的着子点
@@ -115,7 +113,6 @@ public:
 		// 下面是搜集所有可能的着子点。
 		std::vector<int> moves;
 		if (depth > 1000) {
-			// showInfoOnDOS(false);
 			return moves;
 		}
 		bool opponent_has_move = false;
@@ -228,7 +225,7 @@ public:
 
 	virtual bool is_move_possible(int i, int j) const
 	{
-		return simulatorScore[i][j] != minLimit && is_move_possible(i, j, player_to_move);
+		return is_move_possible(i, j, player_to_move);
 	}
 
 	virtual bool is_move_possible(const int i, const int j, const int player) const
@@ -242,7 +239,7 @@ public:
 			board[i][j] = player;
 
 			bool possible = false;
-			if (board[i][j] != minLimit) {
+			if (simulatorScore[i][j] != minLimit) {
 				possible = true;
 			}
 
@@ -268,8 +265,6 @@ public:
 	}
 	int predict() {
 		MCTS::ComputeOptions options;
-		options.max_time = 15;
-		options.number_of_threads = 3;
 		auto state_copy = new AI3(cross);
 		std::future<int> best_move = std::async(std::launch::async, [state_copy, options]()
 		{

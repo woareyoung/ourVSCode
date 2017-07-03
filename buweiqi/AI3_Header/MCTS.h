@@ -76,7 +76,8 @@ namespace MCTS
 	using std::vector;
 	using std::size_t;
 
-#define showInfoOnDOS(expr) _cprintf("showInfoOnDOS: %c .\n", expr);
+	// 这个用于输出信息
+#define showInfoOnDOS(info) _cprintf("showInfoOnDOS: %c .\n", info);
 
 	// 这个类是用于构建蒙卡洛树的，蒙卡洛树的根结点由用户创建，剩余的其他的结点都是直接添加的。
 	template<typename State>
@@ -89,24 +90,24 @@ namespace MCTS
 
 		bool has_untried_moves() const;// 是否还有未曾尝试过的着子方法
 		template<typename RandomEngine>
-		int get_untried_move(RandomEngine* engine) const;// 随机获取未曾尝试过的着子方法
-		Node* best_child() const;
+		int get_untried_move(RandomEngine* engine) const;// 随机获取未曾遍历过的着子方法
+		Node* best_child() const;// 最优的着子点
 
 		bool has_children() const// 是否还有子节点
 		{
 			return !children.empty();
 		}
 
-		Node* select_child_UCT() const;
-		Node* add_child(const int& move, const State& state);
-		void update(double result);
+		Node* select_child_UCT() const;// 使用UTC算法挑选出最优的子节点
+		Node* add_child(const int& move, const State& state);// 添加子节点
+		void update(double result);// 更新父节点的信息
 
 		std::string to_string() const;
 		std::string tree_to_string(int max_depth = 1000000, int indent = 0) const;
 
-		const int move;
-		Node* const parent;
-		const int player_to_move;
+		const int move;// 
+		Node* const parent;// 父节点
+		const int player_to_move;// 当前执子的玩家
 
 		double wins;// 估分
 		int visits;// 访问次数
@@ -121,22 +122,17 @@ namespace MCTS
 
 		Node(const Node&);
 
-		double UCT_score;
+		double UCT_score;// UCT分数
 	};
-
-
-	/////////////////////////////////////////////////////////
-	/////////////////////////////////////////////////////////
-
 
 	template<typename State>
 	Node<State>::Node(const State& state) :
-		move(no_move),
-		parent(nullptr),
-		player_to_move(state->player_to_move),
+		move(no_move),// 初始化为没有走步
+		parent(nullptr),// 初始化为空
+		player_to_move(state->player_to_move),// 初始化为当前玩家一样的角色
 		wins(0),
 		visits(0),
-		moves(state->get_moves()),
+		moves(state->get_moves()),// 可供着子的着子点集
 		UCT_score(0)
 	{ }
 
@@ -154,13 +150,13 @@ namespace MCTS
 	template<typename State>
 	Node<State>::~Node()
 	{
-		for (auto child : children) {
+		for (auto child : children) {// 将子节点占用的内存进行释放
 			delete child;
 		}
 	}
 
 	template<typename State>
-	bool Node<State>::has_untried_moves() const
+	bool Node<State>::has_untried_moves() const// 是否还有没有遍历过的子节点
 	{
 		return !moves.empty();
 	}
@@ -168,9 +164,11 @@ namespace MCTS
 	// 获取未曾尝试过的着子点
 	template<typename State>
 	template<typename RandomEngine>
-	int Node<State>::get_untried_move(RandomEngine* engine) const
+	int Node<State>::get_untried_move(RandomEngine* engine) const// 从没有遍历过的子节点中获取一个结点作为子树展开的结点
 	{
-		// showInfoOnDOS(!moves.empty());
+		if (moves.empty()) {
+			showInfoOnDOS("结点的数量为空，出现异常！")
+		}
 		// 给定[0, move.size() - 1]范围初始化分布类
 		std::uniform_int_distribution<std::size_t> moves_distribution(0, moves.size() - 1);
 		return moves[moves_distribution(*engine)];
@@ -180,8 +178,12 @@ namespace MCTS
 	template<typename State>
 	Node<State>* Node<State>::best_child() const
 	{
-		// showInfoOnDOS(moves.empty());
-		// showInfoOnDOS(!children.empty());
+		if (moves.empty()) {
+			showInfoOnDOS("结点的数量为空，出现异常！");
+		}
+		if (children.empty()) {
+			showInfoOnDOS("当前结点的孩子的数量为空，是为根结点！");
+		}
 
 		return *std::max_element(children.begin(), children.end(),
 			[](Node* a, Node* b) { return a->visits < b->visits; });;
@@ -195,7 +197,9 @@ namespace MCTS
 	template<typename State>
 	Node<State>* Node<State>::select_child_UCT() const
 	{
-		// showInfoOnDOS(!children.empty());// 如果子节点不为空的话……
+		if (moves.empty()) {
+			showInfoOnDOS("结点的数量为空，出现异常！");
+		}
 		for (auto child : children) {
 			child->UCT_score = double(child->wins) / double(child->visits) +
 				2.0 * std::sqrt(std::log(double(this->visits)) / child->visits);
@@ -216,13 +220,17 @@ namespace MCTS
 		// 新建新的结点，将新的结点添加到children中，并判断children数组是否为空
 		auto node = new Node(state, move, this);
 		children.push_back(node);
-		// showInfoOnDOS(!children.empty());
+		if (children.empty()) {
+			showInfoOnDOS("当前结点的孩子的数量为空，是为根结点！");
+		}
 
 		// 从第一个着子点开始
 		auto itr = moves.begin();
 		// 重新修改着子点数组的大小
 		for (; itr != moves.end() && *itr != move; ++itr);
-		// showInfoOnDOS(itr != moves.end());
+		if (itr != moves.end()) {
+			showInfoOnDOS("当前走步不是最后的一个走步！");
+		}
 		moves.erase(itr);// 从moves数组中删除move元素
 		return node;
 	}
@@ -274,9 +282,6 @@ namespace MCTS
 		return s;
 	}
 
-	/////////////////////////////////////////////////////////
-	/////////////////////////////////////////////////////////
-
 	/**
 	* 生成树，随机的选定一个方向进行扩展
 	* @param root_state 结点的棋盘数据
@@ -291,16 +296,14 @@ namespace MCTS
 	{
 		std::mt19937_64 random_engine(initial_seed);// 随机函数
 
-													// showInfoOnDOS(options.max_iterations >= 0 || options.max_time >= 0);
-
-													// showInfoOnDOS(root_state->player_to_move == 1 || root_state->player_to_move == 2);
+		if (options.max_iterations >= 0 || options.max_time >= 0) {
+			showInfoOnDOS("线程参数设定正确~");
+		}
+		if (!(root_state->player_to_move == 1 || root_state->player_to_move == 2)) {
+			showInfoOnDOS("玩家编号设定出错，请检查~");
+		}
 													// root指针管理一个对象。
 		auto root = std::unique_ptr<Node<State>>(new Node<State>(root_state));
-
-#ifdef USE_OPENMP
-		double start_time = ::omp_get_wtime();
-		double print_time = start_time;
-#endif
 
 		// 遍历 
 		for (int iter = 1; iter <= options.max_iterations/*最大的迭代数量*/
@@ -334,19 +337,6 @@ namespace MCTS
 				node = node->parent;
 			}
 
-#ifdef USE_OPENMP
-			if (options.verbose || options.max_time >= 0) {
-				double time = ::omp_get_wtime();
-				if (options.verbose && (time - print_time >= 1.0 || iter == options.max_iterations)) {
-					std::cerr << iter << " games played (" << double(iter) / (time - start_time) << " / second)." << endl;
-					print_time = time;
-				}
-
-				if (time - start_time >= options.max_time) {
-					break;
-				}
-			}
-#endif
 		}
 
 		return root;
@@ -365,17 +355,13 @@ namespace MCTS
 	{
 		using namespace std;
 
-		// showInfoOnDOS(root_state->player_to_move == 1 || root_state->player_to_move == 2);
-
 		auto moves = root_state->get_moves();
-		// showInfoOnDOS(moves.size() > 0);
+		if (moves.size() <= 0) {
+			showInfoOnDOS("当前可移动的走步小于等于0，请检查~");
+		}
 		if (moves.size() == 1) {
 			return moves[0];
 		}
-
-#ifdef USE_OPENMP
-		double start_time = ::omp_get_wtime();
-#endif
 
 		// 分发所有的任务去计算树——这里采用的是异步线程的方式来处理树
 		vector<future<unique_ptr<Node<State>>>> root_futures;

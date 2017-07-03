@@ -6,11 +6,8 @@
 class Chess
 {
 public:
-	bool Cross[10][10];
 	int cross[10][10];
-	///设置状态 在recursion.cpp文件中
-	void reduceRecursionTimes();
-	void setStatus(int RivalLine, int RivalColumn);
+
 	std::shared_ptr<PACE> Tail;
 	FileSystem FileS;
 	std::shared_ptr<SITUATION> SituaHead;
