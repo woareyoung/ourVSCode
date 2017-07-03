@@ -16,6 +16,7 @@ ChessBoard::ChessBoard()
 	///默认没有使用AI
 	Player1isAI = false;
 	Player2isAI = false;
+	ControlLoop = true;
 	line = 0;
 	column = 0;
 	Start = false;//表示未开始游戏
@@ -38,11 +39,10 @@ ChessBoard::ChessBoard()
 	{
 		CrossCross[i] = i * ChessDiameter;
 	}
-	Tail = NULL;
-	SituaHead = NULL;
-	TempTail = NULL;
+	TempTail = nullptr;
+	Tail = nullptr;
+	SituaHead = nullptr;
 	Init_cross();
-	Init_Pace();
 	///默认AI不可选
 	CanSelectAI1 = false;
 	CanSelectAI2 = false;
@@ -69,42 +69,22 @@ void ChessBoard::Init_cross()
 			cross[i][j] = 0;
 		}
 	}
-	Player1AI = NULL;
-	Player2AI = NULL;
+	Player1AI = nullptr;
+	Player2AI = nullptr;
 }
 ///初始化下棋记录
 void ChessBoard::Init_Pace()
 {
-	std::shared_ptr<PACE> p = Tail;
-	while (p != NULL)
+	while (Tail->perior != nullptr)
 	{
 		Tail = Tail->perior;
-		// delete p;
-		p = nullptr;
-		p = Tail;
+		Tail->next = nullptr;
 	}
-	std::shared_ptr<SITUATION> s = SituaHead;
-	while (p != NULL)
+	Tail = nullptr;
+	while (SituaHead->next != nullptr)
 	{
 		SituaHead = SituaHead->next;
-		// delete s;
-		s = nullptr;
-		s = SituaHead;
+		SituaHead->prior = nullptr;
 	}
-}
-
-void Chess::ClearSitua()
-{
-	std::shared_ptr<SITUATION> temp, tem;
-	if(SituaHead->next != NULL)
-		temp = SituaHead->next;
-	else return;//如果链表为空，就退出函数
-	while (temp != NULL)
-	{
-		tem = temp->next;
-		// delete temp;
-		temp = tem;
-	}
-	SituaHead = NULL;
-	SituaHead = NULL;
+	SituaHead = nullptr;
 }

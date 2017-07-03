@@ -1,52 +1,43 @@
 #include "../ChessBoard_Header/Chess.h"
 #include "../ChessBoard_Header/ChessBoard.h"
-#include <math.h>
 #include <memory>
 #include <iostream>
 
 void ChessBoard::AddSituationList()
 {
-	if (line < 5 && column > 5) Qua.FirstQuadrant++;
-	else if (line < 5 && column < 5) Qua.SecondQuadrant++;
-	else if (line > 5 && column < 5) Qua.ThirdQuadrant++;
-	else if (line > 5 && column > 5) Qua.ForthQuadrant++;
 	///新建结点
-	if (SituaHead == NULL)
+	if (SituaHead == nullptr)
 	{
 		TempTail = std::shared_ptr<SITUATION>(new SITUATION);
-		TempTail->next = NULL;
-		TempTail->prior = NULL;
+		TempTail->next = nullptr;
+		TempTail->prior = nullptr;
 		SituaHead = TempTail;
 	}
 	else
 	{
-
 		std::shared_ptr<SITUATION> s = std::shared_ptr<SITUATION>(new SITUATION);
 		TempTail->next = s;
 		s->prior = TempTail;
 		TempTail = s;
-		TempTail->next = NULL;
+		TempTail->next = nullptr;
 	}
 	TempTail->Line[0] = line * 10 + column;//记录本次走棋位置
 
 	int maxQuadrant = Qua.GetMaxQuadrant();//获取最多棋子的象限
 	int i, j;
-	int value;
 	int nnn;
 	//如果最多棋子的是第一象限
 	if (maxQuadrant == Qua.FirstQuadrant)
 	{
 		for (i = 1; i < 10; ++i)
 		{
-			value = 0;
 			nnn = 1;
 			for (j = 9; j > 0; j--)
 			{
 				nnn *= 2;
-				if (cross[i][j] == 1) value += nnn * 10000;
-				else if (cross[i][j] == 2) value += nnn;
+				if (cross[i][j] == 1) TempTail->Line[i] += nnn * 10000;
+				else if (cross[i][j] == 2) TempTail->Line[i] += nnn;
 			}
-			TempTail->Line[i] = (int)value;
 		}
 	}
 	//如果最多棋子的是第二象限
@@ -54,15 +45,13 @@ void ChessBoard::AddSituationList()
 	{
 		for (i = 1; i < 10; ++i)
 		{
-			value = 0;
 			nnn = 1;
 			for (j = 1; j < 10; ++j)
 			{
 				nnn *= 2;
-				if (cross[i][j] == 1) value += nnn * 10000;
-				else if (cross[i][j] == 2) value += nnn;
+				if (cross[i][j] == 1) TempTail->Line[i] += nnn * 10000;
+				else if (cross[i][j] == 2) TempTail->Line[i] += nnn;
 			}
-			TempTail->Line[i] = (int)value;
 		}
 	}
 	//如果最多棋子的是第三象限
@@ -70,15 +59,13 @@ void ChessBoard::AddSituationList()
 	{
 		for (i = 9; i > 0; i--)
 		{
-			value = 0;
 			nnn = 1;
 			for (j = 1; j < 10; ++j)
 			{
 				nnn *= 2;
-				if (cross[i][j] == 1) value += nnn * 10000;
-				else if (cross[i][j] == 2) value += nnn;
+				if (cross[i][j] == 1) TempTail->Line[i] += nnn * 10000;
+				else if (cross[i][j] == 2) TempTail->Line[i] += nnn;
 			}
-			TempTail->Line[i] = (int)value;
 		}
 	}
 	//如果最多棋子的是第四象限
@@ -86,30 +73,32 @@ void ChessBoard::AddSituationList()
 	{
 		for (i = 9; i > 0; i--)
 		{
-			value = 0;
 			nnn = 1;
 			for (j = 9; j > 0; j--)
 			{
 				nnn *= 2;
-				if (cross[i][j] == 1) value += nnn * 10000;
-				else if (cross[i][j] == 2) value += nnn;
+				if (cross[i][j] == 1) TempTail->Line[i] += nnn * 10000;
+				else if (cross[i][j] == 2) TempTail->Line[i] += nnn;
 			}
-			TempTail->Line[i] = (int)value;
 		}
 	}
+	if (line < 5 && column > 5) Qua.FirstQuadrant++;
+	else if (line < 5 && column < 5) Qua.SecondQuadrant++;
+	else if (line > 5 && column < 5) Qua.ThirdQuadrant++;
+	else if (line > 5 && column > 5) Qua.ForthQuadrant++;
 }
 
 void ChessBoard::AddList(int type)
 {
 	//添加到记录
-	if (Tail == NULL)
+	if (Tail == nullptr)
 	{
 		Tail = std::shared_ptr<PACE>(new PACE);
 		Tail->line = line;
 		Tail->column = column;
 		Tail->player = type;
-		Tail->next = NULL;
-		Tail->perior = NULL;
+		Tail->next = nullptr;
+		Tail->perior = nullptr;
 	}
 	else
 	{
@@ -117,7 +106,7 @@ void ChessBoard::AddList(int type)
 		p->line = line;
 		p->column = column;
 		p->player = type;
-		p->next = NULL;
+		p->next = nullptr;
 		p->perior = Tail;
 		Tail->next = p;
 		Tail = p;

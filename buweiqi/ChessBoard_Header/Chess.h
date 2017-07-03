@@ -15,6 +15,5 @@ public:
 
 	QUADRANT Qua;
 	
-	void ClearSitua();
 };
 #endif // CHESS_H_INCLUDED

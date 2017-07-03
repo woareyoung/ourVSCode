@@ -36,58 +36,84 @@ void ChessBoard::PaintBoard()
 ///回退一步功能函数
 void ChessBoard::BackPace()
 {
-	if (!Start) return;//如果未开始游戏，按钮无效
-	if (Tail == NULL) return;
-	std::shared_ptr<PACE> p;
-	std::shared_ptr<SITUATION> s;
+	if (Tail == nullptr) return;//如果已经没棋了，就不能再回退了
+	std::shared_ptr<SITUATION> s = nullptr;
+	std::shared_ptr<PACE> p = nullptr;
 	switch (Player1isAI || Player2isAI)
 	{
 		//如果有一方是AI，则回退两步
 	case true:
+		if (Player1isAI && Tail->perior == nullptr) return;
 		cross[Tail->line][Tail->column] = 0;
 		p = Tail;
 		Tail = Tail->perior;
-		// delete p;
 		p = nullptr;
-		Tail->next = NULL;
+		Tail->next = nullptr;
 		if (Player1isAI) Player1AI->GetPosition(line, column, 100);
 		if (Player2isAI) Player2AI->GetPosition(line, column, 200);
 		line = Tail->line;
 		column = Tail->column;
 		s = TempTail;
 		TempTail = TempTail->prior;
-		// delete s;
 		s = nullptr;
-		TempTail->next = NULL;
+		TempTail->next = nullptr;
+		if (onTurn == isPlay1onTurn)
+		{
+			onTurn = isAI2onTurn;
+			DisplayOnTurn(1);
+		}
+		else if (onTurn == isPlay2onTurn)
+		{
+			onTurn = isAI1onTurn;
+			DisplayOnTurn(2);
+		}
 		//如果两方都是玩家，则回退一步
 	case false:
 		cross[Tail->line][Tail->column] = 0;
 		if (Player1isAI) Player1AI->GetPosition(line, column, 100);
 		if (Player2isAI) Player2AI->GetPosition(line, column, 200);
-		if (Tail->perior == NULL)
+		if (Tail->perior == nullptr)
 		{
-			// delete Tail;
 			Tail = nullptr;
 			line = 0;
 			column = 0;
-			// delete TempTail;
 			TempTail = nullptr;
-			for (int i = 0; i < 11; ++i) TempTail->Line[i] = 0;
+			SituaHead = nullptr;
 		}
 		else
 		{
 			p = Tail;
 			Tail = Tail->perior;
-			// delete p;
 			p = nullptr;
-			Tail->next = NULL;
+			Tail->next = nullptr;
 			line = Tail->line;
 			column = Tail->column;
 			s = TempTail;
 			TempTail = TempTail->prior;
-			// delete s;
 			s = nullptr;
-			TempTail->next = NULL;
+			TempTail->next = nullptr;
+		}
+		if (onTurn == isAI1onTurn)
+		{
+			onTurn = isPlay2onTurn;
+			DisplayOnTurn(1);
+		}
+		else if (onTurn == isAI2onTurn)
+		{
+			onTurn = isPlay1onTurn;
+			DisplayOnTurn(2);
+		}
+		else if (onTurn == isPlay1onTurn)
+		{
+			if (Player2isAI) onTurn = isAI2onTurn;
+			else onTurn = isPlay2onTurn;
+			DisplayOnTurn(1);
+		}
+		else if (onTurn == isPlay2onTurn)
+		{
+			if (Player1isAI) onTurn = isAI1onTurn;
+			else onTurn = isPlay1onTurn;
+			DisplayOnTurn(2);
 		}
 		break;
 	}

@@ -157,7 +157,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 				CB.MainProcedureThead = CreateThread(NULL, 0, PlayProc, NULL, 0, NULL);
 			}
 			break;
-		case TURNBACK:CB.BackPace(); break;
+		case TURNBACK:
+			//两个都是AI则不能悔棋
+			if ((!CB.Player1isAI || !CB.Player2isAI) && CB.ControlLoop && CB.Start)
+			{
+				CB.ControlLoop = false; 
+				CB.BackPace();
+				CB.ControlLoop = true;
+			} break;
 		case CHECK_RECORD:SeeCombatRecord(); break;
 		}
 		break;
@@ -276,7 +283,7 @@ DWORD WINAPI TimerProc(PVOID pParam)
 DWORD WINAPI PlayProc(PVOID pParam)
 {
 	while(CB.Start)
-		CB.PaintChess();
+		if(CB.ControlLoop) CB.PaintChess();
 	CloseHandle(CB.MainProcedureThead);
 	return 0;
 }

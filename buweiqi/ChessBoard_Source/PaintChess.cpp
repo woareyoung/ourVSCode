@@ -9,36 +9,33 @@ void ChessBoard::PaintChess()
 	switch (onTurn)
 	{
 	case isPlay1onTurn://画黑色棋子
-		if (cross[line][column] == 0)
+		if (line == 0 || column == 0) return;
+		if (cross[line][column] != 0) return;
+		if (Player2isAI == false)
+			onTurn = isPlay2onTurn;
+		else
+			onTurn = isAI2onTurn;
+		PaintAChess(1);
+		//若已分胜负，则结束游戏
+		if (chessInfo.WinOrLose(line, column, onTurn, Winner, cross))
 		{
-			if (Player2isAI == false)
-				onTurn = isPlay2onTurn;
-			else
-				onTurn = isAI2onTurn;
-			PaintAChess(1);
-			//若已分胜负，则结束游戏
-			if (chessInfo.WinOrLose(line, column, onTurn, Winner, cross))
-			{
-				ReStart();
-			}
-			else if (Player2isAI == true) PaintChess();
-		};
+			ReStart();
+		}
+		;
 		break;
 	case isPlay2onTurn://画白色棋子
-		if (cross[line][column] == 0)
+		if (line == 0 || column == 0) return;
+		if (cross[line][column] != 0) return;
+		if (Player1isAI == false)
+			onTurn = isPlay1onTurn;
+		else
+			onTurn = isAI1onTurn;
+		PaintAChess(2);
+		//若已分胜负，则结束游戏
+		if (chessInfo.WinOrLose(line, column, onTurn, Winner, cross))
 		{
-			if (Player1isAI == false)
-				onTurn = isPlay1onTurn;
-			else
-				onTurn = isAI1onTurn;
-			PaintAChess(2);
-			//若已分胜负，则结束游戏
-			if (chessInfo.WinOrLose(line, column, onTurn, Winner, cross))
-			{
-				ReStart();
-			}
-			else if (Player1isAI == true) PaintChess();
-		};
+			ReStart();
+		}
 		break;
 		//画黑色棋子
 	case isAI1onTurn:
@@ -54,9 +51,7 @@ void ChessBoard::PaintChess()
 		PaintAChess(isBlack);
 		//若对方是电脑，则先判断有没有分出胜负
 		bool win = chessInfo.WinOrLose(line, column, onTurn, Winner, cross);
-		if (Player2isAI == true && !win && line != 0 && column != 0)
-			PaintChess();//若对方是电脑，则递归
-		else if (win || line == 0 || column == 0)
+		if (win || line == 0 || column == 0)
 		{
 			Winner = 2;
 			ReStart();
@@ -77,9 +72,7 @@ void ChessBoard::PaintChess()
 		PaintAChess(isWhite);
 		//若对方是电脑，则先判断有没有分出胜负
 		bool win = chessInfo.WinOrLose(line, column, onTurn, Winner, cross);
-		if (Player1isAI == true && !win && line != 0 && column != 0)
-			PaintChess();//若对方是电脑，则递归
-		else if (win || line == 0 || column == 0)
+		if (win || line == 0 || column == 0)
 		{
 			Winner = 1;
 			ReStart();
@@ -93,6 +86,11 @@ void ChessBoard::PaintAChess(int type)
 {
 	AddList(type);
 	cross[line][column] = type;//将获取到的行和列数记录到line和column
+	DisplayOnTurn(type);
+	RePaint();
+}
+void ChessBoard::DisplayOnTurn(int type)
+{
 	if (type == isBlack)
 	{
 		ShowWindow(TurnToBlack, SW_HIDE);
@@ -107,10 +105,9 @@ void ChessBoard::PaintAChess(int type)
 		UpdateWindow(TurnToBlack);
 		Round1 = 60;
 	}
-	RePaint();
 }
 ///获取下棋位置
-bool ChessBoard::GetPointPosition(DWORD lParam)
+void ChessBoard::GetPointPosition(DWORD lParam)
 {
 	point.x = LOWORD(lParam);// 得到一个32bit数的低16bit
 	point.y = HIWORD(lParam);// 得到一个32bit数的高16bit
@@ -125,7 +122,5 @@ bool ChessBoard::GetPointPosition(DWORD lParam)
 			line = a;
 			column = b;
 		}
-		return true;
 	}
-	return false;
 }

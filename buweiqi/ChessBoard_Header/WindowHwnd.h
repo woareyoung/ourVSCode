@@ -55,6 +55,7 @@ public:
 	HANDLE AnoHandle;//计时器线程
 	HANDLE MainProcedureThead;//画棋子线程
 	bool PrintTime;
+	bool ControlLoop;//控制PaintChess()的循环
 	RECT MainWinRect;//记录主窗口位置
 	HDC hdcBuffer;//缓冲
 	HBITMAP hBitMap;//内存位图

@@ -18,15 +18,16 @@ public:
 	ChessBoard();//构造函数
 	void Init_cross();//初始化棋盘状态数组
 	void Init_Pace();//初始化下棋记录
-					 ///在PaintBoard.cpp文件中
+	///在PaintBoard.cpp文件中
 	void PaintBoard();//画棋盘
 	void BackPace();//回退一步功能函数
-					///在PaintTimer.cpp文件中
+	///在PaintTimer.cpp文件中
 	void PaintTimer(HWND All, HWND Round, int Player, bool FirstPrint = false);//输出时间信息
-																			   ///在PaintChess.cpp文件中
+	///在PaintChess.cpp文件中
 	void PaintChess();//画棋子函数
 	void PaintAChess(int type);//实行画棋子
-	bool GetPointPosition(DWORD lParam);//获取下棋位置
+	void GetPointPosition(DWORD lParam);//获取下棋位置
+	void DisplayOnTurn(int type);
 	///在AddList.cpp文件中
 	void AddList(int type);
 	void AddSituationList();
