@@ -99,6 +99,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
+	case WM_KEYDOWN:
+		//按下ESC键时，使当前对局成为最后一局
+		if((int)wParam == 27) CB.CombatNumber = MAX_COMBAT; 
+		_cprintf("%d", wParam);break;
 	case WM_PAINT://重绘消息
 		if (CB.Repaint)
 		{
@@ -158,6 +162,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 				if (CB.Player1isAI) CB.onTurn = isAI1onTurn;
 				CB.AnoHandle = CreateThread(NULL, 0, TimerProc, NULL, 0, NULL);
 				CB.MainProcedureThead = CreateThread(NULL, 0, PlayProc, NULL, 0, NULL);
+				SetFocus(hwnd);
 			}
 			break;
 		case TURNBACK:

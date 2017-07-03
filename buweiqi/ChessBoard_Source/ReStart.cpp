@@ -63,6 +63,7 @@ void ChessBoard::ReStart()
 		if (Player2AI != NULL) Player2AI->GetPosition(n, m, 0);
 	}
 	PostMessage(RootHwnd, WM_PAINT, (WPARAM)NULL, (LPARAM)NULL);
+	UpdateWindow(RootHwnd);
 	ShowWindow(TurnToWhite, SW_HIDE);
 	ShowWindow(TurnToBlack, SW_SHOW);
 }
