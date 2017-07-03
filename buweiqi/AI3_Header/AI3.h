@@ -4,17 +4,19 @@
 
 #include "../AI2_Header/AI2.h"
 #include "MCTS.h"
+#include "../ChessBoard_Header/WinCheck.h"
 #include <tuple>
 #include <set>
+
 
 class AI3 : public AI2
 {
 private:
-	mutable unsigned int board[ChessEnd][ChessEnd];
-	mutable unsigned int simulatorScore[ChessEnd][ChessEnd];
+	mutable int board[ChessEnd][ChessEnd];
+	mutable int simulatorScore[ChessEnd][ChessEnd];
 	unsigned int previous_board_hash_value;
 	std::set<unsigned int> all_hash_values;
-
+	WinCheck::ChessInfo chessInfo;
 public:
 	int player_to_move;
 	mutable int depth;
@@ -25,7 +27,7 @@ public:
 		all_hash_values.insert(compute_hash_value());
 	}
 
-	AI3(unsigned int b[][ChessEnd]) :
+	AI3(int b[][ChessEnd]) :
 		player_to_move(PlayerId),
 		previous_board_hash_value(0),
 		depth(0)
@@ -88,8 +90,11 @@ public:
 			return;
 		}
 
-		int i, j;
+		int i, j, Win;
 		std::tie(i, j) = ind_to_ij(move);// ิชื้
+		if (chessInfo.WinOrLose(i, j, Win, player_to_move, board)) {
+			return;
+		}
 
 		board[i][j] = player_to_move;
 

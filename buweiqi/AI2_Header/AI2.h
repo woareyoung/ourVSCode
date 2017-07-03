@@ -69,7 +69,7 @@ private:
 protected:
 	//记录各交叉点的值，数组访问从“1”开始，访问顺序为“先行后列”，
 	//“0”表示没有棋子，“1”表示黑子，“2”表示白子
-	mutable unsigned int cross[10][10];
+	mutable int cross[10][10];
 
 	// 分数
 	int chessScore[10][10];
