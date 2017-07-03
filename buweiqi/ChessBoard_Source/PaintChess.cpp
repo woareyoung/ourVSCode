@@ -1,7 +1,6 @@
-#pragma once
 #include "../stdafx.h"
 #include "../ChessBoard_Header/ChessBoard.h"
-
+#include "../ChessBoard_Header/WinCheck.h"
 ///»­Æå×Óº¯Êý
 void ChessBoard::PaintChess()
 {
