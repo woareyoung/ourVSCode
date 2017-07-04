@@ -1,27 +1,12 @@
 #include "../AI2_Header/AI2.h"
 #include <cstdlib>
 void AI2::initAllArray() {
+	initAll();
 	for (int i = ChessStart; i < ChessEnd; ++i) {
 		this->goodMoves[i - 1] = { 0,0,0 };
 		for (int j = ChessStart; j < ChessEnd; ++j) {
 			cross[i][j] = NoChess;
 		}
-	}
-	// 初始化函数指针数组
-	void(AI2::*temp[])(DIRECTION*) = {
-		nullptr,//(X,Y)     纯粹只是添加进来凑数而已
-		&AI2::reverse,//(X,Y)
-		&AI2::reverse_Y,//(X,-Y)
-		&AI2::reverse_X,//(-X,-Y)
-		&AI2::reverse_Y,//(-X,Y)
-		&AI2::reverseXY,//(Y,-X)
-		&AI2::reverse_Y,//(Y,X)
-		&AI2::reverse_X,//(-Y,X)
-		&AI2::reverse_Y,//(-Y,-X)
-		&AI2::reverse_X_Y//(X,Y)
-	};
-	for (int i = 0; i < 10; ++i) {
-		Reverse[i] = temp[i];
 	}
 }
 

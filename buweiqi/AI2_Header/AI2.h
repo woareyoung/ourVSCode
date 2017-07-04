@@ -60,6 +60,29 @@ class AI2 : public AI, public AIPlayer, public DefaultChess
 {
 private:
 	// 填充数组进行变换
+	virtual int* getPatternType() {
+		return Type[turn2Who - 1];
+	}
+
+	// 匹配模式
+	static const int pattern_Total = 11;
+	// 匹配的次数
+	static const int pattern_Sum = 44;
+	// 模式分数尺度
+	int pattern_Score[pattern_Total];
+	// 分数说明：
+	// 对方自杀点且非我方自杀点的分数为0，我方自杀点为minLitmit。
+
+	// 模式内判断棋子点数
+	int pattern_Count[pattern_Total];
+	// 看不懂的请看种子填充算法
+	DIRECTION pattern_Background[pattern_Sum];
+	// 利用与或处理棋子点
+	// 匹配模式中棋子分布
+	int pattern_White[pattern_Sum];
+	// 匹配模式中棋子分布
+	int pattern_Black[pattern_Sum];
+
 	void (AI2::*Reverse[10])(DIRECTION*);
 	void reverse(DIRECTION *PatternType);
 	void reverseXY(DIRECTION *PatternType);
@@ -67,10 +90,11 @@ private:
 	void reverse_X(DIRECTION *PatternType);
 	void reverse_X_Y(DIRECTION *PatternType);
 protected:
+	int *Type[2];
 	//记录各交叉点的值，数组访问从“1”开始，访问顺序为“先行后列”，
 	//“0”表示没有棋子，“1”表示黑子，“2”表示白子
 	mutable int cross[10][10];
-
+	bool Position[4];
 	// 分数
 	int chessScore[10][10];
 	// isGo2Dead标志数组
@@ -79,7 +103,13 @@ protected:
 	goodMove goodMoves[81];
 	int MovePointer;// 当前好的着子点的数量
 	int chessCount;
-	bool Position[4];
+
+
+	virtual void initPlayerRole(int onTurn) {
+		Rival = (onTurn == Black || onTurn == isAI1onTurn) ? Black : White;
+		this->turn2Who = getRival(Rival);
+		this->PlayerId = turn2Who;
+	}
 
 	void resetGo2DeadStatus() {
 		for (register int i = ChessInit; i < ChessEnd; ++i) {
@@ -105,6 +135,7 @@ public:
 		initAllArray();
 	}
 
+	void initAll();
 	// 获取最后着子的位置
 	void GetPosition(int &line, int &column, int onTurn);
 	bool isFinal();
@@ -118,7 +149,7 @@ public:
 	void initAllArray();
 	bool isContaint(goodMove move) {
 		for (int i = ChessInit; i < MovePointer; ++i) {
-			if (move.line == goodMoves[i].line 
+			if (move.line == goodMoves[i].line
 				&& move.column == goodMoves[i].column
 				&& move.Score == goodMoves[i].Score) {
 				return true;

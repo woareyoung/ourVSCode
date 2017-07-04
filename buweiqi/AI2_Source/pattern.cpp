@@ -1,85 +1,113 @@
 #include "../AI2_Header/AI2.h"
+#include "../ChessBoard_Header/Pattern.h"
 
-// 匹配模式
-int pattern_Total = 11;
-// 匹配的次数
-int pattern_Sum = 44;
-// 模式分数尺度
-int pattern_Score[] = { 60, 50, 40, 35, 35, 30, 30, 25, 25, 20, 20 };
-// 分数说明：
-// 对方自杀点且非我方自杀点的分数为0，我方自杀点为minLitmit。
+void AI2::initAll() {
+	register int i;
+	// 初始化函数指针数组
+	void(AI2::*temp[])(DIRECTION*) = {
+		nullptr,//(X,Y)     纯粹只是添加进来凑数而已
+		&AI2::reverse,//(X,Y)
+		&AI2::reverse_Y,//(X,-Y)
+		&AI2::reverse_X,//(-X,-Y)
+		&AI2::reverse_Y,//(-X,Y)
+		&AI2::reverseXY,//(Y,-X)
+		&AI2::reverse_Y,//(Y,X)
+		&AI2::reverse_X,//(-Y,X)
+		&AI2::reverse_Y,//(-Y,-X)
+		&AI2::reverse_X_Y//(X,Y)
+	};
+	for (i = ChessInit; i < ChessEnd; ++i) {
+		Reverse[i] = temp[i];
+	}
+	// 模式分数尺度
+	int patternScore[] = { 60, 50, 40, 35, 35, 30, 30, 25, 25, 20, 20 };
+	// 分数说明：
+	// 对方自杀点且非我方自杀点的分数为0，我方自杀点为minLitmit。
 
-// 模式内判断棋子点数
-int pattern_Count[] = { 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 };
-// 看不懂的请看种子填充算法
-DIRECTION pattern_Background[] = {
-	{ -1, 0 },	{ 1,0 },	{ 0,-1 },	{ 0,1 },
-	{ -1, -1 },	{ 1, -1 },	{ 0,-1 },	{ 0,-2 },
-	{ -1, 0 },	{ 0, -1 },	{ 0, 1 },	{ 1, 0 },
-	{ -1, -1 },	{ 1, -1 },	{ 0,-1 },	{ 0,-2 },
-	{ -1, -1 },	{ 1, -1 },	{ 0,-1 },	{ 0,-2 },
-	{ -1, -1 },	{ 1, -1 },	{ 0,-1 },	{ 0,-2 },
-	{ -1, -1 },	{ 1, -1 },	{ 0,-1 },	{ 0,-2 },
-	{ -1, -1 },	{ 1, -1 },	{ 0,-1 },	{ 0,-2 },
-	{ -1, -1 },	{ 1, -1 },	{ 0,-1 },	{ 0,-2 },
-	{ -1, -1 },	{ 1, -1 },	{ 0,-1 },	{ 0,-2 },
-	{ -1, -1 },	{ 1, -1 },	{ 0,-1 },	{ 0,-2 }
-};
-// 利用与或处理棋子点
-// 匹配模式中棋子分布
-int pattern_White[] = {
-	/*********************************************
-	对方的十字围杀，三角围杀，边角围杀都包含
-	组织对方构成围杀是第一优先级
-	**********************************************/
-	Black | Edge,	Black | Edge,	Black | Edge,	NoChess,
-	/*********************************************
-	我方的十字围杀，三角围杀，边角围杀都包含
-	我方构建围杀阵是第二优先级
-	这个是差1构成围杀阵
-	**********************************************/
-	White | Edge,	White | Edge,	NoChess,		White | Edge,
-	/*********************************************
-	边角着子点
-	**********************************************/
-	Edge,			Edge,			NoChess,		NoChess,
-	/*********************************************
-	敌方方的十字围杀，三角围杀，边角围杀都包含
-	敌方构建围杀阵是第二优先级
-	这是主动构成围杀阵(缺二构成围杀阵)
-	**********************************************/
-	Black | Edge,	Black | Edge,	NoChess,		NoChess,
-	Black | Edge,	NoChess,		NoChess,		Black | Edge,
-	/*********************************************
-	我方的十字围杀，三角围杀，边角围杀都包含
-	我方构建围杀阵是第二优先级
-	这是主动构成围杀阵(缺二构成围杀阵)
-	**********************************************/
-	White | Edge,	White | Edge,	NoChess,		NoChess,
-	White | Edge,	NoChess,		NoChess,		White | Edge,
-	/*********************************************
-	缺三
-	**********************************************/
-	NoChess | Edge, Black,			NoChess | Edge,	NoChess | Edge,
-	NoChess | Edge,	NoChess | Edge,	NoChess | Edge,	Black,
-	NoChess | Edge, White,			NoChess | Edge,	NoChess | Edge,
-	NoChess | Edge,	NoChess | Edge,	NoChess | Edge,	White
-};
-// 匹配模式中棋子分布
-int pattern_Black[] = {
-	White | Edge,	White | Edge,	White | Edge,	NoChess,
-	Black | Edge,	Black | Edge,	NoChess,		Black | Edge,
-	Edge,			Edge,			NoChess,		NoChess,
-	White | Edge,	White | Edge,	NoChess,		NoChess,
-	White | Edge,	NoChess,		NoChess,		White | Edge,
-	Black | Edge,	Black | Edge,	NoChess,		NoChess,
-	Black | Edge,	NoChess,		NoChess,		Black | Edge,
-	NoChess | Edge, White,			NoChess | Edge,	NoChess | Edge,
-	NoChess | Edge,	NoChess | Edge,	NoChess | Edge,	White,
-	NoChess | Edge, Black,			NoChess | Edge,	NoChess | Edge,
-	NoChess | Edge,	NoChess | Edge,	NoChess | Edge,	Black
-};
-int* Type[] = { pattern_Black,pattern_White };
+	// 模式内判断棋子点数
+	int patternCount[] = { 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 };
+	// 看不懂的请看种子填充算法
+	DIRECTION patternBackground[] = {
+		{ -1, 0 },{ 1,0 },{ 0,-1 },{ 0,1 },
+		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
+		{ -1, 0 },{ 0, -1 },{ 0, 1 },{ 1, 0 },
+		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
+		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
+		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
+		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
+		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
+		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
+		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
+		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 }
+	};
+	// 利用与或处理棋子点
+	// 匹配模式中棋子分布
+	int patternWhite[] = {
+		/*********************************************
+		对方的十字围杀，三角围杀，边角围杀都包含
+		组织对方构成围杀是第一优先级
+		**********************************************/
+		Black | Edge,	Black | Edge,	Black | Edge,	NoChess,
+		/*********************************************
+		我方的十字围杀，三角围杀，边角围杀都包含
+		我方构建围杀阵是第二优先级
+		这个是差1构成围杀阵
+		**********************************************/
+		White | Edge,	White | Edge,	NoChess,		White | Edge,
+		/*********************************************
+		边角着子点
+		**********************************************/
+		Edge,			Edge,			NoChess,		NoChess,
+		/*********************************************
+		敌方方的十字围杀，三角围杀，边角围杀都包含
+		敌方构建围杀阵是第二优先级
+		这是主动构成围杀阵(缺二构成围杀阵)
+		**********************************************/
+		Black | Edge,	Black | Edge,	NoChess,		NoChess,
+		Black | Edge,	NoChess,		NoChess,		Black | Edge,
+		/*********************************************
+		我方的十字围杀，三角围杀，边角围杀都包含
+		我方构建围杀阵是第二优先级
+		这是主动构成围杀阵(缺二构成围杀阵)
+		**********************************************/
+		White | Edge,	White | Edge,	NoChess,		NoChess,
+		White | Edge,	NoChess,		NoChess,		White | Edge,
+		/*********************************************
+		缺三
+		**********************************************/
+		NoChess | Edge, Black,			NoChess | Edge,	NoChess | Edge,
+		NoChess | Edge,	NoChess | Edge,	NoChess | Edge,	Black,
+		NoChess | Edge, White,			NoChess | Edge,	NoChess | Edge,
+		NoChess | Edge,	NoChess | Edge,	NoChess | Edge,	White
+	};
+	// 匹配模式中棋子分布
+	int patternBlack[] = {
+		White | Edge,	White | Edge,	White | Edge,	NoChess,
+		Black | Edge,	Black | Edge,	NoChess,		Black | Edge,
+		Edge,			Edge,			NoChess,		NoChess,
+		White | Edge,	White | Edge,	NoChess,		NoChess,
+		White | Edge,	NoChess,		NoChess,		White | Edge,
+		Black | Edge,	Black | Edge,	NoChess,		NoChess,
+		Black | Edge,	NoChess,		NoChess,		Black | Edge,
+		NoChess | Edge, White,			NoChess | Edge,	NoChess | Edge,
+		NoChess | Edge,	NoChess | Edge,	NoChess | Edge,	White,
+		NoChess | Edge, Black,			NoChess | Edge,	NoChess | Edge,
+		NoChess | Edge,	NoChess | Edge,	NoChess | Edge,	Black
+	};
+	for (i = 0; i < pattern_Total; ++i) {
+		this->pattern_Score[i] = patternScore[i];
+		this->pattern_Count[i] = patternCount[i];
+	}
+	for (i = 0; i < pattern_Sum; ++i) {
+		this->pattern_Background[i] = patternBackground[i];
+		this->pattern_White[i] = patternWhite[i];
+		this->pattern_Black[i] = patternBlack[i];
+	}
+	int* pType[] = { pattern_Black,pattern_White };
+	for (i = 0; i < 2; ++i) {
+		Type[i] = pType[i];
+	}
+}
 
 /**
 * [AI2::reverse 不反转]
@@ -143,7 +171,7 @@ void AI2::reverse_X_Y(DIRECTION *PatternType) {
 * @return        [无]
 */
 void AI2::startPattern() {
-	int *PatternType = Type[turn2Who - 1];
+	int *PatternType = getPatternType();
 	(this->*Reverse[1])(pattern_Background);//第一个版本 (X, Y)
 	Pattern(PatternType);
 	(this->*Reverse[2])(pattern_Background);//第二个版本，Y轴反转 (X, -Y)
@@ -230,7 +258,7 @@ void AI2::Pattern(int *PatternType) {
 					goto mismatch;
 				};
 				chessScore[x][y] += score;// 这里匹配到了一个模板，这个模板的位置就是这个
-				arraySort(x , y, score);// 数组排序
+				arraySort(x, y, score);// 数组排序
 			mismatch:
 				;
 			}

@@ -5,14 +5,14 @@
 namespace WinCheck {
 	class ChessInfo {
 	private:
-		bool WinCheckPosition[4];
-		bool WinCheckCross[10][10];
-		int WinCheckcross[10][10];
+		mutable bool WinCheckPosition[4];
+		mutable bool WinCheckCross[10][10];
+		mutable int WinCheckcross[10][10];
 	protected:
 		//判断对方的棋子是否被围死，两个参数表示对方棋子的位置
 		//该函数用于一堆棋子被围死的情况，用递归的方法检查一堆棋子的情况
 		//若棋子被围死，则返回true，只要棋子周围有一个空位就返回false
-		bool Besieged(int RivalLine, int RivalColumn, int player, int rival)
+		bool Besieged(int RivalLine, int RivalColumn, int player, int rival) const
 		{
 			bool tie[4] = { false, false, false, false };
 			auto setStatus = [&](int RivalLine, int RivalColumn) -> void {
@@ -50,7 +50,7 @@ namespace WinCheck {
 		///参数：CColumn   需要检查的位置的列
 		///参数：Player  哪个玩家下的棋子
 		///参数：i  下标（WinCheckPosition）
-		bool Check(int OriLine, int OriColumn, int CLine, int CColumn, int player, int i, int& Winner)
+		bool Check(int OriLine, int OriColumn, int CLine, int CColumn, int player, int i, int& Winner) const
 		{
 			int rival = player == 1 ? 2 : 1;
 			auto reduceRecursionTimes = [&]() -> void {
@@ -113,7 +113,7 @@ namespace WinCheck {
 		* 3、围死。基本思想：假设黑子下一个棋子，则判断该黑子周围的四个位置上有没有白子被围死，还有该黑子是否被围死
 		*/
 		//注：调用该函数（即下棋的玩家）的那个人或AI是“己方”
-		bool WinOrLose(int& line, int& column, int& onTurn, int& Winner, int c[10][10])
+		bool WinOrLose(int& line, int& column, int& onTurn, int& Winner, int c[10][10]) const
 		{
 			auto initArray = [&](int c[10][10]) {
 				for (int i = 0; i < 10; ++i) {
@@ -139,6 +139,9 @@ namespace WinCheck {
 			{
 				player = isBlack;
 				rival = isWhite;
+			}
+			else {
+				return false;
 			}
 
 			//判断棋子四周有没有棋子

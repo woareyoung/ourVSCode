@@ -34,10 +34,7 @@ void AI2::GetPosition(int& line, int& column, int onTurn)
 	*******************************************/
 	this->chessCount++;
 	// 注意传递进来的onTurn参数是对方的，而不是己方的。
-	Rival = (onTurn == Black || onTurn == isAI1onTurn) ? Black : White;
-	this->turn2Who = getRival(Rival);
-	this->PlayerId = turn2Who;
-	PlayerId = turn2Who;
+	initPlayerRole(onTurn);
 	cross[line][column] = Rival;
 
 	/******************************************
@@ -51,7 +48,7 @@ void AI2::GetPosition(int& line, int& column, int onTurn)
 	cross[line][column] = turn2Who;
 	// 将计算出的位置的分数设为最小值
 
-	_cprintf("**************This is chess score*******(%d, %d)***********\n", line, column);
+	_cprintf("\n**************This is chess score*******(%d, %d)***********\n", line, column);
 	for (int i = 1; i < 10; ++i)
 	{
 		for (int j = 1; j < 10; ++j)

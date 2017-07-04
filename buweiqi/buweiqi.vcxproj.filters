@@ -114,6 +114,9 @@
     <ClInclude Include="ChessBoard_Header\WinCheck.h">
       <Filter>Header Files\ChessBoard_Header</Filter>
     </ClInclude>
+    <ClInclude Include="ChessBoard_Header\Pattern.h">
+      <Filter>Header Files\ChessBoard_Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="buweiqi.cpp">
