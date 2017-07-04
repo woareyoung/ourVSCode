@@ -30,9 +30,10 @@ private:
 	double MaxScore;//记录最大分值
 	
 	std::shared_ptr<NEXTPACE> np;//获取下一步的可能性的链表
-
-	int GetNextPace(std::shared_ptr<NEXTPACE> np);
-	void BackQua(int line, int column);
+	/*
+		param[np]:可能下棋位置的链表
+	*/
+	int GetNextPace(std::shared_ptr<NEXTPACE> np);//从链表中选取最高胜率的结点
 	///各功能函数 集中在FunctionPart.cpp文件中
 	/*
 		param[row1]:行

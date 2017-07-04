@@ -1,14 +1,15 @@
 #include "../FileSystem_Header/FileSystem.h"
 ///匹配当前盘面状况的记忆
-std::shared_ptr<NEXTPACE> FileSystem::Match(SITUATION &StatusQuo, int player, int round)
+std::shared_ptr<NEXTPACE> FileSystem::Match(SITUATION &StatusQuo, int &count, int round, bool isWinner)
 {
 	std::shared_ptr<NEXTPACE> np = nullptr;//记录“下一步”应对方法的链表的头结点
 	std::shared_ptr<NEXTPACE> temp = np;
 	int i;
- 	SITUATION situa;
+	SITUATION situa;
+	if (!isWinner) for (i = 1; i < 10; i++) situa.Line[i] = DigitalChange(StatusQuo.Line[i]);
+	else situa = StatusQuo;
+	count = 0;
 	OpenFile(FN.ForeName + std::to_string(round) + FN.TXT, TempFile);//打开当前盘面状况的记录文件
-	situa.Line[0] = StatusQuo.Line[0];
-	for (i = 1; i < 10; ++i) situa.Line[i] = StatusQuo.Line[i];
 	TempFile.seekg(0);
 	while (!TempFile.eof())//循环直到文件末尾
 	{
@@ -22,6 +23,7 @@ std::shared_ptr<NEXTPACE> FileSystem::Match(SITUATION &StatusQuo, int player, in
 			}
 			else if (i == 9)
 			{
+				count++;
 				if (np == nullptr)
 				{
 					temp = std::shared_ptr<NEXTPACE>(new NEXTPACE);
@@ -42,8 +44,9 @@ std::shared_ptr<NEXTPACE> FileSystem::Match(SITUATION &StatusQuo, int player, in
 	return np;
 }
 ///匹配含有指定盘面状况的棋谱，返回指定盘面中还没有棋子的位置
-std::shared_ptr<NEXTPACE> FileSystem::GenerMatch(SITUATION &StatusQuo, int player, int round)
+std::shared_ptr<NEXTPACE> FileSystem::GenerMatch(SITUATION &StatusQuo, int &count, int round)
 {
+	count = 0;
 	std::string name = FN.ForeName + std::to_string(round) + FN.TXT;
 	OpenFile(name, TempFile);
 	TempFile.seekg(0);
@@ -62,6 +65,7 @@ std::shared_ptr<NEXTPACE> FileSystem::GenerMatch(SITUATION &StatusQuo, int playe
 			//包含当前盘面状况
 			if (CompareHigh(value[i] / 10000, StatusQuo.Line[i] / 10000, tempHead, tempRear) && CompareLow(value[i] % 10000, StatusQuo.Line[i] % 10000))
 			{
+				if (i == 9) count++;
 				for (tempRear = tempHead; ; tempRear = tempRear->next)
 				{
 					tempRear->site += i * 10;//把每一个值加上“行号”

@@ -17,7 +17,7 @@ public:
 	QUADRANT Qua; //记录走棋纪录
 	SITUATION NowStatus;//当前盘面状况
 	int CurrentRound;//当前回合数
-	int CurrentNull;//空位数量
+	int CurrentNull;//空位数量（备用）
 
 	virtual void GetPosition(int &line, int &column, int onTurn) = 0;
 	/*
@@ -39,6 +39,21 @@ public:
 	    参数maxQuadrant：最大的棋子数
 	*/
 	void GetCurrentStatus(int maxQuadrant);//获取当前盘面压缩数据
+	/*
+	    参数site：模拟下棋位置
+	*/
+	double ProbabilityCount(int site);//计算概率
+	/*
+		参数line：下棋的位置（行）
+		参数column：下棋的位置（列）
+	*/
+	void BackQua(int line, int column)//统计棋盘各个区域的棋子数量
+	{
+		if (line < 5 && column > 5) Qua.FirstQuadrant--;
+		else if (line < 5 && column < 5) Qua.SecondQuadrant--;
+		else if (line > 5 && column < 5) Qua.ThirdQuadrant--;
+		else if (line > 5 && column > 5) Qua.ForthQuadrant--;
+	}
 };
 
 #endif // AI_H_INCLUDED

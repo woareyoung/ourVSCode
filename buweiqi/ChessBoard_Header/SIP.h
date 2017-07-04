@@ -17,6 +17,11 @@ struct SITUATION
 	int Line[10] = { 0 };//9行的记录（其中数组第0个记录下棋的位置）
 	std::shared_ptr<SITUATION> next;
 	std::shared_ptr<SITUATION> prior;
+	SITUATION &operator= (SITUATION &param)
+	{
+		for (int i = 0; i < 10; i++) Line[i] = param.Line[i];
+		return *this;
+	}
 };
 ///
 struct QUADRANT

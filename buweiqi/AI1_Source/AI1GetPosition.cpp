@@ -126,7 +126,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		{
 			Statistic(line, column);
 			GetCurrentStatus(Qua.GetMaxQuadrant());
-			np = FS.Match(NowStatus, 3 - PlayerId, CurrentRound + 1);//搜索出同样的局面输的一方的下棋位置
+			np = FS.Match(NowStatus, OT, CurrentRound + 1, false);//搜索出同样的局面输的一方的下棋位置
 			if (np == nullptr)
 			{
 				BackQua(line, column);
@@ -151,30 +151,32 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 	CurrentRound++;
 	CurrentNull--;
 }
-///从链表中选取最高分的结点
+///从链表中选取最高胜率的结点
 int AI1::GetNextPace(std::shared_ptr<NEXTPACE> np)
 {
-	int Max = cross[np->site / 10][np->site % 10];
+	
 	int nextpace = np->site;
+	if (np->next == nullptr)
+	{
+		np = nullptr;
+		return nextpace;
+	}
+	double MaxPro = ProbabilityCount(nextpace);
+	double tmp;
+	int BestSite = nextpace;
 	std::shared_ptr<NEXTPACE> temp = np->next;
 	np = nullptr;
 	while(temp != nullptr)
 	{
-		if (cross[temp->site / 10][temp->site % 10] > Max)
+		tmp = ProbabilityCount(temp->site);
+		if (tmp > MaxPro)
 		{
-			Max = cross[temp->site / 10][temp->site % 10];
-			nextpace = temp->site;
+			MaxPro = tmp;
+			BestSite = temp->site;
 		}
 		np = temp;
 		temp = temp->next;
 		np = nullptr;
 	}
-	return nextpace;
-}
-void AI1::BackQua(int line, int column)
-{
-	if (line < 5 && column > 5) Qua.FirstQuadrant--;
-	else if (line < 5 && column < 5) Qua.SecondQuadrant--;
-	else if (line > 5 && column < 5) Qua.ThirdQuadrant--;
-	else if (line > 5 && column > 5) Qua.ForthQuadrant--;
+	return BestSite;
 }

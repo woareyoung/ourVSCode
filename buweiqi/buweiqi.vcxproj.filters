@@ -191,6 +191,9 @@
     <ClCompile Include="AI2_Source\isGo2Dead.cpp">
       <Filter>Source Files\AI2_Source</Filter>
     </ClCompile>
+    <ClCompile Include="MainAI_Source\ProbabilityCount.cpp">
+      <Filter>Source Files\MainAI_Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="buweiqi.rc">

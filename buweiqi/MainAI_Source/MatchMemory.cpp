@@ -14,7 +14,7 @@ std::shared_ptr<NEXTPACE> AI::MatchMemory(int line, int column, bool &None)
 	int maxQuadrant = Qua.GetMaxQuadrant();//获取最多棋子的象限
 	int i;
 	GetCurrentStatus(maxQuadrant);
-	std::shared_ptr<NEXTPACE> np = FS.Match(NowStatus, PlayerId, CurrentRound);
+	std::shared_ptr<NEXTPACE> np = FS.Match(NowStatus, line, CurrentRound);
 	//如果有一模一样的记录，则直接跟着下
 	if (np != nullptr)
 	{
@@ -24,7 +24,7 @@ std::shared_ptr<NEXTPACE> AI::MatchMemory(int line, int column, bool &None)
 	for (i = CurrentRound > MAX_ROUND_K ? CurrentRound : MAX_ROUND_K; ; i = i + 2)
 	{
 		//没有一模一样的记录，则查询有没有含有当前盘面的“终盘”
-		if(i < 81) np = FS.GenerMatch(NowStatus, PlayerId, i);
+		if(i < 81) np = FS.GenerMatch(NowStatus, column, i);
 		else return nullptr;
 		if (np != nullptr)
 		{

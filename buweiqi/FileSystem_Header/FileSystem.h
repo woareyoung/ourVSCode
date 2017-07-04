@@ -29,18 +29,19 @@ public:
 	int DigitalChange(int num);//对数值进行高位与低位部分的交换
 	/*
 	param[StatusQuo]:记录当前盘面状况的结构体
-	param[player]:匹配记忆的玩家是玩家1还是玩家2
+	param[count]:总共有多少个记录相符
 	param[round]:当前回合数
+	param[isWinner]:是否以胜利方匹配
 	return:返回“下一步”链表
 	*/
-	std::shared_ptr<NEXTPACE> Match(SITUATION &StatusQuo, int player, int round);//匹配指定盘面状况的棋谱，返回“下一步棋子”
+	std::shared_ptr<NEXTPACE> Match(SITUATION &StatusQuo, int &count, int round, bool isWinner = true);//匹配指定盘面状况的棋谱，返回“下一步棋子”
 	/*
 	param[StatusQuo]:记录当前盘面状况的结构体
-	param[player]:匹配记忆的玩家是玩家1还是玩家2
+	param[count]:总共有多少个记录相符
 	param[round]:当前回合数
 	return:返回指定盘面中还没有棋子的位置
 	*/
-	std::shared_ptr<NEXTPACE> GenerMatch(SITUATION &StatusQuo, int player, int round);//匹配含有指定盘面状况的棋谱，返回指定盘面中还没有棋子的位置
+	std::shared_ptr<NEXTPACE> GenerMatch(SITUATION &StatusQuo, int &count, int round);//匹配含有指定盘面状况的棋谱，返回指定盘面中还没有棋子的位置
 	/*
 	param[sit]:盘面状况
 	param[change]:是否需要将数值转换
