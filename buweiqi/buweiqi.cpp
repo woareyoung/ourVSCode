@@ -75,6 +75,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
+	int i, data[36];
+	std::fstream tempfile("CombatRecord.txt", std::ios::out | std::ios::in);
+	if (!tempfile) exit(0);
+	tempfile.seekg(0);
+	for (i = 0; i < 36; i++)
+	{
+		tempfile >> data[i];
+		if (i < 18) data[i] = 0;
+	}
+	tempfile.close();
+	tempfile.open("CombatRecord.txt", std::ios::out);
+	if (!tempfile) exit(0);
+	tempfile.seekg(0);
+	for (i = 0; i < 36; i++)
+	{
+		tempfile << data[i] << " ";
+		if (i % 6 == 0) tempfile << std::endl;
+	}
 	FreeConsole();
 	return msg.wParam;
 	
@@ -101,8 +119,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_KEYDOWN:
 		//按下ESC键时，使当前对局成为最后一局
-		if((int)wParam == 27) CB.CombatNumber = MAX_COMBAT; 
-		_cprintf("%d", wParam);break;
+		if((int)wParam == 27) CB.CombatNumber = MAX_COMBAT;break;
 	case WM_PAINT://重绘消息
 		if (CB.Repaint)
 		{
@@ -226,24 +243,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		DeleteObject(CB.Tips);
 		DeleteObject(CB.CombatRecord);
 		PostQuitMessage(0);
-		int i, data[36];
-		std::fstream tempfile("CombatRecord.txt", std::ios::out | std::ios::in);
-		if (!tempfile) exit(0);
-		tempfile.seekg(0);
-		for (i = 0; i < 36; i++)
-		{
-			tempfile >> data[i];
-			if (i < 18) data[i] = 0;
-		}
-		tempfile.close();
-		tempfile.open("CombatRecord.txt", std::ios::out);
-		if (!tempfile) exit(0);
-		tempfile.seekg(0);
-		for (i = 0; i < 36; i++)
-		{
-			tempfile << data[i] << " ";
-			if (i % 6 == 0) tempfile << std::endl;
-		}
 		return 0;
 	}
 	return DefWindowProc(hwnd, message, wParam, lParam);

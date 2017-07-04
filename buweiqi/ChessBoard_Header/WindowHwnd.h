@@ -26,6 +26,7 @@ public:
 	HWND StartGame;//开始游戏按钮
 	HWND TurnToBlack;//轮到玩家1的字样
 	HWND TurnToWhite;//轮到玩家2的字样
+	HWND DisplayPosition;//
 
 	HWND SelectAI;//选择AI窗口
 	HWND SelectAI1;//选择AI1按钮，在选择AI窗口中

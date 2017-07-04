@@ -30,5 +30,6 @@
 #define noChess 0
 
 #define MAX_COMBAT 10 //连续对局次数
+#define DISPLAY 2 //1表示在界面显示，2表示在DOS显示，0表示全显示
 
 // TODO: reference additional headers your program requires here
