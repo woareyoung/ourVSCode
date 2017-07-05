@@ -96,7 +96,7 @@ protected:
 	mutable int cross[10][10];
 	bool Position[4];
 	// 分数
-	int chessScore[10][10];
+	mutable int chessScore[10][10];
 	// isGo2Dead标志数组
 	bool isGo2DeadStatus[10][10];
 	// 当前好的着子点的数组集合
