@@ -69,7 +69,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		NULL, NULL, hInstance, NULL);
 	ShowWindow(CB.RootHwnd, iCmdShow);
 	UpdateWindow(CB.RootHwnd);
-
+	
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
 		TranslateMessage(&msg);
@@ -101,8 +101,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_KEYDOWN:
 		//按下ESC键时，使当前对局成为最后一局
-		if((int)wParam == 27) CB.CombatNumber = MAX_COMBAT; 
-		_cprintf("%d", wParam);break;
+		if((int)wParam == 27) CB.CombatNumber = MAX_COMBAT;break;
 	case WM_PAINT://重绘消息
 		if (CB.Repaint)
 		{
@@ -241,8 +240,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		tempfile.seekg(0);
 		for (i = 0; i < 36; i++)
 		{
-			tempfile << data[i] << " ";
 			if (i % 6 == 0) tempfile << std::endl;
+			tempfile << data[i] << " ";
 		}
 		return 0;
 	}
@@ -260,7 +259,7 @@ DWORD WINAPI TimerProc(PVOID pParam)
 		if (Now - Count > Interval)
 		{
 			Count = Now;
-			if (CB.onTurn == isPlay1onTurn || CB.onTurn == isAI1onTurn)
+			if (CB.onTurn == isPlay2onTurn || CB.onTurn == isAI2onTurn)
 			{
 				CB.AllTime1--;
 				CB.Round1--;
@@ -272,7 +271,7 @@ DWORD WINAPI TimerProc(PVOID pParam)
 				}
 				CB.PaintTimer(CB.Timer1A, CB.Timer1R, 1);
 			}
-			else if (CB.onTurn == isPlay2onTurn || CB.onTurn == isAI2onTurn)
+			else if (CB.onTurn == isPlay1onTurn || CB.onTurn == isAI1onTurn)
 			{
 				CB.AllTime2--;
 				CB.Round2--;

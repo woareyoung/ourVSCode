@@ -3,9 +3,12 @@
 ///响应重绘消息
 void ChessBoard::RePaint()
 {
-	SetHandle();
-	PaintBoard();//画棋盘
-	DelHandle();
+	if (DISPLAY < 2)
+	{
+		SetHandle();
+		PaintBoard();//画棋盘
+		DelHandle();
+	}
 }
 ///设置缓冲区
 void ChessBoard::SetHandle()

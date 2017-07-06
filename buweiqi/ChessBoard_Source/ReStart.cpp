@@ -3,6 +3,28 @@
 ///сно╥╫АйЬ
 void ChessBoard::ReStart()
 {
+	if (DISPLAY == 2 || DISPLAY == 0)
+	{
+		int i, j;
+		for (i = 1; i < 10; i++)
+		{
+			for (j = 1; j < 10; j++)
+			{
+				_cprintf(" %d ", cross[i][j]);
+			}
+			_cprintf("\n");
+		}
+		if (Winner == 1)
+		{
+			if(CombatNumber == MAX_COMBAT) _cprintf("the Winner of the final is : Player1 ( Black )\n", CombatNumber);
+			else _cprintf("the Winner of the %d is : Player1 ( Black )\n", CombatNumber);
+		}
+		else
+		{
+			if(CombatNumber == MAX_COMBAT) _cprintf("the Winner of the final is : Player2 ( White )\n", CombatNumber);
+			else _cprintf("the Winner of the %d is : Player2 ( White )\n", CombatNumber);
+		}
+	}
 	bool re = CombatNumber < MAX_COMBAT && Player1isAI && Player2isAI;
 	if (!re)
 	{
