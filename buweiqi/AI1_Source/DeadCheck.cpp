@@ -2,20 +2,42 @@
 #include "../AI1_Header/AI1.h"
 
 ///参数：预备下棋位置
-bool AI1::DeadCheck(int line, int column, int who)
+bool AI1::DeadCheck(int line, int column, int who, bool simulation)
 {
+	if (simulation) cross[line][column] = who; 
 	bool Position[4] = { false, false, false, false };
 	int player = who;//记录己方的编号（是1还是2）
 	//判断棋子四周有没有棋子
 	//检查左边
-	if (CheckPosition(line, column, line, column - 1, player, Position[0])) return true;
+	if (CheckPosition(line, column, line, column - 1, player, Position[0]))
+	{
+		if (simulation) cross[line][column] = 0;
+		return true;
+	}
 	//检查右边
-	if (CheckPosition(line, column, line, column + 1, player, Position[1]))  return true;
+	if (CheckPosition(line, column, line, column + 1, player, Position[1]))  
+	{
+		if (simulation) cross[line][column] = 0;
+		return true;
+	}
 	//检查上边
-	if (CheckPosition(line, column, line - 1, column, player, Position[2])) return true;
+	if (CheckPosition(line, column, line - 1, column, player, Position[2])) 
+	{
+		if (simulation) cross[line][column] = 0;
+		return true;
+	}
 	//检查下边
-	if (CheckPosition(line, column, line + 1, column, player, Position[3])) return true;
-	if (Position[0] && Position[1] && Position[2] && Position[3]) return true;
+	if (CheckPosition(line, column, line + 1, column, player, Position[3])) 
+	{
+		if (simulation) cross[line][column] = 0;
+		return true;
+	}
+	if (Position[0] && Position[1] && Position[2] && Position[3]) 
+	{
+		if (simulation) cross[line][column] = 0;
+		return true;
+	}
+	if (simulation) cross[line][column] = 0;
 	return false;
 }
 bool AI1::CheckPosition(int OriLine, int OriColumn, int CLine, int CColumn, int player, bool &Position)

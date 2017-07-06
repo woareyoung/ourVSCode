@@ -61,7 +61,7 @@ private:
 	void SetCurrentPoint(int ThisFormatStyle, double ThisFormatScorePoor, int ThisSpecialStyle, double ThisSpecialScorePoorint, int LastFormatStyle = 0, double LastFormatScorePoore = 0, int LastSpecialPointStyle = 0, double LastSpecialScorePoor = 0);
 
 	///判断是否是死棋位置   集中在DeadCheck.cpp文件中
-	bool DeadCheck(int line, int column, int who);
+	bool DeadCheck(int line, int column, int who, bool simulation = false);
 	bool CheckPosition(int OriLine, int OriColumn, int CLine, int CColumn, int player, bool &Position);
 	bool Besieg(int RivalLine, int RivalColumn, int player, int rival);
 	bool BesiegePosition(int RivalLine, int RivalColumn, int player, int rival, bool &tie);

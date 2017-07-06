@@ -44,7 +44,7 @@ std::shared_ptr<NEXTPACE> FileSystem::Match(SITUATION &StatusQuo, int &count, in
 	return np;
 }
 ///匹配含有指定盘面状况的棋谱，返回指定盘面中还没有棋子的位置
-std::shared_ptr<NEXTPACE> FileSystem::GenerMatch(SITUATION &StatusQuo, int &count, int round)
+std::shared_ptr<NEXTPACE> FileSystem::GenerMatch(SITUATION &StatusQuo, int &count, int round, bool needptr)
 {
 	count = 0;
 	std::string name = FN.ForeName + std::to_string(round) + FN.TXT;
@@ -63,10 +63,10 @@ std::shared_ptr<NEXTPACE> FileSystem::GenerMatch(SITUATION &StatusQuo, int &coun
 		{
 			TempFile >> value[i];
 			//包含当前盘面状况
-			if (CompareHigh(value[i] / 10000, StatusQuo.Line[i] / 10000, tempHead, tempRear) && CompareLow(value[i] % 10000, StatusQuo.Line[i] % 10000))
+			if (CompareHigh(value[i] / 10000, StatusQuo.Line[i] / 10000, tempHead, tempRear, needptr) && CompareLow(value[i] % 10000, StatusQuo.Line[i] % 10000))
 			{
 				if (i == 9) count++;
-				for (tempRear = tempHead; ; tempRear = tempRear->next)
+				for (tempRear = tempHead; needptr = true; tempRear = tempRear->next)
 				{
 					tempRear->site += i * 10;//把每一个值加上“行号”
 					if (tempRear->next == nullptr)
@@ -81,7 +81,7 @@ std::shared_ptr<NEXTPACE> FileSystem::GenerMatch(SITUATION &StatusQuo, int &coun
 				}
 				continue;
 			}
-			else
+			else if(needptr)
 			{
 				//不符合条件，清空链表
 				ClearList(np);
@@ -96,7 +96,7 @@ std::shared_ptr<NEXTPACE> FileSystem::GenerMatch(SITUATION &StatusQuo, int &coun
 		}
 	}
 	TempFile.close();
-	if (np->site == 0)
+	if (needptr && np->site == 0)
 	{
 		np = nullptr;
 		return nullptr;
@@ -140,7 +140,7 @@ std::shared_ptr<NEXTPACE> FileSystem::UnPack(int value)
 	return np;
 }
 //比较两个数值，查看文件棋谱是否包含当前状况
-bool FileSystem::CompareHigh(int FileValue, int CurrentValue, std::shared_ptr<NEXTPACE> head, std::shared_ptr<NEXTPACE> rear)
+bool FileSystem::CompareHigh(int FileValue, int CurrentValue, std::shared_ptr<NEXTPACE> head, std::shared_ptr<NEXTPACE> rear, bool needptr)
 {
 	std::shared_ptr<NEXTPACE> np1 = UnPack(FileValue);//获取“全集”
 	std::shared_ptr<NEXTPACE> np2 = UnPack(CurrentValue);//获取“子集”
@@ -174,9 +174,12 @@ bool FileSystem::CompareHigh(int FileValue, int CurrentValue, std::shared_ptr<NE
 		{
 			ClearList(np1);//清空链表
 			ClearList(np2);
-			ClearList(head);
-			head = nullptr;
-			rear = nullptr;
+			if (needptr)
+			{
+				ClearList(head);
+				head = nullptr;
+				rear = nullptr;
+			}
 			return false;
 		}
 		//若子集中的元素也存在于全集中，则遍历下一个元素
@@ -187,18 +190,21 @@ bool FileSystem::CompareHigh(int FileValue, int CurrentValue, std::shared_ptr<NE
 		}
 		else if (temp1->site > temp2->site)
 		{
-			if (rear->site < 1) rear->site = temp1->site;
-			else
+			if (needptr)
 			{
-				rear->next = std::shared_ptr<NEXTPACE>(new NEXTPACE);
-				rear = rear->next;
-				rear->next = nullptr;
-				rear->site = temp1->site;
+				if (rear->site < 1) rear->site = temp1->site;
+				else
+				{
+					rear->next = std::shared_ptr<NEXTPACE>(new NEXTPACE);
+					rear = rear->next;
+					rear->next = nullptr;
+					rear->site = temp1->site;
+				}
 			}
 			temp1 = temp1->next;
 		}
 	}
-	ConnectList(rear, temp1);
+	if(needptr) ConnectList(rear, temp1);
 	ClearList(np1);//清空链表
 	ClearList(np2);
 	return true;

@@ -1,6 +1,6 @@
 #include "../stdafx.h"
 #include "../AI1_Header/AI1.h"
-#define MAX_SIMILAR 3 //设置同样的走棋达到连续3次后改变规律
+#define MAX_SIMILAR 2 //设置同样的走棋达到连续3次后改变规律
 ///获取下棋位置
 void AI1::GetPosition(int &line, int &column, int onTurn)
 {
@@ -71,8 +71,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		//如果对局记录中有应对的方法
 		if (np != nullptr)
 		{
-			if (None == false) NextPace = np->site;//获取下一步棋的位置
-			else NextPace = GetNextPace(np);
+			NextPace = GetNextPace(np);
 			int maxQ = Qua.GetMaxQuadrant();
 			if (maxQ == Qua.FirstQuadrant)
 			{
@@ -105,20 +104,16 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		line = MaxScorePosition / 10;
 		column = MaxScorePosition % 10;
 		if (cross[line][column] != 0) continue;//这句虽然没什么用，但保险起见
-		cross[line][column] = OT;
 		///若该位置对于对方来说是死棋，则继续循环
-		if (DeadCheck(line, column, OT) == true && MaxScore > PointStyle[9])
+		if (DeadCheck(line, column, OT, true) == true && MaxScore > PointStyle[9])
 		{
 			Score[line][column] = PointStyle[9];
-			cross[line][column] = 0;
 			continue;
 		}
-		cross[line][column] = PlayerId;
 		///若是死棋位置，且棋盘上还有位置不是死棋，则继续循环
-		if (DeadCheck(line, column, PlayerId) == true && MaxScore > PointStyle[1])
+		if (DeadCheck(line, column, PlayerId, true) == true && MaxScore > PointStyle[1])
 		{
 			Score[line][column] = PointStyle[1];
-			cross[line][column] = 0;
 			continue;
 		}
 		//先检查有没有“重蹈覆辙”
@@ -145,6 +140,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 			break;
 		}
 	}
+	cross[line][column] = PlayerId;
 	cross[line][0] = 1;
 	Statistic(line, column);
 	UpdateScore(line, column, PlayerId);

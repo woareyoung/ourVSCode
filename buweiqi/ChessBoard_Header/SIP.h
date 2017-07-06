@@ -22,6 +22,17 @@ struct SITUATION
 		for (int i = 0; i < 10; i++) Line[i] = param.Line[i];
 		return *this;
 	}
+	void DigitalChange()
+	{
+		int help1;
+		int help2;
+		for (int i = 1; i < 10; i++)
+		{
+			help2 = Line[i] / 10000; //获取高位
+			help1 = Line[i] % 10000; //获取低位
+			Line[i] = help2 + help1 * 10000;
+		}
+	}
 };
 ///
 struct QUADRANT

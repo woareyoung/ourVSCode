@@ -69,29 +69,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		NULL, NULL, hInstance, NULL);
 	ShowWindow(CB.RootHwnd, iCmdShow);
 	UpdateWindow(CB.RootHwnd);
-
+	
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
-	}
-	int i, data[36];
-	std::fstream tempfile("CombatRecord.txt", std::ios::out | std::ios::in);
-	if (!tempfile) exit(0);
-	tempfile.seekg(0);
-	for (i = 0; i < 36; i++)
-	{
-		tempfile >> data[i];
-		if (i < 18) data[i] = 0;
-	}
-	tempfile.close();
-	tempfile.open("CombatRecord.txt", std::ios::out);
-	if (!tempfile) exit(0);
-	tempfile.seekg(0);
-	for (i = 0; i < 36; i++)
-	{
-		tempfile << data[i] << " ";
-		if (i % 6 == 0) tempfile << std::endl;
 	}
 	FreeConsole();
 	return msg.wParam;
@@ -243,6 +225,24 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		DeleteObject(CB.Tips);
 		DeleteObject(CB.CombatRecord);
 		PostQuitMessage(0);
+		int i, data[36];
+		std::fstream tempfile("CombatRecord.txt", std::ios::out | std::ios::in);
+		if (!tempfile) exit(0);
+		tempfile.seekg(0);
+		for (i = 0; i < 36; i++)
+		{
+			tempfile >> data[i];
+			if (i < 18) data[i] = 0;
+		}
+		tempfile.close();
+		tempfile.open("CombatRecord.txt", std::ios::out);
+		if (!tempfile) exit(0);
+		tempfile.seekg(0);
+		for (i = 0; i < 36; i++)
+		{
+			if (i % 6 == 0) tempfile << std::endl;
+			tempfile << data[i] << " ";
+		}
 		return 0;
 	}
 	return DefWindowProc(hwnd, message, wParam, lParam);
@@ -259,7 +259,7 @@ DWORD WINAPI TimerProc(PVOID pParam)
 		if (Now - Count > Interval)
 		{
 			Count = Now;
-			if (CB.onTurn == isPlay1onTurn || CB.onTurn == isAI1onTurn)
+			if (CB.onTurn == isPlay2onTurn || CB.onTurn == isAI2onTurn)
 			{
 				CB.AllTime1--;
 				CB.Round1--;
@@ -271,7 +271,7 @@ DWORD WINAPI TimerProc(PVOID pParam)
 				}
 				CB.PaintTimer(CB.Timer1A, CB.Timer1R, 1);
 			}
-			else if (CB.onTurn == isPlay2onTurn || CB.onTurn == isAI2onTurn)
+			else if (CB.onTurn == isPlay1onTurn || CB.onTurn == isAI1onTurn)
 			{
 				CB.AllTime2--;
 				CB.Round2--;

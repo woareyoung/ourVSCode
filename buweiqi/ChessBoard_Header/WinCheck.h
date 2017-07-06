@@ -61,6 +61,7 @@ namespace WinCheck {
 							WinCheckCross[i][j] = false;
 				}
 			};
+			/*
 			auto showChessBroadInfoOnDOS = [&]()
 			{
 				int countB = 0;
@@ -83,7 +84,7 @@ namespace WinCheck {
 					_cprintf("\n");
 				}
 				_cprintf("----Black:%d,White:%d----\n", countB, countW);
-			};
+			};*/
 			//若己方棋子已到边缘
 			if (CColumn == 0 || CColumn == 10 || CLine == 0 || CLine == 10) WinCheckPosition[i] = true;
 			//若有对方的一个棋子
@@ -93,7 +94,7 @@ namespace WinCheck {
 				if (Besieged(CLine, CColumn, player, rival))
 				{
 					Winner = rival;
-					showChessBroadInfoOnDOS();
+					//showChessBroadInfoOnDOS();
 					return true;
 				}
 				WinCheckPosition[i] = true;
