@@ -3,7 +3,11 @@
 #define AI3_H_INCLUDED
 
 #include <cstdlib>
+#include "../ChessBoard_Header/WinCheck.h"
 #include "../AI2_Header/AI2.h"
+#include <tuple>
+#include <set>
+#include <iostream>
 #include "MCTS.h"
 
 class AI3 : public AI2
@@ -19,23 +23,16 @@ public:
 	int predict() {
 		MCTS::ComputeOptions options;
 		options.number_of_threads = 1;
-		options.max_time = 3;
+		// options.max_time = 1;
 		auto state_copy = new SimulatorGo(cross, chessScore, PlayerId);
-		std::future<int> best_move = std::async(std::launch::async, [state_copy, options]()
-		{
-			return MCTS::compute_move(state_copy, options);
-		});
-		std::future_status status;
-		do {
-			status = best_move.wait_for(std::chrono::seconds(1));
-		} while (status != std::future_status::ready);
-		return best_move.get();
+		auto best_move = MCTS::compute_move(state_copy, options);
+		return best_move;
 	}
 
 	class SimulatorGo : public AI2 {
 	private:
-		// unsigned int previous_cross_hash_value;
-		// std::set<unsigned int> all_hash_values;
+		unsigned int previous_cross_hash_value;
+		std::set<unsigned int> all_hash_values;
 		WinCheck::ChessInfo chessInfo;
 
 		virtual int* getPatternType() override {
@@ -48,7 +45,7 @@ public:
 			depth(0)
 		{
 			initAllArray();
-			// all_hash_values.insert(compute_hash_value());
+			all_hash_values.insert(compute_hash_value());
 		}
 
 		SimulatorGo(
@@ -67,11 +64,11 @@ public:
 			}
 		}
 
-		void initSimulation(bool isFirst) const {
+		void initSimulation() const {
 			for (int i = ChessInit; i < ChessEnd; ++i) {
 				for (int j = ChessInit; j < ChessEnd; ++j) {
 					if (cross[i][j] == NoChess && chessScore[i][j] == minLimit) continue;
-					if (!isFirst && cross[i][j] == NoChess && chessScore[i][j] == 0) continue;
+					if (cross[i][j] == NoChess && chessScore[i][j] == 0) continue;
 					chessScore[i][j] = const_cast<SimulatorGo*>(this)->getDefaultChessScore(i, j);
 				}
 			}
@@ -151,26 +148,31 @@ public:
 		{
 			// 调用Pattern对当前局面进行处理，将所有可能的着子点加入到moves数组
 			const_cast<SimulatorGo*>(this)->Revalute();
-			initSimulation(false);
+			initSimulation();
 			// 下面是搜集所有可能的着子点。
 			std::vector<int> moves;
 			// 如果深度大于1000层的话就，直接诶返回moves了。
 			if (depth > 1000) {
 				return moves;
 			}
-			// 清空moves容器中的数据，对数据进行重装载
-			//moves.swap(std::vector<int>());
 			// 这里用于判断对方是否还有走步可以走，如果有的话就是说尚未达到游戏终止的情况。
 			for (int i = ChessStart; i < ChessEnd; ++i) {
 				for (int j = ChessStart; j < ChessEnd; ++j) {
-					if (cross[i][j] == NoChess && chessScore[i][j] != minLimit) {
+					if (cross[i][j] == NoChess && chessScore[i][j] >= 20) {
 						moves.push_back(ij_to_ind(i, j));
 					}
 				}
 			}
 			if (moves.empty()) {
-				// 清空moves容器中的数据，对数据进行重装载
-				//moves.swap(std::vector<int>());
+				for (int i = ChessStart; i < ChessEnd; ++i) {
+					for (int j = ChessStart; j < ChessEnd; ++j) {
+						if (cross[i][j] == NoChess && chessScore[i][j] != minLimit) {
+							moves.push_back(ij_to_ind(i, j));
+						}
+					}
+				}
+			}
+			if (moves.empty()) {
 				moves.push_back(pass);
 			}
 			return moves;
@@ -194,16 +196,16 @@ public:
 				}
 				return score += player == player_to_move ? ourEyes : RivalEyes;
 			};
-			int score1 = get_player_score(1);// 获取眼的数量
-			int score2 = get_player_score(2);// 获取眼的数量
+			int black = get_player_score(1);// 获取眼的数量
+			int white = get_player_score(2);// 获取眼的数量
 
-			if (score1 == score2) {
+			if (black == white) {
 				return 0.5;
 			}
 
 			// 按照眼的数量推断是谁会赢
 			// 如果玩家1的眼的数量比玩家2的多，那么玩家1会赢
-			int winner = score1 > score2 ? 1 : 2;
+			int winner = black > white ? Black : White;
 
 			// 如果赢者是当前移动的
 			return winner == current_player_to_move ? 0.0 : 1.0;
@@ -257,7 +259,10 @@ public:
 			if (isGo2Dead(x, y, Rival)) {
 				cross[x][y] = NoChess;
 				// 如果是敌方的自杀点的话，这里就置零   -.-！！！
-				chessScore[x][y] = 0;
+				if (chessScore[x][y] != minLimit) {
+					chessScore[x][y] = 0;
+				}
+
 				++this->ourEyes;
 				return false;
 			}

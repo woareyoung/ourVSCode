@@ -11,12 +11,6 @@
 //
 // 使用了根的并行化技术
 // Uses the "root parallelization" technique [1].
-#include "../AI2_Header/AI2.h"
-#include "../ChessBoard_Header/WinCheck.h"
-#include <tuple>
-#include <set>
-#include <assert.h>
-
 #define pass (-2)
 #define no_move (-1)
 
@@ -307,7 +301,6 @@ namespace MCTS
 		}
 		if (!(root_state->player_to_move == 1 || root_state->player_to_move == 2)) {
 			showInfoOnDOS("player_to_move is error~");
-			assert(root_state->player_to_move == 1 || root_state->player_to_move == 2);	
 		}
 		// root指针管理一个Node结点对象。
 		auto root = std::unique_ptr<Node<State>>(new Node<State>(root_state));
@@ -389,6 +382,8 @@ namespace MCTS
 		// 搜集结果
 		vector<unique_ptr<Node<State>>> roots;
 		for (int t = 0; t < options.number_of_threads; ++t) {
+			/*while (root_futures[t].wait_for(
+					std::chrono::milliseconds(100)) != std::future_status::ready);*/
 			// get等待异步操作结束并返回结果
 			roots.push_back(std::move(root_futures[t].get()));
 		}

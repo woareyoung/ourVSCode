@@ -258,7 +258,7 @@ void AI2::Pattern(int *PatternType) {
 					goto mismatch;
 				};
 				chessScore[x][y] += score;// 这里匹配到了一个模板，这个模板的位置就是这个
-				arraySort(x, y, score);// 数组排序
+				// arraySort(x, y, score);// 数组排序
 			mismatch:
 				;
 			}

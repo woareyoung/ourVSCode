@@ -39,7 +39,10 @@ void ChessBoard::BackPace()
 	if (Tail == nullptr) return;//如果已经没棋了，就不能再回退了
 	std::shared_ptr<SITUATION> s = nullptr;
 	std::shared_ptr<PACE> p = nullptr;
-	switch (Player1isAI || Player2isAI)
+	auto isParamRight = [&]() {
+		return Player1isAI || Player2isAI;
+	};
+	switch (isParamRight())
 	{
 		//如果有一方是AI，则回退两步
 	case true:
