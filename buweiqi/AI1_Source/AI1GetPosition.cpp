@@ -1,6 +1,6 @@
 #include "../stdafx.h"
 #include "../AI1_Header/AI1.h"
-#define MAX_SIMILAR 2 //设置同样的走棋达到连续3次后改变规律
+#define MAX_SIMILAR 3 //设置同样的走棋达到连续3次后改变规律
 ///获取下棋位置
 void AI1::GetPosition(int &line, int &column, int onTurn)
 {
@@ -137,6 +137,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 				cross[line][column] = 0;
 				continue;
 			}
+			else BackQua(line, column);
 			break;
 		}
 	}
@@ -150,25 +151,26 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 ///从链表中选取最高胜率的结点
 int AI1::GetNextPace(std::shared_ptr<NEXTPACE> np)
 {
-	
-	int nextpace = np->site;
+	int BestSite;
 	if (np->next == nullptr)
 	{
+		BestSite = np->site;
 		np = nullptr;
-		return nextpace;
+		return BestSite;
 	}
-	double MaxPro = ProbabilityCount(nextpace);
+	double MaxPro = -2;
 	double tmp;
-	int BestSite = nextpace;
-	std::shared_ptr<NEXTPACE> temp = np->next;
-	np = nullptr;
+	std::shared_ptr<NEXTPACE> temp = np;
 	while(temp != nullptr)
 	{
-		tmp = ProbabilityCount(temp->site);
-		if (tmp > MaxPro)
+		if (cross[temp->site / 10][temp->site % 10] == 0)
 		{
-			MaxPro = tmp;
-			BestSite = temp->site;
+			tmp = ProbabilityCount(temp->site);
+			if (tmp > MaxPro)
+			{
+				MaxPro = tmp;
+				BestSite = temp->site;
+			}
 		}
 		np = temp;
 		temp = temp->next;

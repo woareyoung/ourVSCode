@@ -12,6 +12,8 @@ double AI::ProbabilityCount(int site)
 	int column = site % 10;
 	int winCount = 0;
 	int loseCount = 0;
+//	int temp;
+//	int wintemp;
 	bool wait = true;
 	///模拟数据
 	cross[line][column] = PlayerId;//模拟下棋
@@ -23,13 +25,13 @@ double AI::ProbabilityCount(int site)
 	std::async(std::launch::async, [&] () 
 	{
 		NowStatus.DigitalChange();
-		for (int i = CurrentRound + 3; i < 81; i = i + 2) tmp1 = FS.GenerMatch(NowStatus, loseCount, i, false);
+		tmp1 = FS.GenerMatch(NowStatus, loseCount, CurrentRound + 3, false);
 		wait = false;
 	});
-	//计算胜利频数
-	for(int j = CurrentRound + 2; j < 81; j = j + 2) tmp2 = FS.GenerMatch(TempData, winCount, j, false);
+	tmp2 = FS.GenerMatch(TempData, winCount, CurrentRound + 2, false);
 	while (wait) {}//等待线程执行完毕
-	probability = winCount / ((double)winCount + (double)loseCount);//计算胜利频率
+	if (winCount == 0 && loseCount == 0) probability = -1;
+	else probability = winCount / ((double)winCount + (double)loseCount);//计算胜利频率
 	///恢复数据
 	cross[line][column] = 0;
 	BackQua(line, column);

@@ -1,5 +1,5 @@
 #include "../ChessBoard_Header/AI.h"
-#define MAX_ROUND_K 66
+#define MAX_ROUND_K 70
 
 void AI::Statistic(int line, int column)
 {

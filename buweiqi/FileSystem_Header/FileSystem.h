@@ -5,12 +5,20 @@
 #include <memory>
 #include <iostream>
 #include "../ChessBoard_Header/SIP.h"
-
+struct MEMO
+{
+	int value[10] = { 0 };
+	int count = 0;
+	std::shared_ptr<MEMO> next;
+	std::shared_ptr<MEMO> prior;
+};
 class FileSystem
 {
 public:
 	std::fstream TempFile;//临时文件对象
 	FileName FN;//文件名结构体
+	std::shared_ptr<MEMO> mem;//头结点
+	std::shared_ptr<MEMO> tempMEM;
 	int value[10];//用于暂存从文件读取到的数值，value[0]用于记录下一步
 	/*
 	param[FileName]:需要打开的文件名
@@ -22,6 +30,7 @@ public:
 	param[Winner]:胜利者
 	*/
 	void AddMemory(std::shared_ptr<SITUATION> header, int Winner);//将当前这一局游戏添加到总记忆库文件（游戏结束时调用）
+	void ReadFileToMemory(std::shared_ptr<SITUATION> s, bool change);
 	/*
 	param[num]:需要转换的数
 	return:转换后的数
@@ -48,7 +57,7 @@ public:
 	param[change]:是否需要将数值转换
 	return:若重复，返回true；否则返回false
 	*/
-	bool Repeat(std::shared_ptr<SITUATION> sit, bool change = false);//查看是否重复 若是，返回true
+	bool Repeat(std::shared_ptr<SITUATION> sit, std::shared_ptr<MEMO> tempnode, bool change = false);//查看是否重复 若是，返回true
 	/*
 	param[value]:需要解压的数
 	return:返回列的链表

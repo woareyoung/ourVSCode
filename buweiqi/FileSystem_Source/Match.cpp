@@ -18,12 +18,11 @@ std::shared_ptr<NEXTPACE> FileSystem::Match(SITUATION &StatusQuo, int &count, in
 			TempFile >> value[i];
 			if (situa.Line[i] != value[i])//只要有一个数据不相同，则匹配下一条记录
 			{
-				for (; i < 10; ++i) TempFile >> value[0];
+				for (; i < 11; ++i) TempFile >> value[0];
 				break;
 			}
 			else if (i == 9)
 			{
-				count++;
 				if (np == nullptr)
 				{
 					temp = std::shared_ptr<NEXTPACE>(new NEXTPACE);
@@ -37,6 +36,7 @@ std::shared_ptr<NEXTPACE> FileSystem::Match(SITUATION &StatusQuo, int &count, in
 					temp->next = nullptr;
 				}
 				TempFile >> temp->site;
+				TempFile >> count;
 			}
 		}
 	}
@@ -65,7 +65,6 @@ std::shared_ptr<NEXTPACE> FileSystem::GenerMatch(SITUATION &StatusQuo, int &coun
 			//包含当前盘面状况
 			if (CompareHigh(value[i] / 10000, StatusQuo.Line[i] / 10000, tempHead, tempRear, needptr) && CompareLow(value[i] % 10000, StatusQuo.Line[i] % 10000))
 			{
-				if (i == 9) count++;
 				for (tempRear = tempHead; needptr = true; tempRear = tempRear->next)
 				{
 					tempRear->site += i * 10;//把每一个值加上“行号”
@@ -79,6 +78,12 @@ std::shared_ptr<NEXTPACE> FileSystem::GenerMatch(SITUATION &StatusQuo, int &coun
 						break;
 					}
 				}
+				if (i == 9)
+				{
+					TempFile >> i >> i;
+					count += i;
+					break;
+				}
 				continue;
 			}
 			else if(needptr)
@@ -90,7 +95,12 @@ std::shared_ptr<NEXTPACE> FileSystem::GenerMatch(SITUATION &StatusQuo, int &coun
 				tempRear = tempHead;//动态尾结点
 				tempHead->next = nullptr;
 				np->site = 0;
-				for (; i < 10; i++) TempFile >> value[0];
+				for (; i < 11; i++) TempFile >> value[0];
+				break;
+			}
+			else
+			{
+				for (; i < 11; i++) TempFile >> value[0];
 				break;
 			}
 		}
