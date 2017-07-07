@@ -3,7 +3,6 @@
 void AI2::initAllArray() {
 	initAll();
 	for (int i = ChessStart; i < ChessEnd; ++i) {
-		this->goodMoves[i - 1] = { 0,0,0 };
 		for (int j = ChessStart; j < ChessEnd; ++j) {
 			cross[i][j] = NoChess;
 		}
@@ -81,17 +80,4 @@ void AI2::ScanChessBroad() {
 	}
 }
 
-int AI2::getMaxScoreNum(int judge) {
-	register int i = 0;
-	if (MovePointer == 0) {
-		return 0;
-	}
-	int temp = judge;
-	for (; i < MovePointer; ++i) {
-		if (temp != goodMoves[i].Score) {
-			break;
-		}
-	}
-	return i;
-}
 

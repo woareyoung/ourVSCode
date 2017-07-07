@@ -50,10 +50,10 @@ struct goodMove {
 	int line;
 	int column;
 	int Score;
-	bool operator < (const goodMove &A) const
-	{
-		return A.Score < Score;// 从大到小排序
-	}
+	//bool operator < (const goodMove &A) const
+	//{
+	//	return A.Score < Score;// 从大到小排序
+	//}
 };
 
 class AI2 : public AI, public AIPlayer, public DefaultChess
@@ -100,10 +100,9 @@ protected:
 	// isGo2Dead标志数组
 	bool isGo2DeadStatus[10][10];
 	// 当前好的着子点的数组集合
-	goodMove goodMoves[81];
-	int MovePointer;// 当前好的着子点的数量
-	int chessCount;
+	std::vector<goodMove> goodMoves;
 
+	int chessCount;
 
 	virtual void initPlayerRole(int onTurn) {
 		Rival = (onTurn == Black || onTurn == isAI1onTurn) ? Black : White;
@@ -130,7 +129,7 @@ protected:
 		}
 	}
 public:
-	AI2() : chessCount(0), MovePointer(0)
+	AI2() : chessCount(0)
 	{
 		initAllArray();
 	}
@@ -148,23 +147,21 @@ public:
 	void initChessScore(bool isFirst);
 	void initAllArray();
 	bool isContaint(goodMove move) {
-		for (int i = ChessInit; i < MovePointer; ++i) {
-			if (move.line == goodMoves[i].line
-				&& move.column == goodMoves[i].column
-				&& move.Score == goodMoves[i].Score) {
+		int size = goodMoves.size();
+		for (int i = ChessInit; i < size; ++i) {
+			if (move.line == goodMoves[i].line && move.column == goodMoves[i].column) {
+				goodMoves[i].Score += move.Score;
 				return true;
 			}
 		}
 		return false;
 	}
-	int getMaxScoreNum(int judge);
 
 	void Revalute();
 	virtual int maxandmin(int depth);
 	int singleLayer();
 	int DealWithScore(bool isEqual);
-	void getMaxScore(int& tempLine, int& tempColumn);
-	void getMinScore(int& tempLine, int& tempColumn);
+	void getScore(int& tempLine, int& tempColumn, bool isGetMax);
 
 	// 匹配函数
 	void startPattern();
@@ -224,12 +221,19 @@ public:
 		cross[x][y] = NoChess;
 		return true;
 	}
-	void arraySort(int& x, int& y, int& score) {
-		if (!isContaint({ x,y,score })) {
-			goodMoves[MovePointer] = { x,y,score };
-			// 排序
-			std::sort(goodMoves, goodMoves + MovePointer);
-			MovePointer++;
+	void addtoArray(int& line, int& column, int& score) {
+		goodMove gm = { line,column,score };
+		if (!isContaint(gm)) {
+			goodMoves.push_back(gm);
+		}
+	}
+	void arraySort() {
+		// 排序
+		if (goodMoves.size() >= 2) {
+			std::sort(goodMoves.begin(), goodMoves.end(),
+				[](const goodMove &v1, const goodMove &v2) -> bool {
+				return v1.Score > v2.Score;// 从大到小排序  
+			});
 		}
 	}
 

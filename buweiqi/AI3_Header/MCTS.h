@@ -332,7 +332,7 @@ namespace MCTS
 			while (state->has_moves()) {
 				state->do_random_move(&random_engine);
 			}
-
+			
 			// 我们已经到达了树的根结点了，这个时候我们递归回根结点，
 			// 为下一次循环的UTC加分做准备
 			while (node != nullptr) {
@@ -382,9 +382,6 @@ namespace MCTS
 		// 搜集结果
 		vector<unique_ptr<Node<State>>> roots;
 		for (int t = 0; t < options.number_of_threads; ++t) {
-			/*while (root_futures[t].wait_for(
-					std::chrono::milliseconds(100)) != std::future_status::ready);*/
-			// get等待异步操作结束并返回结果
 			roots.push_back(std::move(root_futures[t].get()));
 		}
 
@@ -417,20 +414,22 @@ namespace MCTS
 				best_score = expected_success_rate;
 			}
 
+			// 输出UCT分数
 			if (options.verbose) {
-				cerr << "MOVE: " << itr.first
-					<< " (" << setw(2) << right << int(100.0 * v / double(games_played) + 0.5) << "% visits)"
-					<< " (" << setw(2) << right << int(100.0 * w / v + 0.5) << "% wins)" << endl;
+				_cprintf("MOVE: %d  (%d %%visits) (%d %%wins) \n", itr.first, 
+					int(100.0 * v / double(games_played) + 0.5), 
+					int(100.0 * w / v + 0.5));
 			}
 		}
 
+		// 输出最优的UCT分数
 		if (options.verbose) {
 			auto best_wins = wins[best_move];
 			auto best_visits = visits[best_move];
-			cerr << "----" << endl;
-			cerr << "Best: " << best_move
-				<< " (" << 100.0 * best_visits / double(games_played) << "% visits)"
-				<< " (" << 100.0 * best_wins / best_visits << "% wins)" << endl;
+			_cprintf("---- \n Best: %d  (%d  visits) (%d  wins) \n",
+				best_move, 
+				int(100.0 * best_visits / double(games_played)), 
+				int(100.0 * best_wins / best_visits));
 		}
 
 		return best_move;

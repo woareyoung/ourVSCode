@@ -8,6 +8,7 @@
 #include <tuple>
 #include <set>
 #include <iostream>
+#include <cstdlib>
 #include "MCTS.h"
 
 class AI3 : public AI2
@@ -23,6 +24,7 @@ public:
 	int predict() {
 		MCTS::ComputeOptions options;
 		options.number_of_threads = 1;
+		options.verbose = true;
 		// options.max_time = 1;
 		auto state_copy = new SimulatorGo(cross, chessScore, PlayerId);
 		auto best_move = MCTS::compute_move(state_copy, options);
@@ -76,13 +78,17 @@ public:
 
 		static int ij_to_ind(int i, int j)
 		{
-			return i >= ChessStart && j >= ChessStart && i < ChessEnd && j < ChessEnd ? 100 * i + j : 0;
+			return i >= ChessStart && j >= ChessStart
+				&& i < ChessEnd && j < ChessEnd
+				? 100 * i + j : 0;
 		}
 
 
 		static std::pair<int, int> ind_to_ij(int ind)
 		{
-			return ind <= 0 && ind > 990 ? std::make_pair(0, 0) : std::make_pair(ind / 100, ind % 100);
+			return ind <= 0 && ind > 990
+				? std::make_pair(0, 0)
+				: std::make_pair(ind / 100, ind % 100);
 		}
 
 		// 计算hash值
@@ -127,10 +133,7 @@ public:
 			// 这里表示模拟没有结束，这时我们需要判断是否已经输赢论定了
 			int i, j/*, Win*/;
 			std::tie(i, j) = ind_to_ij(move);// 元组
-											 /*if (chessInfo.WinOrLose(i, j, Win, player_to_move, cross)) {
-											 return;
-											 }*/
-											 // 如果没有输赢未论定的话，就继续模拟
+			// 如果没有输赢未论定的话，就继续模拟
 			cross[i][j] = player_to_move;
 
 			// 轮到下一个玩家着子
@@ -146,9 +149,9 @@ public:
 		// 从棋盘中搜集所有可行的着子点
 		virtual std::vector<int> get_moves() const
 		{
+			initSimulation();
 			// 调用Pattern对当前局面进行处理，将所有可能的着子点加入到moves数组
 			const_cast<SimulatorGo*>(this)->Revalute();
-			initSimulation();
 			// 下面是搜集所有可能的着子点。
 			std::vector<int> moves;
 			// 如果深度大于1000层的话就，直接诶返回moves了。

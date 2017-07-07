@@ -20,7 +20,7 @@ int FileSystem::DigitalChange(int num)
 bool FileSystem::Repeat(std::shared_ptr<SITUATION> sit, std::shared_ptr<MEMO> tempnode, bool change)
 {
 	int i;
-	int temp;//临时变量
+	// int temp;//临时变量
 	TempFile.seekg(0);
 	//存到临时变量中
 	for (i = 1; i < 10; ++i)

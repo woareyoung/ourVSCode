@@ -35,6 +35,9 @@ int AI2::maxandmin(int depth)
 */
 int AI2::singleLayer()
 {
+	if (!goodMoves.empty()) {
+		std::vector<goodMove>().swap(goodMoves);
+	}
 	Revalute();
 	return DealWithScore(turn2Who == PlayerId);
 }
@@ -46,12 +49,7 @@ int AI2::DealWithScore(bool isEqual) {
 	匹配成功
 	*************************************************/
 	this->chessCount++;
-	if (isEqual) {
-		getMaxScore(tempLine, tempColumn);// 获取最大值
-	}
-	else {
-		getMinScore(tempLine, tempColumn);// 获取最小值
-	}
+	this->getScore(tempLine, tempColumn, isEqual);// 获取最大值
 	if (tempLine != 0 && tempColumn != 0) {
 		goto Find;
 	}
@@ -63,8 +61,33 @@ Find:
 	return tempLine * 100 + tempColumn;
 }
 
-void AI2::getMaxScore(int& tempLine, int& tempColumn)
+void AI2::getScore(int& tempLine, int& tempColumn, bool isGetMax)
 {
+//	if (goodMoves.size() >= 1) {
+//		this->arraySort();
+//	}
+//	else {
+//		goto other;
+//	}
+//	goodMove gm = isGetMax ? goodMoves.front() : goodMoves.back();
+//	int size = goodMoves.size();
+//	int maxsize = 0;
+//
+//	int i;
+//	for (i = 0; i < size; ++i) {
+//		if (goodMoves[i].Score == gm.Score) {
+//			++maxsize;
+//		}
+//	}
+//	i = isGetMax ? 0 : size - maxsize;
+//	int range = isGetMax ? maxsize : size;
+//	for (; i < range; ++i)
+//	{
+//		tempLine = goodMoves[i].line;
+//		tempColumn = goodMoves[i].column;
+//		return;
+//	}
+//other:
 	bool isFirst = true;
 	for (int i = 1; i < 10; ++i)
 	{
@@ -72,43 +95,27 @@ void AI2::getMaxScore(int& tempLine, int& tempColumn)
 		{
 			// 这里需要修改
 			if (chessScore[i][j] == minLimit || cross[i][j] != NoChess) continue;
-			if (isGo2Dead(i, j, turn2Who)) continue;
+			if (chessScore[i][j] != 0 && isGo2Dead(i, j, turn2Who)) continue;
 			if (isFirst)
 			{
 				tempLine = i;
 				tempColumn = j;
 				isFirst = false;
 			}
-			else if (!isFirst && chessScore[tempLine][tempColumn] < chessScore[i][j])
+			else if (!isFirst)
 			{
-				tempLine = i;
-				tempColumn = j;
-			}
-		}
-	}
-
-}
-
-void AI2::getMinScore(int& tempLine, int& tempColumn)
-{
-	bool isFirst = true;
-	for (int i = 1; i < 10; ++i)
-	{
-		for (int j = 1; j < 10; ++j)
-		{
-			// 这里需要修改
-			if (chessScore[i][j] == minLimit || cross[i][j] != NoChess) continue;
-			if (isGo2Dead(i, j, turn2Who)) continue;
-			if (isFirst)
-			{
-				tempLine = i;
-				tempColumn = j;
-				isFirst = false;
-			}
-			else if (!isFirst && chessScore[tempLine][tempColumn] > chessScore[i][j])
-			{
-				tempLine = i;
-				tempColumn = j;
+				if (isGetMax) {
+					if (chessScore[tempLine][tempColumn] < chessScore[i][j]) {
+						tempLine = i;
+						tempColumn = j;
+					}
+				}
+				else {
+					if (chessScore[tempLine][tempColumn] > chessScore[i][j]) {
+						tempLine = i;
+						tempColumn = j;
+					}
+				}
 			}
 		}
 	}
@@ -135,14 +142,14 @@ void AI2::Revalute()
 int AI2::FindPosition() {
 	register int x = 0;
 	register int y = 0;
-	register int i; 
+	register int i;
 	register int j;
 	bool Notloop = false;//是否断开循环
 	//扫描棋盘，判断是否只有死棋
 	for (i = 1; i < 10; ++i)
 	{
 		for (j = 1; j < 10; ++j)
-		{	
+		{
 			//如果不是空位，则扫描下一个位置
 			if (cross[i][j] != NoChess) continue;
 			//如果不是死棋，意味着棋局还没结束，则终止循环
@@ -161,7 +168,7 @@ int AI2::FindPosition() {
 		if (Notloop) break;
 	}
 	//如果棋盘上只剩下死棋，则返回一个空位
-	if(i == 10 && j == 10)
+	if (i == 10 && j == 10)
 	{
 		return x * 100 + y;
 	}
