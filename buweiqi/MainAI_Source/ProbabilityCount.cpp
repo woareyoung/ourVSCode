@@ -12,8 +12,6 @@ double AI::ProbabilityCount(int site)
 	int column = site % 10;
 	int winCount = 0;
 	int loseCount = 0;
-//	int temp;
-//	int wintemp;
 	bool wait = true;
 	///模拟数据
 	cross[line][column] = PlayerId;//模拟下棋
@@ -30,7 +28,7 @@ double AI::ProbabilityCount(int site)
 	});
 	tmp2 = FS.GenerMatch(TempData, winCount, CurrentRound + 2, false);
 	while (wait) {}//等待线程执行完毕
-	if (winCount == 0 && loseCount == 0) probability = -1;
+	if (winCount == 0 && loseCount == 0) probability = 0.000001;
 	else probability = winCount / ((double)winCount + (double)loseCount);//计算胜利频率
 	///恢复数据
 	cross[line][column] = 0;

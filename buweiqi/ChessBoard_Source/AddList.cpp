@@ -11,6 +11,7 @@ void ChessBoard::AddSituationList()
 		TempTail = std::shared_ptr<SITUATION>(new SITUATION);
 		TempTail->next = nullptr;
 		TempTail->prior = nullptr;
+		TempTail->fourPtr = nullptr;
 		SituaHead = TempTail;
 	}
 	else
@@ -20,9 +21,14 @@ void ChessBoard::AddSituationList()
 		s->prior = TempTail;
 		TempTail = s;
 		TempTail->next = nullptr;
+		TempTail->fourPtr = nullptr;
 	}
 	TempTail->Line[0] = line * 10 + column;//记录本次走棋位置
-
+	if (CurrentRoundNumber > 4 && CurrentRoundNumber % 5 == 0)
+	{
+		TempTail->prior->prior->prior->prior->fourPtr = TempTail;
+	}
+	CurrentRoundNumber++;
 	int maxQuadrant = Qua.GetMaxQuadrant();//获取最多棋子的象限
 	int i, j;
 	int nnn;

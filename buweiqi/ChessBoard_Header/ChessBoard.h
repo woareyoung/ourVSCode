@@ -42,6 +42,7 @@ public:
 	POINT point;//用于保存鼠标位置
 	int onTurn;//轮到谁
 	int CombatNumber;
+	int CurrentRoundNumber;
 
 	AI *Player1AI;
 	AI *Player2AI;
