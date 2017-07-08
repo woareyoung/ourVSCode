@@ -163,7 +163,8 @@ int AI1::GetNextPace(std::shared_ptr<NEXTPACE> np)
 	std::shared_ptr<NEXTPACE> temp = np;
 	while(temp != nullptr)
 	{
-		if (cross[temp->site / 10][temp->site % 10] == 0)
+		if(temp->site == 0) {}
+		else if (cross[temp->site / 10][temp->site % 10] == 0)
 		{
 			tmp = ProbabilityCount(temp->site);
 			if (tmp > MaxPro)

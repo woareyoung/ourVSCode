@@ -66,6 +66,7 @@ ChessBoard::ChessBoard()
 ///初始化棋盘状态数组
 void ChessBoard::Init_cross()
 {
+	CurrentRoundNumber = 0;
 	int i, j;
 	for (i = 0; i < 10; ++i) {
 		for (j = 0; j < 10; ++j) {

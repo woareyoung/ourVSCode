@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include <iostream>
+#include <future>
 #include "../ChessBoard_Header/SIP.h"
 struct MEMO
 {
@@ -16,6 +17,7 @@ class FileSystem
 {
 public:
 	std::fstream TempFile;//临时文件对象
+	std::fstream FinalFile[4];//用于游戏结束时写记录进文件
 	FileName FN;//文件名结构体
 	std::shared_ptr<MEMO> mem;//头结点
 	std::shared_ptr<MEMO> tempMEM;
@@ -31,6 +33,7 @@ public:
 	*/
 	void AddMemory(std::shared_ptr<SITUATION> header, int Winner);//将当前这一局游戏添加到总记忆库文件（游戏结束时调用）
 	void ReadFileToMemory(std::shared_ptr<SITUATION> s, bool change);
+	void ReadMemoryToFile(std::shared_ptr<SITUATION> header, int j, bool change, int ThreadNumber);
 	/*
 	param[num]:需要转换的数
 	return:转换后的数
