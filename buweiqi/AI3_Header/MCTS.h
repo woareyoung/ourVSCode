@@ -11,8 +11,6 @@
 //
 // 使用了根的并行化技术
 // Uses the "root parallelization" technique [1].
-#define pass (-2)
-#define no_move (-1)
 
 namespace MCTS
 {
@@ -62,6 +60,7 @@ namespace MCTS
 #include <vector>
 #include <conio.h>
 
+#define no_move (-1)
 
 // 蒙特卡洛树搜索——Monte Carlo Tree Search
 namespace MCTS
@@ -164,10 +163,6 @@ namespace MCTS
 	template<typename RandomEngine>
 	int Node<State>::get_untried_move(RandomEngine* engine) const// 从没有遍历过的子节点中获取一个结点作为子树展开的结点
 	{
-		if (moves.empty()) {
-			showInfoOnDOS("error,get_untried_move -> moves vector is empty!");
-			return pass;
-		}
 		// 给定[0, move.size() - 1]范围初始化分布类
 		std::uniform_int_distribution<std::size_t> moves_distribution(0, moves.size() - 1);
 		return moves[moves_distribution(*engine)];
@@ -227,9 +222,6 @@ namespace MCTS
 		auto itr = moves.begin();
 		// 重新修改着子点数组的大小
 		for (; itr != moves.end() && *itr != move; ++itr);
-		/*if (itr != moves.end()) {
-			showInfoOnDOS("this move is not end!");
-		}*/
 		moves.erase(itr);// 从moves数组中删除move元素
 		return node;
 	}
@@ -332,15 +324,17 @@ namespace MCTS
 			while (state->has_moves()) {
 				state->do_random_move(&random_engine);
 			}
-			
+
 			// 我们已经到达了树的根结点了，这个时候我们递归回根结点，
 			// 为下一次循环的UTC加分做准备
 			while (node != nullptr) {
-				node->update(state->get_result(node->player_to_move));
+				node->update(state->get_result(node->player_to_move));// 这里只看输赢就好了
 				node = node->parent;
 			}
-
 		}
+		auto node = root.get();
+		_cprintf("*******compute tree:*******\n %s\n", node->tree_to_string().c_str());
+		// system("pause");
 
 		return root;
 	}
@@ -362,7 +356,7 @@ namespace MCTS
 		if (moves.size() <= 0) {
 			showInfoOnDOS("moves.size() is zero");
 		}
-		if (moves.size() == 1){ 
+		if (moves.size() == 1) {
 			return moves[0];
 		}
 
@@ -416,8 +410,8 @@ namespace MCTS
 
 			// 输出UCT分数
 			if (options.verbose) {
-				_cprintf("MOVE: %d  (%d %%visits) (%d %%wins) \n", itr.first, 
-					int(100.0 * v / double(games_played) + 0.5), 
+				_cprintf("MOVE: %d  (%d %%visits) (%d %%wins) \n", itr.first,
+					int(100.0 * v / double(games_played) + 0.5),
 					int(100.0 * w / v + 0.5));
 			}
 		}
@@ -427,8 +421,8 @@ namespace MCTS
 			auto best_wins = wins[best_move];
 			auto best_visits = visits[best_move];
 			_cprintf("---- \n Best: %d  (%d  visits) (%d  wins) \n",
-				best_move, 
-				int(100.0 * best_visits / double(games_played)), 
+				best_move,
+				int(100.0 * best_visits / double(games_played)),
 				int(100.0 * best_wins / best_visits));
 		}
 

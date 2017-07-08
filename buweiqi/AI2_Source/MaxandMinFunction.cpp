@@ -35,9 +35,9 @@ int AI2::maxandmin(int depth)
 */
 int AI2::singleLayer()
 {
-	if (!goodMoves.empty()) {
+	/*if (!goodMoves.empty()) {
 		std::vector<goodMove>().swap(goodMoves);
-	}
+	}*/
 	Revalute();
 	return DealWithScore(turn2Who == PlayerId);
 }

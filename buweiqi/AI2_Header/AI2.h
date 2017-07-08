@@ -32,8 +32,9 @@
 
 #define getRival(onTurn) (onTurn == White ? Black : White)
 
-#define getLine(temp) (temp / 100)
-#define getColumn(temp) (temp % 100)
+#define getLine(temp) ( (temp) <= 0 || (temp) > 990 ? 0 : (temp / 100))
+#define getColumn(temp) ( (temp) <= 0 || (temp) > 990 ? 0 : (temp % 100))
+#define getMove(line, column) (OnChessBoard(line, column) ? (line * 100 + column) : 0)
 
 typedef struct tagDIRECTION
 {
@@ -166,7 +167,7 @@ public:
 	// 匹配函数
 	void startPattern();
 	void Pattern(int *PatternType);
-	virtual bool checkEmptyPos(int& x, int& y, int& start, int& mainColor, Pos emptyPos[]) {
+	bool checkEmptyPos(int& x, int& y, int& start, int& mainColor, Pos emptyPos[]) {
 		/******************************************
 		判断当前匹配到的空位是否是敌方的自杀点，
 		如果是的话，就把该点的分数设置为0，跳过匹配模式
