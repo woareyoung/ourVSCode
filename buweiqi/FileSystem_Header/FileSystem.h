@@ -17,7 +17,7 @@ class FileSystem
 {
 public:
 	std::fstream TempFile;//临时文件对象
-	std::fstream FinalFile[4];//用于游戏结束时写记录进文件
+	std::fstream FinalFile[4];//用于游戏结束时写记录进文件的文件对象
 	FileName FN;//文件名结构体
 	std::shared_ptr<MEMO> mem;//头结点
 	std::shared_ptr<MEMO> tempMEM;
@@ -32,8 +32,18 @@ public:
 	param[Winner]:胜利者
 	*/
 	void AddMemory(std::shared_ptr<SITUATION> header, int Winner);//将当前这一局游戏添加到总记忆库文件（游戏结束时调用）
-	void ReadFileToMemory(std::shared_ptr<SITUATION> s, bool change);
-	void ReadMemoryToFile(std::shared_ptr<SITUATION> header, int j, bool change, int ThreadNumber);
+	/*
+	param[s]:对局记录链表的头结点
+	param[change]:是否需要进行高低位转换
+	*/
+	void DistributeThread(std::shared_ptr<SITUATION> header, bool change);//创建多线程并分配工作
+	/*
+	param[header]:对局记录链表中的结点
+	param[j]:回合数
+	param[change]:是否需要进行高低位转换
+	param[ThreadNumber]:线程编号
+	*/
+	void ReadMemoryToFile(std::shared_ptr<SITUATION> s, int j, bool change, int ThreadNumber);//修改文件中的内容
 	/*
 	param[num]:需要转换的数
 	return:转换后的数
