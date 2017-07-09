@@ -91,17 +91,12 @@ public:
 		depth++;
 		// 对方的结点
 		int rival = getRival(player_to_move);
-		if (move == no_move) {
-			Winner = rival;
-			return;
-		}
 		// 这里表示模拟没有结束，这时我们需要判断是否已经输赢论定了
 		int line, column;
 		line = getLine(move);
 		column = getColumn(move);
 
-		chessInfo.WinOrLose(line, column, player_to_move, Winner, cross);
-		if (Winner == Black || Winner == White) {
+		if (chessScore[line][column] == minLimit) {
 			return;
 		}
 

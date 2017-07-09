@@ -43,18 +43,33 @@ void FileSystem::ReadFileToMemory(std::shared_ptr<SITUATION> header, bool change
 	s[3] = s[2]->next;
 	int j[4];
 	bool wait[3] = { true };
-	for(int i = 0; i < 3; i++)
+	std::async(std::launch::async, [&]()
 	{
-		std::async(std::launch::async, [&]()
+		for (j[0] = 1; s[0] != nullptr; j[0] = j[0] + 4)
 		{
-			for (j[i] = i + 1; s[i] != nullptr; j[i] = j[i] + 4)
-			{
-				ReadMemoryToFile(s[i], j[0], change, i);
-				s[i] = s[i]->fourPtr;
-			}
-			wait[0] = false;
-		});
-	}
+			ReadMemoryToFile(s[0], j[0], change, 0);
+			s[0] = s[0]->fourPtr;
+		}
+		wait[0] = false;
+	});
+	std::async(std::launch::async, [&]()
+	{
+		for (j[1] = 2; s[1] != nullptr; j[1] = j[1] + 4)
+		{
+			ReadMemoryToFile(s[1], j[1], change, 1);
+			s[1] = s[1]->fourPtr;
+		}
+		wait[1] = false;
+	});
+	std::async(std::launch::async, [&]()
+	{
+		for (j[2] = 3; s[2] != nullptr; j[2] = j[2] + 4)
+		{
+			ReadMemoryToFile(s[2], j[2], change, 2);
+			s[2] = s[2]->fourPtr;
+		}
+		wait[2] = false;
+	});
 	for (j[3] = 4; s[3] != nullptr; j[3] = j[3] + 4)
 	{
 		ReadMemoryToFile(s[3], j[3], change, 3);
@@ -68,11 +83,12 @@ void FileSystem::ReadMemoryToFile(std::shared_ptr<SITUATION> s, int j, bool chan
 	std::string name;
 	bool rep = false;//标记是否已经查出是重复的
 	bool comp = true;//标记是否需要比较是否重复
-	bool need = true;
+	bool need = true;//标记是否需要写进文件
 	int i;
 	name = FN.ForeName + std::to_string(j) + FN.TXT;
 	OpenFile(name, FinalFile[ThreadNumber]);
 	FinalFile[ThreadNumber].seekg(0);
+	///将文件中的内容读到内存中
 	while (!FinalFile[ThreadNumber].eof())
 	{
 		if (mem == nullptr)
@@ -91,64 +107,39 @@ void FileSystem::ReadMemoryToFile(std::shared_ptr<SITUATION> s, int j, bool chan
 		}
 		for (i = 1; i < 10; i++) FinalFile[ThreadNumber] >> tempMEM->value[i];
 		FinalFile[ThreadNumber] >> tempMEM->value[0] >> tempMEM->count;
+		//如果已经检查出是重复的，那么就不用检查了
 		if (comp)
 		{
-			rep = Repeat(s, tempMEM, change);
-			comp = false;
+			rep = Repeat(s, tempMEM, change);//比较是否重复
+			if(rep) comp = false;
 		}
 		//如果当前盘面已重复，则把次数加1
-		if (need)
+		if (need && rep)
 		{
-			if (rep)
-			{
-				tempMEM->count++;
-				rep = false;
-			}
-			else
-			{
-				tempMEM->next = std::shared_ptr<MEMO>(new MEMO);
-				tempMEM->next->prior = tempMEM;
-				tempMEM = tempMEM->next;
-				tempMEM->next = nullptr;
-				for (i = 0; i < 10; i++) tempMEM->value[i] = s->Line[i];
-				tempMEM->count = 1;
-			}
+			tempMEM->count++;
+			need = false;
 		}
 	}
 	FinalFile[ThreadNumber].close();
+	//↓↓↓↓↓↓由于C++文件流读取，最后一组数据会读两遍，所以要删除一组↓↓↓↓↓↓//
+	ttt = tempMEM;
+	tempMEM = tempMEM->prior;
+	ttt = nullptr;
+	tempMEM->next = nullptr;
+	//↑↑↑↑↑↑↑由于C++文件流读取，最后一组数据会读两遍，所以要删除一组↑↑↑↑↑↑//
+	//如果当前盘面是记录中没有出现过的
+	if (!rep)
+	{
+		tempMEM->next = std::shared_ptr<MEMO>(new MEMO);
+		tempMEM->next->prior = tempMEM;
+		tempMEM = tempMEM->next;
+		tempMEM->next = nullptr;
+		for (i = 0; i < 10; i++) tempMEM->value[i] = s->Line[i];
+		tempMEM->count = 1;
+	}
 	///---------------把修改后的内容重新写进文件-------------------//
 	FinalFile[ThreadNumber].open(name, std::ios::out);
-	//↓↓↓↓↓↓由于C++文件流读取，最后一组数据会读两遍，所以要删除一组↓↓↓↓↓↓//
-	bool repeat = true;
-	ttt = tempMEM->prior;
-	for (i = 0; i < 10; i++)
-	{
-		if (tempMEM->value[i] != ttt->value[i])
-		{
-			repeat = false;
-			break;
-		}
-	}
-	if (!repeat)
-	{
-		ttt = ttt->prior;
-		repeat = true;
-		for (i = 0; i < 10; i++)
-		{
-			if (tempMEM->value[i] != ttt->value[i])
-			{
-				repeat = false;
-				break;
-			}
-		}
-	}
-	if (repeat)
-	{
-		ttt = tempMEM->prior;
-		tempMEM = nullptr;
-		ttt->next = nullptr;
-	}
-	//↑↑↑↑↑↑↑由于C++文件流读取，最后一组数据会读两遍，所以要删除一组↑↑↑↑↑↑//
+	
 	//↓↓↓↓↓↓把修改后的内容写进文件↓↓↓↓↓↓//
 	for (tempMEM = mem; tempMEM != nullptr; mem = tempMEM, tempMEM = tempMEM->next, mem = nullptr)
 	{
