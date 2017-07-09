@@ -47,15 +47,15 @@ struct Pos {
 	int column;
 };
 
-struct goodMove {
-	int line;
-	int column;
-	int Score;
-	//bool operator < (const goodMove &A) const
-	//{
-	//	return A.Score < Score;// 从大到小排序
-	//}
-};
+//struct goodMove {
+//	int line;
+//	int column;
+//	int Score;
+//	//bool operator < (const goodMove &A) const
+//	//{
+//	//	return A.Score < Score;// 从大到小排序
+//	//}
+//};
 
 class AI2 : public AI, public AIPlayer, public DefaultChess
 {
@@ -96,7 +96,7 @@ protected:
 	// isGo2Dead标志数组
 	bool isGo2DeadStatus[10][10];
 	// 当前好的着子点的数组集合
-	std::vector<goodMove> goodMoves;
+	/*std::vector<goodMove> goodMoves;*/
 
 	int chessCount;
 
@@ -147,7 +147,7 @@ public:
 	// 初始化数组
 	void initChessScore(bool isFirst);
 	void initAllArray();
-	bool isContaint(goodMove move) {
+	/*bool isContaint(goodMove move) {
 		int size = goodMoves.size();
 		for (int i = ChessInit; i < size; ++i) {
 			if (move.line == goodMoves[i].line && move.column == goodMoves[i].column) {
@@ -156,7 +156,7 @@ public:
 			}
 		}
 		return false;
-	}
+	}*/
 
 	void Revalute();
 	virtual int maxandmin(int depth);
@@ -222,21 +222,21 @@ public:
 		cross[x][y] = NoChess;
 		return true;
 	}
-	void addtoArray(int& line, int& column, int& score) {
-		goodMove gm = { line,column,score };
-		if (!isContaint(gm)) {
-			goodMoves.push_back(gm);
-		}
-	}
-	void arraySort() {
-		// 排序
-		if (goodMoves.size() >= 2) {
-			std::sort(goodMoves.begin(), goodMoves.end(),
-				[](const goodMove &v1, const goodMove &v2) -> bool {
-				return v1.Score > v2.Score;// 从大到小排序  
-			});
-		}
-	}
+	//void addtoArray(int& line, int& column, int& score) {
+	//	goodMove gm = { line,column,score };
+	//	if (!isContaint(gm)) {
+	//		goodMoves.push_back(gm);
+	//	}
+	//}
+	//void arraySort() {
+	//	// 排序
+	//	if (goodMoves.size() >= 2) {
+	//		std::sort(goodMoves.begin(), goodMoves.end(),
+	//			[](const goodMove &v1, const goodMove &v2) -> bool {
+	//			return v1.Score > v2.Score;// 从大到小排序  
+	//		});
+	//	}
+	//}
 
 	// 当没有匹配到的时候获取一个合适的位置
 	int FindPosition();

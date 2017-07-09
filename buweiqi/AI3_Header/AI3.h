@@ -90,6 +90,24 @@ public:
 		// 如果没有输赢未论定的话，就继续模拟
 		cross[line][column] = player_to_move;
 
+		_cprintf("\n**************This is chess score*******(%d, %d)***%s********\n", 
+			line, column, player_to_move == Black ? "Black" : "White");
+		for (int i = 1; i < 10; ++i)
+		{
+			for (int j = 1; j < 10; ++j)
+				if (chessScore[i][j] >= 20) {
+					_cprintf("%d\t", chessScore[i][j]);
+				}
+				else {
+					_cprintf(" \t");
+				}
+			_cprintf("\n");
+		}
+		_cprintf("**************This is chess cross*********(%d, %d)***%s******\n", 
+			line, column, player_to_move == Black ? "Black" : "White");
+		showChessBoard(cross);
+		system("pause");
+
 		// 轮到下一个玩家着子
 		player_to_move = rival;
 	}
@@ -105,6 +123,7 @@ public:
 	{
 		initSimulation();
 		// 调用Pattern对当前局面进行处理，将所有可能的着子点加入到moves数组
+		_cprintf("Player is -> %s \n", player_to_move == Black ? "Black" : "White");
 		const_cast<SimulatorGo*>(this)->Revalute();
 		// 下面是搜集所有可能的着子点。
 		std::vector<int> moves;
@@ -131,21 +150,6 @@ public:
 			}
 		}
 		// 如果执行完上述的之后没有一个着子点可以下的话，游戏结束。
-		_cprintf("\n moves` vector is : \n");
-		for (auto move : moves) {
-			_cprintf("(%d->%d).", move, chessScore[getLine(move)][getColumn(move)]);
-		}
-		_cprintf("\n");
-		_cprintf("\n**************This is chess score******************\n");
-		for (int i = 1; i < 10; ++i)
-		{
-			for (int j = 1; j < 10; ++j)
-				_cprintf("%d\t", chessScore[i][j]);
-			_cprintf("\n");
-		}
-		_cprintf("**************This is chess cross******************\n");
-		showChessBoard(cross);
-		system("pause");
 		return moves;
 	}
 
