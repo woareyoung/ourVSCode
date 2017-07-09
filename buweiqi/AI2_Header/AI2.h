@@ -60,11 +60,6 @@ struct goodMove {
 class AI2 : public AI, public AIPlayer, public DefaultChess
 {
 private:
-	// 填充数组进行变换
-	virtual int* getPatternType() {
-		return Type[turn2Who - 1];
-	}
-
 	// 匹配模式
 	static const int pattern_Total = 11;
 	// 匹配的次数
@@ -104,6 +99,11 @@ protected:
 	std::vector<goodMove> goodMoves;
 
 	int chessCount;
+
+	// 填充数组进行变换
+	virtual int* getPatternType() {
+		return Type[turn2Who - 1];
+	}
 
 	virtual void initPlayerRole(int onTurn) {
 		Rival = (onTurn == Black || onTurn == isAI1onTurn) ? Black : White;

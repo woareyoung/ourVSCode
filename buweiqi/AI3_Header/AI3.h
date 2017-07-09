@@ -2,9 +2,9 @@
 #ifndef AI3_H_INCLUDED
 #define AI3_H_INCLUDED
 
-#include <cstdlib>
 #include "../ChessBoard_Header/WinCheck.h"
 #include "../AI2_Header/AI2.h"
+#include "../ChessBoard_Header/showUnicodeInfo.h"
 #include <tuple>
 #include <set>
 #include <iostream>
@@ -14,6 +14,7 @@
 class SimulatorGo : public AI2 {
 private:
 	WinCheck::ChessInfo chessInfo;
+protected:
 	virtual int* getPatternType() override {
 		return Type[player_to_move - 1];
 	}
@@ -68,20 +69,6 @@ public:
 		auto move = moves[move_ind(*engine)];
 		// 开始走步
 		do_move(move);
-		//_cprintf("\n**************This is chess score******************\n");
-		//for (int i = 1; i < 10; ++i)
-		//{
-		//	for (int j = 1; j < 10; ++j)
-		//		_cprintf("%d\t", chessScore[i][j]);
-		//	_cprintf("\n");
-		//}
-		//_cprintf("**************This is chess cross******************\n");
-		//for (int i = 1; i < 10; ++i)
-		//{
-		//	for (int j = 1; j < 10; ++j)
-		//		_cprintf("%d\t", cross[i][j]);
-		//	_cprintf("\n");
-		//}
 	}
 
 	// 模拟着子
@@ -144,10 +131,21 @@ public:
 			}
 		}
 		// 如果执行完上述的之后没有一个着子点可以下的话，游戏结束。
-		/*_cprintf("\n moves` vector is : \n");
+		_cprintf("\n moves` vector is : \n");
 		for (auto move : moves) {
-		_cprintf("%d.", move);
-		}*/
+			_cprintf("(%d->%d).", move, chessScore[getLine(move)][getColumn(move)]);
+		}
+		_cprintf("\n");
+		_cprintf("\n**************This is chess score******************\n");
+		for (int i = 1; i < 10; ++i)
+		{
+			for (int j = 1; j < 10; ++j)
+				_cprintf("%d\t", chessScore[i][j]);
+			_cprintf("\n");
+		}
+		_cprintf("**************This is chess cross******************\n");
+		showChessBoard(cross);
+		system("pause");
 		return moves;
 	}
 
@@ -173,7 +171,7 @@ public:
 	int predict() {
 		MCTS::ComputeOptions options;
 		options.number_of_threads = 1;
-		options.verbose = true;
+		// options.verbose = true;
 		// options.max_time = 1;
 		auto state_copy = new SimulatorGo(cross, chessScore, PlayerId);
 		auto best_move = MCTS::compute_move(state_copy, options);
@@ -181,6 +179,19 @@ public:
 	}
 };
 
-
+/*_cprintf("\n**************This is chess score******************\n");
+for (int i = 1; i < 10; ++i)
+{
+for (int j = 1; j < 10; ++j)
+_cprintf("%d\t", chessScore[i][j]);
+_cprintf("\n");
+}
+_cprintf("**************This is chess cross******************\n");
+for (int i = 1; i < 10; ++i)
+{
+for (int j = 1; j < 10; ++j)
+_cprintf("%d\t", cross[i][j]);
+_cprintf("\n");
+}*/
 
 #endif // AI3_H_INCLUDED

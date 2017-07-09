@@ -33,9 +33,11 @@ namespace {
 			{
 				if (i == 0) {
 					showUnicode(j);
+					showInfo("  ");
 				}
 				else if (j == 0) {
 					showUnicode(i);
+					showInfo("  ");
 				}
 				else {
 					if (cross[i][j] != Black && cross[i][j] != White) {

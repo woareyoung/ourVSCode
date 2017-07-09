@@ -158,6 +158,7 @@
     <ClInclude Include="ChessBoard_Header\ChessBoard.h" />
     <ClInclude Include="ChessBoard_Header\Pattern.h" />
     <ClInclude Include="ChessBoard_Header\PlayerInfo.h" />
+    <ClInclude Include="ChessBoard_Header\showUnicodeInfo.h" />
     <ClInclude Include="ChessBoard_Header\SIP.h" />
     <ClInclude Include="ChessBoard_Header\WinCheck.h" />
     <ClInclude Include="ChessBoard_Header\WindowHwnd.h" />

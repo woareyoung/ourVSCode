@@ -117,6 +117,9 @@
     <ClInclude Include="ChessBoard_Header\Pattern.h">
       <Filter>Header Files\ChessBoard_Header</Filter>
     </ClInclude>
+    <ClInclude Include="ChessBoard_Header\showUnicodeInfo.h">
+      <Filter>Header Files\ChessBoard_Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="buweiqi.cpp">
