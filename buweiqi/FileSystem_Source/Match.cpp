@@ -51,6 +51,8 @@ std::shared_ptr<NEXTPACE> FileSystem::GenerMatch(SITUATION &StatusQuo, int &coun
 	OpenFile(name, TempFile);
 	TempFile.seekg(0);
 	int i;
+	bool HighSimilar = false, LowSimilar = false;
+	bool wait = true;
 	for (i = 0; i < 10; i++) value[i] = 0;
 	std::shared_ptr<NEXTPACE> np = std::shared_ptr<NEXTPACE>(new NEXTPACE);//记录未下棋位置的链表的头结点
 	std::shared_ptr<NEXTPACE> tempHead = np;//动态头结点
@@ -59,11 +61,21 @@ std::shared_ptr<NEXTPACE> FileSystem::GenerMatch(SITUATION &StatusQuo, int &coun
 	np->site = 0;
 	while (!TempFile.eof())
 	{
+		HighSimilar = false;
+		LowSimilar = false;
+		wait = true;
 		for (i = 1; i < 10; i++)
 		{
 			TempFile >> value[i];
+			std::async(std::launch::async, [&]()
+			{
+				LowSimilar = CompareLow(value[i] % 10000, StatusQuo.Line[i] % 10000);
+				wait = false;
+			});
+			HighSimilar = CompareHigh(value[i] / 10000, StatusQuo.Line[i] / 10000, tempHead, tempRear, needptr);
+			while (wait) {}
 			//包含当前盘面状况
-			if (CompareHigh(value[i] / 10000, StatusQuo.Line[i] / 10000, tempHead, tempRear, needptr) && CompareLow(value[i] % 10000, StatusQuo.Line[i] % 10000))
+			if (HighSimilar && LowSimilar)
 			{
 				for (tempRear = tempHead; needptr = true; tempRear = tempRear->next)
 				{
@@ -95,14 +107,9 @@ std::shared_ptr<NEXTPACE> FileSystem::GenerMatch(SITUATION &StatusQuo, int &coun
 				tempRear = tempHead;//动态尾结点
 				tempHead->next = nullptr;
 				np->site = 0;
-				for (; i < 11; i++) TempFile >> value[0];
-				break;
 			}
-			else
-			{
-				for (; i < 11; i++) TempFile >> value[0];
-				break;
-			}
+			for (; i < 11; i++) TempFile >> value[0];
+			break;
 		}
 	}
 	TempFile.close();
