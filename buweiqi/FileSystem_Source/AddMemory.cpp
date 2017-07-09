@@ -4,8 +4,8 @@
 void FileSystem::AddMemory(std::shared_ptr<SITUATION> header, int Winner)
 {
 	mem = nullptr;
-	if (Winner == 1) ReadFileToMemory(header, false);
-	else ReadFileToMemory(header, true);
+	if (Winner == 1) DistributeThread(header, false);
+	else DistributeThread(header, true);
 }
 ///对数值进行高位与低位部分的交换
 int FileSystem::DigitalChange(int num)
@@ -34,53 +34,51 @@ bool FileSystem::Repeat(std::shared_ptr<SITUATION> sit, std::shared_ptr<MEMO> te
 	}
 	return true;
 }
-void FileSystem::ReadFileToMemory(std::shared_ptr<SITUATION> header, bool change)
+void FileSystem::DistributeThread(std::shared_ptr<SITUATION> header, bool change)
 {
 	std::shared_ptr<SITUATION> s[4];
 	s[0] = header;
 	s[1] = s[0]->next;
 	s[2] = s[1]->next;
 	s[3] = s[2]->next;
-	int j[4];
-	bool wait[3] = { true };
+	bool wait[3] = { true };//标记各线程是否已经执行完毕
 	std::async(std::launch::async, [&]()
 	{
-		for (j[0] = 1; s[0] != nullptr; j[0] = j[0] + 4)
+		for (int j = 1; s[0] != nullptr; j = j + 4)
 		{
-			ReadMemoryToFile(s[0], j[0], change, 0);
+			ReadMemoryToFile(s[0], j, change, 0);
 			s[0] = s[0]->fourPtr;
 		}
 		wait[0] = false;
 	});
 	std::async(std::launch::async, [&]()
 	{
-		for (j[1] = 2; s[1] != nullptr; j[1] = j[1] + 4)
+		for (int j = 2; s[1] != nullptr; j = j + 4)
 		{
-			ReadMemoryToFile(s[1], j[1], change, 1);
+			ReadMemoryToFile(s[1], j, change, 1);
 			s[1] = s[1]->fourPtr;
 		}
 		wait[1] = false;
 	});
 	std::async(std::launch::async, [&]()
 	{
-		for (j[2] = 3; s[2] != nullptr; j[2] = j[2] + 4)
+		for (int j = 3; s[2] != nullptr; j = j + 4)
 		{
-			ReadMemoryToFile(s[2], j[2], change, 2);
+			ReadMemoryToFile(s[2], j, change, 2);
 			s[2] = s[2]->fourPtr;
 		}
 		wait[2] = false;
 	});
-	for (j[3] = 4; s[3] != nullptr; j[3] = j[3] + 4)
+	for (int j = 4; s[3] != nullptr; j = j + 4)
 	{
-		ReadMemoryToFile(s[3], j[3], change, 3);
+		ReadMemoryToFile(s[3], j, change, 3);
 		s[3] = s[3]->fourPtr;
 	}
 	while (wait[0] && wait[1] && wait[2]) {}
 }
 void FileSystem::ReadMemoryToFile(std::shared_ptr<SITUATION> s, int j, bool change, int ThreadNumber)
 {
-	std::shared_ptr<MEMO> ttt;
-	std::string name;
+	std::string name;//文件名
 	bool rep = false;//标记是否已经查出是重复的
 	bool comp = true;//标记是否需要比较是否重复
 	bool need = true;//标记是否需要写进文件
@@ -122,6 +120,7 @@ void FileSystem::ReadMemoryToFile(std::shared_ptr<SITUATION> s, int j, bool chan
 	}
 	FinalFile[ThreadNumber].close();
 	//↓↓↓↓↓↓由于C++文件流读取，最后一组数据会读两遍，所以要删除一组↓↓↓↓↓↓//
+	std::shared_ptr<MEMO> ttt;//辅助变量
 	ttt = tempMEM;
 	tempMEM = tempMEM->prior;
 	ttt = nullptr;
@@ -138,8 +137,7 @@ void FileSystem::ReadMemoryToFile(std::shared_ptr<SITUATION> s, int j, bool chan
 		tempMEM->count = 1;
 	}
 	///---------------把修改后的内容重新写进文件-------------------//
-	FinalFile[ThreadNumber].open(name, std::ios::out);
-	
+	FinalFile[ThreadNumber].open(name, std::ios::out);//清空文件内容
 	//↓↓↓↓↓↓把修改后的内容写进文件↓↓↓↓↓↓//
 	for (tempMEM = mem; tempMEM != nullptr; mem = tempMEM, tempMEM = tempMEM->next, mem = nullptr)
 	{

@@ -52,6 +52,7 @@ void AI::GetCurrentStatus(int maxQuadrant)
 {
 	int rival = 3 - PlayerId;
 	int TempSum, i, j;
+	for (i = 0; i < 10; i++) NowStatus.Line[i] = 0;
 	//如果最多棋子的是第一象限
 	if (maxQuadrant == Qua.FirstQuadrant)
 	{
