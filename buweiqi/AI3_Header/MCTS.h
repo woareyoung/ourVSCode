@@ -321,9 +321,7 @@ namespace MCTS
 			}
 
 			// Okay，选取完根结点，我们就开始跑，循环直到结束。
-			while (state->has_moves()) {
-				state->do_random_move(&random_engine);
-			}
+			while (state->do_random_move(&random_engine)) {}
 
 			// 我们已经到达了树的根结点了，这个时候我们递归回根结点，
 			// 为下一次循环的UTC加分做准备

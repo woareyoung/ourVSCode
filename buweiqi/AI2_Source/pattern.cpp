@@ -29,12 +29,17 @@ void AI2::initAll() {
 	// 看不懂的请看种子填充算法
 	DIRECTION patternBackground[] = {
 		{ -1, 0 },{ 1,0 },{ 0,-1 },{ 0,1 },
+
 		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
+
 		{ -1, 0 },{ 0, -1 },{ 0, 1 },{ 1, 0 },
+
 		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
 		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
+
 		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
 		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
+
 		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
 		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
 		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
@@ -171,6 +176,7 @@ void AI2::reverse_X_Y(DIRECTION *PatternType) {
 * @return        [无]
 */
 void AI2::startPattern() {
+	initCSPoint();
 	int *PatternType = getPatternType();
 	(this->*Reverse[1])(pattern_Background);//第一个版本 (X, Y)
 	Pattern(PatternType);
@@ -225,7 +231,7 @@ void AI2::Pattern(int *PatternType) {
 							if (cross[x + x_offset][y + y_offset] == NoChess) {
 								// 假如当前空白点的分数值为0的时候，就直接跳过
 								// 因为分数为0表示当前空白点的位置是敌方自杀点，没必要理会
-								if (chessScore[x + x_offset][y + y_offset] == 0) goto mismatch;
+								if (CS[x + x_offset][y + y_offset] == 0) goto mismatch;
 								else {
 									emptyPos[start].line = x + x_offset;
 									emptyPos[start++].column = y + y_offset;
@@ -257,7 +263,7 @@ void AI2::Pattern(int *PatternType) {
 				if (!checkStone(x, y)) {
 					goto mismatch;
 				};
-				chessScore[x][y] += score;// 这里匹配到了一个模板，这个模板的位置就是这个
+				CS[x][y] += score;// 这里匹配到了一个模板，这个模板的位置就是这个
 			mismatch:
 				;
 			}

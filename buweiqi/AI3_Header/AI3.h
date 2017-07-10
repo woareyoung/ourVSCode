@@ -14,19 +14,30 @@
 class SimulatorGo : public AI2 {
 private:
 	WinCheck::ChessInfo chessInfo;
+	mutable int chessScoreB[ChessEnd][ChessEnd];
+	mutable int chessScoreW[ChessEnd][ChessEnd];
 protected:
 	virtual int* getPatternType() override {
 		return Type[player_to_move - 1];
 	}
 public:
+	bool ifShowInfo;
+
 	mutable int Winner;
 	int player_to_move;
 	mutable int depth;
 	SimulatorGo() :
 		depth(0),
-		Winner(NoChess)
+		Winner(NoChess),
+		ifShowInfo(false)
 	{
 		initAllArray();
+		for (int i = ChessInit; i < ChessEnd; ++i) {
+			for (int j = ChessInit; j < ChessEnd; ++j) {
+				chessScoreW[i][j] = this->getDefaultChessScore(i, j);
+				chessScoreB[i][j] = chessScoreW[i][j];
+			}
+		}
 	}
 
 	SimulatorGo(
@@ -35,13 +46,22 @@ public:
 		int Id) :
 		player_to_move(Id),
 		Winner(NoChess),
-		depth(0)
+		depth(0),
+		ifShowInfo(false)
 	{
 		initAllArray();
 		for (int i = ChessInit; i < ChessEnd; ++i) {
 			for (int j = ChessInit; j < ChessEnd; ++j) {
 				cross[i][j] = b[i][j];
 				chessScore[i][j] = C[i][j];
+				if (Id == Black) {
+					chessScoreB[i][j] = C[i][j];
+					chessScoreW[i][j] = this->getDefaultChessScore(i, j);
+				}
+				else if (Id == White) {
+					chessScoreW[i][j] = C[i][j];
+					chessScoreB[i][j] = this->getDefaultChessScore(i, j);
+				}
 			}
 		}
 	}
@@ -49,18 +69,17 @@ public:
 	void initSimulation() const {
 		for (int i = ChessInit; i < ChessEnd; ++i) {
 			for (int j = ChessInit; j < ChessEnd; ++j) {
-				if (cross[i][j] == NoChess && chessScore[i][j] == minLimit) continue;
-				if (cross[i][j] == NoChess && chessScore[i][j] == 0) continue;
-				chessScore[i][j] = const_cast<SimulatorGo*>(this)->getDefaultChessScore(i, j);
+				if (cross[i][j] == NoChess && CS[i][j] == minLimit) continue;
+				if (cross[i][j] == NoChess && CS[i][j] == 0) continue;
+				CS[i][j] = const_cast<SimulatorGo*>(this)->getDefaultChessScore(i, j);
 			}
 		}
 	}
 
 	// 随机走步
 	template<typename RandomEngine>
-	void do_random_move(RandomEngine* engine)
+	void do_random_move(RandomEngine* engine, std::vector<int> moves)
 	{
-		auto moves = get_moves();// 获取可以着子的着子点集合
 		if (moves.empty()) {// 如果着子点集合为空的话，就直接返回
 			Winner = getRival(player_to_move);
 			return;
@@ -82,59 +101,95 @@ public:
 		int line, column;
 		line = getLine(move);
 		column = getColumn(move);
-
-		if (chessScore[line][column] == minLimit) {
-			return;
-		}
-
 		// 如果没有输赢未论定的话，就继续模拟
 		cross[line][column] = player_to_move;
 
-		_cprintf("\n**************This is chess score*******(%d, %d)***%s********\n", 
-			line, column, player_to_move == Black ? "Black" : "White");
-		for (int i = 1; i < 10; ++i)
-		{
-			for (int j = 1; j < 10; ++j)
-				if (chessScore[i][j] >= 20) {
-					_cprintf("%d\t", chessScore[i][j]);
-				}
-				else {
-					_cprintf(" \t");
-				}
-			_cprintf("\n");
+
+		if (ifShowInfo) {
+			_cprintf("\n**************This is chess score*******(%d, %d)***%s********\n",
+				line, column, player_to_move == Black ? "Black" : "White");
+			for (int i = 1; i < 10; ++i)
+			{
+				for (int j = 1; j < 10; ++j)
+					if (CS[i][j] >= 20) {
+						_cprintf("%d\t", CS[i][j]);
+					}
+					else if (CS[i][j] == minLimit) {
+						_cprintf("M\t");
+					}
+					else if (CS[i][j] == 0) {
+						_cprintf("0\t");
+					}
+					else {
+						_cprintf(" \t");
+					}
+					_cprintf("\n");
+			}
+			_cprintf("**************This is chess cross*********(%d, %d)***%s******\n",
+				line, column, player_to_move == Black ? "Black" : "White");
+			showChessBoard(cross);
+			// system("pause");
 		}
-		_cprintf("**************This is chess cross*********(%d, %d)***%s******\n", 
-			line, column, player_to_move == Black ? "Black" : "White");
-		showChessBoard(cross);
-		system("pause");
 
 		// 轮到下一个玩家着子
 		player_to_move = rival;
 	}
 
 	// 是否还有可着子的着子点
-	virtual bool has_moves() const
+	template<typename RandomEngine>
+	bool do_random_move(RandomEngine* engine)
 	{
-		return !get_moves().empty();
+		auto moves = get_moves();
+		if (!moves.empty()) {
+			do_random_move(engine, moves);
+			return true;
+		}
+		return false;
+	}
+
+	virtual void initCSPoint() override {
+		if (player_to_move == Black) {
+			CS = chessScoreB;
+		}
+		else if (player_to_move == White) {
+			CS = chessScoreW;
+		}
+		else {
+			CS = chessScore;// 这里目测不会用到的
+		}
 	}
 
 	// 从棋盘中搜集所有可行的着子点
 	virtual std::vector<int> get_moves() const
 	{
-		initSimulation();
-		// 调用Pattern对当前局面进行处理，将所有可能的着子点加入到moves数组
-		_cprintf("Player is -> %s \n", player_to_move == Black ? "Black" : "White");
-		const_cast<SimulatorGo*>(this)->Revalute();
 		// 下面是搜集所有可能的着子点。
 		std::vector<int> moves;
-		// 如果深度大于1000层的话就，直接诶返回moves了。
-		if (depth > 1000) {
+
+		// 如果深度大于888层的话就，直接诶返回moves了。
+		if (depth > 888) {
 			return moves;
 		}
+
+		if (Winner == Black && Winner == White) {
+			if (ifShowInfo) {
+				system("pause");
+				_cprintf("Winner is %s", Winner == Black ? "Black" : "White");
+			}
+			return moves;
+		}
+		if (ifShowInfo) {
+			// 调用Pattern对当前局面进行处理，将所有可能的着子点加入到moves数组
+			_cprintf("Player is -> %s \n", player_to_move == Black ? "Black" : "White");
+		}
+
+		const_cast<SimulatorGo*>(this)->initCSPoint();
+		initSimulation();
+		const_cast<SimulatorGo*>(this)->Revalute();
+
 		// 从当前棋盘中选择出由Pattern匹配出来的比较好的着子点集合
 		for (int i = ChessStart; i < ChessEnd; ++i) {
 			for (int j = ChessStart; j < ChessEnd; ++j) {
-				if (cross[i][j] == NoChess && chessScore[i][j] >= 20) {
+				if (cross[i][j] == NoChess && CS[i][j] >= 10) {
 					moves.emplace_back(getMove(i, j));
 				}
 			}
@@ -143,13 +198,24 @@ public:
 		if (moves.empty()) {
 			for (int i = ChessStart; i < ChessEnd; ++i) {
 				for (int j = ChessStart; j < ChessEnd; ++j) {
-					if (cross[i][j] == NoChess && chessScore[i][j] != minLimit) {
+					if (cross[i][j] == NoChess && CS[i][j] != minLimit) {
+						cross[i][j] = player_to_move;
+						if (const_cast<SimulatorGo*>(this)->isGo2Dead(i, j, player_to_move)) {
+							CS[i][j] = minLimit;
+							cross[i][j] = NoChess;
+							continue;
+						}
+						cross[i][j] = NoChess;
 						moves.emplace_back(getMove(i, j));
 					}
 				}
 			}
 		}
+
 		// 如果执行完上述的之后没有一个着子点可以下的话，游戏结束。
+		if (ifShowInfo && moves.empty()) {
+			_cprintf("moves is null.\n");
+		}
 		return moves;
 	}
 
@@ -157,8 +223,65 @@ public:
 	double get_result(int current_player_to_move) const
 	{
 		double Score = Winner == current_player_to_move ? 0.0 : 1.0;
-		Winner = NoChess;
 		return Score;
+	}
+
+	virtual bool checkEmptyPos(int& x, int& y, int& start, int& mainColor, Pos emptyPos[]) override {
+		/******************************************
+		判断当前匹配到的空位是否是敌方的自杀点，
+		如果是的话，就把该点的分数设置为0，跳过匹配模式
+		*******************************************/
+		int rival = getRival(player_to_move);
+		for (int i = 0; i < start; ++i) {
+			if (mainColor == rival) {
+				// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
+				cross[emptyPos[i].line][emptyPos[i].column] = rival;
+				if (isGo2Dead(emptyPos[i].line, emptyPos[i].column, rival)) {
+					cross[emptyPos[i].line][emptyPos[i].column] = NoChess;
+					// 如果是敌方的自杀点的话，这里就置零   -.-！！！
+					CS[emptyPos[i].line][emptyPos[i].column] = 0;
+					return false;
+				}
+			}
+			else if (mainColor == player_to_move) {
+				// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
+				cross[x][y] = player_to_move;
+				if (isGo2Dead(x, y, player_to_move)) {
+					CS[x][y] = minLimit;
+					cross[x][y] = NoChess;
+					// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
+					return false;
+				}
+			}
+			// 这里既不是我方自杀点，也不是敌方自杀点
+			cross[emptyPos[i].line][emptyPos[i].column] = NoChess;
+		}
+		return true;
+	}
+	// 检查棋子是否有效，并对分析的结果进行相应的加分
+	virtual bool checkStone(int& x, int& y) override {
+		// 对于当前匹配到的着子点的环境进行分析
+		// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
+		int rival = getRival(player_to_move);
+		cross[x][y] = player_to_move;
+		if (isGo2Dead(x, y, player_to_move)) {
+			CS[x][y] = minLimit;
+			cross[x][y] = NoChess;
+			// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
+			return false;
+		}
+		// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
+		if (cross[x][y] == NoChess && CS[x][y] == 0) return false;
+		cross[x][y] = rival;
+		if (isGo2Dead(x, y, rival)) {
+			cross[x][y] = NoChess;
+			// 如果是敌方的自杀点的话，这里就置零   -.-！！！
+			CS[x][y] = 0;
+			return false;
+		}
+		// 这里既不是我方自杀点，也不是敌方自杀点
+		cross[x][y] = NoChess;
+		return true;
 	}
 };
 
@@ -182,20 +305,5 @@ public:
 		return best_move;
 	}
 };
-
-/*_cprintf("\n**************This is chess score******************\n");
-for (int i = 1; i < 10; ++i)
-{
-for (int j = 1; j < 10; ++j)
-_cprintf("%d\t", chessScore[i][j]);
-_cprintf("\n");
-}
-_cprintf("**************This is chess cross******************\n");
-for (int i = 1; i < 10; ++i)
-{
-for (int j = 1; j < 10; ++j)
-_cprintf("%d\t", cross[i][j]);
-_cprintf("\n");
-}*/
 
 #endif // AI3_H_INCLUDED

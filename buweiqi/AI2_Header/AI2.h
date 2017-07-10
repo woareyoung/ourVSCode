@@ -86,6 +86,12 @@ private:
 	void reverse_X(DIRECTION *PatternType);
 	void reverse_X_Y(DIRECTION *PatternType);
 protected:
+	mutable int(*CS)[10];
+	virtual void initCSPoint() {
+		if (CS == nullptr) {
+			CS = chessScore;
+		}
+	}
 	int *Type[2];
 	//记录各交叉点的值，数组访问从“1”开始，访问顺序为“先行后列”，
 	//“0”表示没有棋子，“1”表示黑子，“2”表示白子
@@ -126,11 +132,11 @@ protected:
 		}
 		if (cross[line][column] != NoChess) {
 			cross[line][column] = NoChess;
-			chessScore[line][column] = getDefaultChessScore(line, column);
+			CS[line][column] = getDefaultChessScore(line, column);
 		}
 	}
 public:
-	AI2() : chessCount(0)
+	AI2() : chessCount(0), CS(nullptr)
 	{
 		initAllArray();
 	}
@@ -167,7 +173,7 @@ public:
 	// 匹配函数
 	void startPattern();
 	void Pattern(int *PatternType);
-	bool checkEmptyPos(int& x, int& y, int& start, int& mainColor, Pos emptyPos[]) {
+	virtual bool checkEmptyPos(int& x, int& y, int& start, int& mainColor, Pos emptyPos[]) {
 		/******************************************
 		判断当前匹配到的空位是否是敌方的自杀点，
 		如果是的话，就把该点的分数设置为0，跳过匹配模式
@@ -179,7 +185,7 @@ public:
 				if (isGo2Dead(emptyPos[i].line, emptyPos[i].column, Rival)) {
 					cross[emptyPos[i].line][emptyPos[i].column] = NoChess;
 					// 如果是敌方的自杀点的话，这里就置零   -.-！！！
-					chessScore[emptyPos[i].line][emptyPos[i].column] = 0;
+					CS[emptyPos[i].line][emptyPos[i].column] = 0;
 					return false;
 				}
 			}
@@ -187,7 +193,7 @@ public:
 				// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
 				cross[x][y] = turn2Who;
 				if (isGo2Dead(x, y, turn2Who)) {
-					chessScore[x][y] = minLimit;
+					CS[x][y] = minLimit;
 					cross[x][y] = NoChess;
 					// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
 					return false;
@@ -204,18 +210,18 @@ public:
 		// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
 		cross[x][y] = turn2Who;
 		if (isGo2Dead(x, y, turn2Who)) {
-			chessScore[x][y] = minLimit;
+			CS[x][y] = minLimit;
 			cross[x][y] = NoChess;
 			// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
 			return false;
 		}
 		// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
-		if (cross[x][y] == NoChess && chessScore[x][y] == 0) return false;
+		if (cross[x][y] == NoChess && CS[x][y] == 0) return false;
 		cross[x][y] = Rival;
 		if (isGo2Dead(x, y, Rival)) {
 			cross[x][y] = NoChess;
 			// 如果是敌方的自杀点的话，这里就置零   -.-！！！
-			chessScore[x][y] = 0;
+			CS[x][y] = 0;
 			return false;
 		}
 		// 这里既不是我方自杀点，也不是敌方自杀点
