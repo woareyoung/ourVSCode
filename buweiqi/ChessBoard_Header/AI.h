@@ -25,16 +25,12 @@ public:
 		参数column：下棋的位置（列）
 		参数None：是否没有一模一样的记录
 	*/
-	std::shared_ptr<NEXTPACE> MatchMemory(int line, int column, bool& None);//匹配记忆
+	bool MatchMemory(int line, int column, std::set<int> &res);//匹配记忆
 	/*
 		参数line：下棋的位置（行）
 		参数column：下棋的位置（列）
 	*/
 	void Statistic(int line, int column);//统计棋盘各个区域的棋子数量
-	/*
-		参数head：链表的头结点
-	*/
-	void ClearList(std::shared_ptr<NEXTPACE> head);//清空链表
 	/*
 	    参数maxQuadrant：最大的棋子数
 	*/

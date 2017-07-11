@@ -5,6 +5,7 @@
 #include <memory>
 #include <iostream>
 #include <future>
+#include <set>
 #include "../ChessBoard_Header/SIP.h"
 
 #define ProThreadNumber 4//线程数
@@ -60,7 +61,7 @@ public:
 	param[isWinner]:是否以胜利方匹配
 	return:返回“下一步”链表
 	*/
-	std::shared_ptr<NEXTPACE> Match(SITUATION &StatusQuo, int &count, int round, bool isWinner = true);//匹配指定盘面状况的棋谱，返回“下一步棋子”
+	int Match(SITUATION &StatusQuo, std::set<int> &result, int round, bool isWinner);//匹配指定盘面状况的棋谱，返回“下一步棋子”
 	/*
 	param[StatusQuo]:记录当前盘面状况的结构体
 	param[count]:总共有多少个记录相符
@@ -68,7 +69,7 @@ public:
 	param[needptr]:是否需要链表（当用于计算频数的时候为false）
 	return:返回指定盘面中还没有棋子的位置
 	*/
-	std::shared_ptr<NEXTPACE> GenerMatch(SITUATION &StatusQuo, int &count, int round, bool needptr = true);//匹配含有指定盘面状况的棋谱，返回指定盘面中还没有棋子的位置
+	int GenerMatch(SITUATION &StatusQuo, std::set<int> &Parent, int round, bool needptr);//匹配含有指定盘面状况的棋谱，返回指定盘面中还没有棋子的位置
 	/*
 	param[sit]:盘面状况
 	param[change]:是否需要将数值转换
@@ -86,7 +87,7 @@ public:
 	param[head]:子集不存在的位置的链表头结点
 	param[rear]:子集不存在的位置的链表尾结点
 	*/
-	bool CompareHigh(int FileValue, int CurrentValue, std::shared_ptr<NEXTPACE> head, std::shared_ptr<NEXTPACE> rear, bool needptr = true);//比较两个数值，查看文件棋谱是否包含当前状况
+	bool CompareHigh(int FileValue, int CurrentValue, std::set<int> &stl, bool needptr = true);//比较两个数值，查看文件棋谱是否包含当前状况
 	//param[FileValue]:文件中的数值
 	//param[CurrentValue] : 当前盘面的数值
 	bool CompareLow(int FileValue, int CurrentValue);
@@ -98,7 +99,7 @@ public:
 	param[Aim]:目的链表
 	param[Source]:源链表
 	*/
-	void ConnectList(std::shared_ptr<NEXTPACE> Aim, std::shared_ptr<NEXTPACE> Source);//链表接力
+	void ConnectList(std::set<int> &Aim, std::shared_ptr<NEXTPACE> Source);//链表接力
 	/*
 	param[NowRound]：回合数
 	*/

@@ -5,6 +5,7 @@ int FileSystem::CountNumber(SITUATION &sit, bool win)
 	int Count[ProThreadNumber] = { 0 };
 	int SumCount = 0;
 	std::shared_ptr<DISKSTATUS> ttt;
+	std::set<int> NoWant;
 	if (win) ttt = ProHeadWin;
 	else ttt = ProHeadLose;
 	SITUATION SIT[ProThreadNumber] = { sit };
@@ -24,7 +25,7 @@ int FileSystem::CountNumber(SITUATION &sit, bool win)
 				//判断盘面是否相同
 				for (int n = 1; n < 10; n++)
 				{
-					if (CompareHigh(ProThread[i]->Value[n] / 10000, SIT[i].Line[n] / 10000, nullptr, nullptr, false) && CompareLow(ProThread[i]->Value[n] % 10000, SIT[i].Line[n] % 10000)) 
+					if (CompareHigh(ProThread[i]->Value[n] / 10000, SIT[i].Line[n] / 10000, NoWant, false) && CompareLow(ProThread[i]->Value[n] % 10000, SIT[i].Line[n] % 10000))
 						break;//如果有不包含的数据，则搜索下一个结点
 					else if (n == 9) Count[i] += ProThread[i]->count;
 				}
@@ -38,7 +39,7 @@ int FileSystem::CountNumber(SITUATION &sit, bool win)
 		//判断盘面是否相同
 		for (int n = 1; n < 10; n++)
 		{
-			if (CompareHigh(ProThread[0]->Value[n] / 10000, SIT[0].Line[n] / 10000, nullptr, nullptr, false) && CompareLow(ProThread[0]->Value[n] % 10000, SIT[0].Line[n] % 10000)) 
+			if (CompareHigh(ProThread[0]->Value[n] / 10000, SIT[0].Line[n] / 10000, NoWant, false) && CompareLow(ProThread[0]->Value[n] % 10000, SIT[0].Line[n] % 10000))
 				break;//如果有不相同的数据，则搜索下一个结点
 			else if (n == 9) Count[0] += ProThread[0]->count;
 		}

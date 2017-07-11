@@ -8,45 +8,23 @@ void AI::Statistic(int line, int column)
 	else if (line > 5 && column < 5) Qua.ThirdQuadrant++;
 	else if (line > 5 && column > 5) Qua.ForthQuadrant++;
 }
-std::shared_ptr<NEXTPACE> AI::MatchMemory(int line, int column, bool &None)
+bool AI::MatchMemory(int line, int column, std::set<int> &res)
 {
 	Statistic(line, column);//先统计当前局面
 	int maxQuadrant = Qua.GetMaxQuadrant();//获取最多棋子的象限
 	int i;
 	GetCurrentStatus(maxQuadrant);
-	std::shared_ptr<NEXTPACE> np = FS.Match(NowStatus, line, CurrentRound);
+	line = FS.Match(NowStatus, res, CurrentRound, true);
 	//如果有一模一样的记录，则直接跟着下
-	if (np != nullptr)
-	{
-		None = false;
-		return np;
-	}
+	if (!res.empty()) return false;
 	for (i = CurrentRound + MAX_ROUND_K; ; i = i + 2)
 	{
 		//没有一模一样的记录，则查询有没有含有当前盘面的“终盘”
-		if(i < 81) np = FS.GenerMatch(NowStatus, column, i);
-		else return nullptr;
-		if (np != nullptr)
-		{
-			None = true;
-			return np;
-		}
+		if(i < 81) column = FS.GenerMatch(NowStatus, res, i, true);
+		else return false;
+		if (!res.empty()) return true;
 	}
-	None = true;
-	//如果什么都没有
-	return nullptr;
-}
-
-void AI::ClearList(std::shared_ptr<NEXTPACE> head)
-{
-	std::shared_ptr<NEXTPACE> temp = head->next;
-	head = nullptr;
-	while (temp != nullptr)
-	{
-		head = temp;
-		temp = temp->next;
-		head = nullptr;
-	}
+	return true;
 }
 void AI::GetCurrentStatus(int maxQuadrant)
 {

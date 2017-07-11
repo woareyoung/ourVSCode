@@ -67,9 +67,10 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 	{
 		bool None;
 		int NextPace;
-		np = MatchMemory(line, column, None);//获取对局记录中符合当前盘面的对应方法
+		np.clear();
+		None = MatchMemory(line, column, np);//获取对局记录中符合当前盘面的对应方法
 		//如果对局记录中有应对的方法
-		if (np != nullptr)
+		if (!np.empty())
 		{
 			NextPace = GetNextPace(np);
 			if (NextPace > 0) abc = false;
@@ -121,14 +122,15 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		{
 			Statistic(line, column);
 			GetCurrentStatus(Qua.GetMaxQuadrant());
-			np = FS.Match(NowStatus, OT, CurrentRound + 1, false);//搜索出同样的局面输的一方的下棋位置
-			if (np == nullptr)
+			np.clear();
+			FS.Match(NowStatus, np, CurrentRound + 1, false);//搜索出同样的局面输的一方的下棋位置
+			if (np.empty())
 			{
 				BackQua(line, column);
 				break;
 			}
 			else Similar++;
-			ClearList(np);
+			np.clear();
 			if (Similar == MAX_SIMILAR)
 			{
 				Similar = 0;
@@ -149,34 +151,31 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 	CurrentNull--;
 }
 ///从链表中选取最高胜率的结点
-int AI1::GetNextPace(std::shared_ptr<NEXTPACE> np)
+int AI1::GetNextPace(std::set<int> &np)
 {
 	int BestSite = -1;
-	if (np->next == nullptr)
+	if (np.size() == 1)
 	{
-		BestSite = np->site;
-		np = nullptr;
+		std::set<int>::iterator i = np.begin();
+		BestSite = *i;
+		np.clear();
 		return BestSite;
 	}
 	FS.ReadFileToMemory(CurrentRound + 2);
 	double MaxPro = -2;
 	double tmp;
-	std::shared_ptr<NEXTPACE> temp = np;
-	while(temp != nullptr)
+	for (auto temp : np)
 	{
-		if(temp->site < 1) {}
-		else if (cross[temp->site / 10][temp->site % 10] == 0)
+		if(temp < 1) {}
+		else if (cross[temp / 10][temp % 10] == 0)
 		{
-			tmp = ProbabilityCount(temp->site);
+			tmp = ProbabilityCount(temp);
 			if (tmp > MaxPro)
 			{
 				MaxPro = tmp;
-				BestSite = temp->site;
+				BestSite = temp;
 			}
 		}
-		np = temp;
-		temp = temp->next;
-		np = nullptr;
 	}
 	FS.ClearLIST(FS.ProHeadWin);
 	FS.ClearLIST(FS.ProHeadLose);

@@ -29,11 +29,11 @@ private:
 	double Score[10][10];//记录每个位置上的分值
 	double MaxScore;//记录最大分值
 	
-	std::shared_ptr<NEXTPACE> np;//获取下一步的可能性的链表
+	std::set<int> np;//获取下一步的可能性的链表
 	/*
-		param[np]:可能下棋位置的链表
+		param[np]:可能下棋位置的set集合
 	*/
-	int GetNextPace(std::shared_ptr<NEXTPACE> np);//从链表中选取最高胜率的结点
+	int GetNextPace(std::set<int>& np);//从链表中选取最高胜率的结点
 	///各功能函数 集中在FunctionPart.cpp文件中
 	/*
 		param[row1]:行
