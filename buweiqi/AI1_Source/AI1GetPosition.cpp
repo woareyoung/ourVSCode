@@ -72,6 +72,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		if (np != nullptr)
 		{
 			NextPace = GetNextPace(np);
+			if (NextPace > 0) abc = false;
 			int maxQ = Qua.GetMaxQuadrant();
 			if (maxQ == Qua.FirstQuadrant)
 			{
@@ -94,7 +95,6 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 				column = 10 - NextPace % 10;
 			}
 			cross[line][column] = PlayerId;
-			abc = false;
 		}
 	}
 	///若是死棋位置则一直循环，直到不是死棋位置
@@ -151,19 +151,20 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 ///从链表中选取最高胜率的结点
 int AI1::GetNextPace(std::shared_ptr<NEXTPACE> np)
 {
-	int BestSite;
+	int BestSite = -1;
 	if (np->next == nullptr)
 	{
 		BestSite = np->site;
 		np = nullptr;
 		return BestSite;
 	}
+	FS.ReadFileToMemory(CurrentRound + 2);
 	double MaxPro = -2;
 	double tmp;
 	std::shared_ptr<NEXTPACE> temp = np;
 	while(temp != nullptr)
 	{
-		if(temp->site == 0) {}
+		if(temp->site < 1) {}
 		else if (cross[temp->site / 10][temp->site % 10] == 0)
 		{
 			tmp = ProbabilityCount(temp->site);
@@ -177,5 +178,7 @@ int AI1::GetNextPace(std::shared_ptr<NEXTPACE> np)
 		temp = temp->next;
 		np = nullptr;
 	}
+	FS.ClearLIST(FS.ProHeadWin);
+	FS.ClearLIST(FS.ProHeadLose);
 	return BestSite;
 }

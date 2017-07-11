@@ -78,6 +78,7 @@ void FileSystem::DistributeThread(std::shared_ptr<SITUATION> header, bool change
 }
 void FileSystem::ReadMemoryToFile(std::shared_ptr<SITUATION> s, int j, bool change, int ThreadNumber)
 {
+	std::shared_ptr<MEMO> tempMEM;
 	std::string name;//文件名
 	bool rep = false;//标记是否已经查出是重复的
 	bool comp = true;//标记是否需要比较是否重复
@@ -120,11 +121,14 @@ void FileSystem::ReadMemoryToFile(std::shared_ptr<SITUATION> s, int j, bool chan
 	}
 	FinalFile[ThreadNumber].close();
 	//↓↓↓↓↓↓由于C++文件流读取，最后一组数据会读两遍，所以要删除一组↓↓↓↓↓↓//
-	std::shared_ptr<MEMO> ttt;//辅助变量
-	ttt = tempMEM;
-	tempMEM = tempMEM->prior;
-	ttt = nullptr;
-	tempMEM->next = nullptr;
+	if (tempMEM->value[0] > 0)
+	{
+		std::shared_ptr<MEMO> ttt;//辅助变量
+		ttt = tempMEM;
+		tempMEM = tempMEM->prior;
+		ttt = nullptr;
+		tempMEM->next = nullptr;
+	}
 	//↑↑↑↑↑↑↑由于C++文件流读取，最后一组数据会读两遍，所以要删除一组↑↑↑↑↑↑//
 	//如果当前盘面是记录中没有出现过的
 	if (!rep)

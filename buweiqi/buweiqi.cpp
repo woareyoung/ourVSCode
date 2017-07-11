@@ -259,7 +259,7 @@ DWORD WINAPI TimerProc(PVOID pParam)
 		if (Now - Count > Interval)
 		{
 			Count = Now;
-			if (CB.onTurn == isPlay2onTurn || CB.onTurn == isAI2onTurn)
+			if (CB.onTurn == isPlay1onTurn || CB.onTurn == isAI1onTurn)
 			{
 				CB.AllTime1--;
 				CB.Round1--;
@@ -271,7 +271,7 @@ DWORD WINAPI TimerProc(PVOID pParam)
 				}
 				CB.PaintTimer(CB.Timer1A, CB.Timer1R, 1);
 			}
-			else if (CB.onTurn == isPlay1onTurn || CB.onTurn == isAI1onTurn)
+			else if (CB.onTurn == isPlay2onTurn || CB.onTurn == isAI2onTurn)
 			{
 				CB.AllTime2--;
 				CB.Round2--;

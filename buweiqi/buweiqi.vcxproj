@@ -193,6 +193,7 @@
     <ClCompile Include="FileSystem_Source\AddMemory.cpp" />
     <ClCompile Include="FileSystem_Source\Init.cpp" />
     <ClCompile Include="FileSystem_Source\Match.cpp" />
+    <ClCompile Include="FileSystem_Source\ReadFile.cpp" />
     <ClCompile Include="MainAI_Source\MatchMemory.cpp" />
     <ClCompile Include="MainAI_Source\ProbabilityCount.cpp" />
   </ItemGroup>
