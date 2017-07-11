@@ -172,10 +172,10 @@ namespace MCTS
 	template<typename State>
 	Node<State>* Node<State>::best_child() const
 	{
-		if (moves.empty()) {
+		if (options.verbose && moves.empty()) {
 			showInfoOnDOS("error, best_child -> moves vector is empty!");
 		}
-		if (children.empty()) {
+		if (options.verbose && children.empty()) {
 			showInfoOnDOS("error, best_child -> node`s children is none!");
 		}
 
@@ -214,8 +214,9 @@ namespace MCTS
 		// 新建新的结点，将新的结点添加到children中，并判断children数组是否为空
 		auto node = new Node(state, move, this);
 		children.push_back(node);
+
 		if (children.empty()) {
-			showInfoOnDOS("error, node`s children is empty!");
+			// shishowInfoOnDOS("error, node`s children is empty!");
 		}
 
 		// 从第一个着子点开始
@@ -288,11 +289,13 @@ namespace MCTS
 	{
 		std::mt19937_64 random_engine(initial_seed);// 随机函数种子，用于随机走步
 
-		if (options.max_iterations >= 0 || options.max_time >= 0) {
-			showInfoOnDOS("option is right~");
-		}
-		if (!(root_state->player_to_move == 1 || root_state->player_to_move == 2)) {
-			showInfoOnDOS("player_to_move is error~");
+		if (options.verbose) {
+			if (options.max_iterations >= 0 || options.max_time >= 0) {
+				showInfoOnDOS("option is right~");
+			}
+			if (!(root_state->player_to_move == 1 || root_state->player_to_move == 2)) {
+				showInfoOnDOS("player_to_move is error~");
+			}
 		}
 		// root指针管理一个Node结点对象。
 		auto root = std::unique_ptr<Node<State>>(new Node<State>(root_state));
@@ -330,9 +333,11 @@ namespace MCTS
 				node = node->parent;
 			}
 		}
-		auto node = root.get();
-		_cprintf("*******compute tree:*******\n %s\n", node->tree_to_string().c_str());
-		// system("pause");
+		if (options.verbose) {
+			auto node = root.get();
+			_cprintf("*******compute tree:*******\n %s\n", node->tree_to_string().c_str());
+			// system("pause");
+		}
 
 		return root;
 	}
@@ -351,13 +356,15 @@ namespace MCTS
 		using namespace std;
 
 		auto moves = root_state->get_moves();// 获取所有的可行走的着子点
-		if (moves.size() <= 0) {
-			showInfoOnDOS("moves.size() is zero");
+		if (options.verbose) {
+			if (moves.size() <= 0) {
+				showInfoOnDOS("moves.size() is zero");
+			}
+			if (moves.size() == 1) {
+				return moves[0];
+			}
 		}
-		if (moves.size() == 1) {
-			return moves[0];
-		}
-
+	
 		// 分发所有的任务去计算树——这里采用的是异步线程的方式来处理树
 		vector<future<unique_ptr<Node<State>>>> root_futures;
 		ComputeOptions job_options = options;

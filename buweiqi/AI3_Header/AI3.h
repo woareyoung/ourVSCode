@@ -14,7 +14,6 @@
 class SimulatorGo : public AI2 {
 private:
 	WinCheck::ChessInfo chessInfo;
-	mutable int chessScoreB[ChessEnd][ChessEnd];
 	mutable int chessScoreW[ChessEnd][ChessEnd];
 protected:
 	virtual int* getPatternType() override {
@@ -35,14 +34,13 @@ public:
 		for (int i = ChessInit; i < ChessEnd; ++i) {
 			for (int j = ChessInit; j < ChessEnd; ++j) {
 				chessScoreW[i][j] = this->getDefaultChessScore(i, j);
-				chessScoreB[i][j] = chessScoreW[i][j];
+				chessScore[i][j] = chessScoreW[i][j];
 			}
 		}
 	}
 
 	SimulatorGo(
 		int b[ChessEnd][ChessEnd],
-		int C[ChessEnd][ChessEnd],
 		int Id) :
 		player_to_move(Id),
 		Winner(NoChess),
@@ -53,15 +51,8 @@ public:
 		for (int i = ChessInit; i < ChessEnd; ++i) {
 			for (int j = ChessInit; j < ChessEnd; ++j) {
 				cross[i][j] = b[i][j];
-				chessScore[i][j] = C[i][j];
-				if (Id == Black) {
-					chessScoreB[i][j] = C[i][j];
-					chessScoreW[i][j] = this->getDefaultChessScore(i, j);
-				}
-				else if (Id == White) {
-					chessScoreW[i][j] = C[i][j];
-					chessScoreB[i][j] = this->getDefaultChessScore(i, j);
-				}
+				chessScoreW[i][j] = this->getDefaultChessScore(i, j);
+				chessScore[i][j] = chessScoreW[i][j];
 			}
 		}
 	}
@@ -148,10 +139,7 @@ public:
 	}
 
 	virtual void initCSPoint() override {
-		if (player_to_move == Black) {
-			CS = chessScoreB;
-		}
-		else if (player_to_move == White) {
+		if (player_to_move == White) {
 			CS = chessScoreW;
 		}
 		else {
@@ -292,15 +280,14 @@ private:
 public:
 
 	virtual int maxandmin(int depth) override {
-		Revalute();
 		return predict();
 	}
 	int predict() {
 		MCTS::ComputeOptions options;
-		options.number_of_threads = 1;
+		options.number_of_threads = 2;
 		// options.verbose = true;
 		// options.max_time = 1;
-		auto state_copy = new SimulatorGo(cross, chessScore, PlayerId);
+		auto state_copy = new SimulatorGo(cross, PlayerId);
 		auto best_move = MCTS::compute_move(state_copy, options);
 		return best_move;
 	}
