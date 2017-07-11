@@ -6,6 +6,8 @@
 #include <iostream>
 #include <future>
 #include "../ChessBoard_Header/SIP.h"
+
+#define ProThreadNumber 4//线程数
 struct MEMO
 {
 	int value[10] = { 0 };
@@ -20,7 +22,9 @@ public:
 	std::fstream FinalFile[4];//用于游戏结束时写记录进文件的文件对象
 	FileName FN;//文件名结构体
 	std::shared_ptr<MEMO> mem;//头结点
-	std::shared_ptr<MEMO> tempMEM;
+	std::shared_ptr<DISKSTATUS> ProHeadWin;//用于计算胜率时的多线程
+	std::shared_ptr<DISKSTATUS> ProHeadLose;//用于计算胜率时的多线程
+	
 	int value[10];//用于暂存从文件读取到的数值，value[0]用于记录下一步
 	/*
 	param[FileName]:需要打开的文件名
@@ -95,4 +99,21 @@ public:
 	param[Source]:源链表
 	*/
 	void ConnectList(std::shared_ptr<NEXTPACE> Aim, std::shared_ptr<NEXTPACE> Source);//链表接力
+	/*
+	param[NowRound]：回合数
+	*/
+	void ReadFileToMemory(int NowRound);//将文件内容读取到内存中
+	/*
+	param[Head]：链表头结点
+	param[filename]：文件名
+	*/
+	void ReadFile(int HeadNumber, std::string filename);//读取文件并建立链表
+	/*
+	param[Head]：链表头结点
+	*/
+	void ClearLIST(std::shared_ptr<DISKSTATUS> Head);//清空链表
+	/*
+	param[sit]:盘面状况
+	*/
+	int CountNumber(SITUATION &sit, bool win);
 };

@@ -24,8 +24,7 @@ void ChessBoard::AddSituationList()
 		TempTail->fourPtr = nullptr;
 	}
 	CurrentRoundNumber++;
-	TempTail->Line[0] = line * 10 + column;//记录本次走棋位置
-	if (CurrentRoundNumber > 4 && CurrentRoundNumber % 5 == 0)
+	if (CurrentRoundNumber > 4)
 	{
 		TempTail->prior->prior->prior->prior->fourPtr = TempTail;
 	}
@@ -35,6 +34,7 @@ void ChessBoard::AddSituationList()
 	//如果最多棋子的是第一象限
 	if (maxQuadrant == Qua.FirstQuadrant)
 	{
+		TempTail->Line[0] = line * 10 + (10 - column);//记录本次走棋位置
 		for (i = 1; i < 10; ++i)
 		{
 			nnn = 1;
@@ -49,6 +49,7 @@ void ChessBoard::AddSituationList()
 	//如果最多棋子的是第二象限
 	else if (maxQuadrant == Qua.SecondQuadrant)
 	{
+		TempTail->Line[0] = line * 10 + column;//记录本次走棋位置
 		for (i = 1; i < 10; ++i)
 		{
 			nnn = 1;
@@ -63,6 +64,7 @@ void ChessBoard::AddSituationList()
 	//如果最多棋子的是第三象限
 	else if (maxQuadrant == Qua.ThirdQuadrant)
 	{
+		TempTail->Line[0] = (10 - line) * 10 + column;//记录本次走棋位置
 		for (i = 9; i > 0; i--)
 		{
 			nnn = 1;
@@ -77,6 +79,7 @@ void ChessBoard::AddSituationList()
 	//如果最多棋子的是第四象限
 	else if (maxQuadrant == Qua.ForthQuadrant)
 	{
+		TempTail->Line[0] = (10 - line) * 10 + (10 - column);//记录本次走棋位置
 		for (i = 9; i > 0; i--)
 		{
 			nnn = 1;

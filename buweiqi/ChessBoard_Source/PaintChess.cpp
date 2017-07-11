@@ -39,13 +39,17 @@ void ChessBoard::PaintChess()
 		//画黑色棋子
 	case isAI1onTurn:
 	{
-		if (Player2isAI == true)
-			onTurn = isAI2onTurn;
-		else
-			onTurn = isPlay2onTurn;
-
 		///在此调用AI程序，返回下棋的位置（第几行，第几列）
-		Player1AI->GetPosition(line, column, onTurn);
+		if (Player2isAI == true)
+		{
+			Player1AI->GetPosition(line, column, isAI2onTurn);
+			onTurn = isAI2onTurn;
+		}
+		else
+		{
+			Player1AI->GetPosition(line, column, isPlay2onTurn);
+			onTurn = isPlay2onTurn;
+		}
 
 		PaintAChess(isBlack);
 		//若对方是电脑，则先判断有没有分出胜负
@@ -60,14 +64,17 @@ void ChessBoard::PaintChess()
 	//画白色棋子
 	case isAI2onTurn:
 	{
-		if (Player1isAI == true)
-			onTurn = isAI1onTurn;
-		else
-			onTurn = isPlay1onTurn;
-
 		///在此调用AI程序，返回下棋的位置（第几行，第几列）
-		Player2AI->GetPosition(line, column, onTurn);
-
+		if (Player1isAI == true)
+		{
+			Player2AI->GetPosition(line, column, isAI1onTurn);
+			onTurn = isAI1onTurn;
+		}
+		else
+		{
+			Player2AI->GetPosition(line, column, isPlay1onTurn);
+			onTurn = isPlay1onTurn;
+		}
 		PaintAChess(isWhite);
 		//若对方是电脑，则先判断有没有分出胜负
 		bool win = chessInfo.WinOrLose(line, column, onTurn, Winner, cross);
@@ -88,6 +95,7 @@ void ChessBoard::PaintAChess(int type)
 	DisplayOnTurn(type);
 	Repaint = false;
 	RePaint();
+	UpdateWindow(RootHwnd);
 	Repaint = true;
 }
 void ChessBoard::DisplayOnTurn(int type)

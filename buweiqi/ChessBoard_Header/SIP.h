@@ -64,3 +64,12 @@ struct NEXTPACE
 	int site;
 	std::shared_ptr<NEXTPACE> next;
 };
+
+struct DISKSTATUS
+{
+	int Value[10];
+	int count;
+	std::shared_ptr<DISKSTATUS> next;
+	std::shared_ptr<DISKSTATUS> prior;
+	std::shared_ptr<DISKSTATUS> JumpPtr;
+};
