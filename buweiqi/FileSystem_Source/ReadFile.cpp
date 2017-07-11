@@ -123,7 +123,8 @@ void FileSystem::ClearLIST(std::shared_ptr<DISKSTATUS> Head)
 		temp[i] = tem;
 		tem = tem->next;
 	}
-	bool wait[ProThreadNumber - 1] = { true };
+	bool wait[ProThreadNumber - 1];
+	for (i = 0; i < ProThreadNumber - 1; i++) wait[i] = true;
 	for (i = 0; i < ProThreadNumber - 1; i++)
 	{
 		std::shared_ptr<DISKSTATUS> t = temp[i];
@@ -154,7 +155,7 @@ void FileSystem::ClearLIST(std::shared_ptr<DISKSTATUS> Head)
 				www = false;
 				break;
 			}
-			else if (j == ProThreadNumber - 1) www = true;
+			else if (j == ProThreadNumber - 2) www = true;
 		}
 		if (www) break;
 	}
