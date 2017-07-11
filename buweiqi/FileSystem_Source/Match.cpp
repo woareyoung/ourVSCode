@@ -63,7 +63,7 @@ int FileSystem::GenerMatch(SITUATION &StatusQuo, std::set<int> &Parent, int roun
 				LowSimilar = CompareLow(one % 10000, two % 10000);//低位是否包含
 				wait = false;
 			});
-			Temp.clear();//先清空再用
+			if(!Temp.empty()) Temp.clear();//先清空再用
 			HighSimilar = CompareHigh(value[i] / 10000, StatusQuo.Line[i] / 10000, Temp, needptr);//判断高位是否包含
 			//如果数据不是0，则把临时容器内容加入到子容器
 			if (value[i] != 0)

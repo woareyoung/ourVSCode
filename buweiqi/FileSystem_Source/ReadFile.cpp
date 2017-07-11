@@ -10,14 +10,20 @@ int FileSystem::CountNumber(SITUATION &sit, bool win)
 	else ttt = ProHeadLose;
 	SITUATION SIT[ProThreadNumber] = { sit };
 	std::shared_ptr<DISKSTATUS> ProThread[ProThreadNumber];
-	for (int j = 0; j < ProThreadNumber; j++)
+	int j;
+	for (j = 0; j < ProThreadNumber; j++)
 	{
 		ProThread[j] = ttt;
 		ttt = ttt->next;
+		if (ttt == nullptr)
+		{
+			j++;
+			break;
+		}
 	}
 	bool wait[ProThreadNumber - 1] = { true };//标记是否一样
 	bool DOloop = true;
-	for (int i = 1; i < ProThreadNumber; i++)
+	for (int i = 1; i < ProThreadNumber && i < j; i++)
 	{
 		std::async(std::launch::async, [&]() {
 			while (ProThread[i] != nullptr)
@@ -47,13 +53,13 @@ int FileSystem::CountNumber(SITUATION &sit, bool win)
 	}
 	while (DOloop)
 	{
-		for (int m = 0; m < ProThreadNumber - 1; m++)
+		for (int m = 0; m < ProThreadNumber - 1 && m < j; m++)
 		{
 			if (wait[m]) break;
-			else if (m == ProThreadNumber - 2) DOloop = false;
+			else if (m == ProThreadNumber - 2 || m == j - 1) DOloop = false;
 		}
 	}
-	for (int i = 0; i < ProThreadNumber; i++) SumCount += Count[i];
+	for (int i = 0; i < ProThreadNumber && i < j; i++) SumCount += Count[i];
 	return SumCount;
 }
 void FileSystem::ReadFileToMemory(int NowRound)
@@ -117,15 +123,20 @@ void FileSystem::ClearLIST(std::shared_ptr<DISKSTATUS> Head)
 {
 	if (Head == nullptr) return;
 	std::shared_ptr<DISKSTATUS> temp[ProThreadNumber], tem = Head;
-	int i;
-	for (i = 0; i < ProThreadNumber; i++)
+	int i, num;
+	for (num = 0; num < ProThreadNumber; num++)
 	{
-		temp[i] = tem;
+		temp[num] = tem;
 		tem = tem->next;
+		if (tem == nullptr)
+		{
+			num++;
+			break;
+		}
 	}
 	bool wait[ProThreadNumber - 1];
 	for (i = 0; i < ProThreadNumber - 1; i++) wait[i] = true;
-	for (i = 0; i < ProThreadNumber - 1; i++)
+	for (i = 0; i < ProThreadNumber - 1 && i < num - 1; i++)
 	{
 		std::shared_ptr<DISKSTATUS> t = temp[i];
 		std::async(std::launch::async, [&]() {
@@ -138,7 +149,7 @@ void FileSystem::ClearLIST(std::shared_ptr<DISKSTATUS> Head)
 			wait[i] = false;
 		});
 	}
-	std::shared_ptr<DISKSTATUS> t = temp[ProThreadNumber - 1];
+	std::shared_ptr<DISKSTATUS> t = temp[ProThreadNumber > num ? num - 1 : ProThreadNumber - 1];
 	while (t != nullptr)
 	{
 		tem = t;
@@ -148,14 +159,14 @@ void FileSystem::ClearLIST(std::shared_ptr<DISKSTATUS> Head)
 	bool www = false;
 	while (true)
 	{
-		for (int j = 0; j < ProThreadNumber - 1; j++)
+		for (int j = 0; j < ProThreadNumber - 1 && j < num - 2; j++)
 		{
 			if (wait[j] == true)
 			{
 				www = false;
 				break;
 			}
-			else if (j == ProThreadNumber - 2) www = true;
+			else if (j == ProThreadNumber - 2 || j == num - 3) www = true;
 		}
 		if (www) break;
 	}
