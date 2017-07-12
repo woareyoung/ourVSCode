@@ -32,19 +32,21 @@ public:
 	/*
 	param[header]:记录着整一局游戏走棋记录的链表表头
 	*/
-	void AddMemory(std::shared_ptr<SITUATION> header);//将当前这一局游戏添加到总记忆库文件（游戏结束时调用）
+	void AddMemory(std::shared_ptr<SITUATION> header, int winner);//将当前这一局游戏添加到总记忆库文件（游戏结束时调用）
 	/*
 	param[StatusQuo]:记录当前盘面状况的结构体
 	param[result]:下一步棋子的集合
 	param[round]:当前回合数
+	param[playerId]:玩家编号
 	*/
-	void Match(SITUATION &StatusQuo, std::set<int> &result, int round);//匹配指定盘面状况的棋谱，获取“下一步棋子”
+	void Match(SITUATION &StatusQuo, std::set<int> &result, int round, int playerId);//匹配指定盘面状况的棋谱，获取“下一步棋子”
 	/*
 	param[StatusQuo]:记录当前盘面状况的结构体
 	param[Parent]:棋谱中有但当前盘面没有的“我”的棋子位置
 	param[round]:当前回合数
+	param[playerId]:玩家编号
 	*/
-	void GenerMatch(SITUATION &StatusQuo, std::set<int> &Parent, int round);//匹配含有指定盘面状况的棋谱，返回指定盘面中还没有棋子的位置
+	void GenerMatch(SITUATION &StatusQuo, std::set<int> &Parent, int round, int playerId);//匹配含有指定盘面状况的棋谱，返回指定盘面中还没有棋子的位置
 	/*
 	param[OneData]:解压后玩家1的棋子位置
 	param[TwoData]:解压后玩家2的棋子位置

@@ -121,25 +121,21 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		else
 		{
 			Statistic(line, column);
+			cross[line][column] = PlayerId;
 			GetCurrentStatus(Qua.GetMaxQuadrant(), NowStatus);
+			cross[line][column] = 0;
+			BackQua(line, column);
 			np.clear();
-			FS.Match(NowStatus, np, CurrentRound + 1);//搜索出同样的局面输的一方的下棋位置
-			if (np.empty())
-			{
-				BackQua(line, column);
-				break;
-			}
+			FS.Match(NowStatus, np, CurrentRound + 1, 3 - PlayerId);//搜索出同样的局面输的一方的下棋位置
+			if (np.empty()) break;
 			else Similar++;
 			np.clear();
 			if (Similar == MAX_SIMILAR)
 			{
 				Similar = 0;
-				BackQua(line, column);
-				Score[line][column] *= 0.75;
-				cross[line][column] = 0;
+				Score[line][column] *= 0.5;
 				continue;
 			}
-			else BackQua(line, column);
 			break;
 		}
 	}

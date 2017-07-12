@@ -13,13 +13,13 @@ bool AI::MatchMemory(int line, int column, std::set<int> &res)
 	Statistic(line, column);//先统计当前局面
 	int i;
 	GetCurrentStatus(Qua.GetMaxQuadrant(), NowStatus);
-	FS.Match(NowStatus, res, CurrentRound);
+	FS.Match(NowStatus, res, CurrentRound, PlayerId);
 	//如果有一模一样的记录，则直接跟着下
 	if (!res.empty()) return false;
 	for (i = CurrentRound + MAX_ROUND_K; ; i = i + 2)
 	{
 		//没有一模一样的记录，则查询有没有含有当前盘面的“终盘”
-		if(i < 81) FS.GenerMatch(NowStatus, res, i);
+		if(i < 81) FS.GenerMatch(NowStatus, res, i, PlayerId);
 		else return false;
 		if (!res.empty()) return true;
 	}
