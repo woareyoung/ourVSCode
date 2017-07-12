@@ -32,7 +32,7 @@ void ChessBoard::ReStart()
 			MessageBox(RootHwnd, _T("¹§Ï²Íæ¼Ò1£¨ºÚ×Ó£©Ê¤³ö"), _T("¿­Ðý"), MB_OK);
 		else MessageBox(RootHwnd, _T("¹§Ï²Íæ¼Ò2£¨°××Ó£©Ê¤³ö"), _T("¿­Ðý"), MB_OK);
 	}
-	FileS.AddMemory(SituaHead, Winner);
+	FileS.AddMemory(SituaHead);
 	if (Player1AI == &ai1)
 	{
 		if (Player2AI == &ai11) UpdateCRdata(1, 1, Winner);

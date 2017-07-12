@@ -34,7 +34,7 @@ public:
 	/*
 	    参数maxQuadrant：最大的棋子数
 	*/
-	void GetCurrentStatus(int maxQuadrant);//获取当前盘面压缩数据
+	void GetCurrentStatus(int maxQuadrant, SITUATION &CurrentStatus);//获取当前盘面压缩数据
 	/*
 	    参数site：模拟下棋位置
 	*/

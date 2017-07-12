@@ -200,6 +200,9 @@
     <ClCompile Include="FileSystem_Source\ReadFile.cpp">
       <Filter>Source Files\FileSystem_Source</Filter>
     </ClCompile>
+    <ClCompile Include="AI1_Source\SimCalDead.cpp">
+      <Filter>Source Files\AI1_Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="buweiqi.rc">

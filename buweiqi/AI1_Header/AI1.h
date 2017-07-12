@@ -7,6 +7,8 @@
 #include <conio.h>
 #include <math.h>
 #include "../chessBoard_Header/AI.h"
+#include <stack>
+#include <set>
 #include "PointStyle.h"
 #include "../FileSystem_Header/FileSystem.h"
 #include "../ChessBoard_Header/SIP.h"
@@ -28,6 +30,13 @@ private:
 	double PointStyle[18];//记录每种特殊点类型的分值
 	double Score[10][10];//记录每个位置上的分值
 	double MaxScore;//记录最大分值
+
+	int SimulateScore[10][10];
+	int RivalDeadPosNumber;//对方死棋位置数
+	int MyDeadPosNumber;//我方死棋位置数
+	int DoubleNoDeadNumber;//双方不会死的位置数
+	std::stack<int> MyDeadNumber;
+	std::stack<int> RivalDeadNumber;
 	
 	std::set<int> np;//获取下一步的可能性的链表
 	/*
@@ -68,6 +77,10 @@ private:
 
 	///在RateResetScore.cpp文件中
 	void RateResetScore(double ResetRate, bool add = true);//按比例缩小分值，减少分差，精确定位
+
+
+	void CalDeadPosNumber(int line, int column);//计算死棋位置数量
+	
 };
 
 

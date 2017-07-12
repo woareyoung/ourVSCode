@@ -1,6 +1,6 @@
 #include "../stdafx.h"
 #include "../AI1_Header/AI1.h"
-#define MAX_SIMILAR 3 //设置同样的走棋达到连续3次后改变规律
+#define MAX_SIMILAR 2 //设置同样的走棋达到连续3次后改变规律
 ///获取下棋位置
 void AI1::GetPosition(int &line, int &column, int onTurn)
 {
@@ -121,9 +121,9 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		else
 		{
 			Statistic(line, column);
-			GetCurrentStatus(Qua.GetMaxQuadrant());
+			GetCurrentStatus(Qua.GetMaxQuadrant(), NowStatus);
 			np.clear();
-			FS.Match(NowStatus, np, CurrentRound + 1, false);//搜索出同样的局面输的一方的下棋位置
+			FS.Match(NowStatus, np, CurrentRound + 1);//搜索出同样的局面输的一方的下棋位置
 			if (np.empty())
 			{
 				BackQua(line, column);
@@ -161,23 +161,8 @@ int AI1::GetNextPace(std::set<int> &np)
 		np.clear();
 		return BestSite;
 	}
-	FS.ReadFileToMemory(CurrentRound + 2);
-	double MaxPro = -2;
-	double tmp;
-	for (auto temp : np)
-	{
-		if(temp < 1) {}
-		else if (cross[temp / 10][temp % 10] == 0)
-		{
-			tmp = ProbabilityCount(temp);
-			if (tmp > MaxPro)
-			{
-				MaxPro = tmp;
-				BestSite = temp;
-			}
-		}
-	}
-	FS.ClearLIST(FS.ProHeadWin);
-	FS.ClearLIST(FS.ProHeadLose);
+//	FS.ReadFile(CurrentRound + 2);
+	BestSite = *np.begin();
+	np.clear();
 	return BestSite;
 }
