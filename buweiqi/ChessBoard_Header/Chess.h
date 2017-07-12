@@ -3,15 +3,14 @@
 #define CHESS_H_INCLUDED
 #include "SIP.h"
 #include "../FileSystem_Header/FileSystem.h"
+#include <list>
 class Chess
 {
 public:
 	int cross[10][10];
-
-	std::shared_ptr<PACE> Tail;
 	FileSystem FileS;
-	std::shared_ptr<SITUATION> SituaHead;
-	std::shared_ptr<SITUATION> TempTail;
+	std::list<SITUATION> MemBattle;
+	std::list<PACE> MemPace;
 
 	QUADRANT Qua;
 	

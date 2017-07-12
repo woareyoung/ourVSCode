@@ -36,9 +36,8 @@ void ChessBoard::PaintBoard()
 ///回退一步功能函数
 void ChessBoard::BackPace()
 {
-	if (Tail == nullptr) return;//如果已经没棋了，就不能再回退了
-	std::shared_ptr<SITUATION> s = nullptr;
-	std::shared_ptr<PACE> p = nullptr;
+	if (MemPace.empty()) return;
+	PACE pac;
 	auto isParamRight = [&]() {
 		return Player1isAI || Player2isAI;
 	};
@@ -46,20 +45,20 @@ void ChessBoard::BackPace()
 	{
 		//如果有一方是AI，则回退两步
 	case true:
-		if (Player1isAI && Tail->perior == nullptr) return;
-		cross[Tail->line][Tail->column] = 0;
-		p = Tail;
-		Tail = Tail->perior;
-		p = nullptr;
-		Tail->next = nullptr;
+		if (MemPace.empty()) return;
+		if (Player1isAI && MemPace.size() == 1) return;
+		pac = MemPace.back();
+		cross[pac.line][pac.column] = 0;
 		if (Player1isAI) Player1AI->GetPosition(line, column, 100);
 		if (Player2isAI) Player2AI->GetPosition(line, column, 200);
-		line = Tail->line;
-		column = Tail->column;
-		s = TempTail;
-		TempTail = TempTail->prior;
-		s = nullptr;
-		TempTail->next = nullptr;
+		MemPace.pop_back();
+		if (MemPace.empty()) line = 0, column = 0;
+		else
+		{
+			pac = MemPace.back();
+			line = pac.line, column = pac.column;
+		}
+		MemBattle.pop_back();
 		if (onTurn == isPlay1onTurn)
 		{
 			onTurn = isAI2onTurn;
@@ -72,30 +71,18 @@ void ChessBoard::BackPace()
 		}
 		//如果两方都是玩家，则回退一步
 	case false:
-		cross[Tail->line][Tail->column] = 0;
+		pac = MemPace.back();
+		cross[pac.line][pac.column] = 0;
 		if (Player1isAI) Player1AI->GetPosition(line, column, 100);
 		if (Player2isAI) Player2AI->GetPosition(line, column, 200);
-		if (Tail->perior == nullptr)
-		{
-			Tail = nullptr;
-			line = 0;
-			column = 0;
-			TempTail = nullptr;
-			SituaHead = nullptr;
-		}
+		MemPace.pop_back();
+		if (MemPace.empty()) line = 0, column = 0;
 		else
 		{
-			p = Tail;
-			Tail = Tail->perior;
-			p = nullptr;
-			Tail->next = nullptr;
-			line = Tail->line;
-			column = Tail->column;
-			s = TempTail;
-			TempTail = TempTail->prior;
-			s = nullptr;
-			TempTail->next = nullptr;
+			pac = MemPace.back();
+			line = pac.line, column = pac.column;
 		}
+		MemBattle.pop_back();
 		if (onTurn == isAI1onTurn)
 		{
 			onTurn = isPlay2onTurn;

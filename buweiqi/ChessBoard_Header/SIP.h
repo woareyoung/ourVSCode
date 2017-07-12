@@ -16,8 +16,6 @@ struct SITUATION
 {
 	std::string BoardStatus = "";//盘面状况
 	int ChessPosition;//下棋位置
-	std::shared_ptr<SITUATION> next;
-	std::shared_ptr<SITUATION> prior;
 	SITUATION &operator= (SITUATION &param)
 	{
 		BoardStatus = param.BoardStatus;

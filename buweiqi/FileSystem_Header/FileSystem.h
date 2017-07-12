@@ -32,7 +32,7 @@ public:
 	/*
 	param[header]:记录着整一局游戏走棋记录的链表表头
 	*/
-	void AddMemory(std::shared_ptr<SITUATION> header, int winner);//将当前这一局游戏添加到总记忆库文件（游戏结束时调用）
+	void AddMemory(std::list<SITUATION> header, int winner);//将当前这一局游戏添加到总记忆库文件（游戏结束时调用）
 	/*
 	param[StatusQuo]:记录当前盘面状况的结构体
 	param[result]:下一步棋子的集合
