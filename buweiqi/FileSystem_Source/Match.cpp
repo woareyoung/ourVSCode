@@ -40,8 +40,9 @@ void FileSystem::GenerMatch(SITUATION &StatusQuo, std::set<int> &Parent, int rou
 			tempSTL2.clear();
 			wait = false;
 		});
-		for (auto t : tempSTL1)
-			Parent.insert(t);
+		if(!tempSTL1.empty())
+			for (auto t : tempSTL1)
+				Parent.insert(t);
 		tempSTL1.clear();
 		while (wait) {}
 	}
