@@ -31,7 +31,7 @@ private:
 	double PointStyle[18];//记录每种特殊点类型的分值
 	double Score[10][10];//记录每个位置上的分值
 	double MaxScore;//记录最大分值
-	std::mutex g_lock;//互斥锁
+//	std::mutex g_lock;//互斥锁
 
 	std::stack<int> MyDeadNumber;
 	std::stack<int> RivalDeadNumber;

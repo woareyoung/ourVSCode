@@ -1,7 +1,7 @@
 #include "../stdafx.h"
 #include "../AI1_Header/AI1.h"
 
-#define MAX_SIMILAR 2 //设置同样的走棋达到连续3次后改变规律
+#define MAX_SIMILAR 2 //设置同样的走棋达到连续2次后改变规律
 #define ThreadAmount 5//线程数
 ///获取下棋位置
 void AI1::GetPosition(int &line, int &column, int onTurn)
@@ -131,12 +131,20 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 			BackQua(line, column);
 			np.clear();
 			FS.Match(NowStatus, np, CurrentRound + 1, 3 - PlayerId);//搜索出同样的局面输的一方的下棋位置
-			if (np.empty()) break;
-			else Similar++;
+			if (np.empty())
+			{
+				if (Similar == -1) Similar = -1;
+				break;
+			}
+			else
+			{
+				if (Similar == -1) Similar = 2;
+				else Similar++;
+			}
 			np.clear();
 			if (Similar == MAX_SIMILAR)
 			{
-				Similar = 0;
+				Similar = -1;
 				Score[line][column] *= 0.5;
 				continue;
 			}
@@ -175,7 +183,7 @@ int AI1::GetNextPace(std::set<int> &np)
 			{
 				ThreadGo[i] = true;//标记线程已在执行
 				std::async(std::launch::async, [&]() {
-					g_lock.lock();//加互斥锁，解决访问冲突
+//					g_lock.lock();//加互斥锁，解决访问冲突
 					auto t = np.begin();//获取候补位置的第一个
 					int tempPos = *t;
 					np.erase(tempPos);//将该位置从候补列表中擦除
@@ -185,7 +193,7 @@ int AI1::GetNextPace(std::set<int> &np)
 						maxScore = ttt;
 						BestSite = tempPos;
 					}
-					g_lock.unlock();//解锁
+//					g_lock.unlock();//解锁
 				});
 				ThreadGo[i] = false;//标记线程空闲
 			}
