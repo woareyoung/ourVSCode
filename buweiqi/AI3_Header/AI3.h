@@ -187,10 +187,13 @@ public:
 			for (int i = ChessStart; i < ChessEnd; ++i) {
 				for (int j = ChessStart; j < ChessEnd; ++j) {
 					if (cross[i][j] == NoChess && CS[i][j] != minLimit) {
+						cross[i][j] = player_to_move;
 						if (const_cast<SimulatorGo*>(this)->isGo2Dead(i, j, player_to_move)) {
 							CS[i][j] = minLimit;
+							cross[i][j] = NoChess;
 							continue;
 						}
+						cross[i][j] = NoChess;
 						moves.emplace_back(getMove(i, j));
 					}
 				}
@@ -220,7 +223,9 @@ public:
 		for (int i = 0; i < start; ++i) {
 			if (mainColor == rival) {
 				// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
+				cross[emptyPos[i].line][emptyPos[i].column] = rival;
 				if (isGo2Dead(emptyPos[i].line, emptyPos[i].column, rival)) {
+					cross[emptyPos[i].line][emptyPos[i].column] = NoChess;
 					// 如果是敌方的自杀点的话，这里就置零   -.-！！！
 					CS[emptyPos[i].line][emptyPos[i].column] = 0;
 					return false;
@@ -228,13 +233,16 @@ public:
 			}
 			else if (mainColor == player_to_move) {
 				// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
+				cross[x][y] = player_to_move;
 				if (isGo2Dead(x, y, player_to_move)) {
 					CS[x][y] = minLimit;
+					cross[x][y] = NoChess;
 					// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
 					return false;
 				}
 			}
 			// 这里既不是我方自杀点，也不是敌方自杀点
+			cross[emptyPos[i].line][emptyPos[i].column] = NoChess;
 		}
 		return true;
 	}
@@ -243,19 +251,24 @@ public:
 		// 对于当前匹配到的着子点的环境进行分析
 		// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
 		int rival = getRival(player_to_move);
+		cross[x][y] = player_to_move;
 		if (isGo2Dead(x, y, player_to_move)) {
 			CS[x][y] = minLimit;
+			cross[x][y] = NoChess;
 			// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
 			return false;
 		}
 		// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
 		if (cross[x][y] == NoChess && CS[x][y] == 0) return false;
+		cross[x][y] = rival;
 		if (isGo2Dead(x, y, rival)) {
+			cross[x][y] = NoChess;
 			// 如果是敌方的自杀点的话，这里就置零   -.-！！！
 			CS[x][y] = 0;
 			return false;
 		}
 		// 这里既不是我方自杀点，也不是敌方自杀点
+		cross[x][y] = NoChess;
 		return true;
 	}
 };
