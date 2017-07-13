@@ -164,9 +164,6 @@
     <ClCompile Include="AI1_Source\FunctionPart.cpp">
       <Filter>Source Files\AI1_Source</Filter>
     </ClCompile>
-    <ClCompile Include="AI1_Source\DeadCheck.cpp">
-      <Filter>Source Files\AI1_Source</Filter>
-    </ClCompile>
     <ClCompile Include="AI2_Source\AI2GetPosition.cpp">
       <Filter>Source Files\AI2_Source</Filter>
     </ClCompile>
@@ -202,6 +199,9 @@
     </ClCompile>
     <ClCompile Include="AI1_Source\SimCalDead.cpp">
       <Filter>Source Files\AI1_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MainAI_Source\DeadCheck.cpp">
+      <Filter>Source Files\MainAI_Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

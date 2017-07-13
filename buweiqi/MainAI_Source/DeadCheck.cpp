@@ -1,8 +1,9 @@
 #include "../stdafx.h"
-#include "../AI1_Header/AI1.h"
+#include "../ChessBoard_Header/AI.h"
+#include <stack>
 
 ///参数：预备下棋位置
-bool AI1::DeadCheck(int line, int column, int who)
+bool AI::DeadCheck(int line, int column, int who)
 {
 	bool simulate = false;//标记是否是模拟下棋
 	//为了适应多线程，另定义一个变量，解决访问冲突
@@ -17,6 +18,7 @@ bool AI1::DeadCheck(int line, int column, int who)
 	std::stack<std::pair<int, int>> position;
 	std::pair<int, int> p;
 	std::stack<bool> PosNumber;//用于计算遍历数量
+	//初始化遍历标记数组
 	auto InitVisit = [&]() {
 		for (i = 0; i < 10; i++)
 			for (j = 0; j < 10; j++)

@@ -50,6 +50,13 @@ public:
 		else if (line > 5 && column < 5) Qua.ThirdQuadrant--;
 		else if (line > 5 && column > 5) Qua.ForthQuadrant--;
 	}
+	///判断是否是死棋位置   集中在DeadCheck.cpp文件中
+	/*
+		参数line:下棋的位置——行
+		参数column:下棋的位置——列
+		参数who:谁 下的棋
+	*/
+	bool DeadCheck(int line, int column, int who);
 };
 
 #endif // AI_H_INCLUDED

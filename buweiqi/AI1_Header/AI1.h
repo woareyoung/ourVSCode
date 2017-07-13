@@ -26,7 +26,6 @@ private:
 	int Similar;//与过去输的局面相似的程度
 	//记录各交叉点的值，数组访问从“1”开始，访问顺序为“先行后列”，
 	//“0”表示没有棋子，“1”表示黑子，“2”表示白子
-	int cross[10][10];
 	bool Cross[10][10];//遍历标识
 	int MaxScorePosition;//最大分值的位置
 	double PointStyle[18];//记录每种特殊点类型的分值
@@ -67,9 +66,6 @@ private:
 	void RecordSpecialPoint(int row1, int row2, int who, bool isAddScore = true);//用SetCurrentPoint()设置当前点，再调用AddRecord
 	void AddRecord(int n, int n1, int n2, int n3, int n4, int amo, bool isAddScore = true);
 	void SetCurrentPoint(int ThisFormatStyle, double ThisFormatScorePoor, int ThisSpecialStyle, double ThisSpecialScorePoorint, int LastFormatStyle = 0, double LastFormatScorePoore = 0, int LastSpecialPointStyle = 0, double LastSpecialScorePoor = 0);
-
-	///判断是否是死棋位置   集中在DeadCheck.cpp文件中
-	bool DeadCheck(int line, int column, int who);
 
 	///在RateResetScore.cpp文件中
 	void RateResetScore(double ResetRate, bool add = true);//按比例缩小分值，减少分差，精确定位

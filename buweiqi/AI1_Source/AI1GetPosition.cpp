@@ -173,7 +173,7 @@ int AI1::GetNextPace(std::set<int> &np)
 			{
 				ThreadGo[i] = true;//标记线程已在执行
 				std::async(std::launch::async, [&]() {
-//					g_lock.lock();//加互斥锁，解决访问冲突
+					g_lock.lock();//加互斥锁，解决访问冲突
 					auto t = np.begin();//获取候补位置的第一个
 					int tempPos = *t;
 					np.erase(tempPos);//将该位置从候补列表中擦除
@@ -183,7 +183,7 @@ int AI1::GetNextPace(std::set<int> &np)
 						maxScore = ttt;
 						BestSite = tempPos;
 					}
-//					g_lock.unlock();//解锁
+					g_lock.unlock();//解锁
 				});
 				ThreadGo[i] = false;//标记线程空闲
 			}
