@@ -2,7 +2,6 @@
 
 double AI1::CalDeadPosNumber(int line, int column)
 {
-	cross[line][column] = PlayerId;
 	bool MyDeath, RivalDeath;
 
 	double MyDeadPosNumber = 0;//自己的死棋位置数量
@@ -21,8 +20,8 @@ double AI1::CalDeadPosNumber(int line, int column)
 		for (int j = 1; j < 10; j++)
 		{
 			if (cross[i][j] != 0) continue;
-			MyDeath = DeadCheck(i, j, PlayerId, true);
-			RivalDeath = DeadCheck(i, j, 3 - PlayerId, true);
+			MyDeath = DeadCheck(i, j, PlayerId);
+			RivalDeath = DeadCheck(i, j, 3 - PlayerId);
 			if (MyDeath && !RivalDeath) MyDeadPosNumber++;
 			else if (!MyDeath && RivalDeath) RivalDeadPosNumber++;
 			else CheckTigerMouth(i, j);

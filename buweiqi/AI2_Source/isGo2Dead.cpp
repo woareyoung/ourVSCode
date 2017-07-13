@@ -8,7 +8,7 @@ DIRECTION direction_8[] = { { -1, 0 },{ 0, 1 },{ 1, 0 },{ 0, -1 },{ -1, 1 },{ 1,
 bool AI2::isGo2Dead(int line, int column, int type)
 {
 	bool simulate = false;//标记是否是模拟下棋
-						  //为了适应多线程，另定义一个变量，解决访问冲突
+	//为了适应多线程，另定义一个变量，解决访问冲突
 	int BoardCross[10][10];
 	int i, j;//遍历变量
 	int rival = 3 - type;//对方
@@ -140,7 +140,6 @@ bool AI2::isGo2Dead(int line, int column, int type)
 	}
 	if (VisitAll(type)) return true;
 	return false;
-}
 }
 
 

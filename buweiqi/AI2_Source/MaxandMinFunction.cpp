@@ -179,7 +179,6 @@ int AI2::FindPosition() {
 			if (cross[x][y] != NoChess || chessScore[x][y] == minLimit) continue;
 			// 对于当前匹配到的着子点的环境进行分析
 			// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
-			cross[x][y] = turn2Who;
 			if (isGo2Dead(x, y, turn2Who)) {
 				chessScore[x][y] = minLimit;
 				// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
@@ -188,14 +187,12 @@ int AI2::FindPosition() {
 			if (isFinal()) goto empty;
 			// 临时设置当前获得的位置为我方着子点，判断是否是敌方的自杀点
 			if (chessScore[x][y] == 0) goto empty;
-			cross[x][y] = Rival;
 			if (isGo2Dead(x, y, Rival)) {
 				chessScore[x][y] = 0;
 				goto empty;
 			}
-		empty:
+		empty:;
 			// 这里什么都没有匹配到，所以进行重置
-			cross[x][y] = NoChess;
 		}
 	}
 	return x * 100 + y;

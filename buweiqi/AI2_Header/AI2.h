@@ -148,7 +148,6 @@ public:
 
 	// 判断是否是死棋位
 	bool isGo2Dead(int line, int column, int type);
-	bool Besieg(int RivalLine, int RivalColumn, int player, int rival);
 
 	// 初始化数组
 	void initChessScore(bool isFirst);
@@ -181,9 +180,7 @@ public:
 		for (int i = 0; i < start; ++i) {
 			if (mainColor == Rival) {
 				// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
-				cross[emptyPos[i].line][emptyPos[i].column] = Rival;
 				if (isGo2Dead(emptyPos[i].line, emptyPos[i].column, Rival)) {
-					cross[emptyPos[i].line][emptyPos[i].column] = NoChess;
 					// 如果是敌方的自杀点的话，这里就置零   -.-！！！
 					CS[emptyPos[i].line][emptyPos[i].column] = 0;
 					return false;
@@ -191,16 +188,13 @@ public:
 			}
 			else if (mainColor == turn2Who) {
 				// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
-				cross[x][y] = turn2Who;
 				if (isGo2Dead(x, y, turn2Who)) {
 					CS[x][y] = minLimit;
-					cross[x][y] = NoChess;
 					// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
 					return false;
 				}
 			}
 			// 这里既不是我方自杀点，也不是敌方自杀点
-			cross[emptyPos[i].line][emptyPos[i].column] = NoChess;
 		}
 		return true;
 	}
@@ -208,24 +202,19 @@ public:
 	virtual bool checkStone(int& x, int& y) {
 		// 对于当前匹配到的着子点的环境进行分析
 		// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
-		cross[x][y] = turn2Who;
 		if (isGo2Dead(x, y, turn2Who)) {
 			CS[x][y] = minLimit;
-			cross[x][y] = NoChess;
 			// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
 			return false;
 		}
 		// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
 		if (cross[x][y] == NoChess && CS[x][y] == 0) return false;
-		cross[x][y] = Rival;
 		if (isGo2Dead(x, y, Rival)) {
-			cross[x][y] = NoChess;
 			// 如果是敌方的自杀点的话，这里就置零   -.-！！！
 			CS[x][y] = 0;
 			return false;
 		}
 		// 这里既不是我方自杀点，也不是敌方自杀点
-		cross[x][y] = NoChess;
 		return true;
 	}
 	//void addtoArray(int& line, int& column, int& score) {

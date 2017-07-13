@@ -1,6 +1,6 @@
 #include "../stdafx.h"
 #include "../AI1_Header/AI1.h"
-#include <mutex>
+
 #define MAX_SIMILAR 2 //设置同样的走棋达到连续3次后改变规律
 #define ThreadAmount 5//线程数
 ///获取下棋位置
@@ -108,13 +108,13 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		column = MaxScorePosition % 10;
 		if (cross[line][column] != 0) continue;//这句虽然没什么用，但保险起见
 		///若该位置对于对方来说是死棋，则继续循环
-		if (DeadCheck(line, column, OT, true) == true && MaxScore > PointStyle[9])
+		if (DeadCheck(line, column, OT) == true && MaxScore > PointStyle[9])
 		{
 			Score[line][column] = PointStyle[9];
 			continue;
 		}
 		///若是死棋位置，且棋盘上还有位置不是死棋，则继续循环
-		if (DeadCheck(line, column, PlayerId, true) == true && MaxScore > PointStyle[1])
+		if (DeadCheck(line, column, PlayerId) == true && MaxScore > PointStyle[1])
 		{
 			Score[line][column] = PointStyle[1];
 			continue;
@@ -163,7 +163,7 @@ int AI1::GetNextPace(std::set<int> &np)
 	double maxScore = -100;
 	bool ThreadGo[ThreadAmount] = { false };//标记线程是否正在执行
 	int i;
-	std::mutex g_lock;//互斥锁
+
 	while (!np.empty())
 	{
 		for (i = 0; i < ThreadAmount; i++)
@@ -173,7 +173,7 @@ int AI1::GetNextPace(std::set<int> &np)
 			{
 				ThreadGo[i] = true;//标记线程已在执行
 				std::async(std::launch::async, [&]() {
-					g_lock.lock();//加互斥锁，解决访问冲突
+//					g_lock.lock();//加互斥锁，解决访问冲突
 					auto t = np.begin();//获取候补位置的第一个
 					int tempPos = *t;
 					np.erase(tempPos);//将该位置从候补列表中擦除
@@ -183,7 +183,7 @@ int AI1::GetNextPace(std::set<int> &np)
 						maxScore = ttt;
 						BestSite = tempPos;
 					}
-					g_lock.unlock();//解锁
+//					g_lock.unlock();//解锁
 				});
 				ThreadGo[i] = false;//标记线程空闲
 			}

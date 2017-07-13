@@ -9,6 +9,7 @@
 #include "../chessBoard_Header/AI.h"
 #include <stack>
 #include <set>
+#include <mutex>
 #include "PointStyle.h"
 #include "../FileSystem_Header/FileSystem.h"
 #include "../ChessBoard_Header/SIP.h"
@@ -25,11 +26,13 @@ private:
 	int Similar;//与过去输的局面相似的程度
 	//记录各交叉点的值，数组访问从“1”开始，访问顺序为“先行后列”，
 	//“0”表示没有棋子，“1”表示黑子，“2”表示白子
+	int cross[10][10];
 	bool Cross[10][10];//遍历标识
 	int MaxScorePosition;//最大分值的位置
 	double PointStyle[18];//记录每种特殊点类型的分值
 	double Score[10][10];//记录每个位置上的分值
 	double MaxScore;//记录最大分值
+	std::mutex g_lock;//互斥锁
 
 	std::stack<int> MyDeadNumber;
 	std::stack<int> RivalDeadNumber;
@@ -66,10 +69,7 @@ private:
 	void SetCurrentPoint(int ThisFormatStyle, double ThisFormatScorePoor, int ThisSpecialStyle, double ThisSpecialScorePoorint, int LastFormatStyle = 0, double LastFormatScorePoore = 0, int LastSpecialPointStyle = 0, double LastSpecialScorePoor = 0);
 
 	///判断是否是死棋位置   集中在DeadCheck.cpp文件中
-	bool DeadCheck(int line, int column, int who, bool simulation = false);
-	bool CheckPosition(int OriLine, int OriColumn, int CLine, int CColumn, int player, bool &Position);
-	bool Besieg(int RivalLine, int RivalColumn, int player, int rival);
-	bool BesiegePosition(int RivalLine, int RivalColumn, int player, int rival, bool &tie);
+	bool DeadCheck(int line, int column, int who);
 
 	///在RateResetScore.cpp文件中
 	void RateResetScore(double ResetRate, bool add = true);//按比例缩小分值，减少分差，精确定位
