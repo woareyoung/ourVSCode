@@ -4,7 +4,6 @@
 ///画棋子函数
 void ChessBoard::PaintChess()
 {
-	WinCheck::ChessInfo chessInfo;
 	// 判断轮到哪一方
 	switch (onTurn)
 	{
@@ -17,10 +16,16 @@ void ChessBoard::PaintChess()
 			onTurn = isAI2onTurn;
 		PaintAChess(1);
 		//若已分胜负，则结束游戏
+		if (GoDie(line, column, 1))
+		{
+			Winner = 2;
+			ReStart();
+		}
+		/*
 		if (chessInfo.WinOrLose(line, column, onTurn, Winner, cross))
 		{
 			ReStart();
-		};
+		};*/
 		break;
 	case isPlay2onTurn://画白色棋子
 		if (line == 0 || column == 0) return;
@@ -31,10 +36,15 @@ void ChessBoard::PaintChess()
 			onTurn = isAI1onTurn;
 		PaintAChess(2);
 		//若已分胜负，则结束游戏
+		if (GoDie(line, column, 2))
+		{
+			Winner = 1;
+			ReStart();
+		}/*
 		if (chessInfo.WinOrLose(line, column, onTurn, Winner, cross))
 		{
 			ReStart();
-		}
+		}*/
 		break;
 		//画黑色棋子
 	case isAI1onTurn:
@@ -53,12 +63,17 @@ void ChessBoard::PaintChess()
 
 		PaintAChess(isBlack);
 		//若对方是电脑，则先判断有没有分出胜负
+		if (GoDie(line, column, 1))
+		{
+			Winner = 2;
+			ReStart();
+		}/*
 		bool win = chessInfo.WinOrLose(line, column, onTurn, Winner, cross);
 		if (win || line == 0 || column == 0)
 		{
 			Winner = 2;
 			ReStart();
-		}
+		}*/
 	};
 	break;
 	//画白色棋子
@@ -77,12 +92,18 @@ void ChessBoard::PaintChess()
 		}
 		PaintAChess(isWhite);
 		//若对方是电脑，则先判断有没有分出胜负
+		if (GoDie(line, column, 2))
+		{
+			Winner = 1;
+			ReStart();
+		}
+		/*
 		bool win = chessInfo.WinOrLose(line, column, onTurn, Winner, cross);
 		if (win || line == 0 || column == 0)
 		{
 			Winner = 1;
 			ReStart();
-		}
+		}*/
 	};
 	break;
 	}

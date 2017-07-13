@@ -59,7 +59,6 @@ void ChessBoard::ReStart()
 	AllTime2 = 900;
 	Round1 = 60;//步时60秒
 	Round2 = 60;
-	Start = false;
 	line = 0;
 	column = 0;
 	///界面的Quadrant对象
@@ -74,6 +73,7 @@ void ChessBoard::ReStart()
 		Player2isAI = false;
 		Player1AI = nullptr;
 		Player2AI = nullptr;
+		Start = false;
 		SendMessageA(Player1UseAI, WM_SETTEXT, (WPARAM)NULL, LPARAM("使用AI"));
 		SendMessageA(Player2UseAI, WM_SETTEXT, (WPARAM)NULL, LPARAM("使用AI"));
 		SendMessageA(StartGame, WM_SETTEXT, (WPARAM)NULL, LPARAM("开始游戏"));
