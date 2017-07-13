@@ -48,25 +48,15 @@ bool AI2::isGo2Dead(int line, int column, int type)
 	};
 	for (int i = 0; i < 4; ++i)
 	{
-		InitVisit();//初始化遍历标记
-		int Rival = 3 - Player;
-		while (true)
-		{
+		if (cross[line + direction_8[i].x_offset][column + direction_8[i].y_offset] == rival) {
 			reduceRecursionTimes();
 			if (Besieg(line + direction_8[i].x_offset, column + direction_8[i].y_offset, player, rival)) {
 				cross[line][column] = NoChess;
 				return true;
-			}	
+			}
 			Position[i] = true;
 		}
-		else if (line + direction_8[i].x_offset < 1 || line + direction_8[i].x_offset > 9
-			|| column + direction_8[i].y_offset < 1 || column + direction_8[i].y_offset > 9)
-		{
-			Position[i] = true;
-		}
-		else if (cross[line + direction_8[i].x_offset][column + direction_8[i].y_offset] == player)
-		{
-			reduceRecursionTimes();
+		else if (line + direction_8[i].x_offset < 1 || line + direction_8[i].x_offset > 9) {
 			Position[i] = Besieg(line, column, rival, player);
 		}
 	}
