@@ -7,6 +7,9 @@
 #include <conio.h>
 #include <math.h>
 #include "../chessBoard_Header/AI.h"
+#include <stack>
+#include <set>
+#include <mutex>
 #include "PointStyle.h"
 #include "../FileSystem_Header/FileSystem.h"
 #include "../ChessBoard_Header/SIP.h"
@@ -28,12 +31,16 @@ private:
 	double PointStyle[18];//记录每种特殊点类型的分值
 	double Score[10][10];//记录每个位置上的分值
 	double MaxScore;//记录最大分值
+//	std::mutex g_lock;//互斥锁
+
+	std::stack<int> MyDeadNumber;
+	std::stack<int> RivalDeadNumber;
 	
-	std::shared_ptr<NEXTPACE> np;//获取下一步的可能性的链表
+	std::set<int> np;//获取下一步的可能性的链表
 	/*
-		param[np]:可能下棋位置的链表
+		param[np]:可能下棋位置的set集合
 	*/
-	int GetNextPace(std::shared_ptr<NEXTPACE> np);//从链表中选取最高胜率的结点
+	int GetNextPace(std::set<int>& np);//从链表中选取最高胜率的结点
 	///各功能函数 集中在FunctionPart.cpp文件中
 	/*
 		param[row1]:行
@@ -60,14 +67,12 @@ private:
 	void AddRecord(int n, int n1, int n2, int n3, int n4, int amo, bool isAddScore = true);
 	void SetCurrentPoint(int ThisFormatStyle, double ThisFormatScorePoor, int ThisSpecialStyle, double ThisSpecialScorePoorint, int LastFormatStyle = 0, double LastFormatScorePoore = 0, int LastSpecialPointStyle = 0, double LastSpecialScorePoor = 0);
 
-	///判断是否是死棋位置   集中在DeadCheck.cpp文件中
-	bool DeadCheck(int line, int column, int who, bool simulation = false);
-	bool CheckPosition(int OriLine, int OriColumn, int CLine, int CColumn, int player, bool &Position);
-	bool Besieg(int RivalLine, int RivalColumn, int player, int rival);
-	bool BesiegePosition(int RivalLine, int RivalColumn, int player, int rival, bool &tie);
-
 	///在RateResetScore.cpp文件中
 	void RateResetScore(double ResetRate, bool add = true);//按比例缩小分值，减少分差，精确定位
+
+
+	double CalDeadPosNumber(int line, int column);//计算死棋位置数量
+	
 };
 
 

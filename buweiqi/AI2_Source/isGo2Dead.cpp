@@ -1,5 +1,6 @@
 #include "../AI2_Header/AI2.h"
 #include <map>
+#include <stack>
 
 DIRECTION direction_8[] = { { -1, 0 },{ 0, 1 },{ 1, 0 },{ 0, -1 },{ -1, 1 },{ 1, 1 },{ 1, -1 },{ -1, -1 } };
 /**
@@ -47,7 +48,9 @@ bool AI2::isGo2Dead(int line, int column, int type)
 	};
 	for (int i = 0; i < 4; ++i)
 	{
-		if (cross[line + direction_8[i].x_offset][column + direction_8[i].y_offset] == rival)
+		InitVisit();//初始化遍历标记
+		int Rival = 3 - Player;
+		while (true)
 		{
 			reduceRecursionTimes();
 			if (Besieg(line + direction_8[i].x_offset, column + direction_8[i].y_offset, player, rival)) {

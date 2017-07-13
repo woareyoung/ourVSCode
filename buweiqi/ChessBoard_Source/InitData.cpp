@@ -40,9 +40,6 @@ ChessBoard::ChessBoard()
 	{
 		CrossCross[i] = i * ChessDiameter;
 	}
-	TempTail = nullptr;
-	Tail = nullptr;
-	SituaHead = nullptr;
 	Init_cross();
 	///默认AI不可选
 	CanSelectAI1 = false;
@@ -77,22 +74,10 @@ void ChessBoard::Init_cross()
 ///初始化下棋记录
 void ChessBoard::Init_Pace()
 {
-	std::shared_ptr<SITUATION> s = nullptr;
-	std::shared_ptr<PACE> p = nullptr;
-	while (Tail->perior != nullptr)
-	{
-		p = Tail;
-		Tail = Tail->perior;
-		p = nullptr;
-		Tail->next = nullptr;
-	}
-	Tail = nullptr;
-	while (SituaHead->next != nullptr)
-	{
-		s = SituaHead;
-		SituaHead = SituaHead->next;
-		s = nullptr;
-		SituaHead->prior = nullptr;
-	}
-	SituaHead = nullptr;
+	MemPace.clear();
+	MemBattle.clear();
+	PACE pac;
+	pac.line = 0;
+	pac.column = 0;
+	MemPace.push_back(pac);
 }

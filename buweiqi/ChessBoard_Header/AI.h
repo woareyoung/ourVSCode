@@ -25,20 +25,16 @@ public:
 		参数column：下棋的位置（列）
 		参数None：是否没有一模一样的记录
 	*/
-	std::shared_ptr<NEXTPACE> MatchMemory(int line, int column, bool& None);//匹配记忆
+	bool MatchMemory(int line, int column, std::set<int> &res);//匹配记忆
 	/*
 		参数line：下棋的位置（行）
 		参数column：下棋的位置（列）
 	*/
 	void Statistic(int line, int column);//统计棋盘各个区域的棋子数量
 	/*
-		参数head：链表的头结点
-	*/
-	void ClearList(std::shared_ptr<NEXTPACE> head);//清空链表
-	/*
 	    参数maxQuadrant：最大的棋子数
 	*/
-	void GetCurrentStatus(int maxQuadrant);//获取当前盘面压缩数据
+	void GetCurrentStatus(int maxQuadrant, SITUATION &CurrentStatus);//获取当前盘面压缩数据
 	/*
 	    参数site：模拟下棋位置
 	*/
@@ -54,6 +50,14 @@ public:
 		else if (line > 5 && column < 5) Qua.ThirdQuadrant--;
 		else if (line > 5 && column > 5) Qua.ForthQuadrant--;
 	}
+	///判断是否是死棋位置   集中在DeadCheck.cpp文件中
+	/*
+		参数line:下棋的位置——行
+		参数column:下棋的位置——列
+		参数who:谁 下的棋
+		参数CROSS:当前棋盘状况（用于解决多线程的冲突）
+	*/
+	bool DeadCheck(int line, int column, int who, int CROSS[][10]);
 };
 
 #endif // AI_H_INCLUDED

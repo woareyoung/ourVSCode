@@ -170,11 +170,11 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AI1_Source\DeadCheck.cpp" />
     <ClCompile Include="AI1_Source\FunctionPart.cpp" />
     <ClCompile Include="AI1_Source\AI1GetPosition.cpp" />
     <ClCompile Include="AI1_Source\Initialize.cpp" />
     <ClCompile Include="AI1_Source\RateResetScore.cpp" />
+    <ClCompile Include="AI1_Source\SimCalDead.cpp" />
     <ClCompile Include="AI1_Source\UpdateScore.cpp" />
     <ClCompile Include="AI2_Source\DataUtil.cpp" />
     <ClCompile Include="AI2_Source\AI2GetPosition.cpp" />
@@ -194,6 +194,7 @@
     <ClCompile Include="FileSystem_Source\Init.cpp" />
     <ClCompile Include="FileSystem_Source\Match.cpp" />
     <ClCompile Include="FileSystem_Source\ReadFile.cpp" />
+    <ClCompile Include="MainAI_Source\DeadCheck.cpp" />
     <ClCompile Include="MainAI_Source\MatchMemory.cpp" />
     <ClCompile Include="MainAI_Source\ProbabilityCount.cpp" />
   </ItemGroup>

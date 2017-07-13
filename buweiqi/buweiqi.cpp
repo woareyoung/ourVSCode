@@ -294,7 +294,7 @@ DWORD WINAPI PlayProc(PVOID pParam)
 	while (CB.Start)
 	{
 		if(CB.ControlLoop) CB.PaintChess();
-		if (!CB.Start && CB.CombatNumber < MAX_COMBAT)
+		if (!CB.Start && CB.CombatNumber < MAX_COMBAT && CB.Player1isAI && CB.Player2isAI)
 		{
 			CB.CombatNumber++;
 			CB.Start = true;
@@ -305,6 +305,7 @@ DWORD WINAPI PlayProc(PVOID pParam)
 	CloseHandle(CB.MainProcedureThead);
 	return 0;
 }
+
 ///ÏìÓ¦Ñ¡ÔñAI
 void SelectFun()
 {

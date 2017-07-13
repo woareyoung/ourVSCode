@@ -17,15 +17,3 @@ void FileSystem::OpenFile(std::string FileName, std::fstream &f)
 		}
 	}
 }
-void FileSystem::ClearList(std::shared_ptr<NEXTPACE> HeadNode)
-{
-	if (HeadNode == nullptr) return;
-	std::shared_ptr<NEXTPACE> temp = HeadNode->next;
-	HeadNode = nullptr;
-	while(temp != nullptr)
-	{
-		HeadNode = temp;
-		temp = temp->next;
-		HeadNode = nullptr;
-	}
-}

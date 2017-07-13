@@ -1,6 +1,8 @@
 #include "../stdafx.h"
 #include "../AI1_Header/AI1.h"
-#define MAX_SIMILAR 3 //设置同样的走棋达到连续3次后改变规律
+
+#define MAX_SIMILAR 2 //设置同样的走棋达到连续2次后改变规律
+#define ThreadAmount 5//线程数
 ///获取下棋位置
 void AI1::GetPosition(int &line, int &column, int onTurn)
 {
@@ -67,10 +69,13 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 	{
 		bool None;
 		int NextPace;
-		np = MatchMemory(line, column, None);//获取对局记录中符合当前盘面的对应方法
+		np.clear();
+		None = MatchMemory(line, column, np);//获取对局记录中符合当前盘面的对应方法
 		//如果对局记录中有应对的方法
-		if (np != nullptr)
+		if (!np.empty())
 		{
+			GetMaxScorePosition();
+			np.insert(MaxScorePosition);
 			NextPace = GetNextPace(np);
 			if (NextPace > 0) abc = false;
 			int maxQ = Qua.GetMaxQuadrant();
@@ -105,13 +110,13 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		column = MaxScorePosition % 10;
 		if (cross[line][column] != 0) continue;//这句虽然没什么用，但保险起见
 		///若该位置对于对方来说是死棋，则继续循环
-		if (DeadCheck(line, column, OT, true) == true && MaxScore > PointStyle[9])
+		if (DeadCheck(line, column, OT, cross) == true && MaxScore > PointStyle[9])
 		{
 			Score[line][column] = PointStyle[9];
 			continue;
 		}
 		///若是死棋位置，且棋盘上还有位置不是死棋，则继续循环
-		if (DeadCheck(line, column, PlayerId, true) == true && MaxScore > PointStyle[1])
+		if (DeadCheck(line, column, PlayerId, cross) == true && MaxScore > PointStyle[1])
 		{
 			Score[line][column] = PointStyle[1];
 			continue;
@@ -120,24 +125,29 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		else
 		{
 			Statistic(line, column);
-			GetCurrentStatus(Qua.GetMaxQuadrant());
-			np = FS.Match(NowStatus, OT, CurrentRound + 1, false);//搜索出同样的局面输的一方的下棋位置
-			if (np == nullptr)
+			cross[line][column] = PlayerId;
+			GetCurrentStatus(Qua.GetMaxQuadrant(), NowStatus);
+			cross[line][column] = 0;
+			BackQua(line, column);
+			np.clear();
+			FS.Match(NowStatus, np, CurrentRound + 1, 3 - PlayerId);//搜索出同样的局面输的一方的下棋位置
+			if (np.empty())
 			{
-				BackQua(line, column);
+				if (Similar == -1) Similar = -1;
 				break;
 			}
-			else Similar++;
-			ClearList(np);
+			else
+			{
+				if (Similar == -1) Similar = 2;
+				else Similar++;
+			}
+			np.clear();
 			if (Similar == MAX_SIMILAR)
 			{
-				Similar = 0;
-				BackQua(line, column);
-				Score[line][column] *= 0.75;
-				cross[line][column] = 0;
+				Similar = -1;
+				Score[line][column] *= 0.5;
 				continue;
 			}
-			else BackQua(line, column);
 			break;
 		}
 	}
@@ -149,36 +159,55 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 	CurrentNull--;
 }
 ///从链表中选取最高胜率的结点
-int AI1::GetNextPace(std::shared_ptr<NEXTPACE> np)
+int AI1::GetNextPace(std::set<int> &np)
 {
 	int BestSite = -1;
-	if (np->next == nullptr)
+	//如果容器只有一个元素
+	if (np.size() == 1)
 	{
-		BestSite = np->site;
-		np = nullptr;
+		std::set<int>::iterator i = np.begin();
+		BestSite = *i;
+		np.clear();
 		return BestSite;
 	}
-	FS.ReadFileToMemory(CurrentRound + 2);
-	double MaxPro = -2;
-	double tmp;
-	std::shared_ptr<NEXTPACE> temp = np;
-	while(temp != nullptr)
+	double maxScore = -100;
+	bool ThreadGo[ThreadAmount] = { false };//标记线程是否正在执行
+	int i;
+
+	while (!np.empty())
 	{
-		if(temp->site < 1) {}
-		else if (cross[temp->site / 10][temp->site % 10] == 0)
+		for (i = 0; i < ThreadAmount; i++)
 		{
-			tmp = ProbabilityCount(temp->site);
-			if (tmp > MaxPro)
+			if (np.empty()) break;
+			if (!ThreadGo[i])//如果线程空闲状况
 			{
-				MaxPro = tmp;
-				BestSite = temp->site;
+				ThreadGo[i] = true;//标记线程已在执行
+				std::async(std::launch::async, [&]() {
+//					g_lock.lock();//加互斥锁，解决访问冲突
+					auto t = np.begin();//获取候补位置的第一个
+					int tempPos = *t;
+					np.erase(tempPos);//将该位置从候补列表中擦除
+					double ttt = CalDeadPosNumber(tempPos / 10, tempPos % 10);//获取该位置的评价
+					if (ttt > maxScore)
+					{
+						maxScore = ttt;
+						BestSite = tempPos;
+					}
+//					g_lock.unlock();//解锁
+				});
+				ThreadGo[i] = false;//标记线程空闲
 			}
 		}
-		np = temp;
-		temp = temp->next;
-		np = nullptr;
 	}
-	FS.ClearLIST(FS.ProHeadWin);
-	FS.ClearLIST(FS.ProHeadLose);
+	bool wait = true;
+	while (wait)
+	{
+		for (int i = 0; i < ThreadAmount; i++)
+		{
+			if (ThreadGo[i]) break;//如果还有线程正在执行，则主线程等待
+			else if (i == ThreadAmount - 1) wait = false;
+		}
+	}
+	np.clear();
 	return BestSite;
 }

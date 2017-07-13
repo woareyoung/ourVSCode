@@ -8,31 +8,17 @@ struct PACE
 	int line;
 	int column;
 	int player;
-	std::shared_ptr<PACE> next;
-	std::shared_ptr<PACE> perior;
 };
 ///记录当前盘面状况
 struct SITUATION
 {
-	int Line[10] = { 0 };//9行的记录（其中数组第0个记录下棋的位置）
-	std::shared_ptr<SITUATION> next;
-	std::shared_ptr<SITUATION> prior;
-	std::shared_ptr<SITUATION> fourPtr;//后4个结点
+	std::string BoardStatus = "";//盘面状况
+	int ChessPosition;//下棋位置
 	SITUATION &operator= (SITUATION &param)
 	{
-		for (int i = 0; i < 10; i++) Line[i] = param.Line[i];
+		BoardStatus = param.BoardStatus;
+		ChessPosition = param.ChessPosition;
 		return *this;
-	}
-	void DigitalChange()
-	{
-		int help1;
-		int help2;
-		for (int i = 1; i < 10; i++)
-		{
-			help2 = Line[i] / 10000; //获取高位
-			help1 = Line[i] % 10000; //获取低位
-			Line[i] = help2 + help1 * 10000;
-		}
 	}
 };
 ///
@@ -57,19 +43,4 @@ struct FileName
 {
 	std::string TXT = ".txt";
 	std::string ForeName = "AIMemory\\Round";
-};
-
-struct NEXTPACE
-{
-	int site;
-	std::shared_ptr<NEXTPACE> next;
-};
-
-struct DISKSTATUS
-{
-	int Value[10];
-	int count;
-	std::shared_ptr<DISKSTATUS> next;
-	std::shared_ptr<DISKSTATUS> prior;
-	std::shared_ptr<DISKSTATUS> JumpPtr;
 };

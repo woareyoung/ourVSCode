@@ -1,160 +1,57 @@
 #include "../FileSystem_Header/FileSystem.h"
 
-int FileSystem::CountNumber(SITUATION &sit, bool win)
+//读文件到容器
+void FileSystem::ReadFile(int round)
 {
-	int Count[ProThreadNumber] = { 0 };
-	int SumCount = 0;
-	std::shared_ptr<DISKSTATUS> ttt;
-	if (win) ttt = ProHeadWin;
-	else ttt = ProHeadLose;
-	SITUATION SIT[ProThreadNumber] = { sit };
-	std::shared_ptr<DISKSTATUS> ProThread[ProThreadNumber];
-	for (int j = 0; j < ProThreadNumber; j++)
-	{
-		ProThread[j] = ttt;
-		ttt = ttt->next;
-	}
-	bool wait[ProThreadNumber - 1] = { true };//标记是否一样
-	bool DOloop = true;
-	for (int i = 1; i < ProThreadNumber; i++)
-	{
-		std::async(std::launch::async, [&]() {
-			while (ProThread[i] != nullptr)
-			{
-				//判断盘面是否相同
-				for (int n = 1; n < 10; n++)
-				{
-					if (CompareHigh(ProThread[i]->Value[n] / 10000, SIT[i].Line[n] / 10000, nullptr, nullptr, false) && CompareLow(ProThread[i]->Value[n] % 10000, SIT[i].Line[n] % 10000)) 
-						break;//如果有不包含的数据，则搜索下一个结点
-					else if (n == 9) Count[i] += ProThread[i]->count;
-				}
-				ProThread[i] = ProThread[i]->JumpPtr;
-			}
-			wait[i - 1] = false;
-		});
-	}
-	while (ProThread[0] != nullptr)
-	{
-		//判断盘面是否相同
-		for (int n = 1; n < 10; n++)
+	bool ThreadFinish[OpenFileThreadNumber] = { false };//标记线程是否执行完毕
+	bool MainFinish = false;//标记父线程是否可以离开了
+	auto ReadFileToSTL = [&](std::string fileName, int ThreadNum, std::unordered_multimap<std::string, int> &stl) {
+		int temp;
+		std::string data;
+		CountFile[ThreadNum].open(fileName, std::ios::in | std::ios::out);
+		if (!CountFile) return;//打开文件失败
+		//将文件读取到容器中
+		while (!CountFile[ThreadNum].eof())
 		{
-			if (CompareHigh(ProThread[0]->Value[n] / 10000, SIT[0].Line[n] / 10000, nullptr, nullptr, false) && CompareLow(ProThread[0]->Value[n] % 10000, SIT[0].Line[n] % 10000)) 
-				break;//如果有不相同的数据，则搜索下一个结点
-			else if (n == 9) Count[0] += ProThread[0]->count;
+			CountFile[ThreadNum].seekg(0);
+			CountFile[ThreadNum] >> data >> temp;
+			stl.insert(std::pair<std::string, int>(data, temp));
 		}
-		ProThread[0] = ProThread[0]->JumpPtr;
-	}
-	while (DOloop)
-	{
-		for (int m = 0; m < ProThreadNumber - 1; m++)
-		{
-			if (wait[m]) break;
-			else if (m == ProThreadNumber - 2) DOloop = false;
-		}
-	}
-	for (int i = 0; i < ProThreadNumber; i++) SumCount += Count[i];
-	return SumCount;
-}
-void FileSystem::ReadFileToMemory(int NowRound)
-{
-	std::string winfilename = FN.ForeName + std::to_string(NowRound) + FN.TXT;
-	std::string losefilename = FN.ForeName + std::to_string(NowRound + 1) + FN.TXT;
-	bool wait = true;
-	//读取输记录
-	std::async(std::launch::async, [&]() {
-		ReadFile(0, losefilename);
-		wait = false;
-	});
-	//读取赢记录
-	ReadFile(1, winfilename);
-	while (wait) {}
-}
-void FileSystem::ReadFile(int HeadNumber, std::string filename)
-{
-	std::fstream file;
-	file.open(filename, std::ios::out | std::ios::in);
-	if (!file)
-	{
-		if(HeadNumber == 0) ProHeadLose = nullptr;
-		else ProHeadWin = nullptr;
-		return;
-	}
-	int i, num = 0;
-	std::shared_ptr<DISKSTATUS> tempTail = HeadNumber == 0 ? ProHeadLose : ProHeadWin;
-	std::shared_ptr<DISKSTATUS> temp;
-	while (!file.eof())
-	{
-		if (tempTail == nullptr)
-		{
-			tempTail = std::shared_ptr<DISKSTATUS>(new DISKSTATUS);
-			tempTail->next = nullptr;
-			tempTail->prior = nullptr;
-			tempTail->JumpPtr = nullptr;
-			if (HeadNumber == 0) ProHeadLose = tempTail;
-			else ProHeadWin = tempTail;
-		}
-		else
-		{
-			tempTail->next = std::shared_ptr<DISKSTATUS>(new DISKSTATUS);
-			tempTail->next->prior = tempTail;
-			tempTail = tempTail->next;
-			tempTail->next = nullptr;
-			tempTail->JumpPtr = nullptr;
-		}
-		num++;
-		if (num > ProThreadNumber)
-		{
-			for (i = 0, temp = tempTail; i < ProThreadNumber; i++) temp = temp->prior;
-			temp->JumpPtr = tempTail;
-		}
-		for (i = 1; i < 10; i++) file >> tempTail->Value[i];
-		file >> tempTail->Value[0] >> tempTail->count;
-	}
-}
-
-void FileSystem::ClearLIST(std::shared_ptr<DISKSTATUS> Head)
-{
-	if (Head == nullptr) return;
-	std::shared_ptr<DISKSTATUS> temp[ProThreadNumber], tem = Head;
+		CountFile[ThreadNum].close();
+		ThreadFinish[ThreadNum] = true;
+	};
 	int i;
-	for (i = 0; i < ProThreadNumber; i++)
+	if (CountMapUseLack)
 	{
-		temp[i] = tem;
-		tem = tem->next;
-	}
-	bool wait[ProThreadNumber - 1] = { true };
-	for (i = 0; i < ProThreadNumber - 1; i++)
-	{
-		std::shared_ptr<DISKSTATUS> t = temp[i];
-		std::async(std::launch::async, [&]() {
-			while (t != nullptr)
-			{
-				tem = t;
-				t = t->JumpPtr;
-				tem = nullptr;
-			}
-			wait[i] = false;
-		});
-	}
-	std::shared_ptr<DISKSTATUS> t = temp[ProThreadNumber - 1];
-	while (t != nullptr)
-	{
-		tem = t;
-		t = t->JumpPtr;
-		tem = nullptr;
-	}
-	bool www = false;
-	while (true)
-	{
-		for (int j = 0; j < ProThreadNumber - 1; j++)
+		for (i = 0; i < OpenFileThreadNumber; i++)
 		{
-			if (wait[j] == true)
+			std::thread t(ReadFileToSTL, FN.ForeName + std::to_string(round + i) + FN.TXT, i, CCountMap[i]);
+			if (i == OpenFileThreadNumber - 1) t.join();//当到最后一条线程的时候，等待它执行完毕再离开
+			else t.detach();//使子线程与父线程分离执行
+		}
+	}
+	else
+	{
+		for (i = 0; i < OpenFileThreadNumber; i++)
+		{
+			std::thread t(ReadFileToSTL, FN.ForeName + std::to_string(round + i) + FN.TXT, i, CountMap[i]);
+			if (i == OpenFileThreadNumber - 1) t.join();//当到最后一条线程的时候，等待它执行完毕再离开
+			else t.detach();//使子线程与父线程分离执行
+		}
+		CountMapUseLack = true;
+	}
+	//等待子线程
+	while (!MainFinish)
+	{
+		for (i = 0; i < OpenFileThreadNumber; i++)
+		{
+			//只要还有线程未执行完毕，则继续等待
+			if (!ThreadFinish[i])
 			{
-				www = false;
+				MainFinish = false;
 				break;
 			}
-			else if (j == ProThreadNumber - 1) www = true;
+			else if (i == OpenFileThreadNumber - 1) MainFinish = true;
 		}
-		if (www) break;
 	}
 }
