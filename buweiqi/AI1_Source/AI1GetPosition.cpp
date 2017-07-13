@@ -74,6 +74,8 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		//如果对局记录中有应对的方法
 		if (!np.empty())
 		{
+			GetMaxScorePosition();
+			np.insert(MaxScorePosition);
 			NextPace = GetNextPace(np);
 			if (NextPace > 0) abc = false;
 			int maxQ = Qua.GetMaxQuadrant();
@@ -108,13 +110,13 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		column = MaxScorePosition % 10;
 		if (cross[line][column] != 0) continue;//这句虽然没什么用，但保险起见
 		///若该位置对于对方来说是死棋，则继续循环
-		if (DeadCheck(line, column, OT) == true && MaxScore > PointStyle[9])
+		if (DeadCheck(line, column, OT, cross) == true && MaxScore > PointStyle[9])
 		{
 			Score[line][column] = PointStyle[9];
 			continue;
 		}
 		///若是死棋位置，且棋盘上还有位置不是死棋，则继续循环
-		if (DeadCheck(line, column, PlayerId) == true && MaxScore > PointStyle[1])
+		if (DeadCheck(line, column, PlayerId, cross) == true && MaxScore > PointStyle[1])
 		{
 			Score[line][column] = PointStyle[1];
 			continue;

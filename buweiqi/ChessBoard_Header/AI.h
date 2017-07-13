@@ -55,8 +55,9 @@ public:
 		参数line:下棋的位置——行
 		参数column:下棋的位置——列
 		参数who:谁 下的棋
+		参数CROSS:当前棋盘状况（用于解决多线程的冲突）
 	*/
-	bool DeadCheck(int line, int column, int who);
+	bool DeadCheck(int line, int column, int who, int CROSS[][10]);
 };
 
 #endif // AI_H_INCLUDED

@@ -3,7 +3,7 @@
 #include <stack>
 
 ///参数：预备下棋位置
-bool AI::DeadCheck(int line, int column, int who)
+bool AI::DeadCheck(int line, int column, int who, int CROSS[][10])
 {
 	bool simulate = false;//标记是否是模拟下棋
 	//为了适应多线程，另定义一个变量，解决访问冲突
@@ -13,7 +13,7 @@ bool AI::DeadCheck(int line, int column, int who)
 	int saveLine = line, saveColumn = column;
 	for (i = 0; i < 10; i++)
 		for (j = 0; j < 10; j++)
-			BoardCross[i][j] = cross[i][j];
+			BoardCross[i][j] = CROSS[i][j];
 	bool VisitStatus[10][10] = { false };//标记是否已遍历过
 	std::stack<std::pair<int, int>> position;
 	std::pair<int, int> p;
@@ -45,7 +45,7 @@ bool AI::DeadCheck(int line, int column, int who)
 		line = saveLine;
 		column = saveColumn;
 		while (!position.empty()) position.pop();
-		if (simulate) cross[line][column] = 0;
+		if (simulate) CROSS[line][column] = 0;
 	};
 	//判断是否是模拟下棋
 	if (BoardCross[line][column] == 0)
