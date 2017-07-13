@@ -305,6 +305,7 @@ DWORD WINAPI PlayProc(PVOID pParam)
 	CloseHandle(CB.MainProcedureThead);
 	return 0;
 }
+
 ///œÏ”¶—°‘ÒAI
 void SelectFun()
 {

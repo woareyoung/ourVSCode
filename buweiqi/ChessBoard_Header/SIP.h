@@ -8,8 +8,6 @@ struct PACE
 	int line;
 	int column;
 	int player;
-	std::shared_ptr<PACE> next;
-	std::shared_ptr<PACE> perior;
 };
 ///记录当前盘面状况
 struct SITUATION
@@ -45,19 +43,4 @@ struct FileName
 {
 	std::string TXT = ".txt";
 	std::string ForeName = "AIMemory\\Round";
-};
-
-struct NEXTPACE
-{
-	int site;
-	std::shared_ptr<NEXTPACE> next;
-};
-
-struct DISKSTATUS
-{
-	int Value[10];
-	int count;
-	std::shared_ptr<DISKSTATUS> next;
-	std::shared_ptr<DISKSTATUS> prior;
-	std::shared_ptr<DISKSTATUS> JumpPtr;
 };

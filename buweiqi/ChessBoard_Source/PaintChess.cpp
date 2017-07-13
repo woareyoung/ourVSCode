@@ -95,7 +95,6 @@ void ChessBoard::PaintAChess(int type)
 	DisplayOnTurn(type);
 	Repaint = false;
 	RePaint();
-	UpdateWindow(RootHwnd);
 	Repaint = true;
 }
 void ChessBoard::DisplayOnTurn(int type)

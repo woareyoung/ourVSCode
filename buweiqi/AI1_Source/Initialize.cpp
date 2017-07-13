@@ -49,7 +49,6 @@ void AI1::InitializeD()
 	{
 		for (j = 0; j < 10; ++j)
 		{
-			SimulateScore[i][j] = 0;
 			Score[i][j] = 1;
 			cross[i][j] = 0;
 			Cross[i][j] = false;
@@ -75,7 +74,4 @@ void AI1::InitializeD()
 
 	Similar = 0;
 	np.clear();
-	RivalDeadPosNumber = 0;
-	MyDeadPosNumber = 0;
-	DoubleNoDeadNumber = 81;
 }

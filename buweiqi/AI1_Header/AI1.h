@@ -31,10 +31,6 @@ private:
 	double Score[10][10];//记录每个位置上的分值
 	double MaxScore;//记录最大分值
 
-	int SimulateScore[10][10];
-	int RivalDeadPosNumber;//对方死棋位置数
-	int MyDeadPosNumber;//我方死棋位置数
-	int DoubleNoDeadNumber;//双方不会死的位置数
 	std::stack<int> MyDeadNumber;
 	std::stack<int> RivalDeadNumber;
 	
@@ -79,7 +75,7 @@ private:
 	void RateResetScore(double ResetRate, bool add = true);//按比例缩小分值，减少分差，精确定位
 
 
-	void CalDeadPosNumber(int line, int column);//计算死棋位置数量
+	double CalDeadPosNumber(int line, int column);//计算死棋位置数量
 	
 };
 

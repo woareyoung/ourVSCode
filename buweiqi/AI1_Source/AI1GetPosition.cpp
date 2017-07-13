@@ -1,6 +1,8 @@
 #include "../stdafx.h"
 #include "../AI1_Header/AI1.h"
+#include <mutex>
 #define MAX_SIMILAR 2 //设置同样的走棋达到连续3次后改变规律
+#define ThreadAmount 5//线程数
 ///获取下棋位置
 void AI1::GetPosition(int &line, int &column, int onTurn)
 {
@@ -150,6 +152,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 int AI1::GetNextPace(std::set<int> &np)
 {
 	int BestSite = -1;
+	//如果容器只有一个元素
 	if (np.size() == 1)
 	{
 		std::set<int>::iterator i = np.begin();
@@ -157,8 +160,44 @@ int AI1::GetNextPace(std::set<int> &np)
 		np.clear();
 		return BestSite;
 	}
-//	FS.ReadFile(CurrentRound + 2);
-	BestSite = *np.begin();
+	double maxScore = -100;
+	bool ThreadGo[ThreadAmount] = { false };//标记线程是否正在执行
+	int i;
+	std::mutex g_lock;//互斥锁
+	while (!np.empty())
+	{
+		for (i = 0; i < ThreadAmount; i++)
+		{
+			if (np.empty()) break;
+			if (!ThreadGo[i])//如果线程空闲状况
+			{
+				ThreadGo[i] = true;//标记线程已在执行
+				std::async(std::launch::async, [&]() {
+					g_lock.lock();//加互斥锁，解决访问冲突
+					auto t = np.begin();//获取候补位置的第一个
+					int tempPos = *t;
+					np.erase(tempPos);//将该位置从候补列表中擦除
+					double ttt = CalDeadPosNumber(tempPos / 10, tempPos % 10);//获取该位置的评价
+					if (ttt > maxScore)
+					{
+						maxScore = ttt;
+						BestSite = tempPos;
+					}
+					g_lock.unlock();//解锁
+				});
+				ThreadGo[i] = false;//标记线程空闲
+			}
+		}
+	}
+	bool wait = true;
+	while (wait)
+	{
+		for (int i = 0; i < ThreadAmount; i++)
+		{
+			if (ThreadGo[i]) break;//如果还有线程正在执行，则主线程等待
+			else if (i == ThreadAmount - 1) wait = false;
+		}
+	}
 	np.clear();
 	return BestSite;
 }
