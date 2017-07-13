@@ -201,11 +201,10 @@ void AI2::startPattern() {
 * [AI2::Pattern 使用模板匹配棋盘棋子]
 * @param PatternType [模板]
 */
-void AI2::Pattern(int *PatternType) {
+void AI2::Pattern(const int *PatternType) {
 	register int x_offset, y_offset;
 	register int i, j, x, y;
 	register int pointer, start = 0, score;
-	register int *pattern = PatternType;
 	int mainColor = NoChess;
 	Pos emptyPos[3];
 	// 每一个棋子都要遍历一遍模板
@@ -225,7 +224,7 @@ void AI2::Pattern(int *PatternType) {
 					score = pattern_Score[i];
 					// 棋子在棋盘内
 					if (OnChessBoard(x + x_offset, y + y_offset)) {
-						if (0 == (cross[x + x_offset][y + y_offset] & pattern[j])) goto mismatch;//不相同的
+						if (0 == (cross[x + x_offset][y + y_offset] & PatternType[j])) goto mismatch;//不相同的
 						else
 						{
 							if (cross[x + x_offset][y + y_offset] == NoChess) {
@@ -241,7 +240,7 @@ void AI2::Pattern(int *PatternType) {
 						}
 					}
 					else {
-						if (0 == (Edge & pattern[j])) goto mismatch;//不是边界
+						if (0 == (Edge & PatternType[j])) goto mismatch;//不是边界
 					}
 				}
 				// 匹配到一个模版
