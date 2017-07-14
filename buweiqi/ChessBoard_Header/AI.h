@@ -4,6 +4,7 @@
 #include "SIP.h"
 #include "../FileSystem_Header/FileSystem.h"
 #include <math.h>
+#include <unordered_map>
 
 class AI
 {
@@ -18,7 +19,10 @@ public:
 	SITUATION NowStatus;//当前盘面状况
 	int CurrentRound;//当前回合数
 	int CurrentNull;//空位数量（备用）
-
+	bool ForeReadFinish;//记录预读文件是否完成
+	bool ForeReadHaveMem;//标记预读文件中是否有内容
+	std::unordered_multimap<std::string, std::pair<int, int>> ForeReadContent;//存放预读内容
+	
 	virtual void GetPosition(int &line, int &column, int onTurn) = 0;
 	/*
 		参数line：下棋的位置（行）
@@ -29,8 +33,14 @@ public:
 	/*
 		参数line：下棋的位置（行）
 		参数column：下棋的位置（列）
-	*/
-	void Statistic(int line, int column);//统计棋盘各个区域的棋子数量
+	*///统计棋盘各个区域的棋子数量
+	void Statistic(int line, int column)
+	{
+		if (line < 5 && column > 5) Qua.FirstQuadrant++;
+		else if (line < 5 && column < 5) Qua.SecondQuadrant++;
+		else if (line > 5 && column < 5) Qua.ThirdQuadrant++;
+		else if (line > 5 && column > 5) Qua.ForthQuadrant++;
+	}
 	/*
 	    参数maxQuadrant：最大的棋子数
 	*/
@@ -58,6 +68,10 @@ public:
 		参数CROSS:当前棋盘状况（用于解决多线程的冲突）
 	*/
 	bool DeadCheck(int line, int column, int who, int CROSS[][10]);
+	/*
+	param[round]:需要预读的回合数
+	*/
+	void ForeReadFileToMemory(int round);//预读文件
 };
 
 #endif // AI_H_INCLUDED

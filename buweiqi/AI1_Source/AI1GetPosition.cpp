@@ -65,6 +65,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		cross[line][column] = PlayerId;
 		abc = false;
 	}
+	while (ForeReadFinish == false) {}//等待预读功能完成
 	if (abc)
 	{
 		bool None;
@@ -140,6 +141,9 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 	UpdateScore(line, column, PlayerId);
 	CurrentRound++;
 	CurrentNull--;
+	std::async(std::launch::async, [&]() {
+		ForeReadFileToMemory(CurrentRound);
+	});
 }
 ///从链表中选取最高胜率的结点
 int AI1::GetNextPace(std::set<int> &np)

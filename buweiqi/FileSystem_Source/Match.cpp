@@ -1,5 +1,6 @@
 #include "../stdafx.h"
 #include "../FileSystem_Header/FileSystem.h"
+#include <mutex>
 ///匹配当前盘面状况的记忆
 void FileSystem::Match(SITUATION &StatusQuo, std::set<int> &result, int round, int playerId)
 {
@@ -27,6 +28,7 @@ void FileSystem::GenerMatch(SITUATION &StatusQuo, std::set<int> &Parent, int rou
 	std::set<int> tempSTL1, tempSTL2;
 	std::set<int> one1, two1, one2, two2;
 	tempSTL1.clear();
+	std::mutex g_lock;//互斥锁
 	bool com = false, wait = true;
 	while (!TempFile.eof())
 	{
@@ -40,11 +42,15 @@ void FileSystem::GenerMatch(SITUATION &StatusQuo, std::set<int> &Parent, int rou
 		if (!com) continue;
 		std::async(std::launch::async, [&]() {
 			tempSTL2.clear();
+			g_lock.lock();//加锁
 			wait = false;
+			g_lock.unlock();//解锁
 		});
-		if(!tempSTL1.empty())
+		if (tempSTL1.size() > 0)
+		{
 			for (auto t : tempSTL1)
 				Parent.insert(t);
+		}
 		tempSTL1.clear();
 		while (wait) {}
 	}

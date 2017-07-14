@@ -5,11 +5,9 @@
 #include <time.h>
 #include <stdlib.h>
 #include <conio.h>
-//#include <math.h>
 #include "../chessBoard_Header/AI.h"
 #include <stack>
 #include <set>
-//#include <mutex>
 #include "PointStyle.h"
 #include "../FileSystem_Header/FileSystem.h"
 #include "../ChessBoard_Header/SIP.h"
@@ -31,12 +29,8 @@ private:
 	double PointStyle[18];//记录每种特殊点类型的分值
 	double Score[10][10];//记录每个位置上的分值
 	double MaxScore;//记录最大分值
-//	std::mutex g_lock;//互斥锁
-
-	std::stack<int> MyDeadNumber;
-	std::stack<int> RivalDeadNumber;
 	
-	std::set<int> np;//获取下一步的可能性的链表
+	std::set<int> np;//获取下一步的可能性的集合
 	/*
 		param[np]:可能下棋位置的set集合
 	*/
@@ -51,11 +45,6 @@ private:
 	*/
 	int GetChessAmount(int row1, int row2, int who, int &num);//查看特定位置的四个方向有多少个棋子
 	void GetMaxScorePosition();//获取最大分值的位置
-	/*
-		param[line]:刚下棋的行
-		param[column]:刚下棋的列
-	*/
-	void MemoryData(int line, int column);//记录数据
 
 	///更新位置分值所用函数 集中在UpdateScore.cpp文件中
 	//更新棋盘位置分值，参数：行，列，是否加分
@@ -69,7 +58,7 @@ private:
 
 	///在RateResetScore.cpp文件中
 	void RateResetScore(double ResetRate, bool add = true);//按比例缩小分值，减少分差，精确定位
-
+	//--------------------------------------------------------------------------------//
 	/*
 	param[line]:下棋位置——行
 	param[column]:下棋位置——列
@@ -81,6 +70,7 @@ private:
 	param[site]：需要转换的位置
 	*/
 	void SymmetryExchange(int &line, int &column, int site);//将记录中的位置转换为合适当前盘面的位置
+
 };
 
 

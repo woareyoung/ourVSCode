@@ -2,19 +2,22 @@
 #include "../ChessBoard_Header/AI.h"
 #define MAX_ROUND_K 4
 
-void AI::Statistic(int line, int column)
-{
-	if (line < 5 && column > 5) Qua.FirstQuadrant++;
-	else if (line < 5 && column < 5) Qua.SecondQuadrant++;
-	else if (line > 5 && column < 5) Qua.ThirdQuadrant++;
-	else if (line > 5 && column > 5) Qua.ForthQuadrant++;
-}
 bool AI::MatchMemory(int line, int column, std::set<int> &res)
 {
 	Statistic(line, column);//先统计当前局面
 	int i;
 	GetCurrentStatus(Qua.GetMaxQuadrant(), NowStatus);
-	FS.Match(NowStatus, res, CurrentRound, PlayerId);
+	std::pair<int, int> p;
+	if (ForeReadHaveMem)
+	{
+		auto ran = ForeReadContent.equal_range(NowStatus.BoardStatus);
+		for (auto it = ran.first; it != ran.second; it++)
+		{
+			p = it->second;//获取“值”
+			res.insert(p.first);//获取“值”的第一个元素
+		}
+	}
+	else FS.Match(NowStatus, res, CurrentRound, PlayerId);
 	//如果有一模一样的记录，则直接跟着下
 	if (!res.empty()) return false;
 	for (i = CurrentRound + MAX_ROUND_K; ; i = i + 2)

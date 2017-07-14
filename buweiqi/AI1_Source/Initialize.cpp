@@ -74,4 +74,6 @@ void AI1::InitializeD()
 
 	Similar = 0;
 	np.clear();
+	ForeReadFinish = true;
+	ForeReadHaveMem = false;
 }
