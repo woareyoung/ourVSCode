@@ -272,7 +272,7 @@ public:
 	}
 	int predict() {
 		MCTS::ComputeOptions options;
-		options.number_of_threads = 8;
+		options.number_of_threads = 6;
 		// options.verbose = true;
 		// options.max_time = 1;
 		auto state_copy = new SimulatorGo(cross, PlayerId);

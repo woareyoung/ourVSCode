@@ -206,7 +206,7 @@ void AI2::Pattern(const int *PatternType) {
 	register int i, j, x, y;
 	register int pointer, start = 0, score;
 	int mainColor = NoChess;
-	Pos emptyPos[3];
+	Pos emptyPos[10];
 	// 每一个棋子都要遍历一遍模板
 	for (x = ChessStart; x < ChessEnd; ++x) {
 		for (y = ChessStart; y < ChessEnd; ++y) {

@@ -13,26 +13,30 @@ double AI1::CalDeadPosNumber(int line, int column)
 	crossing[line][column] = PlayerId;
 	double MyDeadPosNumber = 0;//自己的死棋位置数量
 	double RivalDeadPosNumber = 0;//对方的死棋位置数量
-	double TigerMouth = 0;//虎口数量
-	auto CheckTigerMouth = [&](int TL, int TC) {
+	double TigerMouth[3] = { 0 };//虎口数量
+	auto CheckTigerMouth = [&](int TL, int TC, int player) {
 		int num = 0;
-		if (crossing[TL][TC + 1] != PlayerId && crossing[TL][TC + 1] != 0) num++;
-		if (crossing[TL + 1][TC] != PlayerId && crossing[TL + 1][TC] != 0) num++;
-		if (crossing[TL - 1][TC] != PlayerId && crossing[TL - 1][TC] != 0) num++;
-		if (crossing[TL][TC - 1] != PlayerId && crossing[TL][TC - 1] != 0) num++;
-		if (num == 3) TigerMouth++;
+		if (crossing[TL][TC + 1] == player || TC == 9) num++;
+		if (crossing[TL + 1][TC] == player && TL == 9) num++;
+		if (crossing[TL - 1][TC] == player && TL == 1) num++;
+		if (crossing[TL][TC - 1] == player && TC == 1) num++;
+		if (num == 3) ++TigerMouth[player];
 	};
-	for (i = 1; i < 10; i++)
+	for (i = 1; i < 10; ++i)
 	{
-		for (j = 1; j < 10; j++)
+		for (j = 1; j < 10; ++j)
 		{
 			if (crossing[i][j] != 0) continue;
 			MyDeath = DeadCheck(i, j, PlayerId, crossing);
 			RivalDeath = DeadCheck(i, j, 3 - PlayerId, crossing);
 			if (MyDeath && !RivalDeath) MyDeadPosNumber++;
 			else if (!MyDeath && RivalDeath) RivalDeadPosNumber++;
-			else CheckTigerMouth(i, j);
+			else
+			{
+				CheckTigerMouth(i, j, PlayerId);
+				CheckTigerMouth(i, j, 3 - PlayerId);
+			}
 		}
 	}
-	return RivalDeadPosNumber - MyDeadPosNumber + 0.5 * TigerMouth;
+	return RivalDeadPosNumber - MyDeadPosNumber + 0.5 * (TigerMouth[PlayerId] - TigerMouth[3 - PlayerId]);
 }

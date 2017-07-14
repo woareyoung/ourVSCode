@@ -16,9 +16,9 @@ void AIForFile::ForeReadFileToMemory(int round)
 	std::fstream file(filename, std::ios::out | std::ios::in);//文件对象
 	if (!file)
 	{
+		file.close();
 		ForeReadHaveMem = false;
 		ForeReadFinish = true;
-		file.close();
 		return;
 	}
 	ForeReadContent.clear();//先清空容器
