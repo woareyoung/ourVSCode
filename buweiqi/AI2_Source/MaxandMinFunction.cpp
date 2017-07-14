@@ -5,7 +5,7 @@
 * [AI2::maxandmin 极大极小函数]
 * @param depth 		执行的深度
 */
-int AI2::maxandmin(int depth)
+int AI2::maxandmin(const int& depth)
 {
 	int tempArrayW[10] =
 	{
@@ -42,7 +42,7 @@ int AI2::singleLayer()
 	return DealWithScore(turn2Who == PlayerId);
 }
 
-int AI2::DealWithScore(bool isEqual) {
+int AI2::DealWithScore(const bool& isEqual) {
 	int tempLine = 0;
 	int tempColumn = 0;
 	/************************************************

@@ -9,7 +9,7 @@ void AI2::initAllArray() {
 	}
 }
 
-void AI2::initChessScore(bool isFirst)
+void AI2::initChessScore(const bool& isFirst)
 {
 	for (int i = ChessStart; i < ChessEnd; ++i)
 	{

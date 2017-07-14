@@ -8,7 +8,7 @@
 * @param onTurn 		上一步敌方的ID
 * @param isExist[10][10]		棋盘着子情况数组
 */
-void AI2::GetPosition(int& line, int& column, int onTurn)
+void AI2::GetPosition(int &line, int &column, int onTurn)
 {
 	//接收到界面的远程命令
 	if (onTurn != 1 && onTurn != -1 && onTurn != 2 && onTurn != -2)
@@ -48,7 +48,7 @@ void AI2::GetPosition(int& line, int& column, int onTurn)
 	cross[line][column] = turn2Who;
 	// 将计算出的位置的分数设为最小值
 
-	_cprintf("\n**************This is chess score*******(%d, %d)***********\n", line, column);
+	/*_cprintf("\n**************This is chess score*******(%d, %d)***********\n", line, column);
 	for (int i = 1; i < 10; ++i)
 	{
 		for (int j = 1; j < 10; ++j)
@@ -61,5 +61,5 @@ void AI2::GetPosition(int& line, int& column, int onTurn)
 		for (int j = 1; j < 10; ++j)
 			_cprintf("%d\t", cross[i][j]);
 		_cprintf("\n");
-	}
+	}*/
 }

@@ -183,7 +183,7 @@ public:
 			}
 		}
 		// 如果当前Pattern匹配完之后，没有一个是好的着子点
-		if (moves.empty()) {
+		if (moves.size() < 5) {
 			for (int i = ChessStart; i < ChessEnd; ++i) {
 				for (int j = ChessStart; j < ChessEnd; ++j) {
 					if (cross[i][j] == NoChess && CS[i][j] != minLimit) {
@@ -211,7 +211,7 @@ public:
 		return Score;
 	}
 
-	virtual bool checkEmptyPos(int& x, int& y, int& start, int& mainColor, Pos emptyPos[]) override {
+	virtual bool checkEmptyPos(const int& x, const int& y, const int& start, const int& mainColor, const Pos *emptyPos) override {
 		/******************************************
 		判断当前匹配到的空位是否是敌方的自杀点，
 		如果是的话，就把该点的分数设置为0，跳过匹配模式
@@ -240,7 +240,7 @@ public:
 		return true;
 	}
 	// 检查棋子是否有效，并对分析的结果进行相应的加分
-	virtual bool checkStone(int& x, int& y) override {
+	virtual bool checkStone(const int& x, const int& y) override {
 		// 对于当前匹配到的着子点的环境进行分析
 		// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
 		int rival = getRival(player_to_move);
@@ -267,12 +267,12 @@ private:
 
 public:
 
-	virtual int maxandmin(int depth) override {
+	virtual int maxandmin(const int& depth) override {
 		return predict();
 	}
 	int predict() {
 		MCTS::ComputeOptions options;
-		options.number_of_threads = 6;
+		options.number_of_threads = 8;
 		// options.verbose = true;
 		// options.max_time = 1;
 		auto state_copy = new SimulatorGo(cross, PlayerId);

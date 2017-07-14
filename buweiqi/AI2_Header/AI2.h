@@ -147,10 +147,10 @@ public:
 	bool isFinal();
 
 	// 判断是否是死棋位
-	bool isGo2Dead(int line, int column, int type);
+	bool isGo2Dead(const int& line, const int& column, const int& type);
 
 	// 初始化数组
-	void initChessScore(bool isFirst);
+	void initChessScore(const bool& isFirst);
 	void initAllArray();
 	/*bool isContaint(goodMove move) {
 		int size = goodMoves.size();
@@ -164,15 +164,15 @@ public:
 	}*/
 
 	void Revalute();
-	virtual int maxandmin(int depth);
+	virtual int maxandmin(const int& depth);
 	int singleLayer();
-	int DealWithScore(bool isEqual);
+	int DealWithScore(const bool& isEqual);
 	void getScore(int& tempLine, int& tempColumn, bool isGetMax);
 
 	// 匹配函数
 	void startPattern();
 	void Pattern(const int *PatternType);
-	virtual bool checkEmptyPos(int& x, int& y, int& start, int& mainColor, Pos emptyPos[]) {
+	virtual bool checkEmptyPos(const int& x, const int& y, const int& start, const int& mainColor, const Pos *emptyPos) {
 		/******************************************
 		判断当前匹配到的空位是否是敌方的自杀点，
 		如果是的话，就把该点的分数设置为0，跳过匹配模式
@@ -199,7 +199,7 @@ public:
 		return true;
 	}
 	// 检查棋子是否有效，并对分析的结果进行相应的加分
-	virtual bool checkStone(int& x, int& y) {
+	virtual bool checkStone(const int& x, const int& y) {
 		// 对于当前匹配到的着子点的环境进行分析
 		// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
 		if (isGo2Dead(x, y, turn2Who)) {

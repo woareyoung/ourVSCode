@@ -6,7 +6,7 @@ DIRECTION direction_8[] = { { -1, 0 },{ 0, 1 },{ 1, 0 },{ 0, -1 },{ -1, 1 },{ 1,
 /**
 * [AI2::isGo2Dead 判断着子点是否有自杀倾向]
 */
-bool AI2::isGo2Dead(int line, int column, int type)
+bool AI2::isGo2Dead(const int& line, const int& column, const int& type)
 {
 	cross[line][column] = type;
 	int player = type;//记录己方的编号（是1还是2）
@@ -22,7 +22,7 @@ bool AI2::isGo2Dead(int line, int column, int type)
 	for (int i = 0; i < 4; ++i) Position[i] = false;
 
 	std::function<bool(int, int, int, int)> Besieg;
-	Besieg = [&](int RivalLine, int RivalColumn, int player, int rival) {
+	Besieg = [&](const int& RivalLine, const int& RivalColumn, const int& player, const int& rival) {
 		bool tie[4] = { false, false, false, false };
 		// 设置Cross数组状态
 		auto setStatus = [&](int RivalLine, int RivalColumn) -> void {

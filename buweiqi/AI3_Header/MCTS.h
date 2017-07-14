@@ -19,12 +19,12 @@ namespace MCTS
 		int number_of_threads;// 线程数量
 		int max_iterations;// 最大迭代次数
 		double max_time;// 最长的时间
-		bool verbose;// 是否冗余
+		bool verbose;// 是否显示Dos信息
 
 		ComputeOptions() :
 			number_of_threads(8),// 默认的线程数量是8条
 			max_iterations(10000),// 默认的最大的迭代数量是10000
-			max_time(-1.0), // default is no time limit.默认是没有时间限制的
+			max_time(-1.0), // 默认是没有时间限制的
 			verbose(false)
 		{ }
 	};
@@ -194,6 +194,8 @@ namespace MCTS
 		/*if (moves.empty()) {
 			showInfoOnDOS("error, select_child_UCT -> moves vector is empty!");
 		}*/
+
+		// 计算结点的UCT分数
 		for (auto child : children) {
 			child->UCT_score = double(child->wins) / double(child->visits) +
 				2.0 * std::sqrt(std::log(double(this->visits)) / child->visits);
