@@ -1,9 +1,9 @@
 #include "../stdafx.h"
-#include "../ChessBoard_Header/AI.h"
+#include "../AI1_Header/AIForFile.h"
 #include <stack>
 
 ///参数：预备下棋位置
-bool AI::DeadCheck(int line, int column, int who, int CROSS[][10])
+bool AIForFile::DeadCheck(int line, int column, int who, int CROSS[][10])
 {
 	bool simulate = false;//标记是否是模拟下棋
 	//为了适应多线程，另定义一个变量，解决访问冲突

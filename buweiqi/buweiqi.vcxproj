@@ -148,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI1_Header\AI1.h" />
+    <ClInclude Include="AI1_Header\AIForFile.h" />
     <ClInclude Include="AI1_Header\PointStyle.h" />
     <ClInclude Include="AI2_Header\AI2.h" />
     <ClInclude Include="AI2_Header\AIPlayer.h" />
@@ -182,6 +183,9 @@
     <ClCompile Include="AI2_Source\isGo2Dead.cpp" />
     <ClCompile Include="AI2_Source\MaxandMinFunction.cpp" />
     <ClCompile Include="AI2_Source\pattern.cpp" />
+    <ClCompile Include="AIForFile_Source\DeadCheck.cpp" />
+    <ClCompile Include="AIForFile_Source\MatchMemory.cpp" />
+    <ClCompile Include="AIForFile_Source\ProbabilityCount.cpp" />
     <ClCompile Include="buweiqi.cpp" />
     <ClCompile Include="ChessBoard_Source\AddList.cpp" />
     <ClCompile Include="ChessBoard_Source\InitData.cpp" />
@@ -195,9 +199,6 @@
     <ClCompile Include="FileSystem_Source\Init.cpp" />
     <ClCompile Include="FileSystem_Source\Match.cpp" />
     <ClCompile Include="FileSystem_Source\ReadFile.cpp" />
-    <ClCompile Include="MainAI_Source\DeadCheck.cpp" />
-    <ClCompile Include="MainAI_Source\MatchMemory.cpp" />
-    <ClCompile Include="MainAI_Source\ProbabilityCount.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="buweiqi.rc" />

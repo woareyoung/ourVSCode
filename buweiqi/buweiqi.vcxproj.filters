@@ -46,7 +46,7 @@
     <Filter Include="Source Files\FileSystem_Source">
       <UniqueIdentifier>{edb2cbeb-a855-407b-9696-fca6f7266fce}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\MainAI_Source">
+    <Filter Include="Source Files\AIForFile_Source">
       <UniqueIdentifier>{3915d4eb-5eaf-4416-b34a-3d6413f4bc77}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -120,6 +120,9 @@
     <ClInclude Include="ChessBoard_Header\showUnicodeInfo.h">
       <Filter>Header Files\ChessBoard_Header</Filter>
     </ClInclude>
+    <ClInclude Include="AI1_Header\AIForFile.h">
+      <Filter>Header Files\AI1_Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="buweiqi.cpp">
@@ -185,14 +188,8 @@
     <ClCompile Include="FileSystem_Source\Match.cpp">
       <Filter>Source Files\FileSystem_Source</Filter>
     </ClCompile>
-    <ClCompile Include="MainAI_Source\MatchMemory.cpp">
-      <Filter>Source Files\MainAI_Source</Filter>
-    </ClCompile>
     <ClCompile Include="AI2_Source\isGo2Dead.cpp">
       <Filter>Source Files\AI2_Source</Filter>
-    </ClCompile>
-    <ClCompile Include="MainAI_Source\ProbabilityCount.cpp">
-      <Filter>Source Files\MainAI_Source</Filter>
     </ClCompile>
     <ClCompile Include="FileSystem_Source\ReadFile.cpp">
       <Filter>Source Files\FileSystem_Source</Filter>
@@ -200,8 +197,14 @@
     <ClCompile Include="AI1_Source\SimCalDead.cpp">
       <Filter>Source Files\AI1_Source</Filter>
     </ClCompile>
-    <ClCompile Include="MainAI_Source\DeadCheck.cpp">
-      <Filter>Source Files\MainAI_Source</Filter>
+    <ClCompile Include="AIForFile_Source\DeadCheck.cpp">
+      <Filter>Source Files\AIForFile_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AIForFile_Source\MatchMemory.cpp">
+      <Filter>Source Files\AIForFile_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AIForFile_Source\ProbabilityCount.cpp">
+      <Filter>Source Files\AIForFile_Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

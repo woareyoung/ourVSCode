@@ -1,8 +1,8 @@
 #include "../stdafx.h"
-#include "../ChessBoard_Header/AI.h"
+#include "../AI1_Header/AIForFile.h"
 #define MAX_ROUND_K 4
 
-bool AI::MatchMemory(int line, int column, std::set<int> &res)
+bool AIForFile::MatchMemory(int line, int column, std::set<int> &res)
 {
 	Statistic(line, column);//先统计当前局面
 	int i;
@@ -29,7 +29,7 @@ bool AI::MatchMemory(int line, int column, std::set<int> &res)
 	}
 	return true;
 }
-void AI::GetCurrentStatus(int maxQuadrant, SITUATION &CurrentStatus)
+void AIForFile::GetCurrentStatus(int maxQuadrant, SITUATION &CurrentStatus)
 {
 	int i, j;
 	for (i = 0; i < 10; i++) CurrentStatus.BoardStatus = "";

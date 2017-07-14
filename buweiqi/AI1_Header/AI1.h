@@ -11,9 +11,10 @@
 #include "PointStyle.h"
 #include "../FileSystem_Header/FileSystem.h"
 #include "../ChessBoard_Header/SIP.h"
+#include "AIForFile.h"
 
 ///AI类
-class AI1 : public AI, private PointStyle
+class AI1 : public AI, private PointStyle, private AIForFile
 {
 public:
 	AI1();//构造函数

@@ -1,15 +1,15 @@
 #include "../stdafx.h"
-#include "../ChessBoard_Header/AI.h"
+#include "../AI1_Header/AIForFile.h"
 #include "../ChessBoard_Header/SIP.h"
 #include <future>
 //胜率计算
-double AI::ProbabilityCount(int site)
+double AIForFile::ProbabilityCount(int site)
 {
 	double probability = 0;
 	return probability;
 }
 
-void AI::ForeReadFileToMemory(int round)
+void AIForFile::ForeReadFileToMemory(int round)
 {
 	ForeReadFinish = false;//标记预读工作正在执行
 	std::string filename = FS.FN.ForeName + std::to_string(round) + FS.FN.TXT;//文件名
