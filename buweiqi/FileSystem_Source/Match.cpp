@@ -25,6 +25,7 @@ void FileSystem::GenerMatch(SITUATION &StatusQuo, std::set<int> &Parent, int rou
 	std::string data = "";
 	std::set<int> tempSTL1, tempSTL2;
 	std::set<int> one1, two1, one2, two2;
+	tempSTL1.clear();
 	bool com = false, wait = true;
 	while (!TempFile.eof())
 	{

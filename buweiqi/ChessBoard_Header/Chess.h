@@ -10,6 +10,7 @@ class Chess
 {
 public:
 	int cross[10][10];
+//	int ChessAmount[3];//Æå×ÓÊıÁ¿
 	FileSystem FileS;
 	std::list<SITUATION> MemBattle;
 	std::list<PACE> MemPace;

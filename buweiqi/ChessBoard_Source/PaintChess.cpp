@@ -21,11 +21,6 @@ void ChessBoard::PaintChess()
 			Winner = 2;
 			ReStart();
 		}
-		/*
-		if (chessInfo.WinOrLose(line, column, onTurn, Winner, cross))
-		{
-			ReStart();
-		};*/
 		break;
 	case isPlay2onTurn://画白色棋子
 		if (line == 0 || column == 0) return;
@@ -40,11 +35,7 @@ void ChessBoard::PaintChess()
 		{
 			Winner = 1;
 			ReStart();
-		}/*
-		if (chessInfo.WinOrLose(line, column, onTurn, Winner, cross))
-		{
-			ReStart();
-		}*/
+		}
 		break;
 		//画黑色棋子
 	case isAI1onTurn:
@@ -67,13 +58,7 @@ void ChessBoard::PaintChess()
 		{
 			Winner = 2;
 			ReStart();
-		}/*
-		bool win = chessInfo.WinOrLose(line, column, onTurn, Winner, cross);
-		if (win || line == 0 || column == 0)
-		{
-			Winner = 2;
-			ReStart();
-		}*/
+		}
 	};
 	break;
 	//画白色棋子
@@ -97,13 +82,6 @@ void ChessBoard::PaintChess()
 			Winner = 1;
 			ReStart();
 		}
-		/*
-		bool win = chessInfo.WinOrLose(line, column, onTurn, Winner, cross);
-		if (win || line == 0 || column == 0)
-		{
-			Winner = 1;
-			ReStart();
-		}*/
 	};
 	break;
 	}
@@ -111,6 +89,7 @@ void ChessBoard::PaintChess()
 ///实行画棋子
 void ChessBoard::PaintAChess(int type)
 {
+//	ChessAmount[type]++;
 	AddList(type);
 	cross[line][column] = type;//将获取到的行和列数记录到line和column
 	DisplayOnTurn(type);

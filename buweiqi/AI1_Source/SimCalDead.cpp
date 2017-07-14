@@ -2,6 +2,7 @@
 
 double AI1::CalDeadPosNumber(int line, int column)
 {
+	if (cross[line][column] != 0) return -1000;
 	bool MyDeath, RivalDeath;
 	int i, j;
 	int crossing[10][10];

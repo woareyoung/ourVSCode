@@ -26,7 +26,7 @@ void ChessBoard::PaintBoard()
 			}
 		}
 	}
-	if (Start == true && line != 0 && column != 0)
+	if (line != 0 && column != 0)
 	{
 		SelectObject(hdcBuffer, Tips);
 		StretchBlt(hdc, CrossCross[column] - ChessDiameter / 5, CrossCross[line] - ChessDiameter / 5, ChessDiameter * 2 / 5, ChessDiameter * 2 / 5, hdcBuffer, 0, 0, 126, 126, SRCCOPY);//将兼容设备复制到显示设备上
