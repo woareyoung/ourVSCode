@@ -80,4 +80,9 @@ void ChessBoard::Init_Pace()
 	pac.line = 0;
 	pac.column = 0;
 	MemPace.push_back(pac);
+	/*
+	ChessAmount[1] = 0;
+	ChessAmount[2] = 0;
+	ChessAmount[0] = 0;
+	*/
 }

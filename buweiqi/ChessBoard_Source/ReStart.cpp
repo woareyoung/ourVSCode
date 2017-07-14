@@ -51,6 +51,7 @@ void ChessBoard::ReStart()
 		else if (Player2AI == &ai22) UpdateCRdata(3, 2, Winner);
 		else  UpdateCRdata(3, 3, Winner);
 	}
+//	_cprintf("Black Chess number : %d  White Chess number : %d\n", ChessAmount[1], ChessAmount[2]);
 	Winner = 0;
 	Init_cross();
 	Init_Pace();
@@ -66,6 +67,7 @@ void ChessBoard::ReStart()
 	Qua.SecondQuadrant = 0;
 	Qua.ThirdQuadrant = 0;
 	Qua.ForthQuadrant = 0;
+	Start = false;
 	if (!re)
 	{
 		onTurn = 1;
@@ -73,7 +75,6 @@ void ChessBoard::ReStart()
 		Player2isAI = false;
 		Player1AI = nullptr;
 		Player2AI = nullptr;
-		Start = false;
 		SendMessageA(Player1UseAI, WM_SETTEXT, (WPARAM)NULL, LPARAM("使用AI"));
 		SendMessageA(Player2UseAI, WM_SETTEXT, (WPARAM)NULL, LPARAM("使用AI"));
 		SendMessageA(StartGame, WM_SETTEXT, (WPARAM)NULL, LPARAM("开始游戏"));

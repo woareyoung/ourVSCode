@@ -152,7 +152,6 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		}
 	}
 	cross[line][column] = PlayerId;
-	cross[line][0] = 1;
 	Statistic(line, column);
 	UpdateScore(line, column, PlayerId);
 	CurrentRound++;
@@ -188,7 +187,7 @@ int AI1::GetNextPace(std::set<int> &np)
 					int tempPos = *t;
 					np.erase(tempPos);//将该位置从候补列表中擦除
 					double ttt = CalDeadPosNumber(tempPos / 10, tempPos % 10);//获取该位置的评价
-					if (ttt > maxScore)
+					if (ttt > maxScore && ttt != -1000)
 					{
 						maxScore = ttt;
 						BestSite = tempPos;
