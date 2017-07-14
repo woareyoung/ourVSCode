@@ -1,3 +1,4 @@
+#include "../stdafx.h"
 #include "../FileSystem_Header/FileSystem.h"
 
 ///将本局游戏记录到总记忆库

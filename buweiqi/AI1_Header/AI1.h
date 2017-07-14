@@ -5,11 +5,11 @@
 #include <time.h>
 #include <stdlib.h>
 #include <conio.h>
-#include <math.h>
+//#include <math.h>
 #include "../chessBoard_Header/AI.h"
 #include <stack>
 #include <set>
-#include <mutex>
+//#include <mutex>
 #include "PointStyle.h"
 #include "../FileSystem_Header/FileSystem.h"
 #include "../ChessBoard_Header/SIP.h"
@@ -70,9 +70,17 @@ private:
 	///在RateResetScore.cpp文件中
 	void RateResetScore(double ResetRate, bool add = true);//按比例缩小分值，减少分差，精确定位
 
-
+	/*
+	param[line]:下棋位置——行
+	param[column]:下棋位置——列
+	*/
 	double CalDeadPosNumber(int line, int column);//计算死棋位置数量
-	
+	/*
+	param[line]:转换后的位置——行
+	param[column]：转换后的位置——列
+	param[site]：需要转换的位置
+	*/
+	void SymmetryExchange(int &line, int &column, int site);//将记录中的位置转换为合适当前盘面的位置
 };
 
 

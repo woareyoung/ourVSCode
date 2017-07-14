@@ -78,28 +78,11 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 			np.insert(MaxScorePosition);
 			NextPace = GetNextPace(np);
 			if (NextPace > 0) abc = false;
-			int maxQ = Qua.GetMaxQuadrant();
-			if (maxQ == Qua.FirstQuadrant)
-			{
-				line = NextPace / 10;
-				column = 10 - NextPace % 10;
-			}
-			else if (maxQ == Qua.SecondQuadrant)
-			{
-				line = NextPace / 10;
-				column = NextPace % 10;
-			}
-			else if (maxQ == Qua.ThirdQuadrant)
-			{
-				line = 10 - NextPace / 10;
-				column = NextPace % 10;
-			}
 			else
 			{
-				line = 10 - NextPace / 10;
-				column = 10 - NextPace % 10;
+				SymmetryExchange(line, column, NextPace);
+				cross[line][column] = PlayerId;
 			}
-			cross[line][column] = PlayerId;
 		}
 	}
 	///若是死棋位置则一直循环，直到不是死棋位置
@@ -186,15 +169,19 @@ int AI1::GetNextPace(std::set<int> &np)
 					auto t = np.begin();//获取候补位置的第一个
 					int tempPos = *t;
 					np.erase(tempPos);//将该位置从候补列表中擦除
-					double ttt = CalDeadPosNumber(tempPos / 10, tempPos % 10);//获取该位置的评价
-					if (ttt > maxScore && ttt != -1000)
+					if(DeadCheck(tempPos / 10, tempPos % 10, PlayerId, cross)){ }
+					else
 					{
-						maxScore = ttt;
-						BestSite = tempPos;
+						double ttt = CalDeadPosNumber(tempPos / 10, tempPos % 10);//获取该位置的评价
+						if (ttt > maxScore && ttt != -1000)
+						{
+							maxScore = ttt;
+							BestSite = tempPos;
+						}
 					}
 //					g_lock.unlock();//解锁
 				});
-				ThreadGo[i] = false;//标记线程空闲
+				ThreadGo[i] = false;//标记线程空闲d
 			}
 		}
 	}
@@ -209,4 +196,29 @@ int AI1::GetNextPace(std::set<int> &np)
 	}
 	np.clear();
 	return BestSite;
+}
+
+void AI1::SymmetryExchange(int &line, int &column, int site)
+{
+	int maxQ = Qua.GetMaxQuadrant();
+	if (maxQ == Qua.FirstQuadrant)
+	{
+		line = site / 10;
+		column = 10 - site % 10;
+	}
+	else if (maxQ == Qua.SecondQuadrant)
+	{
+		line = site / 10;
+		column = site % 10;
+	}
+	else if (maxQ == Qua.ThirdQuadrant)
+	{
+		line = 10 - site / 10;
+		column = site % 10;
+	}
+	else
+	{
+		line = 10 - site / 10;
+		column = 10 - site % 10;
+	}
 }

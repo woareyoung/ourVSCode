@@ -1,3 +1,4 @@
+#include "../stdafx.h"
 #include "../FileSystem_Header/FileSystem.h"
 
 ///打开文件

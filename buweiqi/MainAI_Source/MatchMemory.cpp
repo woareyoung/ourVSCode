@@ -1,3 +1,4 @@
+#include "../stdafx.h"
 #include "../ChessBoard_Header/AI.h"
 #define MAX_ROUND_K 4
 

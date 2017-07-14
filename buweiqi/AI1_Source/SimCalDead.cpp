@@ -1,3 +1,4 @@
+#include "../stdafx.h"
 #include "../AI1_Header/AI1.h"
 
 double AI1::CalDeadPosNumber(int line, int column)
@@ -10,7 +11,6 @@ double AI1::CalDeadPosNumber(int line, int column)
 		for (j = 0; j < 10; j++)
 			crossing[i][j] = cross[i][j];
 	crossing[line][column] = PlayerId;
-	if(DeadCheck(line, column, PlayerId, crossing)) return -101;
 	double MyDeadPosNumber = 0;//自己的死棋位置数量
 	double RivalDeadPosNumber = 0;//对方的死棋位置数量
 	double TigerMouth = 0;//虎口数量
