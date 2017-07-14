@@ -78,11 +78,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 			np.insert(MaxScorePosition);
 			NextPace = GetNextPace(np);
 			if (NextPace > 0) abc = false;
-			else
-			{
-				SymmetryExchange(line, column, NextPace);
-				cross[line][column] = PlayerId;
-			}
+			else cross[line][column] = PlayerId;
 		}
 	}
 	///若是死棋位置则一直循环，直到不是死棋位置
@@ -155,7 +151,7 @@ int AI1::GetNextPace(std::set<int> &np)
 	double maxScore = -100;
 	bool ThreadGo[ThreadAmount] = { false };//标记线程是否正在执行
 	int i;
-
+	int Line = 0, Column = 0;
 	while (!np.empty())
 	{
 		for (i = 0; i < ThreadAmount; i++)
@@ -169,14 +165,14 @@ int AI1::GetNextPace(std::set<int> &np)
 					auto t = np.begin();//获取候补位置的第一个
 					int tempPos = *t;
 					np.erase(tempPos);//将该位置从候补列表中擦除
-					if(DeadCheck(tempPos / 10, tempPos % 10, PlayerId, cross)){ }
-					else
+					SymmetryExchange(Line, Column, tempPos);
+					if(DeadCheck(Line, Column, PlayerId, cross) == false)
 					{
-						double ttt = CalDeadPosNumber(tempPos / 10, tempPos % 10);//获取该位置的评价
+						double ttt = CalDeadPosNumber(Line, Column);//获取该位置的评价
 						if (ttt > maxScore && ttt != -1000)
 						{
 							maxScore = ttt;
-							BestSite = tempPos;
+							BestSite = Line * 10 + Column;
 						}
 					}
 //					g_lock.unlock();//解锁
