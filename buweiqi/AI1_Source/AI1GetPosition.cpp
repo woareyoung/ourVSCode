@@ -77,8 +77,13 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 			GetMaxScorePosition();
 			np.insert(MaxScorePosition);
 			NextPace = GetNextPace(np);
-			if (NextPace > 0) abc = false;
-			else cross[line][column] = PlayerId;
+			if (NextPace < 0) abc = true;
+			else
+			{
+				line = NextPace / 10;
+				column = NextPace % 10;
+				abc = false;
+			}
 		}
 	}
 	///若是死棋位置则一直循环，直到不是死棋位置
