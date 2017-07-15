@@ -177,7 +177,7 @@ int AI1::GetNextPace(std::set<int> &np)
 					if(DeadCheck(Line, Column, PlayerId, cross) == false)
 					{
 						double ttt = CalDeadPosNumber(Line, Column);//获取该位置的评价
-						if (ttt > maxScore && ttt != -1000)
+						if (ttt > maxScore)
 						{
 							maxScore = ttt;
 							BestSite = Line * 10 + Column;
