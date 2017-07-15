@@ -17,13 +17,13 @@ bool AIForFile::DeadCheck(int line, int column, int who, int CROSS[][10])
 	bool VisitStatus[10][10] = { false };//标记是否已遍历过
 	std::stack<std::pair<int, int>> position;
 	std::pair<int, int> p;
-	std::stack<bool> PosNumber;//用于计算遍历数量
+	/*
 	//初始化遍历标记数组
 	auto InitVisit = [&]() {
 		for (i = 0; i < 10; i++)
 			for (j = 0; j < 10; j++)
 				VisitStatus[i][j] = false;
-	};
+	};*/
 	//弹出数据
 	auto POPdata = [&]() {
 		if (position.empty()) return false;
@@ -45,7 +45,6 @@ bool AIForFile::DeadCheck(int line, int column, int who, int CROSS[][10])
 		line = saveLine;
 		column = saveColumn;
 		while (!position.empty()) position.pop();
-		if (simulate) CROSS[line][column] = 0;
 	};
 	//判断是否是模拟下棋
 	if (BoardCross[line][column] == 0)
@@ -57,7 +56,6 @@ bool AIForFile::DeadCheck(int line, int column, int who, int CROSS[][10])
 	//param[Player]:检查 谁 的棋子被围死
 	auto VisitAll = [&](int Player)
 	{
-		InitVisit();//初始化遍历标记
 		int Rival = 3 - Player;
 		while (true)
 		{
@@ -120,23 +118,44 @@ bool AIForFile::DeadCheck(int line, int column, int who, int CROSS[][10])
 	if (BoardCross[line - 1][column] == rival && line > 1)
 	{
 		line = line - 1;
-		if (VisitAll(rival)) return true;
+		if (VisitAll(rival))
+		{
+			if (simulate) cross[line][column] = 0;
+			return true;
+		}
 	}
 	if (BoardCross[line + 1][column] == rival && line < 9)
 	{
 		line = line + 1;
-		if (VisitAll(rival)) return true;
+		if (VisitAll(rival))
+		{
+			if (simulate) cross[line][column] = 0;
+			return true;
+		}
 	}
 	if (BoardCross[line][column - 1] == rival && column > 1)
 	{
 		column = column - 1;
-		if (VisitAll(rival)) return true;
+		if (VisitAll(rival))
+		{
+			if (simulate) cross[line][column] = 0;
+			return true;
+		}
 	}
 	if (BoardCross[line][column + 1] == rival && column < 9)
 	{
 		column = column + 1;
-		if (VisitAll(rival)) return true;
+		if (VisitAll(rival))
+		{
+			if (simulate) cross[line][column] = 0;
+			return true;
+		}
 	}
-	if (VisitAll(who)) return true;
+	if (VisitAll(who))
+	{
+		if (simulate) cross[line][column] = 0;
+		return true;
+	}
+	if (simulate) cross[line][column] = 0;
 	return false;
 }

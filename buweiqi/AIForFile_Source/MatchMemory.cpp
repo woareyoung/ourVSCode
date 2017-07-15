@@ -1,6 +1,6 @@
 #include "../stdafx.h"
 #include "../AI1_Header/AIForFile.h"
-#define MAX_ROUND_K 4
+#define MAX_ROUND_K 70
 
 bool AIForFile::MatchMemory(int line, int column, std::set<int> &res)
 {
@@ -20,7 +20,7 @@ bool AIForFile::MatchMemory(int line, int column, std::set<int> &res)
 	else FS.Match(NowStatus, res, CurrentRound, PlayerId);
 	//如果有一模一样的记录，则直接跟着下
 	if (!res.empty()) return false;
-	for (i = CurrentRound + MAX_ROUND_K; ; i = i + 2)
+	for (i = CurrentRound > MAX_ROUND_K ? CurrentRound : MAX_ROUND_K; ; i = i + 1)
 	{
 		//没有一模一样的记录，则查询有没有含有当前盘面的“终盘”
 		if(i < 81) FS.GenerMatch(NowStatus, res, i, PlayerId);

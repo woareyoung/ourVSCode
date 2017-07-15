@@ -153,6 +153,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case MID_START:
 			if (!CB.Start)
 			{
+				CB.CombatNumber = 1;
 				ShowWindow(CB.TurnToBlack, SW_SHOW);
 				UpdateWindow(CB.TurnToBlack);
 				CB.PrintTime = true;
@@ -213,8 +214,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			SetCursor(ARROWcursor);
 		break;
 	case WM_LBUTTONDOWN://Êó±ê×ó¼üÊÂ¼þ
-		if (CB.Start == true)
+		if (CB.Start == true || CB.Player1isAI == false || CB.Player2isAI == false)
 		{
+			if (CB.onTurn == isPlay1onTurn || CB.onTurn == isPlay2onTurn) ResumeThread(CB.MainProcedureThead);
 			CB.GetPointPosition(lParam);
 		}
 		break;
@@ -290,7 +292,6 @@ DWORD WINAPI TimerProc(PVOID pParam)
 }
 DWORD WINAPI PlayProc(PVOID pParam)
 {
-	CB.CombatNumber = 1;
 	while (CB.Start)
 	{
 		if(CB.ControlLoop) CB.PaintChess();

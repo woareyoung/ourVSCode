@@ -14,8 +14,7 @@ protected:
 	// 敌方的眼的数量
 	int RivalEyes;
 	//记录各交叉点的值，数组访问从“1”开始，访问顺序为“先行后列”，
-	//“0”表示没有棋子，“1”表示黑子，“2”表示白子
-	int cross[10][10];
+
 	int PlayerId;// 当前AI的身份是黑子还是白子
 public:
 	AIPlayer() : ourEyes(0), RivalEyes(0)
