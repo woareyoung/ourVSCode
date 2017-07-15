@@ -55,6 +55,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		if (line < 3 || line > 7 || column < 3 || column > 7) RateResetScore(0.78);
 		else RateResetScore(0.92);
 		UpdateScore(line, column, OT, true);
+		CalDeadPosNumber(line, column, DoubleDontDead);
 	}
 	//如果是第一步下棋
 	else
@@ -107,7 +108,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 			continue;
 		}
 		//先检查有没有“重蹈覆辙”
-		else
+		else if(DoubleDontDead != 0)
 		{
 			Statistic(line, column);
 			cross[line][column] = PlayerId;
@@ -135,6 +136,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 			}
 			break;
 		}
+		else break;
 	}
 	cross[line][column] = PlayerId;
 	Statistic(line, column);
@@ -160,6 +162,7 @@ int AI1::GetNextPace(std::set<int> &np)
 	double maxScore = -100;
 	bool ThreadGo[ThreadAmount] = { false };//标记线程是否正在执行
 	int i;
+	int n;
 	int Line = 0, Column = 0;
 	while (!np.empty())
 	{
@@ -176,7 +179,7 @@ int AI1::GetNextPace(std::set<int> &np)
 					SymmetryExchange(Line, Column, tempPos);
 					if(DeadCheck(Line, Column, PlayerId, cross) == false)
 					{
-						double ttt = CalDeadPosNumber(Line, Column);//获取该位置的评价
+						double ttt = CalDeadPosNumber(Line, Column, n);//获取该位置的评价
 						if (ttt > maxScore)
 						{
 							maxScore = ttt;

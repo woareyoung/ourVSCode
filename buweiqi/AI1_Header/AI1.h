@@ -26,6 +26,7 @@ private:
 	//记录各交叉点的值，数组访问从“1”开始，访问顺序为“先行后列”，
 	//“0”表示没有棋子，“1”表示黑子，“2”表示白子
 	bool Cross[10][10];//遍历标识
+	int DoubleDontDead;//双方都不死的位置数量
 	int MaxScorePosition;//最大分值的位置
 	double PointStyle[18];//记录每种特殊点类型的分值
 	double Score[10][10];//记录每个位置上的分值
@@ -64,7 +65,7 @@ private:
 	param[line]:下棋位置——行
 	param[column]:下棋位置——列
 	*/
-	double CalDeadPosNumber(int line, int column);//计算死棋位置数量
+	double CalDeadPosNumber(int line, int column, int &deadPos);//计算死棋位置数量
 	/*
 	param[line]:转换后的位置——行
 	param[column]：转换后的位置——列

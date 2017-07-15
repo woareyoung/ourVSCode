@@ -41,20 +41,12 @@ void FileSystem::GenerMatch(SITUATION &StatusQuo, std::set<int> &Parent, int rou
 		com = Compare(two1, two2, tempSTL2);
 		if (!com) continue;
 		tempSTL2.clear();
-		/*
-		std::async(std::launch::async, [&]() {
-			g_lock.lock();//¼ÓËø
-			
-			wait = false;
-			g_lock.unlock();//½âËø
-		});*/
 		if (tempSTL1.size() > 0)
 		{
 			for (auto t : tempSTL1)
 				Parent.insert(t);
 		}
 		tempSTL1.clear();
-		//while (wait) {}
 	}
 	TempFile.close();
 }

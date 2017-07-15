@@ -1,9 +1,10 @@
 #include "../stdafx.h"
 #include "../AI1_Header/AI1.h"
 
-double AI1::CalDeadPosNumber(int line, int column)
+double AI1::CalDeadPosNumber(int line, int column, int &deadPos)
 {
 	if (cross[line][column] != 0) return -1000;
+	deadPos = 81;
 	bool MyDeath, RivalDeath;
 	int i, j;
 	int crossing[10][10];
@@ -26,11 +27,15 @@ double AI1::CalDeadPosNumber(int line, int column)
 	{
 		for (j = 1; j < 10; ++j)
 		{
-			if (crossing[i][j] != 0) continue;
+			if (crossing[i][j] != 0)
+			{
+				--deadPos;
+				continue;
+			}
 			MyDeath = DeadCheck(i, j, PlayerId, crossing);
 			RivalDeath = DeadCheck(i, j, 3 - PlayerId, crossing);
-			if (MyDeath && !RivalDeath) MyDeadPosNumber++;
-			else if (!MyDeath && RivalDeath) RivalDeadPosNumber++;
+			if (MyDeath && !RivalDeath) MyDeadPosNumber++, deadPos--;
+			else if (!MyDeath && RivalDeath) RivalDeadPosNumber++, deadPos--;
 			else
 			{
 				CheckTigerMouth(i, j, PlayerId);

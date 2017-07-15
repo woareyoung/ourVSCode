@@ -1,2 +1,3 @@
        LastLine: 1 2  AI2_of_Player1_win  AI2_of_Player2_win
    ScoreLine(01,02):          0                      0
+end

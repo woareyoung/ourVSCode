@@ -5,7 +5,7 @@
 #include <list>
 #include "../ChessBoard_Header/ChessBoard.h"
 #include "../ChessBoard_Header/showUnicodeInfo.h"
-#define COMBATNUMBER 500 //AI2模拟对局次数
+#define COMBATNUMBER 2 //AI2模拟对局次数
 ///游戏结束
 void ChessBoard::ReStart()
 {
@@ -68,7 +68,6 @@ void ChessBoard::ReStart()
 		else  UpdateCRdata(3, 3, Winner);
 	}
 	//	_cprintf("Black Chess number : %d  White Chess number : %d\n", ChessAmount[1], ChessAmount[2]);
-	Winner = 0;
 	Init_cross();
 	Init_Pace();
 	onTurn = -1;
@@ -97,10 +96,12 @@ void ChessBoard::ReStart()
 		int temp1, temp2;
 		bool Have = false;
 		FFF >> ScoreLine >> lastline1 >> lastline2 >> PlayerWin1 >> PlayerWin2;
+		lastline1 = Player1AI->NowLine;
+		lastline2 = Player2AI->NowLine;
 		while (!FFF.eof())
 		{
 			FFF >> ScoreLine >> temp1 >> temp2;
-			if (ScoreLine == "LastLine:") break;
+			if (ScoreLine == "end") break;
 			if (Player1AI->NowLine == stoi(ScoreLine.substr(10, 2)) && Player2AI->NowLine == stoi(ScoreLine.substr(13, 2)))
 			{
 				if (Winner == 1) ++temp1;
@@ -109,8 +110,16 @@ void ChessBoard::ReStart()
 				if (temp1 + temp2 > COMBATNUMBER - 1)
 				{
 					int lllll = Player1AI->NowLine > Player2AI->NowLine ? Player1AI->NowLine + 1 : Player2AI->NowLine + 1;
-					if (temp1 > temp2) ai22.setPatternScore(lllll);
-					else ai2.setPatternScore(lllll);
+					if (temp1 > temp2)
+					{
+						ai22.setPatternScore(lllll);
+						ai22.NowLine = lllll;
+					}
+					else
+					{
+						ai2.setPatternScore(lllll);
+						ai2.NowLine = lllll;
+					}
 				}
 				Have = true;
 			}
@@ -118,17 +127,15 @@ void ChessBoard::ReStart()
 			TwoWin.push_back(temp2);
 			SC.push_back(ScoreLine);
 		}
-		OneWin.pop_back();
-		TwoWin.pop_back();
-		SC.pop_back();
 		if (!Have)
 		{
-			if(Winner == 1) OneWin.push_back(1);
-			else TwoWin.push_back(1);
-			if (Player1AI->NowLine > 9) ScoreLine = "ScoreLine(" + std::to_string(Player1AI->NowLine);
+			ScoreLine = "ScoreLine(";
+			if (Winner == 1) OneWin.push_back(1), TwoWin.push_back(0);
+			else TwoWin.push_back(1), OneWin.push_back(0);
+			if (Player1AI->NowLine > 9) ScoreLine += std::to_string(Player1AI->NowLine);
 			else ScoreLine += "0" + std::to_string(Player1AI->NowLine);
 			if(Player2AI->NowLine > 9) ScoreLine += "," + std::to_string(Player2AI->NowLine) + ")";
-			else ScoreLine += "0" + std::to_string(Player2AI->NowLine) + ")";
+			else ScoreLine += ",0" + std::to_string(Player2AI->NowLine) + "):";
 			SC.push_back(ScoreLine);
 		}
 		FFF.close();
@@ -141,10 +148,12 @@ void ChessBoard::ReStart()
 		{
 			FFF << std::setw(20) << *itstr << std::setw(11) << *it1 << std::setw(23) << *it2 << std::endl;
 		}
+		FFF << "end" << std::endl;
 		FFF.close();
 	}
 	//--------------------------------------测试梯度专用-------------------------------------//
 	Start = false;
+	Winner = 0;
 	if (!re)
 	{
 		onTurn = 1;
