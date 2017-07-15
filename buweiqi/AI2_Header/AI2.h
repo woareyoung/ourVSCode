@@ -141,6 +141,12 @@ public:
 		initAllArray();
 	}
 
+	void setPatternScore(int* PS) {
+		for (int i = 0; i < pattern_Total; ++i) {
+			pattern_Score[i] = PS[i];
+		}
+	}
+
 	void initAll();
 	// 获取最后着子的位置
 	void GetPosition(int &line, int &column, int onTurn);
