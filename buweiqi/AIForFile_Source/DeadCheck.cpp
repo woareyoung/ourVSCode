@@ -17,13 +17,13 @@ bool AIForFile::DeadCheck(int line, int column, int who, int CROSS[][10])
 	bool VisitStatus[10][10] = { false };//标记是否已遍历过
 	std::stack<std::pair<int, int>> position;
 	std::pair<int, int> p;
-	/*
+	
 	//初始化遍历标记数组
 	auto InitVisit = [&]() {
 		for (i = 0; i < 10; i++)
 			for (j = 0; j < 10; j++)
 				VisitStatus[i][j] = false;
-	};*/
+	};
 	//弹出数据
 	auto POPdata = [&]() {
 		if (position.empty()) return false;
@@ -56,6 +56,7 @@ bool AIForFile::DeadCheck(int line, int column, int who, int CROSS[][10])
 	//param[Player]:检查 谁 的棋子被围死
 	auto VisitAll = [&](int Player)
 	{
+		InitVisit();
 		int Rival = 3 - Player;
 		while (true)
 		{
