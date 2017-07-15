@@ -15,5 +15,6 @@ public:
 	int Round2;//玩家2剩余步时
 
 	int Winner;//胜利者
+
 };
 #endif // PLAYERINFO_H_INCLUDED

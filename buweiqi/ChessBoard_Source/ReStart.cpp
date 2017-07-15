@@ -1,11 +1,15 @@
 #include "../stdafx.h"
 #include <cstring>
 #include <sstream>  
+#include <iomanip>
+#include <list>
 #include "../ChessBoard_Header/ChessBoard.h"
 #include "../ChessBoard_Header/showUnicodeInfo.h"
+#define COMBATNUMBER 500 //AI2模拟对局次数
 ///游戏结束
 void ChessBoard::ReStart()
 {
+	//显示在DOS界面
 	if (DISPLAY == 2 || DISPLAY == 0)
 	{
 		showChessBoard(cross);
@@ -79,6 +83,67 @@ void ChessBoard::ReStart()
 	Qua.SecondQuadrant = 0;
 	Qua.ThirdQuadrant = 0;
 	Qua.ForthQuadrant = 0;
+	//--------------------------------------测试梯度专用--------------------------------------//
+	if (Player1AI == &ai2 && Player2AI == &ai22)//先判断是不是两个AI2
+	{		
+		int lastline1, lastline2;
+		std::fstream FFF;
+		std::string FFFName = "AI2CombatRec.txt";
+		FileS.OpenFile(FFFName, FFF);
+		std::string PlayerWin1, PlayerWin2, ScoreLine, NW;
+		std::list<int> OneWin;
+		std::list<int> TwoWin;
+		std::list<std::string> SC;
+		int temp1, temp2;
+		bool Have = false;
+		FFF >> ScoreLine >> lastline1 >> lastline2 >> PlayerWin1 >> PlayerWin2;
+		while (!FFF.eof())
+		{
+			FFF >> ScoreLine >> temp1 >> temp2;
+			if (ScoreLine == "LastLine:") break;
+			if (Player1AI->NowLine == stoi(ScoreLine.substr(10, 2)) && Player2AI->NowLine == stoi(ScoreLine.substr(13, 2)))
+			{
+				if (Winner == 1) ++temp1;
+				else ++temp2;
+				//当达到对局次数时
+				if (temp1 + temp2 > COMBATNUMBER - 1)
+				{
+					int lllll = Player1AI->NowLine > Player2AI->NowLine ? Player1AI->NowLine + 1 : Player2AI->NowLine + 1;
+					if (temp1 > temp2) ai22.setPatternScore(lllll);
+					else ai2.setPatternScore(lllll);
+				}
+				Have = true;
+			}
+			OneWin.push_back(temp1);
+			TwoWin.push_back(temp2);
+			SC.push_back(ScoreLine);
+		}
+		OneWin.pop_back();
+		TwoWin.pop_back();
+		SC.pop_back();
+		if (!Have)
+		{
+			if(Winner == 1) OneWin.push_back(1);
+			else TwoWin.push_back(1);
+			if (Player1AI->NowLine > 9) ScoreLine = "ScoreLine(" + std::to_string(Player1AI->NowLine);
+			else ScoreLine += "0" + std::to_string(Player1AI->NowLine);
+			if(Player2AI->NowLine > 9) ScoreLine += "," + std::to_string(Player2AI->NowLine) + ")";
+			else ScoreLine += "0" + std::to_string(Player2AI->NowLine) + ")";
+			SC.push_back(ScoreLine);
+		}
+		FFF.close();
+		FFF.open(FFFName, std::ios::out);
+		std::list<int>::iterator it1 = OneWin.begin(), it2 = TwoWin.begin();
+		std::list<std::string>::iterator itstr = SC.begin();
+		NW = "LastLine: " + std::to_string(lastline1) + " " + std::to_string(lastline2);
+		FFF << std::setw(20) << NW  << std::setw(20) << PlayerWin1 << std::setw(20) << PlayerWin2 << std::endl;
+		for (; it1 != OneWin.end(); ++it1, ++it2, ++itstr)
+		{
+			FFF << std::setw(20) << *itstr << std::setw(11) << *it1 << std::setw(23) << *it2 << std::endl;
+		}
+		FFF.close();
+	}
+	//--------------------------------------测试梯度专用-------------------------------------//
 	Start = false;
 	if (!re)
 	{

@@ -39,6 +39,10 @@ void SeeCombatRecord();
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	PSTR szCmdLine, int iCmdShow)
 {
+	CB.ai2.NowLine = 1;
+	CB.ai22.NowLine = 2;
+	CB.ai2.setPatternScore(CB.ai2.NowLine);
+	CB.ai22.setPatternScore(CB.ai22.NowLine);
 	CB.hInst = hInstance;
 	UPARROWcursor = LoadCursor(NULL, IDC_UPARROW);
 	ARROWcursor = LoadCursor(NULL, IDC_ARROW);

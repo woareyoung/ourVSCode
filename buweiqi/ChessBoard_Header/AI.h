@@ -8,8 +8,7 @@
 class AI
 {
 public:
-
-
+	int NowLine;
 	virtual void GetPosition(int &line, int &column, int onTurn) = 0;
 };
 

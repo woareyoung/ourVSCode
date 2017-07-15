@@ -60,6 +60,20 @@ struct Pos {
 class AI2 : public AI, public AIPlayer, public DefaultChess
 {
 private:
+	int patternAllScore[9][11] = {
+		{ 60, 50, 40, 35, 35, 30, 30, 25, 25, 20, 20 },// 6
+		{ 55, 50, 40, 35, 35, 30, 30, 25, 25, 20, 20 },
+		{ 54, 50, 40, 35, 35, 30, 30, 25, 25, 20, 20 },
+		{ 53, 50, 40, 35, 35, 30, 30, 25, 25, 20, 20 },
+		{ 52, 50, 40, 35, 35, 30, 30, 25, 25, 20, 20 },
+		{ 51, 50, 40, 35, 35, 30, 30, 25, 25, 20, 20 },
+
+		{ 45, 40, 35, 30, 30, 25, 25, 22, 22, 20, 20 },// 1
+
+		{ 50, 60, 40, 35, 35, 30, 30, 25, 25, 20, 20 },
+		{ 40, 50, 60, 35, 35, 30, 30, 25, 25, 20, 20 }
+	};
+
 	// 匹配模式
 	static const int pattern_Total = 11;
 	// 匹配的次数
@@ -141,9 +155,9 @@ public:
 		initAllArray();
 	}
 
-	void setPatternScore(int* PS) {
+	void setPatternScore(int& hang) {
 		for (int i = 0; i < pattern_Total; ++i) {
-			pattern_Score[i] = PS[i];
+			pattern_Score[i] = patternAllScore[hang][i];
 		}
 	}
 
