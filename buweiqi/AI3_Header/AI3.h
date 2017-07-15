@@ -274,6 +274,7 @@ private:
 public:
 
 	virtual int maxandmin(const int& depth) override {
+		initChessScore(true);
 		return predict();
 	}
 	int predict() {

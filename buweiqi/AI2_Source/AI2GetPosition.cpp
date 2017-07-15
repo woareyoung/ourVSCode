@@ -1,5 +1,6 @@
 #include "../stdafx.h"
 #include "../AI2_Header/AI2.h"
+#include "../ChessBoard_Header/showUnicodeInfo.h"
 
 /**
 * [AI2::GetPosition AI对外接口]
@@ -51,15 +52,13 @@ void AI2::GetPosition(int &line, int &column, int onTurn)
 	//_cprintf("\n**************This is chess score*******(%d, %d)***********\n", line, column);
 	//for (int i = 1; i < 10; ++i)
 	//{
-	//	for (int j = 1; j < 10; ++j)
-	//		_cprintf("%d\t", chessScore[i][j]);
+	//	for (int j = 1; j < 10; ++j) {
+	//		if (cross[i][j] == NoChess) {
+	//			_cprintf("%d\t", chessScore[i][j]);
+	//		}
+	//	}
 	//	_cprintf("\n");
 	//}
 	//_cprintf("**************This is chess cross*******(%d, %d)***********\n", line, column);
-	//for (int i = 1; i < 10; ++i)
-	//{
-	//	for (int j = 1; j < 10; ++j)
-	//		_cprintf("%d\t", cross[i][j]);
-	//	_cprintf("\n");
-	//}
+	//showChessBoard(cross);
 }

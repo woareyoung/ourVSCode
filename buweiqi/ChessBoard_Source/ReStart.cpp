@@ -1,28 +1,40 @@
 #include "../stdafx.h"
+#include <cstring>
+#include <sstream>  
 #include "../ChessBoard_Header/ChessBoard.h"
+#include "../ChessBoard_Header/showUnicodeInfo.h"
 ///”Œœ∑Ω· ¯
 void ChessBoard::ReStart()
 {
 	if (DISPLAY == 2 || DISPLAY == 0)
 	{
-		int i, j;
-		for (i = 1; i < 10; i++)
-		{
-			for (j = 1; j < 10; j++)
-			{
-				_cprintf(" %d ", cross[i][j]);
-			}
-			_cprintf("\n");
-		}
+		showChessBoard(cross);
 		if (Winner == 1)
 		{
-			if(CombatNumber == MAX_COMBAT) _cprintf("the Winner of the final is : Player1 ( Black )\n", CombatNumber);
-			else _cprintf("the Winner of the %d is : Player1 ( Black )\n", CombatNumber);
+			if (CombatNumber == MAX_COMBAT) _cprintf("the Winner of the final is : Player1 ( Black )\n\n", CombatNumber);
+			else {
+				std::string str;
+				std::string temp;
+				std::ostringstream convert;
+				convert << CombatNumber;
+				temp = convert.str();
+				str = "***The Winner of the" + temp + "is : Player1 ( °Ò )***\n";
+				showInfo(str.c_str());
+			}
+
 		}
 		else
 		{
-			if(CombatNumber == MAX_COMBAT) _cprintf("the Winner of the final is : Player2 ( White )\n", CombatNumber);
-			else _cprintf("the Winner of the %d is : Player2 ( White )\n", CombatNumber);
+			if (CombatNumber == MAX_COMBAT) _cprintf("the Winner of the final is : Player2 ( White )\n\n", CombatNumber);
+			else {
+				std::string str;
+				std::string temp;
+				std::ostringstream convert;
+				convert << CombatNumber;
+				temp = convert.str();
+				str = "***The Winner of the" + temp + "is : Player2 ( ©ñ )***\n";
+				showInfo(str.c_str());
+			}
 		}
 	}
 	bool re = CombatNumber < MAX_COMBAT && Player1isAI && Player2isAI;
@@ -51,7 +63,7 @@ void ChessBoard::ReStart()
 		else if (Player2AI == &ai22) UpdateCRdata(3, 2, Winner);
 		else  UpdateCRdata(3, 3, Winner);
 	}
-//	_cprintf("Black Chess number : %d  White Chess number : %d\n", ChessAmount[1], ChessAmount[2]);
+	//	_cprintf("Black Chess number : %d  White Chess number : %d\n", ChessAmount[1], ChessAmount[2]);
 	Winner = 0;
 	Init_cross();
 	Init_Pace();
