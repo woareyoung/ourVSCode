@@ -147,7 +147,7 @@ public:
 	bool isFinal();
 
 	// 判断是否是死棋位
-	bool isGo2Dead(const int& line, const int& column, const int& type);
+	bool isGo2Dead(const int line, const int column, const int& type);
 
 	// 初始化数组
 	void initChessScore(const bool& isFirst);
@@ -172,7 +172,7 @@ public:
 	// 匹配函数
 	void startPattern();
 	void Pattern(const int *PatternType);
-	virtual bool checkEmptyPos(const int& x, const int& y, const int& start, const int& mainColor, const Pos *emptyPos) {
+	virtual bool checkEmptyPos(const int& x, const int& y, const int& start, const int& mainColor, const Pos* emptyPos) {
 		/******************************************
 		判断当前匹配到的空位是否是敌方的自杀点，
 		如果是的话，就把该点的分数设置为0，跳过匹配模式

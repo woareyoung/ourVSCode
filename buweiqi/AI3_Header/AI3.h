@@ -69,7 +69,7 @@ public:
 
 	// 随机走步
 	template<typename RandomEngine>
-	void do_random_move(RandomEngine* engine, std::vector<int> moves)
+	void do_random_move(RandomEngine* engine, std::vector<int>& moves)
 	{
 		if (moves.empty()) {// 如果着子点集合为空的话，就直接返回
 			Winner = getRival(player_to_move);
@@ -82,7 +82,7 @@ public:
 	}
 
 	// 模拟着子
-	virtual void do_move(int move)
+	virtual void do_move(const int& move)
 	{
 		// 结点的深度加1
 		depth++;
@@ -153,8 +153,8 @@ public:
 		// 下面是搜集所有可能的着子点。
 		std::vector<int> moves;
 
-		// 如果深度大于888层的话就，直接诶返回moves了。
-		if (depth > 888) {
+		// 如果深度大于1250层的话就，直接诶返回moves了。
+		if (depth > 1250) {
 			return moves;
 		}
 
@@ -205,13 +205,19 @@ public:
 	}
 
 	// 用于判断输赢结果
-	double get_result(int current_player_to_move) const
+	double get_result(const int& current_player_to_move) const
 	{
 		double Score = Winner == current_player_to_move ? 0.0 : 1.0;
 		return Score;
 	}
 
-	virtual bool checkEmptyPos(const int& x, const int& y, const int& start, const int& mainColor, const Pos *emptyPos) override {
+	virtual bool checkEmptyPos(
+		const int& x, 
+		const int& y, 
+		const int& start, 
+		const int& mainColor, 
+		const Pos* emptyPos) override
+	{
 		/******************************************
 		判断当前匹配到的空位是否是敌方的自杀点，
 		如果是的话，就把该点的分数设置为0，跳过匹配模式
@@ -272,7 +278,7 @@ public:
 	}
 	int predict() {
 		MCTS::ComputeOptions options;
-		options.number_of_threads = 8;
+		options.number_of_threads = 4;
 		// options.verbose = true;
 		// options.max_time = 1;
 		auto state_copy = new SimulatorGo(cross, PlayerId);
