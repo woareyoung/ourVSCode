@@ -45,7 +45,7 @@ public:
 		player_to_move(Id),
 		Winner(NoChess),
 		depth(0),
-		ifShowInfo(false)
+		ifShowInfo(true)
 	{
 		initAllArray();
 		for (int i = ChessInit; i < ChessEnd; ++i) {
@@ -112,14 +112,14 @@ public:
 						_cprintf("0\t");
 					}
 					else {
-						_cprintf(" \t");
+						_cprintf("S\t");
 					}
 					_cprintf("\n");
 			}
 			_cprintf("**************This is chess cross*********(%d, %d)***%s******\n",
 				line, column, player_to_move == Black ? "Black" : "White");
 			showChessBoard(cross);
-			// system("pause");
+			system("pause");
 		}
 
 		// 轮到下一个玩家着子
@@ -172,7 +172,7 @@ public:
 
 		const_cast<SimulatorGo*>(this)->initCSPoint();
 		initSimulation();
-		const_cast<SimulatorGo*>(this)->Revalute();
+		const_cast<SimulatorGo*>(this)->startPattern();
 
 		// 从当前棋盘中选择出由Pattern匹配出来的比较好的着子点集合
 		for (int i = ChessStart; i < ChessEnd; ++i) {
@@ -212,10 +212,10 @@ public:
 	}
 
 	virtual bool checkEmptyPos(
-		const int& x, 
-		const int& y, 
-		const int& start, 
-		const int& mainColor, 
+		const int& x,
+		const int& y,
+		const int& start,
+		const int& mainColor,
 		const Pos* emptyPos) override
 	{
 		/******************************************
@@ -279,7 +279,7 @@ public:
 	}
 	int predict() {
 		MCTS::ComputeOptions options;
-		options.number_of_threads = 4;
+		options.number_of_threads = 1;
 		// options.verbose = true;
 		// options.max_time = 1;
 		auto state_copy = new SimulatorGo(cross, PlayerId);

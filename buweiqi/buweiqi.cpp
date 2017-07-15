@@ -5,6 +5,7 @@
 #include "AI2_Header/AI2.h"
 #include "AI3_Header/AI3.h"
 #include <fstream>
+#include <psapi.h>
 
 #define MID_ONE 1
 #define MID_TWO 2
@@ -35,6 +36,20 @@ void SelectFun();//选择AI功能
 void Select();//选择之后的处理
 void InitWndClass(TCHAR szAppName[], WNDCLASS &wndclass, HINSTANCE hInstance, int callback);
 void SeeCombatRecord();
+//监控进程占用内存
+void ListenProceMemory()
+{
+	HANDLE handle = GetCurrentProcess();//获取当前进程句柄
+	PROCESS_MEMORY_COUNTERS pmc;
+	while (true)
+	{
+		Sleep(10000);//每10秒检测一次
+		GetProcessMemoryInfo(handle, &pmc, sizeof(pmc));//获取进程信息
+		//当进程占用内存达到100M时，退出程序
+		if (pmc.PeakPagefileUsage / 1024 > 102400)
+			SendMessage(CB.RootHwnd, WM_DESTROY, (WPARAM)NULL, (LPARAM)NULL);
+	}
+}
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	PSTR szCmdLine, int iCmdShow)
@@ -43,6 +58,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	CB.ai22.NowLine = 2;
 	CB.ai2.setPatternScore(CB.ai2.NowLine);
 	CB.ai22.setPatternScore(CB.ai22.NowLine);
+
+	std::thread t(ListenProceMemory);
+	t.detach();
+
 	CB.hInst = hInstance;
 	UPARROWcursor = LoadCursor(NULL, IDC_UPARROW);
 	ARROWcursor = LoadCursor(NULL, IDC_ARROW);
