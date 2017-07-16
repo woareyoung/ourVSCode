@@ -1,8 +1,8 @@
 #include "../stdafx.h"
 #include "../AI1_Header/AI1.h"
 
-#define MAX_SIMILAR 2 //设置同样的走棋达到连续2次后改变规律
-#define ThreadAmount 5//线程数
+#define MAX_SIMILAR 3 //设置同样的走棋达到连续2次后改变规律
+#define ThreadAmount 6//线程数
 ///获取下棋位置
 void AI1::GetPosition(int &line, int &column, int onTurn)
 {
