@@ -2,7 +2,7 @@
 #include "../AI1_Header/AI1.h"
 
 #define MAX_SIMILAR 2 //设置同样的走棋达到连续2次后改变规律
-#define ThreadAmount 5//线程数
+#define ThreadAmount 6//线程数
 ///获取下棋位置
 void AI1::GetPosition(int &line, int &column, int onTurn)
 {
@@ -55,7 +55,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		if (line < 3 || line > 7 || column < 3 || column > 7) RateResetScore(0.78);
 		else RateResetScore(0.92);
 		UpdateScore(line, column, OT, true);
-		CalDeadPosNumber(line, column, DoubleDontDead);
+		CalDeadPosNumber(line, column, DoubleDontDead, false);
 	}
 	//如果是第一步下棋
 	else
@@ -119,12 +119,12 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 			FS.Match(NowStatus, np, CurrentRound + 1, 3 - PlayerId);//搜索出同样的局面输的一方的下棋位置
 			if (np.empty())
 			{
-				if (Similar == -1) Similar = -1;
+				if (Similar == -1) Similar = 0;
 				break;
 			}
 			else
 			{
-				if (Similar == -1) Similar = 2;
+				if (Similar == -1) Similar = MAX_SIMILAR - 1;
 				else Similar++;
 			}
 			np.clear();

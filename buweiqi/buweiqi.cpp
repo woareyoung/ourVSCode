@@ -48,6 +48,7 @@ void ListenProceMemory()
 		//当进程占用内存达到100M时，退出程序
 		if (pmc.PeakPagefileUsage / 1024 > 102400)
 			SendMessage(CB.RootHwnd, WM_DESTROY, (WPARAM)NULL, (LPARAM)NULL);
+//		EmptyWorkingSet(GetCurrentProcess());//回收所有可回收的内存
 	}
 }
 

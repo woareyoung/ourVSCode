@@ -1,6 +1,6 @@
 #include "../stdafx.h"
 #include "../AI1_Header/AIForFile.h"
-#define MAX_ROUND_K 70
+#define MAX_ROUND_K 69
 
 bool AIForFile::MatchMemory(int line, int column, std::set<int> &res)
 {
