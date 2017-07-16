@@ -65,7 +65,7 @@ private:
 	param[line]:下棋位置——行
 	param[column]:下棋位置——列
 	*/
-	double CalDeadPosNumber(int line, int column, int &deadPos);//计算死棋位置数量
+	double CalDeadPosNumber(int line, int column, int &deadPos, bool Cal = true);//计算死棋位置数量
 	/*
 	param[line]:转换后的位置——行
 	param[column]：转换后的位置——列

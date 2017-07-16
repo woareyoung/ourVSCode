@@ -55,7 +55,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		if (line < 3 || line > 7 || column < 3 || column > 7) RateResetScore(0.78);
 		else RateResetScore(0.92);
 		UpdateScore(line, column, OT, true);
-		CalDeadPosNumber(line, column, DoubleDontDead);
+		CalDeadPosNumber(line, column, DoubleDontDead, false);
 	}
 	//如果是第一步下棋
 	else

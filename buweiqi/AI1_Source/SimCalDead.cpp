@@ -1,9 +1,9 @@
 #include "../stdafx.h"
 #include "../AI1_Header/AI1.h"
 
-double AI1::CalDeadPosNumber(int line, int column, int &deadPos)
+double AI1::CalDeadPosNumber(int line, int column, int &deadPos, bool Cal)
 {
-	if (cross[line][column] != 0) return -1000;
+	if (cross[line][column] != 0 && Cal == true) return -1000;
 	deadPos = 81;
 	bool MyDeath, RivalDeath;
 	int i, j;
