@@ -35,7 +35,7 @@ namespace MCTS
 	* @param options 创建树的参数设置，包含多线程和深度
 	*/
 	template<typename State>
-	int compute_move(const State root_state,
+	int computeNextMove(const State root_state,
 		const ComputeOptions options = ComputeOptions());
 }
 //
@@ -77,6 +77,8 @@ namespace MCTS
 	template<typename State>
 	class Node
 	{
+	protected:
+		
 	public:
 
 		Node(const State& state);
@@ -84,23 +86,20 @@ namespace MCTS
 
 		// 这里表示的是：
 		// 是否还有本结点展开了的但是并没有尝试过的着子点
-		bool has_untried_moves() const;
+		bool hasUntriedMoves() const;
 		template<typename RandomEngine>
 		// 随机获取未曾遍历过的着子方法
-		int get_untried_move(RandomEngine* engine) const;
-		Node* best_child() const;// 最优的着子点
+		int getRandomMove(RandomEngine* engine) const;
+		Node* bestChild() const;// 最优的着子点
 
 		bool has_children() const// 是否还有子节点
 		{
 			return !children.empty();
 		}
 
-		Node* select_child_UCT() const;// 使用UTC算法挑选出最优的子节点
-		Node* add_child(const int& move, const State& state);// 添加子节点
+		Node* selectChildByUCT() const;// 使用UTC算法挑选出最优的子节点
+		Node* addChild(const int& move, const State& state);// 添加子节点
 		void update(double result);// 更新父节点的信息
-
-		std::string to_string() const;
-		std::string tree_to_string(int max_depth = 1000000, int indent = 0) const;
 
 		const int move;// 
 		Node* const parent;// 父节点
@@ -112,10 +111,13 @@ namespace MCTS
 		std::vector<int> moves;// 这是移动路径
 		std::vector<Node*> children; // 这是子节点
 
+		std::string to_string() const;
+		std::string tree2String(int max_depth = 1000000, int indent = 0) const;
+
 	private:
 		Node(const State& state, const int& move, Node* parent);
 
-		std::string indent_string(int indent) const;// 缩进字符串
+		std::string indentString(int indent) const;// 缩进字符串
 
 		Node(const Node&);
 
@@ -129,7 +131,7 @@ namespace MCTS
 		player_to_move(state->player_to_move),// 初始化为当前玩家一样的角色
 		wins(0),
 		visits(0),
-		moves(state->get_moves()),// 可供着子的着子点集
+		moves(state->getMoves()),// 可供着子的着子点集
 		UCT_score(0)
 	{ }
 
@@ -140,7 +142,7 @@ namespace MCTS
 		player_to_move(state->player_to_move),
 		wins(0),
 		visits(0),
-		moves(state->get_moves()),
+		moves(state->getMoves()),
 		UCT_score(0)
 	{ }
 
@@ -153,7 +155,7 @@ namespace MCTS
 	}
 
 	template<typename State>
-	bool Node<State>::has_untried_moves() const// 是否还有没有遍历过的子节点
+	bool Node<State>::hasUntriedMoves() const// 是否还有没有遍历过的子节点
 	{
 		return !moves.empty();
 	}
@@ -161,22 +163,25 @@ namespace MCTS
 	// 获取未曾尝试过的着子点
 	template<typename State>
 	template<typename RandomEngine>
-	int Node<State>::get_untried_move(RandomEngine* engine) const// 从没有遍历过的子节点中获取一个结点作为子树展开的结点
+	int Node<State>::getRandomMove(RandomEngine* engine) const// 从没有遍历过的子节点中获取一个结点作为子树展开的结点
 	{
-		// 给定[0, move.size() - 1]范围初始化分布类
-		std::uniform_int_distribution<std::size_t> moves_distribution(0, moves.size() - 1);
-		return moves[moves_distribution(*engine)];
+		// 均匀分布获取随机数
+		if (moves.size() == 0) {
+			return 0;
+		}
+		std::uniform_int_distribution<std::size_t> movesDist(0, moves.size() - 1);
+		return moves[movesDist(*engine)];
 	}
 
 	// 最优的着子点
 	template<typename State>
-	Node<State>* Node<State>::best_child() const
+	Node<State>* Node<State>::bestChild() const
 	{
 		if (options.verbose && moves.empty()) {
-			showInfoOnDOS("error, best_child -> moves vector is empty!");
+			showInfoOnDOS("error, bestChild -> moves vector is empty!");
 		}
 		if (options.verbose && children.empty()) {
-			showInfoOnDOS("error, best_child -> node`s children is none!");
+			showInfoOnDOS("error, bestChild -> node`s children is none!");
 		}
 
 		return *std::max_element(children.begin(), children.end(),
@@ -189,16 +194,12 @@ namespace MCTS
 	* 原文網址：https://read01.com/NyRDaN.html
 	*/
 	template<typename State>
-	Node<State>* Node<State>::select_child_UCT() const
+	Node<State>* Node<State>::selectChildByUCT() const
 	{
-		/*if (moves.empty()) {
-			showInfoOnDOS("error, select_child_UCT -> moves vector is empty!");
-		}*/
-
 		// 计算结点的UCT分数
 		for (auto child : children) {
 			child->UCT_score = double(child->wins) / double(child->visits) +
-				2.0 * std::sqrt(std::log(double(this->visits)) / child->visits);
+				std::sqrt(2.0 * std::log(double(this->visits)) / child->visits);
 		}
 
 		return *std::max_element(children.begin(), children.end(),
@@ -211,19 +212,13 @@ namespace MCTS
 	* @param state 当前棋盘的状态（局势）
 	*/
 	template<typename State>
-	Node<State>* Node<State>::add_child(const int& move, const State& state)
+	Node<State>* Node<State>::addChild(const int& move, const State& state)
 	{
 		// 新建新的结点，将新的结点添加到children中，并判断children数组是否为空
 		auto node = new Node(state, move, this);
-		children.push_back(node);
-
-		if (children.empty()) {
-			// shishowInfoOnDOS("error, node`s children is empty!");
-		}
-
-		// 从第一个着子点开始
+		children.emplace_back(node);
+		// 如果在moves中包含了move的话，就把move去掉。
 		auto itr = moves.begin();
-		// 重新修改着子点数组的大小
 		for (; itr != moves.end() && *itr != move; ++itr);
 		moves.erase(itr);// 从moves数组中删除move元素
 		return node;
@@ -253,21 +248,21 @@ namespace MCTS
 	}
 
 	template<typename State>
-	std::string Node<State>::tree_to_string(int max_depth, int indent) const
+	std::string Node<State>::tree2String(int max_depth, int indent) const
 	{
 		if (indent >= max_depth) {
 			return "";
 		}
 
-		std::string s = indent_string(indent) + to_string();
+		std::string s = indentString(indent) + to_string();
 		for (auto child : children) {
-			s += child->tree_to_string(max_depth, indent + 1);
+			s += child->tree2String(max_depth, indent + 1);
 		}
 		return s;
 	}
 
 	template<typename State>
-	std::string Node<State>::indent_string(int indent) const
+	std::string Node<State>::indentString(int indent) const
 	{
 		std::string s = "";
 		for (int i = 1; i <= indent; ++i) {
@@ -284,7 +279,7 @@ namespace MCTS
 	* @return 返回根结点
 	*/
 	template<typename State>
-	std::unique_ptr<Node<State>>  compute_tree(
+	std::unique_ptr<Node<State>> computeMSTCTree(
 		const State root_state,
 		const ComputeOptions options,
 		std::mt19937_64::result_type initial_seed)
@@ -313,31 +308,31 @@ namespace MCTS
 			// 不存在非孩子结点的走步move
 			// node的没有尝试的move为空了，并且node并非叶子结点
 			// 这里表示基本上所有的孩子结点都访问过了，这里我们就用UTC的算法对结点进行估分。
-			while (!node->has_untried_moves() && node->has_children()) {
-				node = node->select_child_UCT();
-				state->do_move(node->move);
+			while (!node->hasUntriedMoves() && node->has_children()) {
+				node = node->selectChildByUCT();
+				state->SimulateMove(node->move);
 			}
 
 			// 随机选取一个根结点
-			if (node->has_untried_moves()) {
-				auto move = node->get_untried_move(&random_engine);
-				state->do_move(move);
-				node = node->add_child(move, state);
+			if (node->hasUntriedMoves()) {
+				auto move = node->getRandomMove(&random_engine);
+				state->SimulateMove(move);
+				node = node->addChild(move, state);
 			}
 
 			// Okay，选取完根结点，我们就开始跑，循环直到结束。
-			while (state->do_random_move(&random_engine)) {}
+			while (state->doRandomMove(&random_engine)) {}
 
 			// 我们已经到达了树的根结点了，这个时候我们递归回根结点，
 			// 为下一次循环的UTC加分做准备
 			while (node != nullptr) {
-				node->update(state->get_result(node->player_to_move));// 这里只看输赢就好了
+				node->update(state->getResult(node->player_to_move));// 这里只看输赢就好了
 				node = node->parent;
 			}
 		}
 		if (options.verbose) {
 			auto node = root.get();
-			_cprintf("*******compute tree:*******\n %s\n", node->tree_to_string().c_str());
+			_cprintf("*******compute tree:*******\n %s\n", node->tree2String().c_str());
 			// system("pause");
 		}
 
@@ -352,21 +347,18 @@ namespace MCTS
 	* @return 返回最优的着子点
 	*/
 	template<typename State>
-	int compute_move(const State root_state,
+	int computeNextMove(const State root_state,
 		const ComputeOptions options)
 	{
 		using namespace std;
 
-		auto moves = root_state->get_moves();// 获取所有的可行走的着子点
+		auto moves = root_state->getMoves();// 获取所有的可行走的着子点
 		if (options.verbose) {
-			if (moves.size() <= 0) {
-				showInfoOnDOS("moves.size() is zero");
-			}
 			if (moves.size() == 1) {
 				return moves[0];
 			}
 		}
-	
+
 		// 分发所有的任务去计算树——这里采用的是异步线程的方式来处理树
 		vector<future<unique_ptr<Node<State>>>> root_futures;
 		ComputeOptions job_options = options;
@@ -374,16 +366,16 @@ namespace MCTS
 		for (int t = 0; t < options.number_of_threads; ++t) {
 			auto func = [t, &root_state, &job_options]() -> std::unique_ptr<Node<State>> // 指定类型
 			{
-				return compute_tree(root_state, job_options, 1012411 * t + 12515);
+				return computeMSTCTree(root_state, job_options, 1012411 * t + 12515);
 			};
 			// 使用异步线程来处理数据——分发任务
-			root_futures.push_back(std::async(std::launch::async, func));
+			root_futures.emplace_back(std::async(std::launch::async, func));
 		}
 
 		// 搜集结果
 		vector<unique_ptr<Node<State>>> roots;
 		for (int t = 0; t < options.number_of_threads; ++t) {
-			roots.push_back(std::move(root_futures[t].get()));
+			roots.emplace_back(std::move(root_futures[t].get()));
 		}
 
 		// 合并所有根结点的孩子结点
@@ -435,6 +427,5 @@ namespace MCTS
 
 		return best_move;
 	}
-
 }
 

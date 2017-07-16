@@ -20,7 +20,7 @@ void AI2::initAll() {
 		Reverse[i] = temp[i];
 	}
 	// 模式分数尺度
-	int patternScore[] = { 60, 50, 40, 35, 35, 30, 30, 25, 25, 20, 20 };
+	int patternScore[] = { 45, 40, 35, 30, 30, 25, 25, 23, 23, 20, 20 };
 	// 分数说明：
 	// 对方自杀点且非我方自杀点的分数为0，我方自杀点为minLitmit。
 

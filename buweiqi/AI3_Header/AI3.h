@@ -45,7 +45,7 @@ public:
 		player_to_move(Id),
 		Winner(NoChess),
 		depth(0),
-		ifShowInfo(true)
+		ifShowInfo(false)
 	{
 		initAllArray();
 		for (int i = ChessInit; i < ChessEnd; ++i) {
@@ -67,22 +67,57 @@ public:
 		}
 	}
 
-	// 随机走步
+	// 是否还有可着子的着子点
 	template<typename RandomEngine>
-	void do_random_move(RandomEngine* engine, std::vector<int>& moves)
+	bool doRandomMove(RandomEngine* engine)
 	{
+		auto moves = getMoves();
 		if (moves.empty()) {// 如果着子点集合为空的话，就直接返回
 			Winner = getRival(player_to_move);
-			return;
+			return false;
 		}
-		std::uniform_int_distribution<std::size_t> move_ind(0, moves.size() - 1);
-		auto move = moves[move_ind(*engine)];
-		// 开始走步
-		do_move(move);
+		if (!moves.empty()) {
+			doRandomMove(engine, moves);
+			return true;
+		}
+		return false;
 	}
 
-	// 模拟着子
-	virtual void do_move(const int& move)
+	// 随机走步
+	template<typename RandomEngine>
+	void doRandomMove(RandomEngine* engine, std::vector<int>& moves)
+	{
+		int move;
+		while (true) {
+			if (moves.size() == 0) {
+				Winner = getRival(player_to_move);
+				return;
+			}
+			std::uniform_int_distribution<std::size_t> move_ind(0, moves.size() - 1);
+			move = moves[move_ind(*engine)];
+			int line = getLine(move);
+			int column = getColumn(move);
+			if (isGo2Dead(line, column, player_to_move)) {
+				CS[line][column] = minLimit;
+				auto itr = moves.begin();
+				for (; itr != moves.end() && *itr != move; ++itr);
+				moves.erase(itr);// 从moves数组中删除move元素
+			}
+			else if (moves.empty()) {
+				Winner = getRival(player_to_move);
+				return;
+			}
+			else {
+				break;
+			}
+		}
+
+		// 开始模拟走步
+		SimulateMove(move);
+	}
+
+	// 模拟着子，主要的作用是用于模拟下棋
+	virtual void SimulateMove(const int& move)
 	{
 		// 结点的深度加1
 		depth++;
@@ -94,67 +129,21 @@ public:
 		column = getColumn(move);
 		// 如果没有输赢未论定的话，就继续模拟
 		cross[line][column] = player_to_move;
-
-
-		if (ifShowInfo) {
-			_cprintf("\n**************This is chess score*******(%d, %d)***%s********\n",
-				line, column, player_to_move == Black ? "Black" : "White");
-			for (int i = 1; i < 10; ++i)
-			{
-				for (int j = 1; j < 10; ++j)
-					if (CS[i][j] >= 20) {
-						_cprintf("%d\t", CS[i][j]);
-					}
-					else if (CS[i][j] == minLimit) {
-						_cprintf("M\t");
-					}
-					else if (CS[i][j] == 0) {
-						_cprintf("0\t");
-					}
-					else {
-						_cprintf("S\t");
-					}
-					_cprintf("\n");
-			}
-			_cprintf("**************This is chess cross*********(%d, %d)***%s******\n",
-				line, column, player_to_move == Black ? "Black" : "White");
-			showChessBoard(cross);
-			system("pause");
-		}
+		// 显示模拟的数据，使用ifShowInfo进行控制
+		showSimaluteInfo(line, column);
 
 		// 轮到下一个玩家着子
 		player_to_move = rival;
 	}
 
-	// 是否还有可着子的着子点
-	template<typename RandomEngine>
-	bool do_random_move(RandomEngine* engine)
-	{
-		auto moves = get_moves();
-		if (!moves.empty()) {
-			do_random_move(engine, moves);
-			return true;
-		}
-		return false;
-	}
-
-	virtual void initCSPoint() override {
-		if (player_to_move == White) {
-			CS = chessScoreW;
-		}
-		else {
-			CS = chessScore;// 这里目测不会用到的
-		}
-	}
-
 	// 从棋盘中搜集所有可行的着子点
-	virtual std::vector<int> get_moves() const
+	virtual std::vector<int> getMoves() const
 	{
 		// 下面是搜集所有可能的着子点。
 		std::vector<int> moves;
 
-		// 如果深度大于1250层的话就，直接诶返回moves了。
-		if (depth > 1250) {
+		// 如果深度大于888层的话就，直接诶返回moves了。
+		if (depth > 888) {
 			return moves;
 		}
 
@@ -165,6 +154,7 @@ public:
 			}
 			return moves;
 		}
+
 		if (ifShowInfo) {
 			// 调用Pattern对当前局面进行处理，将所有可能的着子点加入到moves数组
 			_cprintf("Player is -> %s \n", player_to_move == Black ? "Black" : "White");
@@ -177,20 +167,30 @@ public:
 		// 从当前棋盘中选择出由Pattern匹配出来的比较好的着子点集合
 		for (int i = ChessStart; i < ChessEnd; ++i) {
 			for (int j = ChessStart; j < ChessEnd; ++j) {
-				if (cross[i][j] == NoChess && CS[i][j] >= 10) {
+				if (cross[i][j] == NoChess && CS[i][j] >= 20) {
 					moves.emplace_back(getMove(i, j));
 				}
 			}
 		}
 		// 如果当前Pattern匹配完之后，没有一个是好的着子点
-		if (moves.size() < 5) {
+		if (moves.size() == 0) {
 			for (int i = ChessStart; i < ChessEnd; ++i) {
 				for (int j = ChessStart; j < ChessEnd; ++j) {
-					if (cross[i][j] == NoChess && CS[i][j] != minLimit) {
+					if (cross[i][j] == NoChess && CS[i][j] != minLimit && CS[i][j] != 0) {
 						if (const_cast<SimulatorGo*>(this)->isGo2Dead(i, j, player_to_move)) {
 							CS[i][j] = minLimit;
-							continue;
 						}
+						else {
+							moves.emplace_back(getMove(i, j));
+						}
+					}
+				}
+			}
+		}
+		if (moves.size() == 0) {
+			for (int i = ChessStart; i < ChessEnd; ++i) {
+				for (int j = ChessStart; j < ChessEnd; ++j) {
+					if (cross[i][j] == NoChess && CS[i][j] == 0) {
 						moves.emplace_back(getMove(i, j));
 					}
 				}
@@ -205,10 +205,9 @@ public:
 	}
 
 	// 用于判断输赢结果
-	double get_result(const int& current_player_to_move) const
+	double getResult(const int& current_player_to_move) const
 	{
-		double Score = Winner == current_player_to_move ? 0.0 : 1.0;
-		return Score;
+		return Winner == current_player_to_move ? 0.0 : 1.0;
 	}
 
 	virtual bool checkEmptyPos(
@@ -265,6 +264,42 @@ public:
 		// 这里既不是我方自杀点，也不是敌方自杀点
 		return true;
 	}
+	virtual void initCSPoint() override {
+		if (player_to_move == White) {
+			CS = chessScoreW;
+		}
+		else {
+			CS = chessScore;// 这里目测不会用到的
+		}
+	}
+
+	void showSimaluteInfo(const int& line, const int& column) {
+		if (ifShowInfo) {
+			_cprintf("\n**************This is chess score*******(%d, %d)***%s********\n",
+				line, column, player_to_move == Black ? "Black" : "White");
+			for (int i = 1; i < 10; ++i)
+			{
+				for (int j = 1; j < 10; ++j)
+					if (CS[i][j] >= 20) {
+						_cprintf("%d\t", CS[i][j]);
+					}
+					else if (CS[i][j] == minLimit) {
+						_cprintf("M\t");
+					}
+					else if (CS[i][j] == 0) {
+						_cprintf("0\t");
+					}
+					else {
+						_cprintf(".\t");
+					}
+					_cprintf("\n");
+			}
+			_cprintf("**************This is chess cross*********(%d, %d)***%s******\n",
+				line, column, player_to_move == Black ? "Black" : "White");
+			showChessBoard(cross);
+			system("pause");
+		}
+	}
 };
 
 class AI3 : public AI2
@@ -275,15 +310,24 @@ public:
 
 	virtual int maxandmin(const int& depth) override {
 		initChessScore(true);
-		return predict();
+		int maxCount = 6;
+		int bestMove;
+		do {
+			bestMove = predict();
+			--maxCount;
+		} while (this->isGo2Dead(getLine(bestMove), getColumn(bestMove), turn2Who) && maxCount != 0);
+		if (maxCount == 0) {
+			bestMove = 0;
+		}
+		return bestMove;
 	}
 	int predict() {
 		MCTS::ComputeOptions options;
-		options.number_of_threads = 1;
-		// options.verbose = true;
+		options.number_of_threads = 8;
+		options.verbose = true;
 		// options.max_time = 1;
 		auto state_copy = new SimulatorGo(cross, PlayerId);
-		auto best_move = MCTS::compute_move(state_copy, options);
+		auto best_move = MCTS::computeNextMove(state_copy, options);
 		return best_move;
 	}
 };

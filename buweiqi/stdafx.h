@@ -29,7 +29,7 @@
 #define isWhite 2
 #define noChess 0
 
-#define MAX_COMBAT 1000 //连续对局次数
-#define DISPLAY 0 //1表示在界面显示，2表示在DOS显示，0表示全显示
+#define MAX_COMBAT 1 //连续对局次数
+#define DISPLAY 1 //1表示在界面显示，2表示在DOS显示，0表示全显示
 
 // TODO: reference additional headers your program requires here

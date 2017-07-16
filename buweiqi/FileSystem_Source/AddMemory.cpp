@@ -2,7 +2,7 @@
 #include "../FileSystem_Header/FileSystem.h"
 #include <mutex>
 
-#define ThreadNum 4 //读写同时进行，故实际占用线程数为 ThreadNum * 2
+#define ThreadNum 8 //读写同时进行，故实际占用线程数为 ThreadNum * 2
 
 ///将本局游戏记录到总记忆库
 void FileSystem::AddMemory(std::list<SITUATION> header, int winner)
