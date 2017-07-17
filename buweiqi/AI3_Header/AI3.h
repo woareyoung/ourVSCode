@@ -67,6 +67,20 @@ public:
 		}
 	}
 
+	std::vector<int> getAllMoves() {
+		startPattern();
+		ScanChessBroad();
+		std::vector<int> allMoves;
+		for (int i = ChessStart; i < ChessEnd; ++i) {
+			for (int j = ChessStart; j < ChessEnd; ++j) {
+				if (cross[i][j] == NoChess && chessScore[i][j] != minLimit) {
+					allMoves.emplace_back(getMove(i, j));
+				} 
+			}
+		}
+		return allMoves;
+	}
+
 	// 是否还有可着子的着子点
 	template<typename RandomEngine>
 	bool doRandomMove(RandomEngine* engine)
@@ -323,8 +337,9 @@ public:
 	}
 	int predict() {
 		MCTS::ComputeOptions options;
-		options.number_of_threads = 8;
+		options.number_of_threads = 4;
 		options.verbose = true;
+		options.max_iterations = 100000;
 		// options.max_time = 1;
 		auto state_copy = new SimulatorGo(cross, PlayerId);
 		auto best_move = MCTS::computeNextMove(state_copy, options);
