@@ -36,6 +36,7 @@ void SelectFun();//选择AI功能
 void Select();//选择之后的处理
 void InitWndClass(TCHAR szAppName[], WNDCLASS &wndclass, HINSTANCE hInstance, int callback);
 void SeeCombatRecord();
+
 //监控进程占用内存
 void ListenProceMemory()
 {

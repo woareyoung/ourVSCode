@@ -1,12 +1,13 @@
 #include "../stdafx.h"
 #include "../AI1_Header/AIForFile.h"
-#define MAX_ROUND_K 69
+#define MAX_ROUND_K 67
 
 bool AIForFile::MatchMemory(int line, int column, std::set<int> &res)
 {
-	Statistic(line, column);//先统计当前局面
+	QUADRANT qqq = Qua;
+	if(cross[line][column] == 0) Statistic(line, column, qqq);//先统计当前局面
 	int i;
-	GetCurrentStatus(Qua.GetMaxQuadrant(), NowStatus);
+	GetCurrentStatus(qqq.GetMaxQuadrant(), NowStatus, qqq, cross);
 	std::pair<int, int> p;
 	if (ForeReadHaveMem)
 	{
@@ -29,36 +30,36 @@ bool AIForFile::MatchMemory(int line, int column, std::set<int> &res)
 	}
 	return true;
 }
-void AIForFile::GetCurrentStatus(int maxQuadrant, SITUATION &CurrentStatus)
+void AIForFile::GetCurrentStatus(int maxQuadrant, SITUATION &CurrentStatus, QUADRANT &qua, int CROSS[][10])
 {
 	int i, j;
 	for (i = 0; i < 10; i++) CurrentStatus.BoardStatus = "";
 	//如果最多棋子的是第一象限
-	if (maxQuadrant == Qua.FirstQuadrant)
+	if (maxQuadrant == qua.FirstQuadrant)
 	{
 		for (i = 1; i < 10; ++i)
 			for (j = 9; j > 0; j--)
-				CurrentStatus.BoardStatus += std::to_string(cross[i][j]);
+				CurrentStatus.BoardStatus += std::to_string(CROSS[i][j]);
 	}
 	//如果最多棋子的是第二象限
-	else if (maxQuadrant == Qua.SecondQuadrant)
+	else if (maxQuadrant == qua.SecondQuadrant)
 	{
 		for (i = 1; i < 10; ++i)
 			for (j = 1; j < 10; ++j)
-				CurrentStatus.BoardStatus += std::to_string(cross[i][j]);
+				CurrentStatus.BoardStatus += std::to_string(CROSS[i][j]);
 	}
 	//如果最多棋子的是第三象限
-	else if (maxQuadrant == Qua.ThirdQuadrant)
+	else if (maxQuadrant == qua.ThirdQuadrant)
 	{
 		for (i = 9; i > 0; i--)
 			for (j = 1; j < 10; ++j)
-				CurrentStatus.BoardStatus += std::to_string(cross[i][j]);
+				CurrentStatus.BoardStatus += std::to_string(CROSS[i][j]);
 	}
 	//如果最多棋子的是第四象限
-	else if (maxQuadrant == Qua.ForthQuadrant)
+	else if (maxQuadrant == qua.ForthQuadrant)
 	{
 		for (i = 9; i > 0; i--)
 			for (j = 9; j > 0; j--)
-				CurrentStatus.BoardStatus += std::to_string(cross[i][j]);
+				CurrentStatus.BoardStatus += std::to_string(CROSS[i][j]);
 	}
 }

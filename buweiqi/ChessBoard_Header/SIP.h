@@ -37,6 +37,14 @@ struct QUADRANT
 		if (ForthQuadrant > max) max = ForthQuadrant;
 		return max;
 	}
+	QUADRANT &operator= (QUADRANT &param)
+	{
+		FirstQuadrant = param.FirstQuadrant;
+		SecondQuadrant = param.SecondQuadrant;
+		ThirdQuadrant = param.ThirdQuadrant;
+		ForthQuadrant = param.ForthQuadrant;
+		return *this;
+	}
 };
 
 struct FileName
