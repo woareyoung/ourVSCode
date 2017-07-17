@@ -62,9 +62,9 @@ class AI2 : public AI, public AIPlayer, public DefaultChess
 private:
 
 	// 匹配模式
-	static const int pattern_Total = 11;
+	static const int pattern_Total = 17;
 	// 匹配的次数
-	static const int pattern_Sum = 44;
+	static const int pattern_Sum = 86;
 	// 模式分数尺度
 	int pattern_Score[pattern_Total];
 	// 分数说明：
@@ -221,7 +221,7 @@ public:
 		return true;
 	}
 	// 检查棋子是否有效，并对分析的结果进行相应的加分
-	virtual bool checkStone(const int& x, const int& y) {
+	virtual bool checkStone(const int& x, const int& y, const bool& below4) {
 		// 对于当前匹配到的着子点的环境进行分析
 		// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
 		if (isGo2Dead(x, y, turn2Who)) {
@@ -230,6 +230,9 @@ public:
 			return false;
 		}
 		// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
+		if (!below4) {
+			return true;
+		}
 		if (cross[x][y] == NoChess && CS[x][y] == 0) return false;
 		if (isGo2Dead(x, y, Rival)) {
 			// 如果是敌方的自杀点的话，这里就置零   -.-！！！

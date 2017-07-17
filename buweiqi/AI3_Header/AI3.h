@@ -259,7 +259,7 @@ public:
 		return true;
 	}
 	// 检查棋子是否有效，并对分析的结果进行相应的加分
-	virtual bool checkStone(const int& x, const int& y) override {
+	virtual bool checkStone(const int& x, const int& y, const bool& below4) override {
 		// 对于当前匹配到的着子点的环境进行分析
 		// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
 		int rival = getRival(player_to_move);
@@ -267,6 +267,9 @@ public:
 			CS[x][y] = minLimit;
 			// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
 			return false;
+		}
+		if (!below4) {
+			return true;
 		}
 		// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
 		if (cross[x][y] == NoChess && CS[x][y] == 0) return false;
@@ -326,13 +329,13 @@ public:
 		initChessScore(true);
 		int maxCount = 6;
 		int bestMove;
-		do {
+		/*do {*/
 			bestMove = predict();
-			--maxCount;
+		/*	--maxCount;
 		} while (this->isGo2Dead(getLine(bestMove), getColumn(bestMove), turn2Who) && maxCount != 0);
 		if (maxCount == 0) {
 			bestMove = 0;
-		}
+		}*/
 		return bestMove;
 	}
 	int predict() {

@@ -20,12 +20,18 @@ void AI2::initAll() {
 		Reverse[i] = temp[i];
 	}
 	// 模式分数尺度
-	int patternScore[] = { 45, 40, 35, 30, 30, 25, 25, 23, 23, 20, 20 };
+	int patternScore[] = {
+		45, 40, 35, 30, 30, 25, 25, 23, 23, 20, 20,// 11
+		47, 47, 47, 43, 43, 43// 6
+	};
 	// 分数说明：
 	// 对方自杀点且非我方自杀点的分数为0，我方自杀点为minLitmit。
 
 	// 模式内判断棋子点数
-	int patternCount[] = { 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 };
+	int patternCount[] = {
+		4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,// 44
+		7, 7, 7, 7, 7, 7// 42
+	};
 	// 看不懂的请看种子填充算法
 	DIRECTION patternBackground[] = {
 		{ -1, 0 },{ 1,0 },{ 0,-1 },{ 0,1 },
@@ -35,15 +41,22 @@ void AI2::initAll() {
 		{ -1, 0 },{ 0, -1 },{ 0, 1 },{ 1, 0 },
 
 		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
+		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },// 2
+
 		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
+		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },// 2
 
 		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
 		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
+		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
+		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },// 4 44
 
-		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
-		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
-		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 },
-		{ -1, -1 },{ 1, -1 },{ 0,-1 },{ 0,-2 }
+		{ 0, -1 },{ 0, 1 },{ 0, 2 },{ -1, 0 },{ -1, 1 },{ 1, 0 },{ 1, 1 },
+		{ 0, -1 },{ 0, 1 },{ 0, 2 },{ -1, 0 },{ -1, 1 },{ 1, 0 },{ 1, 1 },
+		{ 0, -1 },{ 0, 1 },{ 0, 2 },{ -1, 0 },{ -1, 1 },{ 1, 0 },{ 1, 1 },
+		{ 0, -1 },{ 0, 1 },{ 0, 2 },{ -1, 0 },{ -1, 1 },{ 1, 0 },{ 1, 1 },
+		{ 0, -1 },{ 0, 1 },{ 0, 2 },{ -1, 0 },{ -1, 1 },{ 1, 0 },{ 1, 1 },
+		{ 0, -1 },{ 0, 1 },{ 0, 2 },{ -1, 0 },{ -1, 1 },{ 1, 0 },{ 1, 1 }// 6 42 
 	};
 	// 利用与或处理棋子点
 	// 匹配模式中棋子分布
@@ -83,7 +96,18 @@ void AI2::initAll() {
 		NoChess | Edge, Black,			NoChess | Edge,	NoChess | Edge,
 		NoChess | Edge,	NoChess | Edge,	NoChess | Edge,	Black,
 		NoChess | Edge, White,			NoChess | Edge,	NoChess | Edge,
-		NoChess | Edge,	NoChess | Edge,	NoChess | Edge,	White
+		NoChess | Edge,	NoChess | Edge,	NoChess | Edge,	White,
+
+		/*********************************************
+		菱形围杀缺一
+		**********************************************/
+		// { 0, -1 },{ 0, 1 },{ 0, 2 },{ -1, 0 },{ -1, 1 },{ 1, 0 },{ 1, 1 },
+		NoChess,	White,		Black | Edge,	Black | Edge,	Black | Edge,	Black,		Black,
+		Black,		White,		Black | Edge,	Black | Edge,	Black | Edge,	NoChess,	Black,
+		Black,		White,		Black | Edge,	Black | Edge,	Black | Edge,	Black,		NoChess,
+		NoChess,	Black,		White | Edge,	White | Edge,	White | Edge,	White,		White,
+		White,		Black,		White | Edge,	White | Edge,	White | Edge,	NoChess,	White,
+		White,		Black,		White | Edge,	White | Edge,	White | Edge,	White,		NoChess
 	};
 	// 匹配模式中棋子分布
 	int patternBlack[] = {
@@ -97,7 +121,13 @@ void AI2::initAll() {
 		NoChess | Edge, White,			NoChess | Edge,	NoChess | Edge,
 		NoChess | Edge,	NoChess | Edge,	NoChess | Edge,	White,
 		NoChess | Edge, Black,			NoChess | Edge,	NoChess | Edge,
-		NoChess | Edge,	NoChess | Edge,	NoChess | Edge,	Black
+		NoChess | Edge,	NoChess | Edge,	NoChess | Edge,	Black,// 11
+		NoChess,	Black,		White | Edge,	White | Edge,	White | Edge,	White,		White,
+		White,		Black,		White | Edge,	White | Edge,	White | Edge,	NoChess,	White,
+		White,		Black,		White | Edge,	White | Edge,	White | Edge,	White,		NoChess,
+		NoChess,	White,		Black | Edge,	Black | Edge,	Black | Edge,	Black,		Black,
+		Black,		White,		Black | Edge,	Black | Edge,	Black | Edge,	NoChess,	Black,
+		Black,		White,		Black | Edge,	Black | Edge,	Black | Edge,	Black,		NoChess// 6
 	};
 	for (i = 0; i < pattern_Total; ++i) {
 		this->pattern_Score[i] = patternScore[i];
@@ -207,6 +237,7 @@ void AI2::Pattern(const int *PatternType) {
 	register int pointer, start = 0, score;
 	register int mainColor = NoChess;
 	register Pos emptyPos[10];
+	// register bool isFirst;
 	// 每一个棋子都要遍历一遍模板
 	for (x = ChessStart; x < ChessEnd; ++x) {
 		for (y = ChessStart; y < ChessEnd; ++y) {
@@ -214,23 +245,30 @@ void AI2::Pattern(const int *PatternType) {
 			for (i = 0; i < pattern_Total; ++i)
 			{
 				j = pointer;
+				// isFirst = false;
 				pointer += pattern_Count[i];
 				if (NoChess != cross[x][y]) continue;// 如果不是空着子点就跳转下一次循环
 				start = 0;
+				score = pattern_Score[i];
 				for (; j < pointer; ++j)
 				{
 					x_offset = pattern_Background[j].x_offset;
 					y_offset = pattern_Background[j].y_offset;
-					score = pattern_Score[i];
 					// 棋子在棋盘内
 					if (OnChessBoard(x + x_offset, y + y_offset)) {
 						if (0 == (cross[x + x_offset][y + y_offset] & PatternType[j])) goto mismatch;//不相同的
 						else
 						{
 							if (cross[x + x_offset][y + y_offset] == NoChess) {
+								/*if (!isFirst) {
+									isFirst = true;
+									continue;
+								}*/
+								// 如果当前空白点是死棋位的话，就直接跳过匹配了
+								if (CS[x + x_offset][y + y_offset] == minLimit) goto mismatch;
 								// 假如当前空白点的分数值为0的时候，就直接跳过
 								// 因为分数为0表示当前空白点的位置是敌方自杀点，没必要理会
-								if (CS[x + x_offset][y + y_offset] == 0) goto mismatch;
+								else if (CS[x + x_offset][y + y_offset] == 0) goto mismatch;
 								else {
 									emptyPos[start].line = x + x_offset;
 									emptyPos[start++].column = y + y_offset;
@@ -259,7 +297,7 @@ void AI2::Pattern(const int *PatternType) {
 				2、需要注意该着子点是否是死棋点
 				*******************************************/
 				// 检查棋子是否有效，并对分析的结果进行相应的加分
-				if (!checkStone(x, y)) {
+				if (!checkStone(x, y, pattern_Count[i] <= 4)) {
 					goto mismatch;
 				};
 				CS[x][y] += score;// 这里匹配到了一个模板，这个模板的位置就是这个
