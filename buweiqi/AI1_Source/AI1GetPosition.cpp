@@ -73,20 +73,26 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		bool None;
 		int NextPace;
 		np.clear();
+		maxScore = -100;
 		None = MatchMemory(line, column, np);//获取对局记录中符合当前盘面的对应方法
-		//如果对局记录中有应对的方法
-		if (!np.empty())
-		{
-			GetMaxScorePosition();
-			np.insert(MaxScorePosition);
-			NextPace = GetNextPace(np);
-			if (NextPace < 0) abc = true;
-			else
+		NextPace = GetNextPace(np);
+		GetMaxScorePosition();
+		double WantPos = MaxScore * 0.7;
+		for (int i = 1; i < 10; i++)
+			for (int j = 1; j < 10; j++)
 			{
-				line = NextPace / 10;
-				column = NextPace % 10;
-				abc = false;
+				if (cross[i][j] != 0) continue;
+				else if (Score[i][j] > WantPos) np.insert(i * 10 + j);
 			}
+		double saveScore = maxScore;
+		int NNPP = GetNextPace(np);
+		if (maxScore > saveScore) NextPace = NNPP;
+		if (NextPace < 0) abc = true;
+		else
+		{
+			line = NextPace / 10;
+			column = NextPace % 10;
+			abc = false;
 		}
 	}
 	///若是死棋位置则一直循环，直到不是死棋位置
@@ -152,9 +158,10 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 	});
 }
 ///从链表中选取最高胜率的结点
-int AI1::GetNextPace(std::set<int> &np)
+int AI1::GetNextPace(std::set<int> &np, bool change)
 {
 	int BestSite = -1;
+	/*
 	//如果容器只有一个元素
 	if (np.size() == 1)
 	{
@@ -162,8 +169,7 @@ int AI1::GetNextPace(std::set<int> &np)
 		BestSite = *i;
 		np.clear();
 		return BestSite;
-	}
-	double maxScore = -100;
+	}*/
 	bool ThreadGo[ThreadAmount] = { false };//标记线程是否正在执行
 	int i;
 	int n;
@@ -182,8 +188,13 @@ int AI1::GetNextPace(std::set<int> &np)
 					auto t = np.begin();//获取候补位置的第一个
 					int tempPos = *t;
 					np.erase(tempPos);//将该位置从候补列表中擦除
-					SymmetryExchange(Line, Column, tempPos);
-					if(DeadCheck(Line, Column, PlayerId, cross) == false)
+					if(change) SymmetryExchange(Line, Column, tempPos);
+					else Line = tempPos / 10, Column = tempPos % 10;
+					bool DC1 = DeadCheck(Line, Column, PlayerId, cross);
+					bool DC2 = DeadCheck(Line, Column, 3 - PlayerId, cross);
+					if(DC2) Score[Line][Column] = PointStyle[9];
+					if(DC1) Score[Line][Column] = PointStyle[1];
+					if(!DC1 && !DC2)
 					{
 						double ttt = CalDeadPosNumber(Line, Column, n);//获取该位置的评价
 						if (ttt > maxScore)

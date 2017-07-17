@@ -31,12 +31,13 @@ private:
 	double PointStyle[18];//记录每种特殊点类型的分值
 	double Score[10][10];//记录每个位置上的分值
 	double MaxScore;//记录最大分值
-	
+	double maxScore = -100;
+
 	std::set<int> np;//获取下一步的可能性的集合
 	/*
 		param[np]:可能下棋位置的set集合
 	*/
-	int GetNextPace(std::set<int>& np);//从链表中选取最高胜率的结点
+	int GetNextPace(std::set<int>& np, bool change = true);//从链表中选取最高胜率的结点
 	///各功能函数 集中在FunctionPart.cpp文件中
 	/*
 		param[row1]:行
