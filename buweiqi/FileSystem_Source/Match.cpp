@@ -13,6 +13,7 @@ void FileSystem::Match(SITUATION &StatusQuo, std::set<int> &result, int round, i
 	while (!TempFile.eof())//循环直到文件末尾
 	{
 		TempFile >> data >> temp >> win;
+		if (TempFile.eof()) break;
 		if(data == StatusQuo.BoardStatus && playerId == win) result.insert(temp);
 	}
 	TempFile.close();
@@ -33,6 +34,7 @@ void FileSystem::GenerMatch(SITUATION &StatusQuo, std::set<int> &Parent, int rou
 	while (!TempFile.eof())
 	{
 		TempFile >> data >> count >> count;
+		if (TempFile.eof()) break;
 		UnPack(data, one1, two1);
 		UnPack(StatusQuo.BoardStatus, one2, two2);
 		if (count != playerId) continue;

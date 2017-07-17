@@ -18,9 +18,9 @@ double AI1::CalDeadPosNumber(int line, int column, int &deadPos, bool Cal)
 	auto CheckTigerMouth = [&](int TL, int TC, int player) {
 		int num = 0;
 		if (crossing[TL][TC + 1] == player || TC == 9) num++;
-		if (crossing[TL + 1][TC] == player && TL == 9) num++;
-		if (crossing[TL - 1][TC] == player && TL == 1) num++;
-		if (crossing[TL][TC - 1] == player && TC == 1) num++;
+		if (crossing[TL + 1][TC] == player || TL == 9) num++;
+		if (crossing[TL - 1][TC] == player || TL == 1) num++;
+		if (crossing[TL][TC - 1] == player || TC == 1) num++;
 		if (num == 3) ++TigerMouth[player];
 	};
 	for (i = 1; i < 10; ++i)
