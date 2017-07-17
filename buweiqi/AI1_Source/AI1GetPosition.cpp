@@ -79,11 +79,13 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		GetMaxScorePosition();
 		double WantPos = MaxScore * 0.7;
 		for (int i = 1; i < 10; i++)
+		{
 			for (int j = 1; j < 10; j++)
 			{
 				if (cross[i][j] != 0) continue;
 				else if (Score[i][j] > WantPos) np.insert(i * 10 + j);
 			}
+		}
 		double saveScore = maxScore;
 		int NNPP = GetNextPace(np);
 		if (maxScore > saveScore) NextPace = NNPP;
@@ -101,7 +103,11 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		GetMaxScorePosition();
 		line = MaxScorePosition / 10;
 		column = MaxScorePosition % 10;
-		if (cross[line][column] != 0) continue;//这句虽然没什么用，但保险起见
+		if (cross[line][column] != 0)
+		{
+			Score[line][column] = PointStyle[10];
+			continue;
+		}
 		///若该位置对于对方来说是死棋，则继续循环
 		if (DeadCheck(line, column, OT, cross) == true && MaxScore > PointStyle[9])
 		{
