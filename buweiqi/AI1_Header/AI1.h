@@ -14,7 +14,7 @@
 #include "AIForFile.h"
 
 ///AI类
-class AI1 : public AI, private PointStyle, private AIForFile
+class AI1 : public AI, private PointStyle, public AIForFile
 {
 public:
 	AI1();//构造函数

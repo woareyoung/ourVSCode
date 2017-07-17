@@ -43,5 +43,44 @@ double AI1::CalDeadPosNumber(int line, int column, int &deadPos, bool Cal)
 			}
 		}
 	}
-	return RivalDeadPosNumber - MyDeadPosNumber + 0.5 * (TigerMouth[PlayerId] - TigerMouth[3 - PlayerId]);
+	QUADRANT qqq = Qua;
+	SITUATION sit;
+	Statistic(line, column, qqq);
+	GetCurrentStatus(qqq.GetMaxQuadrant(), sit, qqq, crossing);
+	sit.ChessPosition = line * 10 + column;
+	std::set<int> res;
+	int myLive = 0, rivalLive = 0;
+	std::pair<int, int> p;
+	//如果有预读内容，则用预读内容
+	if (ForeReadHaveMem2)
+	{
+		auto ran = ForeReadContent2.equal_range(sit.BoardStatus);
+		for (auto it = ran.first; it != ran.second; it++)
+		{
+			p = it->second;//获取“值”
+			if (p.second == PlayerId) myLive++;
+		}
+	}
+	else
+	{
+		FS.Match(sit, res, CurrentRound + 1, PlayerId);
+		myLive = res.size();
+	}
+	res.clear();
+	//如果有预读内容，则用预读内容
+	if (ForeReadHaveMem2)
+	{
+		auto ran = ForeReadContent2.equal_range(sit.BoardStatus);
+		for (auto it = ran.first; it != ran.second; it++)
+		{
+			p = it->second;//获取“值”
+			if (p.second == 3 - PlayerId) rivalLive++;
+		}
+	}
+	else
+	{
+		FS.Match(sit, res, CurrentRound + 1, 3 - PlayerId);
+		rivalLive = res.size();
+	}
+	return RivalDeadPosNumber - MyDeadPosNumber + 0.45 * (TigerMouth[PlayerId] - TigerMouth[3 - PlayerId]) + 0.8 * (myLive - rivalLive);
 }

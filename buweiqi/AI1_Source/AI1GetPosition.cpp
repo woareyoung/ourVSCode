@@ -56,6 +56,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		else RateResetScore(0.92);
 		UpdateScore(line, column, OT, true);
 		CalDeadPosNumber(line, column, DoubleDontDead, false);
+		Statistic(line, column, Qua);
 	}
 	//如果是第一步下棋
 	else
@@ -66,8 +67,8 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		cross[line][column] = PlayerId;
 		abc = false;
 	}
-	while (ForeReadFinish == false) {}//等待预读功能完成
-	if (abc)
+	while (ForeReadFinish == false || ForeReadFinish2 == false) {}//等待预读功能完成
+	if (abc && DoubleDontDead > 0)
 	{
 		bool None;
 		int NextPace;
@@ -110,11 +111,11 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		//先检查有没有“重蹈覆辙”
 		else if(DoubleDontDead != 0)
 		{
-			Statistic(line, column);
+			Statistic(line, column, Qua);
 			cross[line][column] = PlayerId;
-			GetCurrentStatus(Qua.GetMaxQuadrant(), NowStatus);
+			GetCurrentStatus(Qua.GetMaxQuadrant(), NowStatus, Qua, cross);
 			cross[line][column] = 0;
-			BackQua(line, column);
+			BackQua(line, column, Qua);
 			np.clear();
 			FS.Match(NowStatus, np, CurrentRound + 1, 3 - PlayerId);//搜索出同样的局面输的一方的下棋位置
 			if (np.empty())
@@ -139,12 +140,15 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 		else break;
 	}
 	cross[line][column] = PlayerId;
-	Statistic(line, column);
+	Statistic(line, column, Qua);
 	UpdateScore(line, column, PlayerId);
 	CurrentRound++;
 	CurrentNull--;
 	std::async(std::launch::async, [&]() {
-		ForeReadFileToMemory(CurrentRound);
+		ForeRead(ForeReadFinish, CurrentRound + 1, ForeReadContent, ForeReadHaveMem);
+	});
+	std::async(std::launch::async, [&]() {
+		ForeRead(ForeReadFinish2, CurrentRound + 2, ForeReadContent2, ForeReadHaveMem2);
 	});
 }
 ///从链表中选取最高胜率的结点
@@ -173,6 +177,8 @@ int AI1::GetNextPace(std::set<int> &np)
 			{
 				ThreadGo[i] = true;//标记线程已在执行
 				std::async(std::launch::async, [&]() {
+					std::mutex g_lock;
+					g_lock.lock();
 					auto t = np.begin();//获取候补位置的第一个
 					int tempPos = *t;
 					np.erase(tempPos);//将该位置从候补列表中擦除
@@ -186,8 +192,9 @@ int AI1::GetNextPace(std::set<int> &np)
 							BestSite = Line * 10 + Column;
 						}
 					}
+					ThreadGo[i] = false;//标记线程空闲d
+					g_lock.unlock();
 				});
-				ThreadGo[i] = false;//标记线程空闲d
 			}
 		}
 	}

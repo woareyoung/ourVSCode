@@ -2,7 +2,7 @@
 #include "../FileSystem_Header/FileSystem.h"
 #include <mutex>
 
-#define ThreadNum 8 //读写同时进行，故实际占用线程数为 ThreadNum * 2
+#define ThreadNum 8 //读写同时进行，故实际占用线程数为
 
 ///将本局游戏记录到总记忆库
 void FileSystem::AddMemory(std::list<SITUATION> header, int winner)
@@ -11,7 +11,7 @@ void FileSystem::AddMemory(std::list<SITUATION> header, int winner)
 	std::mutex g_lock;//互斥锁
 	bool WriteThreadFinish[ThreadNum] = { false };//标记线程是否完成
 	bool threadFinish[ThreadNum] = { false };
-	auto WriteF = [&](int round, std::string Boarddata, int site) {
+	auto WriteF = [&](int round, std::string Boarddata, int site, int winn) {
 		std::string name = FN.ForeName + std::to_string(round) + FN.TXT;
 		std::fstream file;
 		OpenFile(name, file);
@@ -23,7 +23,7 @@ void FileSystem::AddMemory(std::list<SITUATION> header, int winner)
 		while (!file.eof())
 		{
 			file >> tempstr >> temp >> Win;
-			if (tempstr == Boarddata && temp == site)
+			if (tempstr == Boarddata && temp == site && Win == winn)
 			{
 				repeat = true;
 				break;
@@ -48,7 +48,7 @@ void FileSystem::AddMemory(std::list<SITUATION> header, int winner)
 				std::async(std::launch::async, [&]() {
 					g_lock.lock();
 					threadFinish[i] = true;
-					WriteF(j, it->BoardStatus, it->ChessPosition);
+					WriteF(j, it->BoardStatus, it->ChessPosition, winner);
 					threadFinish[i] = false;
 					g_lock.unlock();
 				});
@@ -57,6 +57,5 @@ void FileSystem::AddMemory(std::list<SITUATION> header, int winner)
 			}
 			if (i == ThreadNum - 1) i = 0;
 		}
-//		WriteF(j, it->BoardStatus, it->ChessPosition);
 	}
 }
