@@ -110,7 +110,7 @@ void ChessBoard::ReStart()
 				if (temp1 + temp2 > COMBATNUMBER - 1)
 				{
 					int lllll = Player1AI->NowLine > Player2AI->NowLine ? Player1AI->NowLine + 1 : Player2AI->NowLine + 1;
-					if (lllll == sizeof(ai2.patternAllScore) / 11 / sizeof(ai2.patternAllScore[0][0])) lllll = 0;
+					if (lllll == sizeof(ai2.patternAllScore) / sizeof(ai2.patternAllScore[0]) / sizeof(ai2.patternAllScore[0][0])) lllll = 0;
 					if (temp1 > temp2)
 					{
 						ai22.setPatternScore(lllll);

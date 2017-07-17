@@ -21,15 +21,16 @@ namespace {
 		wchar_t *wide = new wchar_t[num];
 		MultiByteToWideChar(0, 0, info, -1, wide, num);
 		lstrcpy(buf, wide);
+		delete(wide);
 		WriteConsole(hOutputHandle, buf, lstrlen(buf), &nRet, NULL);
 	}
 
-	void showUnicode(int pos) {
+	void showUnicode(const int& pos) {
 		std::string ch[20] = { "£°","£±","£²","£³","£´","£µ","£¶","£·","£¸","£¹" };
 		showInfo(ch[pos].c_str());
 	}
 
-	void showChessBoard(int cross[10][10]) {
+	void showChessBoard(const int (&cross)[10][10]) {
 		for (int i = 0; i < 10; i++)
 		{
 			for (int j = 0; j < 10; j++)
