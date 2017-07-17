@@ -114,6 +114,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 			Score[line][column] = PointStyle[1];
 			continue;
 		}
+		/*
 		//先检查有没有“重蹈覆辙”
 		else if(DoubleDontDead != 0)
 		{
@@ -142,7 +143,7 @@ void AI1::GetPosition(int &line, int &column, int onTurn)
 				continue;
 			}
 			break;
-		}
+		}*/
 		else break;
 	}
 	cross[line][column] = PlayerId;

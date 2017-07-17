@@ -55,6 +55,7 @@ void AI1::InitializeD()
 		}
 	}
 	Score[0][0] = PointStyle[1];
+	/*
 	Score[1][1] = 2;
 	Score[1][2] = 2;
 	Score[2][1] = 2;
@@ -66,7 +67,7 @@ void AI1::InitializeD()
 	Score[9][2] = 2;
 	Score[8][9] = 2;
 	Score[9][9] = 2;
-
+	*/
 	Qua.FirstQuadrant = 0;
 	Qua.SecondQuadrant = 0;
 	Qua.ThirdQuadrant = 0;
