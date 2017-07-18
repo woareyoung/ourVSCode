@@ -310,7 +310,10 @@ void AI2::Pattern(const int *PatternType) {
 				if (!checkStone(x, y, pattern_Count[i] <= 4)) {
 					goto mismatch;
 				};
-				CS[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] += score;// 这里匹配到了一个模板，这个模板的位置就是这个
+				if (CS[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] != 0 &&
+					CS[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] != minLimit) {
+					CS[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] += score;// 这里匹配到了一个模板，这个模板的位置就是这个
+				}
 			mismatch:
 				;
 			}
