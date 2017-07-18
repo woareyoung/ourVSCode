@@ -170,7 +170,7 @@ public:
 	}
 
 	// 获取最后着子的位置
-	std::list<std::pair<int, int>> getMoves(const bool& isFirst, const int(&cro)[][ChessEnd]);
+	std::list<std::pair<int, int>> getMoves(const bool& isFirst, const int cro[][ChessEnd]);
 };
 
 #endif // Pattern_Moves_H_INCLUDED

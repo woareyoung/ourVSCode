@@ -1,6 +1,6 @@
 #include "../../ChessBoard_Header/Pattern_Moves.h"
 
-std::list<std::pair<int, int>> Pattern_Moves::getMoves(const bool& isFirst, const int (&cro)[][ChessEnd]) {
+std::list<std::pair<int, int>> Pattern_Moves::getMoves(const bool& isFirst, const int cro[][ChessEnd]) {
 	auto translate = [](int move) {
 		if (move == noChess) {
 			return NoChess;
