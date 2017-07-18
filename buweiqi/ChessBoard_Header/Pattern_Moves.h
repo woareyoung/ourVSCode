@@ -112,7 +112,7 @@ protected:
 		*******************************************/
 		for (int i = 0; i < start; ++i) {
 			if (mainColor == Rival) {
-				if (chessScore[emptyPos[i].line][emptyPos[i].column] = 0) {
+				if (chessScore[emptyPos[i].line][emptyPos[i].column] == 0) {
 					return false;
 				}
 				// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
@@ -123,7 +123,7 @@ protected:
 				}
 			}
 			else if (mainColor == turn2Who) {
-				if (chessScore[emptyPos[i].line][emptyPos[i].column] = minLimit) {
+				if (chessScore[emptyPos[i].line][emptyPos[i].column] == minLimit) {
 					return false;
 				}
 				// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
