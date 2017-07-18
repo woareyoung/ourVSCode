@@ -200,6 +200,7 @@
     <ClCompile Include="FileSystem_Source\Init.cpp" />
     <ClCompile Include="FileSystem_Source\Match.cpp" />
     <ClCompile Include="FileSystem_Source\ReadFile.cpp" />
+    <ClCompile Include="TestCode\pattern_Rule.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="buweiqi.rc" />

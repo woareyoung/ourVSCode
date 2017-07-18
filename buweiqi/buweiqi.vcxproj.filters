@@ -206,6 +206,9 @@
     <ClCompile Include="AIForFile_Source\ProbabilityCount.cpp">
       <Filter>Source Files\AIForFile_Source</Filter>
     </ClCompile>
+    <ClCompile Include="TestCode\pattern_Rule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="buweiqi.rc">
