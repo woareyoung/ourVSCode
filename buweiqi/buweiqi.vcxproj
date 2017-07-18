@@ -161,6 +161,7 @@
     <ClInclude Include="ChessBoard_Header\Chess.h" />
     <ClInclude Include="ChessBoard_Header\ChessBoard.h" />
     <ClInclude Include="ChessBoard_Header\Pattern.h" />
+    <ClInclude Include="ChessBoard_Header\Pattern_Moves.h" />
     <ClInclude Include="ChessBoard_Header\PlayerInfo.h" />
     <ClInclude Include="ChessBoard_Header\showUnicodeInfo.h" />
     <ClInclude Include="ChessBoard_Header\SIP.h" />
@@ -193,6 +194,7 @@
     <ClCompile Include="ChessBoard_Source\PaintBoard.cpp" />
     <ClCompile Include="ChessBoard_Source\PaintChess.cpp" />
     <ClCompile Include="ChessBoard_Source\PaintTimer.cpp" />
+    <ClCompile Include="ChessBoard_Source\Pattern\Pattern_move.cpp" />
     <ClCompile Include="ChessBoard_Source\RePaint.cpp" />
     <ClCompile Include="ChessBoard_Source\ReStart.cpp" />
     <ClCompile Include="ChessBoard_Source\util\int2String.cpp" />

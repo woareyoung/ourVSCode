@@ -49,6 +49,9 @@
     <Filter Include="Source Files\AIForFile_Source">
       <UniqueIdentifier>{3915d4eb-5eaf-4416-b34a-3d6413f4bc77}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ChessBoard_Source\Pattern">
+      <UniqueIdentifier>{b79d2973-5d93-4e7b-98b3-37d78e96373a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -122,6 +125,9 @@
     </ClInclude>
     <ClInclude Include="AI1_Header\AIForFile.h">
       <Filter>Header Files\AI1_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ChessBoard_Header\Pattern_Moves.h">
+      <Filter>Header Files\ChessBoard_Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -208,6 +214,9 @@
     </ClCompile>
     <ClCompile Include="TestCode\pattern_Rule.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChessBoard_Source\Pattern\Pattern_move.cpp">
+      <Filter>Source Files\ChessBoard_Source\Pattern</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
