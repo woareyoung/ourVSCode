@@ -21,16 +21,22 @@ void AI2::initAll() {
 	}
 	// 模式分数尺度
 	int patternScore[] = {
-		45, 40, 35, 30, 30, 25, 25, 23, 23, 20, 20,// 11
-		47, 47, 47, 43, 43, 43// 6
+		60, 50, 40, 35, 35, 30, 30, 25, 25, 20, 20,// 11
+		65, 65, 65, 999, 999, 999// 6
 	};
 	// 分数说明：
 	// 对方自杀点且非我方自杀点的分数为0，我方自杀点为minLitmit。
+
+	DIRECTION patternAddScorePos[] = {
+		{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },// 11
+		{ 0, 0 },{ 0, 0 },{ 0, 0 }/*3 敌方位置，默认内部填充阻止*/,{ 0, -1 },{ 1, 0 },{ 1, 1 }// 3，己方形成围杀，默认采用外部空位
+	};
 
 	// 模式内判断棋子点数
 	int patternCount[] = {
 		4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,// 44
 		7, 7, 7, 7, 7, 7// 42
+
 	};
 	// 看不懂的请看种子填充算法
 	DIRECTION patternBackground[] = {
@@ -57,6 +63,7 @@ void AI2::initAll() {
 		{ 0, -1 },{ 0, 1 },{ 0, 2 },{ -1, 0 },{ -1, 1 },{ 1, 0 },{ 1, 1 },
 		{ 0, -1 },{ 0, 1 },{ 0, 2 },{ -1, 0 },{ -1, 1 },{ 1, 0 },{ 1, 1 },
 		{ 0, -1 },{ 0, 1 },{ 0, 2 },{ -1, 0 },{ -1, 1 },{ 1, 0 },{ 1, 1 }// 6 42 
+
 	};
 	// 利用与或处理棋子点
 	// 匹配模式中棋子分布
@@ -99,7 +106,7 @@ void AI2::initAll() {
 		NoChess | Edge,	NoChess | Edge,	NoChess | Edge,	White,
 
 		/*********************************************
-		菱形围杀缺一
+		菱形围杀缺一，阻止敌方
 		**********************************************/
 		// { 0, -1 },{ 0, 1 },{ 0, 2 },{ -1, 0 },{ -1, 1 },{ 1, 0 },{ 1, 1 },
 		NoChess,	White,		Black | Edge,	Black | Edge,	Black | Edge,	Black,		Black,
@@ -130,6 +137,7 @@ void AI2::initAll() {
 		Black,		White,		Black | Edge,	Black | Edge,	Black | Edge,	Black,		NoChess// 6
 	};
 	for (i = 0; i < pattern_Total; ++i) {
+		this->pattern_Score_Pos[i] = patternAddScorePos[i];
 		this->pattern_Score[i] = patternScore[i];
 		this->pattern_Count[i] = patternCount[i];
 	}
@@ -300,7 +308,7 @@ void AI2::Pattern(const int *PatternType) {
 				if (!checkStone(x, y, pattern_Count[i] <= 4)) {
 					goto mismatch;
 				};
-				CS[x][y] += score;// 这里匹配到了一个模板，这个模板的位置就是这个
+				CS[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] += score;// 这里匹配到了一个模板，这个模板的位置就是这个
 			mismatch:
 				;
 			}

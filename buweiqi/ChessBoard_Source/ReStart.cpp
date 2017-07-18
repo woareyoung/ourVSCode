@@ -5,7 +5,7 @@
 #include <list>
 #include "../ChessBoard_Header/ChessBoard.h"
 #include "../ChessBoard_Header/showUnicodeInfo.h"
-#define COMBATNUMBER 750 //AI2模拟对局次数
+#define COMBATNUMBER 250 //AI2模拟对局次数
 ///游戏结束
 void ChessBoard::ReStart()
 {

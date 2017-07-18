@@ -70,6 +70,9 @@ private:
 	// 分数说明：
 	// 对方自杀点且非我方自杀点的分数为0，我方自杀点为minLitmit。
 
+	// pattern加分位置
+	DIRECTION pattern_Score_Pos[pattern_Total];
+
 	// 模式内判断棋子点数
 	int pattern_Count[pattern_Total];
 	// 看不懂的请看种子填充算法
