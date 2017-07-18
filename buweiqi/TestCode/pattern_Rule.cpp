@@ -303,28 +303,25 @@ void pattern_Rule::Pattern(const int *PatternType, const int& line, const int& c
 		if (PatternType[j] > Edge) {
 			return PatternType[j] - Edge;
 		}
-		else if (PatternType[j] > NoChess) {
+		if (PatternType[j] > NoChess) {
 			return PatternType[j] - NoChess;
 		}
-		else {
-			return PatternType[j];
-		}
+		return PatternType[j];
 	};
 	for (i = 0; i < pattern_Total; ++i) {
+		init_cross();
 		j = pointer;
 		pointer += pattern_Count[i];
 		for (; j < pointer; ++j) {
 			x_offset = pattern_Background[j].x_offset;
 			y_offset = pattern_Background[j].y_offset;
-			if (Edge & PatternType[j] == 0) continue;
 			if (PatternType[j] == NoChess) continue;
 			if (OnChessBoard(line + x_offset, column + y_offset)) {
 				cross[line + x_offset][column + y_offset] = getChessType(j);
 			}
 		}
+		showChessBoard();
 	}
-	showChessBoard();
-	init_cross();
 }
 
 int main() {
