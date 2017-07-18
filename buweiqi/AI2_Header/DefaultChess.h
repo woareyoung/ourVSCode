@@ -1,5 +1,16 @@
 #pragma once
 
+typedef struct tagDIRECTION
+{
+	int x_offset;
+	int y_offset;
+} DIRECTION;
+
+struct Pos {
+	int line;
+	int column;
+};
+
 class DefaultChess
 {
 public:

@@ -5,12 +5,7 @@ std::list<std::pair<int, int>> Pattern_Moves::getMoves(const bool& isFirst, cons
 		if (move == noChess) {
 			return NoChess;
 		}
-		else if (move == isBlack) {
-			return Black;
-		}
-		else if (move == isWhite) {
-			return White;
-		}
+		return move;
 	};
 	for (int i = ChessStart; i < ChessEnd; ++i) {
 		for (int j = ChessStart; j < ChessEnd; ++j) {
@@ -189,11 +184,18 @@ void Pattern_Moves::reverse(DIRECTION *PatternType) {
 */
 void Pattern_Moves::reverseXY(DIRECTION *PatternType) {
 	register int temp;
+	register DIRECTION* ScorePos = pattern_Score_Pos;
 	for (register int i = 0; i < pattern_Sum; ++i) {
 		temp = (*PatternType).x_offset;
 		(*PatternType).x_offset = (*PatternType).y_offset;
 		(*PatternType).y_offset = temp;
 		++PatternType;
+	}
+	for (register int i = 0; i < pattern_Total; ++i) {
+		temp = (*ScorePos).x_offset;
+		(*ScorePos).x_offset = (*ScorePos).y_offset;
+		(*ScorePos).y_offset = temp;
+		++ScorePos;
 	}
 }
 
@@ -202,9 +204,14 @@ void Pattern_Moves::reverseXY(DIRECTION *PatternType) {
 * @param PatternType [匹配模式中棋子分布]
 */
 void Pattern_Moves::reverse_Y(DIRECTION *PatternType) {
+	register DIRECTION* ScorePos = pattern_Score_Pos;
 	for (register int i = 0; i < pattern_Sum; ++i) {
 		(*PatternType).y_offset = -(*PatternType).y_offset;
 		++PatternType;
+	}
+	for (register int i = 0; i < pattern_Total; ++i) {
+		(*ScorePos).y_offset = -(*ScorePos).y_offset;
+		++ScorePos;
 	}
 }
 
@@ -213,9 +220,14 @@ void Pattern_Moves::reverse_Y(DIRECTION *PatternType) {
 * @param PatternType [匹配模式中棋子分布]
 */
 void Pattern_Moves::reverse_X(DIRECTION *PatternType) {
+	register DIRECTION* ScorePos = pattern_Score_Pos;
 	for (register int i = 0; i < pattern_Sum; ++i) {
 		(*PatternType).x_offset = -(*PatternType).x_offset;
 		++PatternType;
+	}
+	for (register int i = 0; i < pattern_Total; ++i) {
+		(*ScorePos).x_offset = -(*ScorePos).x_offset;
+		++ScorePos;
 	}
 }
 
@@ -225,11 +237,18 @@ void Pattern_Moves::reverse_X(DIRECTION *PatternType) {
 */
 void Pattern_Moves::reverse_X_Y(DIRECTION *PatternType) {
 	register int temp;
+	register DIRECTION* ScorePos = pattern_Score_Pos;
 	for (register int i = 0; i < pattern_Sum; ++i) {
 		temp = -(*PatternType).x_offset;
 		(*PatternType).x_offset = -(*PatternType).y_offset;
 		(*PatternType).y_offset = temp;
 		++PatternType;
+	}
+	for (register int i = 0; i < pattern_Total; ++i) {
+		temp = -(*ScorePos).x_offset;
+		(*ScorePos).x_offset = -(*ScorePos).y_offset;
+		(*ScorePos).y_offset = temp;
+		++ScorePos;
 	}
 }
 /**
@@ -321,12 +340,13 @@ void Pattern_Moves::Pattern(const int *PatternType) {
 				2、需要注意该着子点是否是死棋点
 				*******************************************/
 				// 检查棋子是否有效，并对分析的结果进行相应的加分
-				if (!checkStone(x, y, pattern_Count[i] <= 4)) {
+				if (pattern_Score_Pos[i].x_offset == 0  && 
+					pattern_Score_Pos[i].y_offset == 0 &&
+					!checkStone(x, y, pattern_Count[i] <= 4)) {
 					goto mismatch;
 				};
 				if (chessScore[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] != 0 && 
 					chessScore[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] != minLimit) {
-					// chessScore[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] += score;// 这里匹配到了一个模板，这个模板的位置就是这个
 					patternMoves.emplace_back(getMove(x + pattern_Score_Pos[i].x_offset, y + pattern_Score_Pos[i].y_offset), score);
 				}
 			mismatch:

@@ -36,17 +36,6 @@
 #define getColumn(temp) ( (temp) <= 0 || (temp) > 990 ? 0 : (temp % 100))
 #define getMove(line, column) (OnChessBoard(line, column) ? (line * 100 + column) : 0)
 
-typedef struct tagDIRECTION
-{
-	int x_offset;
-	int y_offset;
-} DIRECTION;
-
-struct Pos {
-	int line;
-	int column;
-};
-
 //struct goodMove {
 //	int line;
 //	int column;

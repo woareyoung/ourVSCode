@@ -22,14 +22,14 @@ void AI2::initAll() {
 	// 模式分数尺度
 	int patternScore[] = {
 		60, 50, 40, 35, 35, 30, 30, 25, 25, 20, 20,// 11
-		65, 65, 65, 55, 55, 55// 6
+		999, 999, 999, 55, 55, 55// 6
 	};
 	// 分数说明：
 	// 对方自杀点且非我方自杀点的分数为0，我方自杀点为minLitmit。
 
 	DIRECTION patternAddScorePos[] = {
 		{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },// 11
-		{ 0, 0 },{ 0, 0 },{ 0, 0 }/*3 敌方位置，默认内部填充阻止*/,{ 0, -1 },{ 1, 0 },{ 1, 1 }// 3，己方形成围杀，默认采用外部空位
+		{ 0, -1 },{ 1, 0 },{ 1, 1 }/*3 敌方位置，默认内部填充阻止*/,{ 0, -1 },{ 1, 0 },{ 1, 1 }// 3，己方形成围杀，默认采用外部空位
 	};
 
 	// 模式内判断棋子点数
@@ -168,11 +168,18 @@ void AI2::reverse(DIRECTION *PatternType) {
 */
 void AI2::reverseXY(DIRECTION *PatternType) {
 	register int temp;
+	register DIRECTION* ScorePos = pattern_Score_Pos;
 	for (register int i = 0; i < pattern_Sum; ++i) {
 		temp = (*PatternType).x_offset;
 		(*PatternType).x_offset = (*PatternType).y_offset;
 		(*PatternType).y_offset = temp;
 		++PatternType;
+	}
+	for (register int i = 0; i < pattern_Total; ++i) {
+		temp = (*ScorePos).x_offset;
+		(*ScorePos).x_offset = (*ScorePos).y_offset;
+		(*ScorePos).y_offset = temp;
+		++ScorePos;
 	}
 }
 
@@ -181,9 +188,14 @@ void AI2::reverseXY(DIRECTION *PatternType) {
 * @param PatternType [匹配模式中棋子分布]
 */
 void AI2::reverse_Y(DIRECTION *PatternType) {
+	register DIRECTION* ScorePos = pattern_Score_Pos;
 	for (register int i = 0; i < pattern_Sum; ++i) {
 		(*PatternType).y_offset = -(*PatternType).y_offset;
 		++PatternType;
+	}
+	for (register int i = 0; i < pattern_Total; ++i) {
+		(*ScorePos).y_offset = -(*ScorePos).y_offset;
+		++ScorePos;
 	}
 }
 
@@ -192,9 +204,14 @@ void AI2::reverse_Y(DIRECTION *PatternType) {
 * @param PatternType [匹配模式中棋子分布]
 */
 void AI2::reverse_X(DIRECTION *PatternType) {
+	register DIRECTION* ScorePos = pattern_Score_Pos;
 	for (register int i = 0; i < pattern_Sum; ++i) {
 		(*PatternType).x_offset = -(*PatternType).x_offset;
-		++PatternType;
+		++PatternType;	
+	}
+	for (register int i = 0; i < pattern_Total; ++i) {
+		(*ScorePos).x_offset = -(*ScorePos).x_offset;
+		++ScorePos;
 	}
 }
 
@@ -204,11 +221,18 @@ void AI2::reverse_X(DIRECTION *PatternType) {
 */
 void AI2::reverse_X_Y(DIRECTION *PatternType) {
 	register int temp;
+	register DIRECTION* ScorePos = pattern_Score_Pos;
 	for (register int i = 0; i < pattern_Sum; ++i) {
 		temp = -(*PatternType).x_offset;
 		(*PatternType).x_offset = -(*PatternType).y_offset;
 		(*PatternType).y_offset = temp;
 		++PatternType;
+	}
+	for (register int i = 0; i < pattern_Total; ++i) {
+		temp = -(*ScorePos).x_offset;
+		(*ScorePos).x_offset = -(*ScorePos).y_offset;
+		(*ScorePos).y_offset = temp;
+		++ScorePos;
 	}
 }
 /**
@@ -307,11 +331,13 @@ void AI2::Pattern(const int *PatternType) {
 				2、需要注意该着子点是否是死棋点
 				*******************************************/
 				// 检查棋子是否有效，并对分析的结果进行相应的加分
-				if (!checkStone(x, y, pattern_Count[i] <= 4)) {
+				if (pattern_Score_Pos[i].x_offset == 0 &&
+					pattern_Score_Pos[i].y_offset == 0 && 
+					!checkStone(x, y, pattern_Count[i] <= 4)) {
 					goto mismatch;
 				};
-				if (CS[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] != 0 &&
-					CS[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] != minLimit) {
+				if (chessScore[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] != 0 &&
+					chessScore[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] != minLimit) {
 					CS[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] += score;// 这里匹配到了一个模板，这个模板的位置就是这个
 				}
 			mismatch:
