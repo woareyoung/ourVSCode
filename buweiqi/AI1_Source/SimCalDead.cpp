@@ -82,5 +82,13 @@ double AI1::CalDeadPosNumber(int line, int column, int &deadPos, bool Cal)
 		FS.Match(sit, res, CurrentRound + 1, 3 - PlayerId);
 		rivalLive = res.size();
 	}
-	return RivalDeadPosNumber - MyDeadPosNumber + 0.45 * (TigerMouth[PlayerId] - TigerMouth[3 - PlayerId]) + 0.8 * myLive - 0.2 * rivalLive;
+	double tempsum;
+	if (myLive != 0 && rivalLive == 0) tempsum = 1;
+	else if (myLive == 0 && rivalLive == 0)
+	{
+		srand(time(NULL));
+		tempsum = (double)(rand() % 10) / 10;
+	}
+	else tempsum = myLive / (myLive + rivalLive);
+	return RivalDeadPosNumber - MyDeadPosNumber + 0.45 * (TigerMouth[PlayerId] - TigerMouth[3 - PlayerId]) + tempsum;
 }
