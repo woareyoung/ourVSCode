@@ -52,6 +52,12 @@
     <Filter Include="Source Files\ChessBoard_Source\Pattern">
       <UniqueIdentifier>{b79d2973-5d93-4e7b-98b3-37d78e96373a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\AI4_Header">
+      <UniqueIdentifier>{6befcebf-45ec-4257-9b79-343c1be51746}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AI4_Source">
+      <UniqueIdentifier>{2bb2093a-2804-438e-9389-4172606c8df8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -128,6 +134,9 @@
     </ClInclude>
     <ClInclude Include="ChessBoard_Header\Pattern_Moves.h">
       <Filter>Header Files\ChessBoard_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="AI4_Header\AI4.h">
+      <Filter>Header Files\AI4_Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -217,6 +226,15 @@
     </ClCompile>
     <ClCompile Include="ChessBoard_Source\Pattern\Pattern_move.cpp">
       <Filter>Source Files\ChessBoard_Source\Pattern</Filter>
+    </ClCompile>
+    <ClCompile Include="AI4_Source\GetPosition.cpp">
+      <Filter>Source Files\AI4_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AI4_Source\UpdateBoardScore.cpp">
+      <Filter>Source Files\AI4_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AI4_Source\DeadFall.cpp">
+      <Filter>Source Files\AI4_Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

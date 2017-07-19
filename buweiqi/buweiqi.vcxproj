@@ -156,6 +156,7 @@
     <ClInclude Include="AI2_Header\DefaultChess.h" />
     <ClInclude Include="AI3_Header\AI3.h" />
     <ClInclude Include="AI3_Header\MCTS.h" />
+    <ClInclude Include="AI4_Header\AI4.h" />
     <ClInclude Include="buweiqi.h" />
     <ClInclude Include="ChessBoard_Header\AI.h" />
     <ClInclude Include="ChessBoard_Header\Chess.h" />
@@ -185,6 +186,9 @@
     <ClCompile Include="AI2_Source\isGo2Dead.cpp" />
     <ClCompile Include="AI2_Source\MaxandMinFunction.cpp" />
     <ClCompile Include="AI2_Source\pattern.cpp" />
+    <ClCompile Include="AI4_Source\DeadFall.cpp" />
+    <ClCompile Include="AI4_Source\GetPosition.cpp" />
+    <ClCompile Include="AI4_Source\UpdateBoardScore.cpp" />
     <ClCompile Include="AIForFile_Source\DeadCheck.cpp" />
     <ClCompile Include="AIForFile_Source\MatchMemory.cpp" />
     <ClCompile Include="AIForFile_Source\ProbabilityCount.cpp" />

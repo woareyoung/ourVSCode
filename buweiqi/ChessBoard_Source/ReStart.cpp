@@ -48,24 +48,24 @@ void ChessBoard::ReStart()
 			MessageBox(RootHwnd, _T("¹§Ï²Íæ¼Ò1£¨ºÚ×Ó£©Ê¤³ö"), _T("¿­Ðý"), MB_OK);
 		else MessageBox(RootHwnd, _T("¹§Ï²Íæ¼Ò2£¨°××Ó£©Ê¤³ö"), _T("¿­Ðý"), MB_OK);
 	}
-	FileS.AddMemory(MemBattle, Winner);
-	if (Player1AI == &ai1)
+//	FileS.AddMemory(MemBattle, Winner);
+	if (Player1AI == &ai4)
 	{
-		if (Player2AI == &ai11) UpdateCRdata(1, 1, Winner);
-		else if (Player2AI == &ai22) UpdateCRdata(1, 2, Winner);
-		else  UpdateCRdata(1, 3, Winner);
+		if (Player2AI == &ai44) UpdateCRdata(4, 4, Winner);
+		else if (Player2AI == &ai22) UpdateCRdata(4, 2, Winner);
+		else if (Player2AI == &ai33) UpdateCRdata(4, 3, Winner);
 	}
 	else if (Player1AI == &ai2)
 	{
-		if (Player2AI == &ai11) UpdateCRdata(2, 1, Winner);
+		if (Player2AI == &ai44) UpdateCRdata(2, 4, Winner);
 		else if (Player2AI == &ai22) UpdateCRdata(2, 2, Winner);
-		else  UpdateCRdata(2, 3, Winner);
+		else if (Player2AI == &ai33) UpdateCRdata(2, 3, Winner);
 	}
-	else
+	else if(Player1AI == &ai3)
 	{
-		if (Player2AI == &ai11) UpdateCRdata(3, 1, Winner);
+		if (Player2AI == &ai44) UpdateCRdata(3, 4, Winner);
 		else if (Player2AI == &ai22) UpdateCRdata(3, 2, Winner);
-		else  UpdateCRdata(3, 3, Winner);
+		else if(Player2AI == &ai33) UpdateCRdata(3, 3, Winner);
 	}
 	//	_cprintf("Black Chess number : %d  White Chess number : %d\n", ChessAmount[1], ChessAmount[2]);
 	Init_cross();

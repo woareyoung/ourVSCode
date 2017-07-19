@@ -1,13 +1,17 @@
 #include "../AI4_Header/AI4.h"
+#define GetLine(x) (x / 100)
+#define GetColumn(y) (y % 100)
 
-void AI4::UpdateScore(std::list<std::pair<int, int>> &SpecialPoint)
+void AI4::UpdateBoardScore(std::list<std::pair<int, int>> &SpecialPoint)
 {
 	std::list<std::pair<int, int>>::iterator Traverse = SpecialPoint.begin();//头结点
 	std::list<std::pair<int, int>>::iterator ListEnd = SpecialPoint.end();//尾结点
 	std::pair<int, int> TempP;//临时变量
 	while (Traverse != ListEnd)
 	{
-		AddScore<int, int>(Traverse->first / 100, Traverse->first % 100, Traverse->second, 2);
+		if (Traverse->second < 0) Score[GetLine(Traverse->first)][GetColumn(Traverse->first)] = Traverse->second;
+		else if(Traverse->second == 0) Score[GetLine(Traverse->first)][GetColumn(Traverse->first)] = Traverse->second;
+		else AddScore<int, int>(GetLine(Traverse->first), GetColumn(Traverse->first), Traverse->second, 2);
 		auto T = Traverse;
 		Traverse++;
 		SpecialPoint.erase(T);

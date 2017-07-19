@@ -9,6 +9,7 @@
 #include "../AI1_Header/AI1.h"
 #include "../AI2_Header/AI2.h"
 #include "../AI3_Header/AI3.h"
+#include "../AI4_Header/AI4.h"
 #include<tchar.h>
 #include "../stdafx.h"
 
@@ -50,9 +51,11 @@ public:
 	AI1 ai11;
 	AI2 ai22;
 	AI3 ai33;
+	AI4 ai44;
 	AI1 ai1;
 	AI2 ai2;
 	AI3 ai3;
+	AI4 ai4;
 
 	int line;//下棋位置的行数
 	int column;//下棋位置的列数
