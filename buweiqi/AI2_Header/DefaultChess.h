@@ -26,7 +26,7 @@
 
 #define getLine(temp) ( (temp) <= 0 || (temp) > 990 ? 0 : (temp / 100))
 #define getColumn(temp) ( (temp) <= 0 || (temp) > 990 ? 0 : (temp % 100))
-#define getMove(line, column) (OnChessBoard(line, column) ? (line * 100 + column) : 0)
+#define getMove(line, column) (OnChessBoard(line, column) ? ((line) * 100 + (column)) : 0)
 
 typedef struct tagDIRECTION
 {

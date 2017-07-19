@@ -187,7 +187,9 @@
     <ClCompile Include="AI2_Source\MaxandMinFunction.cpp" />
     <ClCompile Include="AI2_Source\pattern.cpp" />
     <ClCompile Include="AI4_Source\DeadFall.cpp" />
+    <ClCompile Include="AI4_Source\GetMaxScorePosition.cpp" />
     <ClCompile Include="AI4_Source\GetPosition.cpp" />
+    <ClCompile Include="AI4_Source\SetScoreLevel.cpp" />
     <ClCompile Include="AI4_Source\UpdateBoardScore.cpp" />
     <ClCompile Include="AIForFile_Source\DeadCheck.cpp" />
     <ClCompile Include="AIForFile_Source\MatchMemory.cpp" />

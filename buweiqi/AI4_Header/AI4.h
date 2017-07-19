@@ -5,9 +5,11 @@
 #include "../ChessBoard_Header/AI.h"
 #include "../ChessBoard_Header/Pattern_Moves.h"
 #define GetId(x) ((x) < 0 ? 3 + x : 3 - (x)) //获取玩家身份
-#define HaveChess -50000 //有子的位置的分数
+#define HaveChess -20 //有子的位置的分数
 #define MyDeadChess -10 //我的死棋点的分数
-#define RivalDeadChess -1
+#define RivalDeadChess -5 //对方死棋点的分数
+#define GetLine(x) (x / 100)
+#define GetColumn(y) (y % 100)
 
 class AI4 : public AI
 {
@@ -22,8 +24,10 @@ private:
 	int cross[10][10]; //棋盘状况
 	int PlayerId; //玩家身份——玩家1还是玩家2
 	int Round;//回合数
-	int Score[10][10] = { 1 }; //记录棋盘每个位置的分值
+	int Score[10][10] = { 0 }; //记录棋盘每个位置的分值
+	int level[10][10];//记录每个位置的级别（先设5级，有棋子的位置设0级，分值分别是6、4、3、2、1、0）
 	int MaxScore;
+	std::set<std::pair<int, int>> ForeFiveLevel;//前五级别的位置
 	/*
 	param[SpecialPoint]:存放特殊点及其分数的链表
 	*/
@@ -48,62 +52,20 @@ private:
 	param[MaxLine]:分数最大的位置——行
 	param[MaxColumn]:分数最大的位置——列
 	*/
-	void GetMaxScorePosition(int &MaxLine, int &MaxColumn)//获取分值最大的位置
-	{
-		std::vector<std::pair<int, int>> MaxPos;
-		bool RivalDead = false;
-		bool MyDead = false;
-		int NoChessPosLine, NoChessPosColumn;
-		auto WhoseDead = [&](int line, int column) {
-			RivalDead = DeadCheck(line, column, 3 - PlayerId, cross);
-			MyDead = DeadCheck(line, column, PlayerId, cross);
-			if (MyDead) Score[line][column] = MyDeadChess;
-			else if (RivalDead) Score[line][column] = RivalDeadChess;
-		};
-		auto tempMax = HaveChess;//临时最大值
-		for (int i = 1; i < 10; ++i)
-		{
-			for (int j = 1; j < 10; ++j)
-			{
-				if (cross[i][j] == 0)
-				{
-					WhoseDead(i, j);
-					NoChessPosLine = i;
-					NoChessPosColumn = j;
-				}
-				if (Score[i][j] > tempMax)
-				{
-					MaxPos.clear();
-					tempMax = Score[i][j];
-					MaxScore = tempMax;
-					MaxPos.emplace_back(i, j);
-				}
-				else if (Score[i][j] == tempMax)
-				{
-					MaxPos.emplace_back(i, j);
-				}
-			}
-		}
-		if (MaxScore > MyDeadChess)
-		{
-			std::mt19937_64 random_engine(1000);
-			std::uniform_int_distribution<std::size_t> movesDist(0, MaxPos.size() - 1);
-			auto move = MaxPos[movesDist(random_engine)];
-			MaxLine = move.first;
-			MaxColumn = move.second;
-		}
-		else
-		{
-			MaxColumn = NoChessPosColumn;
-			MaxLine = NoChessPosLine;
-		}
-	}
+	void GetMaxScorePosition(int &MaxLine, int &MaxColumn);//获取分值最大的位置
+	/*
+	param[PositionLevel]:存放整个棋盘分值排列顺序的容器
+	*/
+	void SetScoreLevel(std::set<std::pair<int, int>> PositionLevel);//设置分值等级
 	//初始化数组（一局游戏一次）
 	void Initialize()
 	{
 		for (int i = 0; i < 10; ++i)
 			for (int j = 0; j < 10; ++j)
+			{
 				cross[i][j] = 0;
+				Score[i][j] = 0;
+			}
 		InitScore();
 		Round = 0;
 	}
@@ -112,7 +74,7 @@ private:
 	{
 		for (int i = 0; i < 10; ++i)
 			for (int j = 0; j < 10; ++j)
-				if(Score[i][j] > RivalDeadChess) Score[i][j] = 1;//小于1的位置不是对方的死棋就是自己的死棋或者不是空位
+				if(Score[i][j] > RivalDeadChess) Score[i][j] = 0;//小于1的位置不是对方的死棋就是自己的死棋或者不是空位
 	}
 	//执黑子时，第一步棋
 	void FirstPaceScore()
