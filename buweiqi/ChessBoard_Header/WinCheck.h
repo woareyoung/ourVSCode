@@ -1,6 +1,6 @@
-#ifndef WinCheck_H
-#define WinCheck_H
+#pragma once
 
+#include "../ChessBoard_Header/parameter.h"
 namespace WinCheck {
 	struct ChessBoardOption// º∆À„—°‘Ò
 	{
@@ -398,4 +398,4 @@ namespace WinCheck {
 		}
 	};
 };
-#endif // WinCheck_H
+

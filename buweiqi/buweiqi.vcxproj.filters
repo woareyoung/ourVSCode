@@ -138,6 +138,9 @@
     <ClInclude Include="AI4_Header\AI4.h">
       <Filter>Header Files\AI4_Header</Filter>
     </ClInclude>
+    <ClInclude Include="ChessBoard_Header\parameter.h">
+      <Filter>Header Files\ChessBoard_Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="buweiqi.cpp">

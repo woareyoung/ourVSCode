@@ -1,6 +1,4 @@
 #pragma once
-#ifndef WINDOWHWND_H_INCLUDED
-#define WINDOWHWND_H_INCLUDED
 #include "../stdafx.h"
 #include <fstream>
 
@@ -164,5 +162,3 @@ public:
 	}
 };
 
-
-#endif // WINDOWHWND_H_INCLUDED

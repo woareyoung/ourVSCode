@@ -1,12 +1,10 @@
 #pragma once
-#ifndef AI2_H_INCLUDED
-#define AI2_H_INCLUDED
 #include "../chessBoard_Header/AI.h"
 #include "AIPlayer.h"
 #include "DefaultChess.h"
+#include "../ChessBoard_Header/parameter.h"
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 //struct goodMove {
 //	int line;
@@ -181,5 +179,4 @@ public:
 	int FindPosition();
 };
 
-#endif // AI2_H_INCLUDED
 

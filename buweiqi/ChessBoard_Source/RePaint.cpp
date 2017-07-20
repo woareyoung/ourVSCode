@@ -1,4 +1,3 @@
-#include "../stdafx.h"
 #include "../ChessBoard_Header/ChessBoard.h"
 ///响应重绘消息
 void ChessBoard::RePaint()

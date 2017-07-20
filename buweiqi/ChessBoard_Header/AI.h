@@ -1,6 +1,4 @@
 #pragma once
-#ifndef AI_H_INCLUDED
-#define AI_H_INCLUDED
 #include "SIP.h"
 #include "../FileSystem_Header/FileSystem.h"
 #include <unordered_map>
@@ -15,4 +13,3 @@ public:
 	{}
 };
 
-#endif // AI_H_INCLUDED

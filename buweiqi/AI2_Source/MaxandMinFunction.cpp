@@ -1,6 +1,4 @@
-#include "../stdafx.h"
 #include "../AI2_Header/AI2.h"
-#include <algorithm>
 /**
 * [AI2::maxandmin 极大极小函数]
 * @param depth 		执行的深度

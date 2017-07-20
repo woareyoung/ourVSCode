@@ -1,6 +1,7 @@
-#include "../stdafx.h"
+#include "../ChessBoard_Header/parameter.h"
 #include "../ChessBoard_Header/ChessBoard.h"
 #include "../ChessBoard_Header/WinCheck.h"
+
 ///»­Æå×Óº¯Êý
 void ChessBoard::PaintChess()
 {

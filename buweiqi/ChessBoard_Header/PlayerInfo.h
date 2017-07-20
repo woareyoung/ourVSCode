@@ -1,6 +1,4 @@
 #pragma once
-#ifndef PLAYERINFO_H_INCLUDED
-#define PLAYERINFO_H_INCLUDED
 
 class PlayerInfo
 {
@@ -17,4 +15,3 @@ public:
 	int Winner;//ЪЄРћеп
 
 };
-#endif // PLAYERINFO_H_INCLUDED

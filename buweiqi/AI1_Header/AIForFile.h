@@ -1,7 +1,4 @@
 #pragma once
-
-#ifndef AIFORFILE_H_INCLUDED
-#define AIFORFILE_H_INCLUDED
 #include "../ChessBoard_Header/SIP.h"
 #include "../FileSystem_Header/FileSystem.h"
 class AIForFile
@@ -77,5 +74,3 @@ public :
 		finish = true;
 	}
 };
-
-#endif //AIFORFILE_H_INCLUDED

@@ -1,6 +1,4 @@
 #pragma once
-#ifndef POINTSTYLE_H_INCLUDED
-#define POINTSTYLE_H_INCLUDED
 ///记录“当前点”的特殊点类型与级差分
 class PointStyle
 {
@@ -34,4 +32,3 @@ public:
 
 };
 
-#endif // POINTSTYLE_H_INCLUDED

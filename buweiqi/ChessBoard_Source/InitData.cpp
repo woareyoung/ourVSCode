@@ -1,11 +1,4 @@
-#include "../stdafx.h"
 #include "../ChessBoard_Header/ChessBoard.h"
-#include "../ChessBoard_Header/Chess.h"
-#include "../AI1_Header/AI1.h"
-#include "../AI2_Header/AI2.h"
-#include "../AI3_Header/AI3.h"
-#include <memory>
-#include <iostream>
 
 ChessBoard::ChessBoard()
 {

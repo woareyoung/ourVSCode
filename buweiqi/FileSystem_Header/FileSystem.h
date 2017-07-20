@@ -1,5 +1,4 @@
 #pragma once
-#include "../stdafx.h"
 #include <fstream>
 #include <future>
 #include <set>

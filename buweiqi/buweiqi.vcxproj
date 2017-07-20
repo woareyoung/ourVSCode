@@ -161,6 +161,7 @@
     <ClInclude Include="ChessBoard_Header\AI.h" />
     <ClInclude Include="ChessBoard_Header\Chess.h" />
     <ClInclude Include="ChessBoard_Header\ChessBoard.h" />
+    <ClInclude Include="ChessBoard_Header\parameter.h" />
     <ClInclude Include="ChessBoard_Header\Pattern.h" />
     <ClInclude Include="ChessBoard_Header\Pattern_Moves.h" />
     <ClInclude Include="ChessBoard_Header\PlayerInfo.h" />

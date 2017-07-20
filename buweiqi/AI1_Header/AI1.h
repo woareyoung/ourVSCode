@@ -1,7 +1,4 @@
 #pragma once
-#ifndef AI1_H_INCLUDED
-#define AI1_H_INCLUDED
-
 #include <time.h>
 #include "../chessBoard_Header/AI.h"
 #include <stack>
@@ -71,5 +68,3 @@ private:
 
 };
 
-
-#endif // AI1_H_INCLUDED

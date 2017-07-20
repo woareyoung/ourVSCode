@@ -1,20 +1,31 @@
 #pragma once
-#ifndef CHESSBOARD_H_INCLUDED
-#define CHESSBOARD_H_INCLUDED
+
+#ifdef __ChessBoard
+
+#endif // __ChessBoard
+
+#include "../stdafx.h"
 #include "WindowSize.h"
 #include "WindowHwnd.h"
 #include "PlayerInfo.h"
 #include "Chess.h"
-#include "AI.h"
 #include "../AI1_Header/AI1.h"
 #include "../AI2_Header/AI2.h"
 #include "../AI3_Header/AI3.h"
 #include "../AI4_Header/AI4.h"
-#include "../stdafx.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+	class ChessBoard;
+#ifdef __cplusplus
+}
+#endif
 class ChessBoard : public WindowSize, public WindowHwnd, public PlayerInfo, public Chess
 {
 public:
+
+
 	///在InitData.cpp文件中
 	ChessBoard();//构造函数
 	void Init_cross();//初始化棋盘状态数组
@@ -66,5 +77,3 @@ private:
 	std::string Int2String(int num);//整型换换为字符型
 	void addChar(int mid);//用于辅助转换
 };
-
-#endif // CHESSBOARD_H_INCLUDED

@@ -1,5 +1,6 @@
-#include "../../stdafx.h"
 #include"../../ChessBoard_Header/ChessBoard.h"
+#include <string>
+#include <iostream>
 /**
 * [ChessBoard::Int2String 整型转换为字符串]
 * @param  num []

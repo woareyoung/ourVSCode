@@ -1,6 +1,7 @@
-#include "../stdafx.h"
 #include "../FileSystem_Header/FileSystem.h"
 #include <mutex>
+#include <string>
+#include <iostream>
 ///匹配当前盘面状况的记忆
 void FileSystem::Match(SITUATION &StatusQuo, std::set<int> &result, int round, int playerId)
 {

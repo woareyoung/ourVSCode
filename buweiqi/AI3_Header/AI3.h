@@ -1,14 +1,9 @@
 #pragma once
-#ifndef AI3_H_INCLUDED
-#define AI3_H_INCLUDED
 
 #include "../ChessBoard_Header/WinCheck.h"
 #include "../AI2_Header/AI2.h"
 #include "../ChessBoard_Header/showUnicodeInfo.h"
-#include <tuple>
-#include <set>
-#include <iostream>
-#include <cstdlib>
+#include "../ChessBoard_Header/parameter.h"
 #include "MCTS.h"
 
 class SimulatorGo : public AI2 {
@@ -64,10 +59,52 @@ public:
 
 	// 是否还有可着子的着子点
 	template<typename RandomEngine>
-	bool doRandomMove(RandomEngine* engine);
+	bool doRandomMove(RandomEngine* engine)
+	{
+		auto moves = getMoves();
+		if (moves.empty()) {// 如果着子点集合为空的话，就直接返回
+			Winner = getRival(player_to_move);
+			return false;
+		}
+		if (!moves.empty()) {
+			doRandomMove(engine, moves);
+			return true;
+		}
+		return false;
+	}
+
 	// 随机走步
 	template<typename RandomEngine>
-	void doRandomMove(RandomEngine* engine, std::vector<int>& moves);
+	void doRandomMove(RandomEngine* engine, std::vector<int>& moves)
+	{
+		int move;
+		while (true) {
+			if (moves.size() == 0) {
+				Winner = getRival(player_to_move);
+				return;
+			}
+			std::uniform_int_distribution<std::size_t> move_ind(0, moves.size() - 1);
+			move = moves[move_ind(*engine)];
+			int line = getLine(move);
+			int column = getColumn(move);
+			if (isGo2Dead(line, column, player_to_move)) {
+				CS[line][column] = minLimit;
+				auto itr = moves.begin();
+				for (; itr != moves.end() && *itr != move; ++itr);
+				moves.erase(itr);// 从moves数组中删除move元素
+			}
+			else if (moves.empty()) {
+				Winner = getRival(player_to_move);
+				return;
+			}
+			else {
+				break;
+			}
+		}
+
+		// 开始模拟走步
+		SimulateMove(move);
+	}
 
 	// 模拟着子，主要的作用是用于模拟下棋
 	virtual void SimulateMove(const int& move)
@@ -145,4 +182,3 @@ public:
 	}
 };
 
-#endif // AI3_H_INCLUDED

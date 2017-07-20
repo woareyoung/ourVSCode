@@ -1,6 +1,4 @@
 #pragma once
-#ifndef WINDOWSIZE_H_INCLUDED
-#define WINDOWSIZE_H_INCLUDED
 class WindowSize
 {
 public:
@@ -10,4 +8,3 @@ public:
 	int ChessDiameter;//Æå×ÓÖ±¾¶
 };
 
-#endif // WINDOWSIZE_H_INCLUDED

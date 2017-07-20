@@ -1,8 +1,6 @@
 #pragma once
-#ifndef Pattern_Moves_H_INCLUDED
-#define Pattern_Moves_H_INCLUDED
-#include "../stdafx.h"
 #include "../AI2_Header/DefaultChess.h"
+#include "../ChessBoard_Header/parameter.h"
 #include <iostream>
 #include <list>
 #include <vector>
@@ -134,5 +132,4 @@ public:
 	std::list<std::pair<int, int>> getMoves(const bool& isFirst, const int cro[][ChessEnd]);
 };
 
-#endif // Pattern_Moves_H_INCLUDED
 
