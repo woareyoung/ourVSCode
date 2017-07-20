@@ -424,7 +424,6 @@ namespace MCTS
 				int(100.0 * best_visits / double(games_played)),
 				int(100.0 * best_wins / best_visits));
 		}
-
 		return best_move;
 	}
 }
