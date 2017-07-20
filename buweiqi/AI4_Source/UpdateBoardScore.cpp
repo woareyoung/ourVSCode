@@ -8,6 +8,7 @@ void AI4::UpdateBoardScore(std::list<std::pair<int, int>> &SpecialPoint)
 	{
 		if (Traverse->second < 0) Score[GetLine(Traverse->first)][GetColumn(Traverse->first)] = MyDeadChess;
 		else if(Traverse->second == 0) Score[GetLine(Traverse->first)][GetColumn(Traverse->first)] = RivalDeadChess;
+		else if(Traverse->second == 25) AddScore<int, int>(GetLine(Traverse->first), GetColumn(Traverse->first), Traverse->second, 12);
 		else AddScore<int, int>(GetLine(Traverse->first), GetColumn(Traverse->first), Traverse->second, 2);
 		auto T = Traverse;
 		Traverse++;

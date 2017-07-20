@@ -4,6 +4,17 @@
 #include <iostream>
 #include <cstdlib>
 
+#include "../AI3_Header/MCTS.h"
+int AI3::predict() {
+	MCTS::ComputeOptions options;
+	options.number_of_threads = 1;
+	options.verbose = true;
+	// options.max_iterations = 1;
+	// options.max_time = 1;
+	auto state_copy = new SimulatorGo(cross, PlayerId);
+	auto best_move = MCTS::computeNextMove(state_copy, options);
+	return best_move;
+}
 
 // 从棋盘中搜集所有可行的着子点
 std::vector<int> SimulatorGo::getMoves() const
@@ -29,9 +40,10 @@ std::vector<int> SimulatorGo::getMoves() const
 		_cprintf("Player is -> %s \n", player_to_move == Black ? "Black" : "White");
 	}
 
-	const_cast<SimulatorGo*>(this)->initCSPoint();
+	// const_cast<SimulatorGo*>(this)->initCSPoint();
 	initSimulation();
 	const_cast<SimulatorGo*>(this)->startPattern();
+	const_cast<SimulatorGo*>(this)->ScanChessBroad();
 
 	// 从当前棋盘中选择出由Pattern匹配出来的比较好的着子点集合
 	for (int i = ChessStart; i < ChessEnd; ++i) {

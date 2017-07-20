@@ -4,7 +4,6 @@
 #include "../AI2_Header/AI2.h"
 #include "../ChessBoard_Header/showUnicodeInfo.h"
 #include "../ChessBoard_Header/parameter.h"
-#include "MCTS.h"
 
 class SimulatorGo : public AI2 {
 private:
@@ -170,15 +169,6 @@ public:
 		}*/
 		return bestMove;
 	}
-	int predict() {
-		MCTS::ComputeOptions options;
-		options.number_of_threads = 1;
-		options.verbose = true;
-		options.max_iterations = 1;
-		// options.max_time = 1;
-		auto state_copy = new SimulatorGo(cross, PlayerId);
-		auto best_move = MCTS::computeNextMove(state_copy, options);
-		return best_move;
-	}
+	int predict();
 };
 
