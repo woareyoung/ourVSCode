@@ -367,3 +367,58 @@ void AI2::Pattern(const int *PatternType) {
 		}
 	}
 }
+
+bool AI2::checkEmptyPos(const int& x, const int& y, const int& start, const int& mainColor, const Pos* emptyPos) {
+	/******************************************
+	判断当前匹配到的空位是否是敌方的自杀点，
+	如果是的话，就把该点的分数设置为0，跳过匹配模式
+	*******************************************/
+	for (int i = 0; i < start; ++i) {
+		if (mainColor == Rival) {
+			if (chessScore[emptyPos[i].line][emptyPos[i].column] == 0) {
+				return false;
+			}
+			// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
+			if (isGo2Dead(emptyPos[i].line, emptyPos[i].column, Rival)) {
+				// 如果是敌方的自杀点的话，这里就置零   -.-！！！
+				CS[emptyPos[i].line][emptyPos[i].column] = 0;
+				return false;
+			}
+		}
+		else if (mainColor == turn2Who) {
+			if (chessScore[emptyPos[i].line][emptyPos[i].column] == minLimit) {
+				return false;
+			}
+			// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
+			if (isGo2Dead(emptyPos[i].line, emptyPos[i].column, turn2Who)) {
+				CS[emptyPos[i].line][emptyPos[i].column] = minLimit;
+				// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
+				return false;
+			}
+		}
+		// 这里既不是我方自杀点，也不是敌方自杀点
+	}
+	return true;
+}
+// 检查棋子是否有效，并对分析的结果进行相应的加分
+bool AI2::checkStone(const int& x, const int& y, const bool& below4) {
+	// 对于当前匹配到的着子点的环境进行分析
+	// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
+	if (isGo2Dead(x, y, turn2Who)) {
+		CS[x][y] = minLimit;
+		// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
+		return false;
+	}
+	// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
+	if (!below4) {
+		return true;
+	}
+	if (cross[x][y] == NoChess && CS[x][y] == 0) return false;
+	if (isGo2Dead(x, y, Rival)) {
+		// 如果是敌方的自杀点的话，这里就置零   -.-！！！
+		CS[x][y] = 0;
+		return false;
+	}
+	// 这里既不是我方自杀点，也不是敌方自杀点
+	return true;
+}

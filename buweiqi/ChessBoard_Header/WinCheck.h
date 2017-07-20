@@ -210,7 +210,12 @@ namespace WinCheck {
 			return false;
 		}
 
-		bool WinCheck(int& line, int& column, int& type, int& Winner, int CROSS[][10])
+		bool WinCheck(int& line, int& column, int& type, int CROSS[][10]) {
+			int Winner;
+			return WinCheck(line, column, type, Winner, CROSS);
+		}
+
+		bool WinCheck(const int& line, const int& column, const int& type, int& Winner, int CROSS[][10])
 		{
 			auto initArray = [&](int c[10][10]) {
 				for (int i = 0; i < 10; ++i) {
