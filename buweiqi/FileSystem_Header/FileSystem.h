@@ -1,13 +1,9 @@
 #pragma once
 #include "../stdafx.h"
 #include <fstream>
-#include <string>
-#include <memory>
-#include <iostream>
 #include <future>
 #include <set>
 #include <unordered_map>
-#include <set>
 #include <thread>
 #include "../ChessBoard_Header/SIP.h"
 #define OpenFileThreadNumber 4 //打开文件线程数

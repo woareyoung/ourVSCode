@@ -3,7 +3,6 @@
 #define WINDOWHWND_H_INCLUDED
 #include "../stdafx.h"
 #include <fstream>
-#include <string>
 
 class WindowHwnd
 {

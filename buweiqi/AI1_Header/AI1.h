@@ -3,14 +3,9 @@
 #define AI1_H_INCLUDED
 
 #include <time.h>
-#include <stdlib.h>
-#include <conio.h>
 #include "../chessBoard_Header/AI.h"
 #include <stack>
-#include <set>
 #include "PointStyle.h"
-#include "../FileSystem_Header/FileSystem.h"
-#include "../ChessBoard_Header/SIP.h"
 #include "AIForFile.h"
 
 ///AI¿‡

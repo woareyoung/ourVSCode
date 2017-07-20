@@ -10,7 +10,6 @@
 #include "../AI2_Header/AI2.h"
 #include "../AI3_Header/AI3.h"
 #include "../AI4_Header/AI4.h"
-#include<tchar.h>
 #include "../stdafx.h"
 
 class ChessBoard : public WindowSize, public WindowHwnd, public PlayerInfo, public Chess

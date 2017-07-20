@@ -1,7 +1,6 @@
 #include "../stdafx.h"
 #include "../AI1_Header/AIForFile.h"
 #include "../ChessBoard_Header/SIP.h"
-#include <future>
 bool AIForFile::ForeReadFileToMemory(int round, std::unordered_multimap<std::string, std::pair<int, int>> &stl)
 {
 	std::string filename = FS.FN.ForeName + std::to_string(round) + FS.FN.TXT;//ÎÄ¼þÃû
