@@ -48,6 +48,7 @@ public:
 		ifShowInfo(false)
 	{
 		initAllArray();
+		initCSPoint();
 		for (int i = ChessInit; i < ChessEnd; ++i) {
 			for (int j = ChessInit; j < ChessEnd; ++j) {
 				cross[i][j] = b[i][j];
@@ -73,8 +74,18 @@ public:
 		std::vector<int> allMoves;
 		for (int i = ChessStart; i < ChessEnd; ++i) {
 			for (int j = ChessStart; j < ChessEnd; ++j) {
-				if (cross[i][j] == NoChess && chessScore[i][j] != minLimit) {
-					allMoves.emplace_back(getMove(i, j));
+				if (cross[i][j] == NoChess && CS[i][j] != minLimit) {
+					if (!isGo2Dead(i, j, player_to_move)) {
+						allMoves.emplace_back(getMove(i, j));
+					}
+					else {
+						if (isGo2Dead(i, j, getRival(player_to_move))) {
+							CS[i][j] = 0;
+						}
+						else {
+							CS[i][j] = minLimit;
+						}
+					}
 				} 
 			}
 		}
@@ -238,7 +249,7 @@ public:
 		int rival = getRival(player_to_move);
 		for (int i = 0; i < start; ++i) {
 			if (mainColor == rival) {
-				if (chessScore[emptyPos[i].line][emptyPos[i].column] == 0) {
+				if (CS[emptyPos[i].line][emptyPos[i].column] == 0) {
 					return false;
 				}
 				// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
@@ -249,7 +260,7 @@ public:
 				}
 			}
 			else if (mainColor == player_to_move) {
-				if (chessScore[emptyPos[i].line][emptyPos[i].column] == minLimit) {
+				if (CS[emptyPos[i].line][emptyPos[i].column] == minLimit) {
 					return false;
 				}
 				// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
@@ -260,7 +271,6 @@ public:
 				}
 			}
 			// 这里既不是我方自杀点，也不是敌方自杀点
-			cross[emptyPos[i].line][emptyPos[i].column] = NoChess;
 		}
 		return true;
 	}
@@ -346,9 +356,9 @@ public:
 	}
 	int predict() {
 		MCTS::ComputeOptions options;
-		options.number_of_threads = 4;
+		options.number_of_threads = 1;
 		options.verbose = true;
-		options.max_iterations = 100000;
+		options.max_iterations = 1;
 		// options.max_time = 1;
 		auto state_copy = new SimulatorGo(cross, PlayerId);
 		auto best_move = MCTS::computeNextMove(state_copy, options);
