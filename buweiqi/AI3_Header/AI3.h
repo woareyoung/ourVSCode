@@ -6,9 +6,6 @@
 #include "../AI2_Header/AI2.h"
 #include "../ChessBoard_Header/showUnicodeInfo.h"
 #include <tuple>
-#include <set>
-#include <iostream>
-#include <cstdlib>
 #include "MCTS.h"
 
 class SimulatorGo : public AI2 {

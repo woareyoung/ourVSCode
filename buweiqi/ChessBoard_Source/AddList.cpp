@@ -1,7 +1,5 @@
 #include "../ChessBoard_Header/Chess.h"
 #include "../ChessBoard_Header/ChessBoard.h"
-#include <memory>
-#include <iostream>
 
 void ChessBoard::AddSituationList()
 {

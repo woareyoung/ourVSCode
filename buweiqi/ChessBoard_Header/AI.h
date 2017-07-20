@@ -3,7 +3,6 @@
 #define AI_H_INCLUDED
 #include "SIP.h"
 #include "../FileSystem_Header/FileSystem.h"
-#include <unordered_map>
 
 class AI
 {

@@ -4,7 +4,6 @@
 #include "../chessBoard_Header/AI.h"
 #include "AIPlayer.h"
 #include "DefaultChess.h"
-#include <iostream>
 #include <vector>
 #include <algorithm>
 
