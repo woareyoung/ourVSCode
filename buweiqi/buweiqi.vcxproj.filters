@@ -242,6 +242,9 @@
     <ClCompile Include="AI4_Source\SetScoreLevel.cpp">
       <Filter>Source Files\AI4_Source</Filter>
     </ClCompile>
+    <ClCompile Include="AI3_Source\AI3.cpp">
+      <Filter>Source Files\AI3_Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="buweiqi.rc">
