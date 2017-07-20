@@ -12,9 +12,9 @@ class Pattern_Moves : public DefaultChess
 private:
 
 	// 匹配模式
-	static const int pattern_Total = 17;
+	static const int pattern_Total = 23;
 	// 匹配的次数
-	static const int pattern_Sum = 86;
+	static const int pattern_Sum = 152;
 	// 模式分数尺度
 	int pattern_Score[pattern_Total];
 	// 分数说明：

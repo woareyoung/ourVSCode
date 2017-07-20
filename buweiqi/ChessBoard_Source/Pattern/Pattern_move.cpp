@@ -45,14 +45,15 @@ void Pattern_Moves::initAll() {
 
 	DIRECTION patternAddScorePos[] = {
 		{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },// 11
-		{ 0, -1 },{ 1, 0 },{ 1, 1 }/*3 敌方位置，默认内部填充阻止*/,{ 0, -1 },{ 1, 0 },{ 1, 1 }// 3，己方形成围杀，默认采用外部空位
+		{ 0, -1 },{ 1, 0 },{ 1, 1 }/*3 敌方位置，默认内部填充阻止*/,{ 0, -1 },{ 1, 0 },{ 1, 1 },// 3，己方形成围杀，默认采用外部空位
+		{ 0, 1 },{ 1, 1 },{ 2, -1 },{ 0, 1 },{ 1, 1 },{ 2, -1 }// 6
 	};
 
 	// 模式内判断棋子点数
 	int patternCount[] = {
 		4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,// 44
-		7, 7, 7, 7, 7, 7// 42
-
+		7, 7, 7, 7, 7, 7,// 42
+		11,11,11,11,11,11// 66
 	};
 	// 看不懂的请看种子填充算法
 	DIRECTION patternBackground[] = {
@@ -80,8 +81,12 @@ void Pattern_Moves::initAll() {
 		{ 0, -1 },{ 0, 1 },{ 0, 2 },{ -1, 0 },{ -1, 1 },{ 1, 0 },{ 1, 1 },
 		{ 0, -1 },{ 0, 1 },{ 0, 2 },{ -1, 0 },{ -1, 1 },{ 1, 0 },{ 1, 1 },// 6 42 
 
-		{ -2, -1 },{ -2, 0 },{ -1, -2 },{ -1, -1 },{ -1, 0 },{ -1, 1 },{ 0, -1 },{ 0, 1 },{ 1, 0 },
-
+		{ 0, -2 },{ 1, -2 },{ -1, -1 },{ 0, -1 },{ 1, -1 },{ 2, -1 },{ -1 ,0 },{ 1, 0 },{ 2, 0 },{ 0, 1 },{ 1, 1 },
+		{ 0, -2 },{ 1, -2 },{ -1, -1 },{ 0, -1 },{ 1, -1 },{ 2, -1 },{ -1 ,0 },{ 1, 0 },{ 2, 0 },{ 0, 1 },{ 1, 1 },
+		{ 0, -2 },{ 1, -2 },{ -1, -1 },{ 0, -1 },{ 1, -1 },{ 2, -1 },{ -1 ,0 },{ 1, 0 },{ 2, 0 },{ 0, 1 },{ 1, 1 },
+		{ 0, -2 },{ 1, -2 },{ -1, -1 },{ 0, -1 },{ 1, -1 },{ 2, -1 },{ -1 ,0 },{ 1, 0 },{ 2, 0 },{ 0, 1 },{ 1, 1 },
+		{ 0, -2 },{ 1, -2 },{ -1, -1 },{ 0, -1 },{ 1, -1 },{ 2, -1 },{ -1 ,0 },{ 1, 0 },{ 2, 0 },{ 0, 1 },{ 1, 1 },
+		{ 0, -2 },{ 1, -2 },{ -1, -1 },{ 0, -1 },{ 1, -1 },{ 2, -1 },{ -1 ,0 },{ 1, 0 },{ 2, 0 },{ 0, 1 },{ 1, 1 }// 6 66
 	};
 	// 利用与或处理棋子点
 	// 匹配模式中棋子分布
@@ -132,7 +137,17 @@ void Pattern_Moves::initAll() {
 		Black,		White,		Black | Edge,	Black | Edge,	Black | Edge,	Black,		NoChess,
 		NoChess,	Black,		White | Edge,	White | Edge,	White | Edge,	White,		White,
 		White,		Black,		White | Edge,	White | Edge,	White | Edge,	NoChess,	White,
-		White,		Black,		White | Edge,	White | Edge,	White | Edge,	White,		NoChess
+		White,		Black,		White | Edge,	White | Edge,	White | Edge,	White,		NoChess,
+
+		/*********************************************
+		块围杀缺一
+		**********************************************/
+		Black | Edge,Black | Edge,Black | Edge,	White,White,Black | Edge,Black | Edge,White,Black | Edge,NoChess,Black | Edge,
+		Black | Edge,Black | Edge,Black | Edge,	White,White,Black | Edge,Black | Edge,White,Black | Edge,Black | Edge,NoChess,
+		Black | Edge,Black | Edge,Black | Edge,	White,White,NoChess,Black | Edge,White,Black | Edge,Black | Edge,Black | Edge,
+		White | Edge,White | Edge,White | Edge,	Black,Black,White | Edge,White | Edge,Black,White | Edge,NoChess,White | Edge,
+		White | Edge,White | Edge,White | Edge,	Black,Black,White | Edge,White | Edge,Black,White | Edge,White | Edge,NoChess,
+		White | Edge,White | Edge,White | Edge,	Black,Black,NoChess,White | Edge,Black,White | Edge,White | Edge,White | Edge
 	};
 	// 匹配模式中棋子分布
 	int patternBlack[] = {
@@ -152,7 +167,13 @@ void Pattern_Moves::initAll() {
 		White,		Black,		White | Edge,	White | Edge,	White | Edge,	White,		NoChess,
 		NoChess,	White,		Black | Edge,	Black | Edge,	Black | Edge,	Black,		Black,
 		Black,		White,		Black | Edge,	Black | Edge,	Black | Edge,	NoChess,	Black,
-		Black,		White,		Black | Edge,	Black | Edge,	Black | Edge,	Black,		NoChess// 6
+		Black,		White,		Black | Edge,	Black | Edge,	Black | Edge,	Black,		NoChess,// 6
+		White | Edge,White | Edge,White | Edge,	Black,Black,White | Edge,White | Edge,Black,White | Edge,NoChess,White | Edge,
+		White | Edge,White | Edge,White | Edge,	Black,Black,White | Edge,White | Edge,Black,White | Edge,White | Edge,NoChess,
+		White | Edge,White | Edge,White | Edge,	Black,Black,NoChess,White | Edge,Black,White | Edge,White | Edge,White | Edge,
+		Black | Edge,Black | Edge,Black | Edge,	White,White,Black | Edge,Black | Edge,White,Black | Edge,NoChess,Black | Edge,
+		Black | Edge,Black | Edge,Black | Edge,	White,White,Black | Edge,Black | Edge,White,Black | Edge,Black | Edge,NoChess,
+		Black | Edge,Black | Edge,Black | Edge,	White,White,NoChess,Black | Edge,White,Black | Edge,Black | Edge,Black | Edge
 	};
 	for (i = 0; i < pattern_Total; ++i) {
 		this->pattern_Score_Pos[i] = patternAddScorePos[i];
