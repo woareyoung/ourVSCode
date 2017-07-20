@@ -64,7 +64,6 @@ bool AI2::isGo2Dead(const int line, const int column, const int& type)
 	int tempLine = line, tempColumn = column;
 
 	std::stack<std::pair<int, int>> position;
-	std::stack<bool> PosNumber;//用于计算遍历数量
 	//弹出数据
 	auto POPdata = [&]() {
 		if (position.empty()) return false;
@@ -95,7 +94,6 @@ bool AI2::isGo2Dead(const int line, const int column, const int& type)
 	auto VisitAll = [&](const int& Player)
 	{
 		resetGo2DeadStatus();
-		int Rival = getRival(Player);
 		while (true)
 		{
 			isGo2DeadStatus[tempLine][tempColumn] = true;

@@ -1,6 +1,30 @@
 #ifndef WinCheck_H
 #define WinCheck_H
+
+namespace WinCheck {
+	struct ChessBoardOption// 计算选择
+	{
+		int emptyChess;// 空位
+		int white;// 白子
+		int black;// 黑子
+		int edge;// 边界
+		bool isInterface;
+
+		ChessBoardOption() :
+			emptyChess(noChess),// 默认的线程数量是8条
+			white(isWhite),// 默认的最大的迭代数量是10000
+			black(isBlack), // 默认是没有时间限制的
+			edge(8),
+			isInterface(false)
+		{ }
+	};
+}
+
+
 #include <conio.h>
+#include <iostream>
+#include <tuple>
+#include <stack>
 
 namespace WinCheck {
 	class ChessInfo {
@@ -8,6 +32,8 @@ namespace WinCheck {
 		mutable bool WinCheckPosition[4];
 		mutable bool WinCheckCross[10][10];
 		mutable int WinCheckcross[10][10];
+
+		ChessBoardOption option;
 	protected:
 		//判断对方的棋子是否被围死，两个参数表示对方棋子的位置
 		//该函数用于一堆棋子被围死的情况，用递归的方法检查一堆棋子的情况
@@ -72,11 +98,11 @@ namespace WinCheck {
 					for (int j = 1; j < 10; ++j)
 					{
 						_cprintf("%d\t", WinCheckcross[i][j]);
-						if (WinCheckcross[i][j] == isWhite)
+						if (WinCheckcross[i][j] == option.white)
 						{
 							countW++;
 						}
-						else if (WinCheckcross[i][j] == isBlack)
+						else if (WinCheckcross[i][j] == option.black)
 						{
 							countB++;
 						}
@@ -108,6 +134,12 @@ namespace WinCheck {
 			return false;
 		}
 	public:
+		ChessInfo() :
+			option(ChessBoardOption())
+		{}
+		ChessInfo(const ChessBoardOption chessOption) :
+			option(chessOption)
+		{}
 		/*胜负条件
 		* 1、超时。该条件判断由窗口过程函数实现
 		* 2、空手。先忽略
@@ -177,7 +209,188 @@ namespace WinCheck {
 			}
 			return false;
 		}
-	};
 
+		bool WinCheck(int& line, int& column, int& type, int& Winner, int CROSS[][10])
+		{
+			auto initArray = [&](int c[10][10]) {
+				for (int i = 0; i < 10; ++i) {
+					for (int j = 0; j < 10; ++j) {
+						WinCheckcross[i][j] = CROSS[i][j];
+						WinCheckCross[i][j] = false;
+					}
+				}
+			};
+			initArray(CROSS);
+
+			int player;//记录己方的编号（是1还是2）
+			int rival;//记录对方的编号（是1还是2）
+					  //onTurn的值是先变化了再调用该函数（WinOrLose）的
+			if (option.isInterface) {
+
+				if (type == isPlay1onTurn || type == isAI1onTurn)
+				{
+					player = option.white;
+					rival = option.black;
+				}
+				else if (type == isPlay2onTurn || type == isAI2onTurn)
+				{
+					player = option.black;
+					rival = option.white;
+				}
+				else {
+					return false;
+				}
+			}
+			else {
+				player = type;
+				rival = getRival(type);//对方
+			}
+
+			bool simulate = false;//标记是否是模拟下棋
+
+			int tempLine = line, tempColumn = column;
+
+			std::stack<std::pair<int, int>> position;
+			//弹出数据
+			auto POPdata = [&]() {
+				if (position.empty()) return false;
+				std::tie(tempLine, tempColumn) = position.top();
+				position.pop();
+				return true;
+			};
+			//压栈，并设置遍历
+			auto PUSHdata = [&](int l, int c) {
+				position.push(std::make_pair(tempLine, tempColumn));
+				tempLine = l;
+				tempColumn = c;
+			};
+			//还原数据
+			auto BackData = [&]() {
+				tempLine = line;
+				tempColumn = column;
+				while (!position.empty()) position.pop();
+			};
+			//判断是否是模拟下棋
+			if (WinCheckcross[tempLine][tempColumn] == option.emptyChess)
+			{
+				WinCheckcross[tempLine][tempColumn] = player;
+				simulate = true;
+			}
+
+			auto resetWinCheckCross = [&]() -> void {
+				for (register int i = ChessInit; i < ChessEnd; ++i) {
+					for (register int j = ChessInit; j < ChessEnd; ++j) {
+						WinCheckCross[i][j] = false;
+					}
+				}
+			};
+			//跟踪遍历（判断有没有被围死）
+			//param[Player]:检查 谁 的棋子被围死
+			auto VisitAll = [&](const int& Player)
+			{
+				resetWinCheckCross();
+				while (true)
+				{
+					WinCheckCross[tempLine][tempColumn] = true;
+					//遇到空位，活下去了
+					if (WinCheckcross[tempLine][tempColumn] == option.emptyChess && OnChessBoard(tempLine, tempColumn))
+					{
+						BackData();
+						return false;
+					}
+					//如果上面有自己的棋子且未遍历过
+					if (WinCheckcross[tempLine - 1][tempColumn] == Player && !WinCheckCross[tempLine - 1][tempColumn] && tempLine > 1)
+					{
+						PUSHdata(tempLine - 1, tempColumn);
+						continue;
+					}
+					else if (WinCheckcross[tempLine - 1][tempColumn] == option.emptyChess && tempLine > 1)
+					{
+						--tempLine;
+						continue;
+					}
+					//如果下面有自己的棋子且未遍历过
+					if (WinCheckcross[tempLine + 1][tempColumn] == Player && !WinCheckCross[tempLine + 1][tempColumn] && tempLine < 9)
+					{
+						PUSHdata(tempLine + 1, tempColumn);
+						continue;
+					}
+					else if (WinCheckcross[tempLine + 1][tempColumn] == option.emptyChess && tempLine < 9)
+					{
+						++tempLine;
+						continue;
+					}
+					//如果左边有自己的棋子且未遍历过
+					if (WinCheckcross[tempLine][tempColumn - 1] == Player && !WinCheckCross[tempLine][tempColumn - 1] && tempColumn > 1)
+					{
+						PUSHdata(tempLine, tempColumn - 1);
+						continue;
+					}
+					else if (WinCheckcross[tempLine][tempColumn - 1] == option.emptyChess && tempColumn > 1)
+					{
+						--tempColumn;
+						continue;
+					}
+					//如果右边有自己的棋子且未遍历过
+					if (WinCheckcross[tempLine][tempColumn + 1] == Player && !WinCheckCross[tempLine][tempColumn + 1] && tempColumn < 9)
+					{
+						PUSHdata(tempLine, tempColumn + 1);
+						continue;
+					}
+					else if (WinCheckcross[tempLine][tempColumn + 1] == option.emptyChess && tempColumn < 9)
+					{
+						++tempColumn;
+						continue;
+					}
+					if (POPdata()) continue;
+					BackData();
+					return true;//能到这里证明挂了
+				}
+			};
+			if (WinCheckcross[tempLine - 1][tempColumn] == rival && tempLine > 1)
+			{
+				--tempLine;
+				if (VisitAll(rival)) {
+					if (simulate) WinCheckcross[line][column] = option.emptyChess;
+					Winner = rival;
+					return true;
+				}
+			}
+			if (WinCheckcross[tempLine + 1][tempColumn] == rival && tempLine < 9)
+			{
+				++tempLine;
+				if (VisitAll(rival)) {
+					if (simulate) WinCheckcross[line][column] = option.emptyChess;
+					Winner = rival;
+					return true;
+				}
+			}
+			if (WinCheckcross[tempLine][tempColumn - 1] == rival && tempColumn > 1)
+			{
+				--tempColumn;
+				if (VisitAll(rival)) {
+					if (simulate) WinCheckcross[line][column] = option.emptyChess;
+					Winner = rival;
+					return true;
+				}
+			}
+			if (WinCheckcross[tempLine][tempColumn + 1] == rival && tempColumn < 9)
+			{
+				++tempColumn;
+				if (VisitAll(rival)) {
+					if (simulate) WinCheckcross[line][column] = option.emptyChess;
+					Winner = rival;
+					return true;
+				}
+			}
+			if (VisitAll(player)) {
+				if (simulate) WinCheckcross[line][column] = option.emptyChess;
+				Winner = rival;
+				return true;
+			}
+			if (simulate) WinCheckcross[line][column] = option.emptyChess;
+			return false;
+		}
+	};
 };
 #endif // WinCheck_H

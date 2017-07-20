@@ -4,7 +4,9 @@
 ///画棋子函数
 void ChessBoard::PaintChess()
 {
-	WinCheck::ChessInfo chessInfo;
+	WinCheck::ChessBoardOption option;
+	option.isInterface = true;
+	WinCheck::ChessInfo chessInfo(option);
 	// 判断轮到哪一方
 	switch (onTurn)
 	{
@@ -17,7 +19,7 @@ void ChessBoard::PaintChess()
 			onTurn = isAI2onTurn;
 		PaintAChess(1);
 		//若已分胜负，则结束游戏
-		if (chessInfo.WinOrLose(line, column, onTurn, Winner, cross))
+		if (chessInfo.WinCheck(line, column, onTurn, Winner, cross))
 		{
 			// Winner = 2;
 			ReStart();
@@ -32,7 +34,7 @@ void ChessBoard::PaintChess()
 			onTurn = isAI1onTurn;
 		PaintAChess(2);
 		//若已分胜负，则结束游戏
-		if (chessInfo.WinOrLose(line, column, onTurn, Winner, cross))
+		if (chessInfo.WinCheck(line, column, onTurn, Winner, cross))
 		{
 			// Winner = 1;
 			ReStart();
@@ -55,7 +57,7 @@ void ChessBoard::PaintChess()
 
 		PaintAChess(isBlack);
 		//若对方是电脑，则先判断有没有分出胜负
-		if (chessInfo.WinOrLose(line, column, onTurn, Winner, cross))
+		if (chessInfo.WinCheck(line, column, onTurn, Winner, cross))
 		{
 			// Winner = 2;
 			ReStart();
@@ -78,7 +80,7 @@ void ChessBoard::PaintChess()
 		}
 		PaintAChess(isWhite);
 		//若对方是电脑，则先判断有没有分出胜负
-		if (chessInfo.WinOrLose(line, column, onTurn, Winner, cross))
+		if (chessInfo.WinCheck(line, column, onTurn, Winner, cross))
 		{
 			// Winner = 1;
 			ReStart();
