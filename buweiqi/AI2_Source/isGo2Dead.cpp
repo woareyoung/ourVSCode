@@ -89,6 +89,15 @@ bool AI2::isGo2Dead(const int line, const int column, const int& type)
 		cross[tempLine][tempColumn] = type;
 		simulate = true;
 	}
+	// isGo2Dead标志数组
+	bool isGo2DeadStatus[10][10];
+	auto resetGo2DeadStatus = [&]() {
+		for (register int i = ChessInit; i < ChessEnd; ++i) {
+			for (register int j = ChessInit; j < ChessEnd; ++j) {
+				isGo2DeadStatus[i][j] = false;
+			}
+		}
+	};
 	//跟踪遍历（判断有没有被围死）
 	//param[Player]:检查 谁 的棋子被围死
 	auto VisitAll = [&](const int& Player)

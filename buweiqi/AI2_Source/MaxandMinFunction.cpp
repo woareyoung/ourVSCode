@@ -61,6 +61,8 @@ Find:
 	return tempLine * 100 + tempColumn;
 }
 
+#include "../ChessBoard_Header/WinCheck.h"
+
 void AI2::getScore(int& tempLine, int& tempColumn, bool isGetMax)
 {
 //	if (goodMoves.size() >= 1) {
@@ -88,6 +90,12 @@ void AI2::getScore(int& tempLine, int& tempColumn, bool isGetMax)
 //		return;
 //	}
 //other:
+	WinCheck::ChessBoardOption option;
+	option.black = Black;
+	option.white = White;
+	option.edge = Edge;
+	option.emptyChess = NoChess;
+	WinCheck::ChessInfo chessInfo(option);
 	bool isFirst = true;
 	for (int i = 1; i < 10; ++i)
 	{
@@ -95,7 +103,7 @@ void AI2::getScore(int& tempLine, int& tempColumn, bool isGetMax)
 		{
 			// 这里需要修改
 			if (chessScore[i][j] == minLimit || cross[i][j] != NoChess) continue;
-			if (chessScore[i][j] != 0 && isGo2Dead(i, j, turn2Who)) continue;
+			if (chessScore[i][j] != 0 && chessInfo.WinOrLoseCheck(i, j, turn2Who,cross)) continue;
 			if (isFirst)
 			{
 				tempLine = i;
@@ -172,6 +180,12 @@ int AI2::FindPosition() {
 	{
 		return x * 100 + y;
 	}
+	WinCheck::ChessBoardOption option;
+	option.black = Black;
+	option.white = White;
+	option.edge = Edge;
+	option.emptyChess = NoChess;
+	WinCheck::ChessInfo chessInfo(option);
 	for (i = 1; i < 10; ++i) {
 		for (j = 1; j < 10; ++j) {
 			x = i;
@@ -179,7 +193,7 @@ int AI2::FindPosition() {
 			if (cross[x][y] != NoChess || chessScore[x][y] == minLimit) continue;
 			// 对于当前匹配到的着子点的环境进行分析
 			// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
-			if (isGo2Dead(x, y, turn2Who)) {
+			if (chessInfo.WinOrLoseCheck(x, y, turn2Who, cross)) {
 				chessScore[x][y] = minLimit;
 				// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
 				continue;
@@ -187,7 +201,7 @@ int AI2::FindPosition() {
 			if (isFinal()) continue;
 			// 临时设置当前获得的位置为我方着子点，判断是否是敌方的自杀点
 			if (chessScore[x][y] == 0) continue;
-			if (isGo2Dead(x, y, Rival)) {
+			if (chessInfo.WinOrLoseCheck(x, y, turn2Who, cross)) {
 				chessScore[x][y] = 0;
 				continue;
 			}

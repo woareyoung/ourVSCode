@@ -20,7 +20,6 @@ void AI2::GetPosition(int &line, int &column, int onTurn)
 			// 这里是重新开始游戏的数据重置过程
 			line++;
 			column++;
-			resetGo2DeadStatus();
 			initAllArray();
 		}
 		//回退一步的命令，对数据进行回退。（100为玩家1，200为玩家2，line与column为回退的位置）

@@ -368,7 +368,15 @@ void AI2::Pattern(const int *PatternType) {
 	}
 }
 
+#include "../ChessBoard_Header/WinCheck.h"
+
 bool AI2::checkEmptyPos(const int& x, const int& y, const int& start, const int& mainColor, const Pos* emptyPos) {
+	WinCheck::ChessBoardOption option;
+	option.black = Black;
+	option.white = White;
+	option.edge = Edge;
+	option.emptyChess = NoChess;
+	WinCheck::ChessInfo chessInfo(option);
 	/******************************************
 	判断当前匹配到的空位是否是敌方的自杀点，
 	如果是的话，就把该点的分数设置为0，跳过匹配模式
@@ -379,7 +387,7 @@ bool AI2::checkEmptyPos(const int& x, const int& y, const int& start, const int&
 				return false;
 			}
 			// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
-			if (isGo2Dead(emptyPos[i].line, emptyPos[i].column, Rival)) {
+			if (chessInfo.WinOrLoseCheck(emptyPos[i].line, emptyPos[i].column, Rival, cross)) {
 				// 如果是敌方的自杀点的话，这里就置零   -.-！！！
 				CS[emptyPos[i].line][emptyPos[i].column] = 0;
 				return false;
@@ -390,7 +398,7 @@ bool AI2::checkEmptyPos(const int& x, const int& y, const int& start, const int&
 				return false;
 			}
 			// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
-			if (isGo2Dead(emptyPos[i].line, emptyPos[i].column, turn2Who)) {
+			if (chessInfo.WinOrLoseCheck(emptyPos[i].line, emptyPos[i].column, turn2Who, cross)) {
 				CS[emptyPos[i].line][emptyPos[i].column] = minLimit;
 				// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
 				return false;
@@ -402,9 +410,15 @@ bool AI2::checkEmptyPos(const int& x, const int& y, const int& start, const int&
 }
 // 检查棋子是否有效，并对分析的结果进行相应的加分
 bool AI2::checkStone(const int& x, const int& y, const bool& below4) {
+	WinCheck::ChessBoardOption option;
+	option.black = Black;
+	option.white = White;
+	option.edge = Edge;
+	option.emptyChess = NoChess;
+	WinCheck::ChessInfo chessInfo(option);
 	// 对于当前匹配到的着子点的环境进行分析
 	// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
-	if (isGo2Dead(x, y, turn2Who)) {
+	if (chessInfo.WinOrLoseCheck(x, y, turn2Who, cross)) {
 		CS[x][y] = minLimit;
 		// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
 		return false;
@@ -414,7 +428,7 @@ bool AI2::checkStone(const int& x, const int& y, const bool& below4) {
 		return true;
 	}
 	if (cross[x][y] == NoChess && CS[x][y] == 0) return false;
-	if (isGo2Dead(x, y, Rival)) {
+	if (chessInfo.WinOrLoseCheck(x, y, Rival, cross)) {
 		// 如果是敌方的自杀点的话，这里就置零   -.-！！！
 		CS[x][y] = 0;
 		return false;
