@@ -4,7 +4,6 @@
 #include "AI1_Header/AI1.h"
 #include "AI2_Header/AI2.h"
 #include "AI3_Header/AI3.h"
-#include <fstream>
 #include <psapi.h>
 
 #define MID_ONE 1
