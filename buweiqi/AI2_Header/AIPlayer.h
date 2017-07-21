@@ -17,5 +17,12 @@ protected:
 public:
 	AIPlayer() : ourEyes(0), RivalEyes(0)
 	{}
+
+	int getRole() {
+		return PlayerId;
+	}
+	void setRole(int id) {
+		PlayerId = id;
+	}
 };
 

@@ -77,7 +77,7 @@ protected:
 		this->PlayerId = turn2Who;
 	}
 
-	void ScanChessBroad();
+	virtual void ScanChessBroad();
 	void rollback(int line, int column, int onTurn) {
 		if (onTurn == PlayerId) {
 			--chessCount;
@@ -88,7 +88,6 @@ protected:
 		}
 	}
 public:
-
 	int patternAllScore[9][17] = {
 		{ 60, 50, 40, 35, 35, 30, 30, 25, 25, 20, 20, 65, 65, 65, 55, 55, 55 },// 6
 		{ 55, 50, 40, 35, 35, 30, 30, 25, 25, 20, 20, 60, 60, 60, 52, 52, 52 },

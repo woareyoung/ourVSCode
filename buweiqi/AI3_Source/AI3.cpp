@@ -173,6 +173,7 @@ void SimulatorGo::initCSPoint() {
 }
 
 std::vector<int> SimulatorGo::getAllMoves() {
+	initSimulation();
 	startPattern();
 	ScanChessBroad();
 	std::vector<int> allMoves;
@@ -213,6 +214,35 @@ void SimulatorGo::initSimulation() /*const*/ {
 	}
 }
 
+void SimulatorGo::ScanChessBroad() {
+	WinCheck::ChessBoardOption option;
+	option.black = Black;
+	option.white = White;
+	option.edge = Edge;
+	option.emptyChess = NoChess;
+	WinCheck::ChessInfo chessInfo(option);
+	int rival = getRival(player_to_move);
+	for (int x = ChessStart; x < ChessEnd; ++x) {
+		for (int y = ChessStart; y < ChessEnd; ++y) {
+			if (cross[x][y] == NoChess) {
+				if (chessInfo.WinOrLoseCheck(x, y, player_to_move, cross)) {
+					CS[x][y] = minLimit;
+					// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
+					continue;
+				}
+				// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
+				if (cross[x][y] == NoChess && CS[x][y] == 0) continue;
+				if (chessInfo.WinOrLoseCheck(x, y, rival, cross)) {
+					// 如果是敌方的自杀点的话，这里就置零   -.-！！！
+					CS[x][y] = 0;
+					continue;
+				}
+				// 这里既不是我方自杀点，也不是敌方自杀点
+			}
+		}
+	}
+}
+
 void SimulatorGo::showSimaluteInfo(const int& line, const int& column) {
 	if (ifShowInfo) {
 		_cprintf("\n**************This is chess score*******(%d, %d)***%s********\n",
@@ -241,6 +271,31 @@ void SimulatorGo::showSimaluteInfo(const int& line, const int& column) {
 	}
 }
 
+void SimulatorGo::show(int best_move) {
+	_cprintf("\n**************This is chess score*******(%d, %d)***********\n",
+		getLine(best_move), getColumn(best_move));
+	for (int i = ChessStart; i < ChessEnd; ++i)
+	{
+		for (int j = 1; j < 10; ++j)
+			if (CS[i][j] >= 20) {
+				_cprintf("%d\t", CS[i][j]);
+			}
+			else if (CS[i][j] == minLimit) {
+				_cprintf("M\t");
+			}
+			else if (CS[i][j] == 0) {
+				_cprintf("0\t");
+			}
+			else {
+				_cprintf(".\t");
+			}
+			_cprintf("\n");
+	}
+	_cprintf("**************This is chess cross*******(%d, %d)***********\n",
+		getLine(best_move), getColumn(best_move));
+	showChessBoard(cross);
+}
+
 #include "../AI3_Header/MCTS.h"
 
 int AI3::predict() {
@@ -251,5 +306,7 @@ int AI3::predict() {
 	// options.max_time = 1;
 	auto state_copy = new SimulatorGo(cross, PlayerId);
 	auto best_move = MCTS::computeNextMove(state_copy, options);
+	state_copy->show(best_move);
+	system("pause");
 	return best_move;
 }

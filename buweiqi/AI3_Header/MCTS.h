@@ -128,7 +128,7 @@ namespace MCTS
 	Node<State>::Node(const State& state) :
 		move(no_move),// 初始化为没有走步
 		parent(nullptr),// 初始化为空
-		player_to_move(state->player_to_move),// 初始化为当前玩家一样的角色
+		player_to_move(state->getRole()),// 初始化为当前玩家一样的角色
 		wins(0),
 		visits(0),
 		moves(state->getAllMoves()),// 可供着子的着子点集
@@ -139,7 +139,7 @@ namespace MCTS
 	Node<State>::Node(const State& state, const int& move_, Node* parent_) :
 		move(move_),
 		parent(parent_),
-		player_to_move(state->player_to_move),
+		player_to_move(state->getRole()),
 		wins(0),
 		visits(0),
 		moves(state->getAllMoves()),
@@ -177,13 +177,6 @@ namespace MCTS
 	template<typename State>
 	Node<State>* Node<State>::bestChild() const
 	{
-		if (options.verbose && moves.empty()) {
-			showInfoOnDOS("error, bestChild -> moves vector is empty!");
-		}
-		if (options.verbose && children.empty()) {
-			showInfoOnDOS("error, bestChild -> node`s children is none!");
-		}
-
 		return *std::max_element(children.begin(), children.end(),
 			[](Node* a, Node* b) { return a->visits < b->visits; });;
 	}
@@ -286,14 +279,6 @@ namespace MCTS
 	{
 		std::mt19937_64 random_engine(initial_seed);// 随机函数种子，用于随机走步
 
-		if (options.verbose) {
-			if (options.max_iterations >= 0 || options.max_time >= 0) {
-				showInfoOnDOS("option is right~");
-			}
-			if (!(root_state->player_to_move == 1 || root_state->player_to_move == 2)) {
-				showInfoOnDOS("player_to_move is error~");
-			}
-		}
 		// root指针管理一个Node结点对象。
 		auto root = std::unique_ptr<Node<State>>(new Node<State>(root_state));
 
@@ -352,7 +337,7 @@ namespace MCTS
 	{
 		using namespace std;
 
-		auto moves = root_state->getMoves();// 获取所有的可行走的着子点
+		auto moves = root_state->getAllMoves();// 获取所有的可行走的着子点
 		if (options.verbose) {
 			if (moves.size() == 1) {
 				return moves[0];

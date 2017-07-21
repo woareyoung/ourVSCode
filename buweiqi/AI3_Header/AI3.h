@@ -41,6 +41,7 @@ public:
 		depth(0),
 		ifShowInfo(false)
 	{
+		setRole(Id);
 		initAllArray();
 		initCSPoint();
 		for (int i = ChessInit; i < ChessEnd; ++i) {
@@ -155,8 +156,11 @@ public:
 		const int& y, 
 		const bool& below4) override;
 	virtual void initCSPoint() override;
+	virtual void ScanChessBroad() override;
 
 	void showSimaluteInfo(const int& line, const int& column);
+
+	void SimulatorGo::show(int best_move);
 };
 
 class AI3 : public AI2
