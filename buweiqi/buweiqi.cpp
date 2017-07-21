@@ -100,7 +100,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		DispatchMessage(&msg);
 	}
 	FreeConsole();
-	return (int)msg.wParam;
+	return static_cast<int>(msg.wParam);
 }
 void InitWndClass(TCHAR szAppName[], WNDCLASS &wndclass, HINSTANCE hInstance, int callback)
 {
@@ -124,7 +124,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_KEYDOWN:
 		//按下ESC键时，使当前对局成为最后一局
-		if((int)wParam == 27) CB.CombatNumber = MAX_COMBAT;break;
+		if(static_cast<int>(wParam) == 27) CB.CombatNumber = MAX_COMBAT;break;
 	case WM_PAINT://重绘消息
 		if (CB.Repaint)
 		{

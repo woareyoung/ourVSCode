@@ -57,7 +57,7 @@ void FileSystem::GenerMatch(SITUATION &StatusQuo, std::set<int> &Parent, int rou
 void FileSystem::UnPack(std::string data, std::set<int> &OneData, std::set<int> &TwoData)
 {
 	int sum;
-	for (int i = 0, len = data.length(); i < len; i++)
+	for (int i = 0, len = static_cast<int>(data.length()); i < len; i++)
 	{
 		sum = i + 1;
 		sum = sum / 9 * 10 + sum % 9;

@@ -87,7 +87,7 @@ double AI1::CalDeadPosNumber(int line, int column, int &deadPos, bool Cal)
 	else if (myLive == 0 && rivalLive == 0)
 	{
 		srand((unsigned)time(NULL));
-		tempsum = (double)(rand() % 10) / 10;
+		tempsum = static_cast<double>(rand() % 10) / 10;
 	}
 	else tempsum = myLive / (myLive + rivalLive);
 	return RivalDeadPosNumber - MyDeadPosNumber + 0.45 * (TigerMouth[PlayerId] - TigerMouth[3 - PlayerId]) + tempsum;
