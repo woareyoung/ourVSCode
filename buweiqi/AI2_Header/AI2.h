@@ -21,9 +21,9 @@ class AI2 : public AI, public AIPlayer, public DefaultChess
 private:
 
 	// 匹配模式
-	static const int pattern_Total = 23;
+	static const int pattern_Total = /*23*/11;
 	// 匹配的次数
-	static const int pattern_Sum = 152;
+	static const int pattern_Sum = /*152*/44;
 	// 模式分数尺度
 	int pattern_Score[pattern_Total];
 	// 分数说明：

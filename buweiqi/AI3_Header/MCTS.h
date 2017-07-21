@@ -315,8 +315,8 @@ namespace MCTS
 
 			// 随机选取一个根结点
 			if (node->hasUntriedMoves()) {
-				auto move = node->getRandomMove(&random_engine);
-				state->SimulateMove(move);
+				auto move = node->getRandomMove(&random_engine);// 随机选取一个结点
+				state->SimulateMove(move);// 模拟走一步
 				node = node->addChild(move, state);
 			}
 
@@ -427,4 +427,3 @@ namespace MCTS
 		return best_move;
 	}
 }
-

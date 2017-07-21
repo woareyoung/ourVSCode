@@ -60,6 +60,7 @@ public:
 	template<typename RandomEngine>
 	bool doRandomMove(RandomEngine* engine)
 	{
+		initCSPoint();
 		auto moves = getMoves();
 		if (moves.empty()) {// 如果着子点集合为空的话，就直接返回
 			Winner = getRival(player_to_move);

@@ -238,9 +238,9 @@ void SimulatorGo::showSimaluteInfo(const int& line, const int& column) {
 
 int AI3::predict() {
 	MCTS::ComputeOptions options;
-	options.number_of_threads = 8;
+	options.number_of_threads = 1;
 	options.verbose = true;
-	// options.max_iterations = 1;
+	options.max_iterations = 1;
 	// options.max_time = 1;
 	auto state_copy = new SimulatorGo(cross, PlayerId);
 	auto best_move = MCTS::computeNextMove(state_copy, options);
