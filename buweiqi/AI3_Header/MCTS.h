@@ -131,7 +131,7 @@ namespace MCTS
 		player_to_move(state->player_to_move),// 初始化为当前玩家一样的角色
 		wins(0),
 		visits(0),
-		moves(state->getMoves()),// 可供着子的着子点集
+		moves(state->getAllMoves()),// 可供着子的着子点集
 		UCT_score(0)
 	{ }
 
@@ -142,7 +142,7 @@ namespace MCTS
 		player_to_move(state->player_to_move),
 		wins(0),
 		visits(0),
-		moves(state->getMoves()),
+		moves(state->getAllMoves()),
 		UCT_score(0)
 	{ }
 

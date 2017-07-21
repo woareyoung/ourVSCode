@@ -176,17 +176,24 @@ std::vector<int> SimulatorGo::getAllMoves() {
 	startPattern();
 	ScanChessBroad();
 	std::vector<int> allMoves;
+	int rival = getRival(player_to_move);
+	WinCheck::ChessBoardOption option;
+	option.black = Black;
+	option.white = White;
+	option.edge = Edge;
+	option.emptyChess = NoChess;
+	WinCheck::ChessInfo chessInfo(option);
 	for (int i = ChessStart; i < ChessEnd; ++i) {
 		for (int j = ChessStart; j < ChessEnd; ++j) {
 			if (cross[i][j] == NoChess && CS[i][j] != minLimit) {
-				if (!isGo2Dead(i, j, player_to_move)) {
+				if (!chessInfo.WinOrLoseCheck(i, j, player_to_move,cross)) {
 					allMoves.emplace_back(getMove(i, j));
 				}
 				else {
-					if (isGo2Dead(i, j, getRival(player_to_move))) {
+					if (CS[i][j] != 0 && chessInfo.WinOrLoseCheck(i, j, rival, cross)) {
 						CS[i][j] = 0;
 					}
-					else {
+					else if (CS[i][j] != 0){
 						CS[i][j] = minLimit;
 					}
 				}
@@ -240,7 +247,7 @@ int AI3::predict() {
 	MCTS::ComputeOptions options;
 	options.number_of_threads = 1;
 	options.verbose = true;
-	options.max_iterations = 1;
+	// options.max_iterations = 1;
 	// options.max_time = 1;
 	auto state_copy = new SimulatorGo(cross, PlayerId);
 	auto best_move = MCTS::computeNextMove(state_copy, options);
