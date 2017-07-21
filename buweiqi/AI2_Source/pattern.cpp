@@ -261,7 +261,6 @@ void AI2::reverse_X_Y(DIRECTION *PatternType) {
 * @return        [无]
 */
 void AI2::startPattern() {
-	initCSPoint();
 	int *PatternType = getPatternType();
 	(this->*Reverse[1])(pattern_Background);//第一个版本 (X, Y)
 	Pattern(PatternType);
@@ -292,7 +291,6 @@ void AI2::Pattern(const int *PatternType) {
 	register int pointer, start = 0, score;
 	register int mainColor = NoChess;
 	register Pos emptyPos[10];
-	// register bool isFirst;
 	// 每一个棋子都要遍历一遍模板
 	for (x = ChessStart; x < ChessEnd; ++x) {
 		for (y = ChessStart; y < ChessEnd; ++y) {
@@ -300,7 +298,6 @@ void AI2::Pattern(const int *PatternType) {
 			for (i = 0; i < pattern_Total; ++i)
 			{
 				j = pointer;
-				// isFirst = false;
 				pointer += pattern_Count[i];
 				if (NoChess != cross[x][y]) continue;// 如果不是空着子点就跳转下一次循环
 				start = 0;
@@ -315,10 +312,6 @@ void AI2::Pattern(const int *PatternType) {
 						else
 						{
 							if (cross[x + x_offset][y + y_offset] == NoChess) {
-								/*if (!isFirst) {
-									isFirst = true;
-									continue;
-								}*/
 								// 如果当前空白点是死棋位的话，就直接跳过匹配了
 								if (CS[x + x_offset][y + y_offset] == minLimit) goto mismatch;
 								// 假如当前空白点的分数值为0的时候，就直接跳过
@@ -357,8 +350,8 @@ void AI2::Pattern(const int *PatternType) {
 					!checkStone(x, y, pattern_Count[i] <= 4)) {
 					goto mismatch;
 				};
-				if (chessScore[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] != 0 &&
-					chessScore[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] != minLimit) {
+				if (CS[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] != 0 &&
+					CS[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] != minLimit) {
 					CS[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] += score;// 这里匹配到了一个模板，这个模板的位置就是这个
 				}
 			mismatch:
@@ -383,7 +376,7 @@ bool AI2::checkEmptyPos(const int& x, const int& y, const int& start, const int&
 	*******************************************/
 	for (int i = 0; i < start; ++i) {
 		if (mainColor == Rival) {
-			if (chessScore[emptyPos[i].line][emptyPos[i].column] == 0) {
+			if (CS[emptyPos[i].line][emptyPos[i].column] == 0) {
 				return false;
 			}
 			// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
@@ -394,7 +387,7 @@ bool AI2::checkEmptyPos(const int& x, const int& y, const int& start, const int&
 			}
 		}
 		else if (mainColor == turn2Who) {
-			if (chessScore[emptyPos[i].line][emptyPos[i].column] == minLimit) {
+			if (CS[emptyPos[i].line][emptyPos[i].column] == minLimit) {
 				return false;
 			}
 			// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
@@ -435,4 +428,32 @@ bool AI2::checkStone(const int& x, const int& y, const bool& below4) {
 	}
 	// 这里既不是我方自杀点，也不是敌方自杀点
 	return true;
+}
+
+void AI2::ScanChessBroad() {
+	WinCheck::ChessBoardOption option;
+	option.black = Black;
+	option.white = White;
+	option.edge = Edge;
+	option.emptyChess = NoChess;
+	WinCheck::ChessInfo chessInfo(option);
+	for (int x = ChessStart; x < ChessEnd; ++x) {
+		for (int y = ChessStart; y < ChessEnd; ++y) {
+			if (cross[x][y] == NoChess) {
+				if (chessInfo.WinOrLoseCheck(x, y, turn2Who, cross)) {
+					CS[x][y] = minLimit;
+					// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
+					continue;
+				}
+				// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
+				if (cross[x][y] == NoChess && CS[x][y] == 0) continue;
+				if (chessInfo.WinOrLoseCheck(x, y, Rival, cross)) {
+					// 如果是敌方的自杀点的话，这里就置零   -.-！！！
+					CS[x][y] = 0;
+					continue;
+				}
+				// 这里既不是我方自杀点，也不是敌方自杀点
+			}
+		}
+	}
 }

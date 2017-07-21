@@ -4,9 +4,8 @@
 #include <iostream>
 #include <cstdlib>
 
-
 // 从棋盘中搜集所有可行的着子点
-std::vector<int> SimulatorGo::getMoves() const
+std::vector<int> SimulatorGo::getMoves() /*const*/
 {
 	// 下面是搜集所有可能的着子点。
 	std::vector<int> moves;
@@ -16,7 +15,7 @@ std::vector<int> SimulatorGo::getMoves() const
 		return moves;
 	}
 
-	if (Winner == Black && Winner == White) {
+	if (Winner == Black || Winner == White) {
 		if (ifShowInfo) {
 			system("pause");
 			_cprintf("Winner is %s", Winner == Black ? "Black" : "White");
@@ -29,10 +28,20 @@ std::vector<int> SimulatorGo::getMoves() const
 		_cprintf("Player is -> %s \n", player_to_move == Black ? "Black" : "White");
 	}
 
-	const_cast<SimulatorGo*>(this)->initCSPoint();
+	// const_cast<SimulatorGo*>(this)->initCSPoint();
 	initSimulation();
-	const_cast<SimulatorGo*>(this)->startPattern();
+	// const_cast<SimulatorGo*>(this)->startPattern();
+	// const_cast<SimulatorGo*>(this)->ScanChessBroad();
+	startPattern();
+	ScanChessBroad();
 
+	// 判断是否是死棋位
+	WinCheck::ChessBoardOption option;
+	option.black = Black;
+	option.white = White;
+	option.edge = Edge;
+	option.emptyChess = NoChess;
+	WinCheck::ChessInfo chessInfo(option);
 	// 从当前棋盘中选择出由Pattern匹配出来的比较好的着子点集合
 	for (int i = ChessStart; i < ChessEnd; ++i) {
 		for (int j = ChessStart; j < ChessEnd; ++j) {
@@ -46,7 +55,7 @@ std::vector<int> SimulatorGo::getMoves() const
 		for (int i = ChessStart; i < ChessEnd; ++i) {
 			for (int j = ChessStart; j < ChessEnd; ++j) {
 				if (cross[i][j] == NoChess && CS[i][j] != minLimit && CS[i][j] != 0) {
-					if (const_cast<SimulatorGo*>(this)->isGo2Dead(i, j, player_to_move)) {
+					if (chessInfo.WinOrLoseCheck(i, j, player_to_move, cross)) {
 						CS[i][j] = minLimit;
 					}
 					else {
@@ -60,7 +69,12 @@ std::vector<int> SimulatorGo::getMoves() const
 		for (int i = ChessStart; i < ChessEnd; ++i) {
 			for (int j = ChessStart; j < ChessEnd; ++j) {
 				if (cross[i][j] == NoChess && CS[i][j] == 0) {
-					moves.emplace_back(getMove(i, j));
+					if (chessInfo.WinOrLoseCheck(i, j, player_to_move, cross)) {
+						CS[i][j] = minLimit;
+					}
+					else {
+						moves.emplace_back(getMove(i, j));
+					}
 				}
 			}
 		}
@@ -80,6 +94,12 @@ bool SimulatorGo::checkEmptyPos(
 	const int& mainColor,
 	const Pos* emptyPos) 
 {
+	WinCheck::ChessBoardOption option;
+	option.black = Black;
+	option.white = White;
+	option.edge = Edge;
+	option.emptyChess = NoChess;
+	WinCheck::ChessInfo chessInfo(option);
 	/******************************************
 	判断当前匹配到的空位是否是敌方的自杀点，
 	如果是的话，就把该点的分数设置为0，跳过匹配模式
@@ -91,7 +111,7 @@ bool SimulatorGo::checkEmptyPos(
 				return false;
 			}
 			// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
-			if (isGo2Dead(emptyPos[i].line, emptyPos[i].column, rival)) {
+			if (chessInfo.WinOrLoseCheck(emptyPos[i].line, emptyPos[i].column, rival, cross)) {
 				// 如果是敌方的自杀点的话，这里就置零   -.-！！！
 				CS[emptyPos[i].line][emptyPos[i].column] = 0;
 				return false;
@@ -102,7 +122,7 @@ bool SimulatorGo::checkEmptyPos(
 				return false;
 			}
 			// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
-			if (isGo2Dead(emptyPos[i].line, emptyPos[i].column, player_to_move)) {
+			if (chessInfo.WinOrLoseCheck(emptyPos[i].line, emptyPos[i].column, player_to_move, cross)) {
 				CS[emptyPos[i].line][emptyPos[i].column] = minLimit;
 				// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
 				return false;
@@ -115,10 +135,16 @@ bool SimulatorGo::checkEmptyPos(
 
 // 检查棋子是否有效，并对分析的结果进行相应的加分
 bool SimulatorGo::checkStone(const int& x, const int& y, const bool& below4) {
+	WinCheck::ChessBoardOption option;
+	option.black = Black;
+	option.white = White;
+	option.edge = Edge;
+	option.emptyChess = NoChess;
+	WinCheck::ChessInfo chessInfo(option);
 	// 对于当前匹配到的着子点的环境进行分析
 	// 临时设置当前获得的位置为我方着子点，判断是否是我方的自杀点
 	int rival = getRival(player_to_move);
-	if (isGo2Dead(x, y, player_to_move)) {
+	if (chessInfo.WinOrLoseCheck(x, y, player_to_move, cross)) {
 		CS[x][y] = minLimit;
 		// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
 		return false;
@@ -128,7 +154,7 @@ bool SimulatorGo::checkStone(const int& x, const int& y, const bool& below4) {
 	}
 	// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
 	if (cross[x][y] == NoChess && CS[x][y] == 0) return false;
-	if (isGo2Dead(x, y, rival)) {
+	if (chessInfo.WinOrLoseCheck(x, y, rival, cross)) {
 		// 如果是敌方的自杀点的话，这里就置零   -.-！！！
 		CS[x][y] = 0;
 		return false;
@@ -170,12 +196,12 @@ std::vector<int> SimulatorGo::getAllMoves() {
 	return allMoves;
 }
 
-void SimulatorGo::initSimulation() const {
+void SimulatorGo::initSimulation() /*const*/ {
 	for (int i = ChessInit; i < ChessEnd; ++i) {
 		for (int j = ChessInit; j < ChessEnd; ++j) {
 			if (cross[i][j] == NoChess && CS[i][j] == minLimit) continue;
 			if (cross[i][j] == NoChess && CS[i][j] == 0) continue;
-			CS[i][j] = const_cast<SimulatorGo*>(this)->getDefaultChessScore(i, j);
+			CS[i][j] = /*const_cast<SimulatorGo*>(this)->*/getDefaultChessScore(i, j);
 		}
 	}
 }
@@ -206,4 +232,17 @@ void SimulatorGo::showSimaluteInfo(const int& line, const int& column) {
 		showChessBoard(cross);
 		system("pause");
 	}
+}
+
+#include "../AI3_Header/MCTS.h"
+
+int AI3::predict() {
+	MCTS::ComputeOptions options;
+	options.number_of_threads = 8;
+	options.verbose = true;
+	// options.max_iterations = 1;
+	// options.max_time = 1;
+	auto state_copy = new SimulatorGo(cross, PlayerId);
+	auto best_move = MCTS::computeNextMove(state_copy, options);
+	return best_move;
 }

@@ -51,9 +51,7 @@ private:
 protected:
 	mutable int(*CS)[10];
 	virtual void initCSPoint() {
-		if (CS == nullptr) {
-			CS = chessScore;
-		}
+		CS = chessScore;
 	}
 	int *Type[2];
 	//记录各交叉点的值，数组访问从“1”开始，访问顺序为“先行后列”，
@@ -105,7 +103,7 @@ public:
 		{ 40, 50, 60, 35, 35, 30, 30, 25, 25, 20, 20, 45, 45, 45, 35, 35, 35 }
 	};
 
-	AI2() : chessCount(0), CS(nullptr)
+	AI2() : chessCount(0), CS(chessScore)
 	{
 		initAllArray();
 	}

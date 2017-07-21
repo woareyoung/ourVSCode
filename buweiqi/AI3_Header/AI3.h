@@ -4,7 +4,6 @@
 #include "../AI2_Header/AI2.h"
 #include "../ChessBoard_Header/showUnicodeInfo.h"
 #include "../ChessBoard_Header/parameter.h"
-#include "MCTS.h"
 
 class SimulatorGo : public AI2 {
 private:
@@ -28,7 +27,7 @@ public:
 		initAllArray();
 		for (int i = ChessInit; i < ChessEnd; ++i) {
 			for (int j = ChessInit; j < ChessEnd; ++j) {
-				chessScoreW[i][j] = this->getDefaultChessScore(i, j);
+				chessScoreW[i][j] = getDefaultChessScore(i, j);
 				chessScore[i][j] = chessScoreW[i][j];
 			}
 		}
@@ -53,7 +52,7 @@ public:
 		}
 	}
 
-	void initSimulation() const;
+	void initSimulation() /*const*/;
 
 	std::vector<int> getAllMoves();
 
@@ -78,6 +77,13 @@ public:
 	void doRandomMove(RandomEngine* engine, std::vector<int>& moves)
 	{
 		int move;
+		// 判断是否是死棋位
+		WinCheck::ChessBoardOption option;
+		option.black = Black;
+		option.white = White;
+		option.edge = Edge;
+		option.emptyChess = NoChess;
+		WinCheck::ChessInfo chessInfo(option);
 		while (true) {
 			if (moves.size() == 0) {
 				Winner = getRival(player_to_move);
@@ -87,7 +93,7 @@ public:
 			move = moves[move_ind(*engine)];
 			int line = getLine(move);
 			int column = getColumn(move);
-			if (isGo2Dead(line, column, player_to_move)) {
+			if (chessInfo.WinOrLoseCheck(line, column, player_to_move, cross)) {
 				CS[line][column] = minLimit;
 				auto itr = moves.begin();
 				for (; itr != moves.end() && *itr != move; ++itr);
@@ -124,13 +130,14 @@ public:
 
 		// 轮到下一个玩家着子
 		player_to_move = rival;
+		initCSPoint();
 	}
 
 	// 从棋盘中搜集所有可行的着子点
-	virtual std::vector<int> getMoves() const;
+	virtual std::vector<int> getMoves() /*const*/;
 
 	// 用于判断输赢结果
-	double getResult(const int& current_player_to_move) const
+	double getResult(const int& current_player_to_move)
 	{
 		return Winner == current_player_to_move ? 0.0 : 1.0;
 	}
@@ -170,15 +177,6 @@ public:
 		}*/
 		return bestMove;
 	}
-	int predict() {
-		MCTS::ComputeOptions options;
-		options.number_of_threads = 1;
-		options.verbose = true;
-		options.max_iterations = 1;
-		// options.max_time = 1;
-		auto state_copy = new SimulatorGo(cross, PlayerId);
-		auto best_move = MCTS::computeNextMove(state_copy, options);
-		return best_move;
-	}
+	int predict();
 };
 
