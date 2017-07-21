@@ -100,8 +100,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		DispatchMessage(&msg);
 	}
 	FreeConsole();
-	return msg.wParam;
-	
+	return (int)msg.wParam;
 }
 void InitWndClass(TCHAR szAppName[], WNDCLASS &wndclass, HINSTANCE hInstance, int callback)
 {
@@ -276,12 +275,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 ///计时器函数
 DWORD WINAPI TimerProc(PVOID pParam)
 {
-	double Count = GetTickCount();//现在的计数
-	double Interval = 1000;//时间间隔（单位：ms）
-	double Now = Count;//现在已记录的时间
+	ULONGLONG Count = GetTickCount64();//现在的计数
+	ULONGLONG Interval = 1000;//时间间隔（单位：ms）
+	ULONGLONG Now = Count;//现在已记录的时间
 	while (CB.Start)
 	{
-		Now = GetTickCount();//获取当前计时
+		Now = GetTickCount64();//获取当前计时
 		if (Now - Count > Interval)
 		{
 			Count = Now;

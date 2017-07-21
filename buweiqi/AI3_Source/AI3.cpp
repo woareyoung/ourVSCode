@@ -10,7 +10,7 @@ std::vector<int> SimulatorGo::getMoves() /*const*/
 	// 下面是搜集所有可能的着子点。
 	std::vector<int> moves;
 
-	// 如果深度大于888层的话就，直接诶返回moves了。
+	// 如果深度大于888层的话就，就直接返回moves了。
 	if (depth > 888) {
 		return moves;
 	}
@@ -28,7 +28,6 @@ std::vector<int> SimulatorGo::getMoves() /*const*/
 		_cprintf("Player is -> %s \n", player_to_move == Black ? "Black" : "White");
 	}
 
-	// const_cast<SimulatorGo*>(this)->initCSPoint();
 	initSimulation();
 	// const_cast<SimulatorGo*>(this)->startPattern();
 	// const_cast<SimulatorGo*>(this)->ScanChessBroad();
@@ -271,42 +270,15 @@ void SimulatorGo::showSimaluteInfo(const int& line, const int& column) {
 	}
 }
 
-void SimulatorGo::show(int best_move) {
-	_cprintf("\n**************This is chess score*******(%d, %d)***********\n",
-		getLine(best_move), getColumn(best_move));
-	for (int i = ChessStart; i < ChessEnd; ++i)
-	{
-		for (int j = 1; j < 10; ++j)
-			if (CS[i][j] >= 20) {
-				_cprintf("%d\t", CS[i][j]);
-			}
-			else if (CS[i][j] == minLimit) {
-				_cprintf("M\t");
-			}
-			else if (CS[i][j] == 0) {
-				_cprintf("0\t");
-			}
-			else {
-				_cprintf(".\t");
-			}
-			_cprintf("\n");
-	}
-	_cprintf("**************This is chess cross*******(%d, %d)***********\n",
-		getLine(best_move), getColumn(best_move));
-	showChessBoard(cross);
-}
-
 #include "../AI3_Header/MCTS.h"
 
 int AI3::predict() {
 	MCTS::ComputeOptions options;
 	options.number_of_threads = 1;
-	options.verbose = true;
-	// options.max_iterations = 1;
+	// options.verbose = true;
+	options.max_iterations = -1;
 	// options.max_time = 1;
 	auto state_copy = new SimulatorGo(cross, PlayerId);
 	auto best_move = MCTS::computeNextMove(state_copy, options);
-	state_copy->show(best_move);
-	system("pause");
 	return best_move;
 }

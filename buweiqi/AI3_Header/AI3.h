@@ -62,7 +62,7 @@ public:
 	bool doRandomMove(RandomEngine* engine)
 	{
 		initCSPoint();
-		auto moves = getMoves();
+		auto moves = getAllMoves();/*getMoves()*/;
 		if (moves.empty()) {// 如果着子点集合为空的话，就直接返回
 			Winner = getRival(player_to_move);
 			return false;
@@ -159,8 +159,6 @@ public:
 	virtual void ScanChessBroad() override;
 
 	void showSimaluteInfo(const int& line, const int& column);
-
-	void SimulatorGo::show(int best_move);
 };
 
 class AI3 : public AI2

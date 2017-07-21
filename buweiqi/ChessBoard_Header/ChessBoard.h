@@ -38,7 +38,7 @@ public:
 	///在PaintChess.cpp文件中
 	void PaintChess();//画棋子函数
 	void PaintAChess(int type);//实行画棋子
-	void GetPointPosition(DWORD lParam);//获取下棋位置
+	void GetPointPosition(LPARAM lParam);//获取下棋位置
 	void DisplayOnTurn(int type);
 	///在AddList.cpp文件中
 	void AddList(int type);

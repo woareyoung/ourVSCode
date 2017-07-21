@@ -145,7 +145,7 @@ namespace Pattern {
 		void Pattern(int *PatternType, int(&cross)[10][10], int(&chessScore)[10][10]) {
 			register int x_offset, y_offset;
 			register int i, j, x, y;
-			register int pointer, start = 0, score;
+			register int pointer, start = 0, score = 0;
 			register int *pattern = PatternType;
 			int mainColor = NoChess;
 			Pos emptyPos[3];

@@ -64,7 +64,7 @@ double AI1::CalDeadPosNumber(int line, int column, int &deadPos, bool Cal)
 	else
 	{
 		FS.Match(sit, res, CurrentRound + 1, PlayerId);
-		myLive = res.size();
+		myLive = (int)res.size();
 	}
 	res.clear();
 	//如果有预读内容，则用预读内容
@@ -80,13 +80,13 @@ double AI1::CalDeadPosNumber(int line, int column, int &deadPos, bool Cal)
 	else
 	{
 		FS.Match(sit, res, CurrentRound + 1, 3 - PlayerId);
-		rivalLive = res.size();
+		rivalLive = (int)res.size();
 	}
 	double tempsum;
 	if (myLive != 0 && rivalLive == 0) tempsum = 1;
 	else if (myLive == 0 && rivalLive == 0)
 	{
-		srand(time(NULL));
+		srand((unsigned)time(NULL));
 		tempsum = (double)(rand() % 10) / 10;
 	}
 	else tempsum = myLive / (myLive + rivalLive);

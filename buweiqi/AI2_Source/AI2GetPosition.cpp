@@ -45,6 +45,10 @@ void AI2::GetPosition(int &line, int &column, int onTurn)
 	int temp = maxandmin(1);
 	line = getLine(temp);
 	column = getColumn(temp);
+	if (!OnChessBoard(line, column)) {
+		line = 0;
+		column = 0;
+	}
 	cross[line][column] = turn2Who;
 	// 将计算出的位置的分数设为最小值
 	

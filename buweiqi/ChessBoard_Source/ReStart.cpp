@@ -15,7 +15,7 @@ void ChessBoard::ReStart()
 		showChessBoard(cross);
 		if (Winner == 1)
 		{
-			if (CombatNumber == MAX_COMBAT) _cprintf("the Winner of the final is : Player1 ( Black )\n\n", CombatNumber);
+			if (CombatNumber == MAX_COMBAT) _cprintf("the Winner of the final(%d) is : Player1 ( Black )\n\n", CombatNumber);
 			else {
 				std::string str;
 				std::string temp;
@@ -29,7 +29,7 @@ void ChessBoard::ReStart()
 		}
 		else
 		{
-			if (CombatNumber == MAX_COMBAT) _cprintf("the Winner of the final is : Player2 ( White )\n\n", CombatNumber);
+			if (CombatNumber == MAX_COMBAT) _cprintf("the Winner of the final(%d) is : Player2 ( White )\n\n", CombatNumber);
 			else {
 				std::string str;
 				std::string temp;

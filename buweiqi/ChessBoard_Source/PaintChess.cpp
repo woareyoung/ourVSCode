@@ -119,7 +119,7 @@ void ChessBoard::DisplayOnTurn(int type)
 	}
 }
 ///获取下棋位置
-void ChessBoard::GetPointPosition(DWORD lParam)
+void ChessBoard::GetPointPosition(LPARAM lParam)
 {
 	point.x = LOWORD(lParam);// 得到一个32bit数的低16bit
 	point.y = HIWORD(lParam);// 得到一个32bit数的高16bit

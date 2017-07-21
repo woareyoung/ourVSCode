@@ -18,7 +18,7 @@ namespace {
 		wchar_t *wide = new wchar_t[num];
 		MultiByteToWideChar(0, 0, info, -1, wide, num);
 		lstrcpy(buf, wide);
-		delete(wide);
+		delete[] wide;
 		WriteConsole(hOutputHandle, buf, lstrlen(buf), &nRet, NULL);
 	}
 

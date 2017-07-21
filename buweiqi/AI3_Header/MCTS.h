@@ -23,7 +23,7 @@ namespace MCTS
 
 		ComputeOptions() :
 			number_of_threads(8),// 默认的线程数量是8条
-			max_iterations(10000),// 默认的最大的迭代数量是10000
+			max_iterations(100000),// 默认的最大的迭代数量是10000
 			max_time(-1.0), // 默认是没有时间限制的
 			verbose(false)
 		{ }
@@ -61,6 +61,10 @@ namespace MCTS
 #include <conio.h>
 
 #define no_move (-1)
+
+#ifdef USE_OPENMP
+#include <omp.h>
+#endif
 
 // 蒙特卡洛树搜索——Monte Carlo Tree Search
 namespace MCTS
@@ -279,8 +283,19 @@ namespace MCTS
 	{
 		std::mt19937_64 random_engine(initial_seed);// 随机函数种子，用于随机走步
 
+		if (options.max_time >= 0) {
+#ifndef USE_OPENMP
+			throw std::runtime_error("ComputeOptions::max_time requires OpenMP.");
+#endif
+		}
+
 		// root指针管理一个Node结点对象。
 		auto root = std::unique_ptr<Node<State>>(new Node<State>(root_state));
+
+#ifdef USE_OPENMP
+		double start_time = ::omp_get_wtime();
+		double print_time = start_time;
+#endif
 
 		// 遍历，最大的遍历次数是ComputeOption的最大值
 		// 对棋盘进行UTC加分处理
@@ -314,6 +329,21 @@ namespace MCTS
 				node->update(state->getResult(node->player_to_move));// 这里只看输赢就好了
 				node = node->parent;
 			}
+
+#ifdef USE_OPENMP
+			if (options.verbose || options.max_time >= 0) {
+				double time = ::omp_get_wtime();
+				if (options.verbose && (time - print_time >= 1.0 || iter == options.max_iterations)) {
+					std::cerr << iter << " games played (" << double(iter) / (time - start_time) << " / second)." << endl;
+					print_time = time;
+				}
+
+				if (time - start_time >= options.max_time) {
+					break;
+				}
+			}
+#endif
+
 		}
 		if (options.verbose) {
 			auto node = root.get();
@@ -344,6 +374,10 @@ namespace MCTS
 			}
 		}
 
+#ifdef USE_OPENMP
+		double start_time = ::omp_get_wtime();
+#endif
+
 		// 分发所有的任务去计算树——这里采用的是异步线程的方式来处理树
 		vector<future<unique_ptr<Node<State>>>> root_futures;
 		ComputeOptions job_options = options;
@@ -351,7 +385,7 @@ namespace MCTS
 		for (int t = 0; t < options.number_of_threads; ++t) {
 			auto func = [t, &root_state, &job_options]() -> std::unique_ptr<Node<State>> // 指定类型
 			{
-				return computeMSTCTree(root_state, job_options, 1012411 * t + 12515);
+				return computeMSTCTree(root_state, job_options, 95279527 * t + 12580);
 			};
 			// 使用异步线程来处理数据——分发任务
 			root_futures.emplace_back(std::async(std::launch::async, func));
@@ -380,6 +414,7 @@ namespace MCTS
 		// 寻找最高分的结点
 		double best_score = -1;
 		int best_move = int();
+
 		for (auto itr : visits) {
 			auto move = itr.first;
 			double v = itr.second;
@@ -409,6 +444,15 @@ namespace MCTS
 				int(100.0 * best_visits / double(games_played)),
 				int(100.0 * best_wins / best_visits));
 		}
+
+#ifdef USE_OPENMP
+		if (options.verbose) {
+			double time = ::omp_get_wtime();
+			std::cerr << games_played << " games played in " << double(time - start_time) << " s. "
+				<< "(" << double(games_played) / (time - start_time) << " / second, "
+				<< options.number_of_threads << " parallel jobs)." << endl;
+		}
+#endif
 		return best_move;
 	}
 }
