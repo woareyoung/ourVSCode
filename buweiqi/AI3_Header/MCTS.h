@@ -151,9 +151,12 @@ namespace MCTS
 	template<typename State>
 	Node<State>::~Node()
 	{
-		for (auto child : children) {// 将子节点占用的内存进行释放
-			delete child;
+		int temp = children.size();
+		for (int i = 0; i < temp; ++i) {
+			delete children[i];
 		}
+		children.clear();
+		children.swap(vector<Node*>());
 	}
 
 	template<typename State>
@@ -450,7 +453,7 @@ namespace MCTS
 			_cprintf("---- \n Best: %d  (%f  %%visits) (%f %%wins) \n",
 				best_move,
 				100.0 * best_visits / double(games_played),
-				100.0 * best_wins / best_visits);
+				100.0 * best_wins / best_visits + 0.5);
 		}
 
 		if (options.verbose) {
