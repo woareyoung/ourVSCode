@@ -19,12 +19,17 @@ public:
 	param[onTurn]:对方的身份、界面的命令
 	*/
 	void GetPosition(int &line, int &column, int onTurn);//AI的入口函数
+	/*
+	param[moves]:下棋的位置的集合
+	param[BoardCross]:棋盘状况
+	param[playerId]:AI身份
+	return:是否需要模拟下棋
+	*/
+	bool getMoves(std::vector<int> &moves, const int BoardCross[][10], int playerId);//获取下棋位置的集合
 private:
 	int cross[10][10]; //棋盘状况
 	int PlayerId; //玩家身份——玩家1还是玩家2
-	int Round;//回合数
 	int Score[10][10] = { 0 }; //记录棋盘每个位置的分值
-	int level[10][10];//记录每个位置的级别（先设5级，有棋子的位置设0级，分值分别是6、4、3、2、1、0）
 	int MaxScore;
 	std::set<std::pair<int, int>> ForeFiveLevel;//前五级别的位置
 	/*
@@ -46,12 +51,17 @@ private:
 	参数CROSS:当前棋盘状况（用于解决多线程的冲突）
 	*/
 	bool DeadCheck(int line, int column, int who, int CROSS[][10]);
-
 	/*
 	param[MaxLine]:分数最大的位置——行
 	param[MaxColumn]:分数最大的位置——列
 	*/
 	void GetMaxScorePosition(int &MaxLine, int &MaxColumn);//获取分值最大的位置
+	/*
+	param[line]:下棋的位置——行
+	param[column]:下棋的位置——列
+	param[deadPos]:死棋数量
+	*/
+	int CalDeadPosNumber(int line, int column);//计算棋盘死棋位置数量
 	//初始化数组（一局游戏一次）
 	void Initialize()
 	{
@@ -62,7 +72,6 @@ private:
 				Score[i][j] = 0;
 			}
 		InitScore();
-		Round = 0;
 	}
 	//初始化分值（一回合一次）
 	void InitScore()

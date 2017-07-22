@@ -221,9 +221,6 @@
     <ClCompile Include="AIForFile_Source\MatchMemory.cpp">
       <Filter>Source Files\AIForFile_Source</Filter>
     </ClCompile>
-    <ClCompile Include="AIForFile_Source\ProbabilityCount.cpp">
-      <Filter>Source Files\AIForFile_Source</Filter>
-    </ClCompile>
     <ClCompile Include="TestCode\pattern_Rule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -244,6 +241,12 @@
     </ClCompile>
     <ClCompile Include="AI3_Source\AI3.cpp">
       <Filter>Source Files\AI3_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AIForFile_Source\ForeReadFileToMemory.cpp">
+      <Filter>Source Files\AIForFile_Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AI4_Source\getMoves.cpp">
+      <Filter>Source Files\AI4_Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

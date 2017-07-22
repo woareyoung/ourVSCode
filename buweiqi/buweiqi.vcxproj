@@ -104,6 +104,7 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <PrecompiledHeaderFile />
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -137,7 +138,6 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeaderFile />
-      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -192,11 +192,12 @@
     <ClCompile Include="AI3_Source\AI3.cpp" />
     <ClCompile Include="AI4_Source\DeadFall.cpp" />
     <ClCompile Include="AI4_Source\GetMaxScorePosition.cpp" />
+    <ClCompile Include="AI4_Source\getMoves.cpp" />
     <ClCompile Include="AI4_Source\GetPosition.cpp" />
     <ClCompile Include="AI4_Source\UpdateBoardScore.cpp" />
     <ClCompile Include="AIForFile_Source\DeadCheck.cpp" />
     <ClCompile Include="AIForFile_Source\MatchMemory.cpp" />
-    <ClCompile Include="AIForFile_Source\ProbabilityCount.cpp" />
+    <ClCompile Include="AIForFile_Source\ForeReadFileToMemory.cpp" />
     <ClCompile Include="buweiqi.cpp" />
     <ClCompile Include="ChessBoard_Source\AddList.cpp" />
     <ClCompile Include="ChessBoard_Source\InitData.cpp" />
