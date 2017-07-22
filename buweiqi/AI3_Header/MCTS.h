@@ -62,9 +62,7 @@ namespace MCTS
 
 #define no_move (-1)
 
-#ifdef USE_OPENMP
 #include <omp.h>
-#endif
 
 // 蒙特卡洛树搜索——Monte Carlo Tree Search
 namespace MCTS
@@ -283,19 +281,11 @@ namespace MCTS
 	{
 		std::mt19937_64 random_engine(initial_seed);// 随机函数种子，用于随机走步
 
-		if (options.max_time >= 0) {
-#ifndef USE_OPENMP
-			throw std::runtime_error("ComputeOptions::max_time requires OpenMP.");
-#endif
-		}
-
 		// root指针管理一个Node结点对象。
 		auto root = std::unique_ptr<Node<State>>(new Node<State>(root_state));
 
-#ifdef USE_OPENMP
 		double start_time = ::omp_get_wtime();
 		double print_time = start_time;
-#endif
 
 		// 遍历，最大的遍历次数是ComputeOption的最大值
 		// 对棋盘进行UTC加分处理
@@ -330,11 +320,12 @@ namespace MCTS
 				node = node->parent;
 			}
 
-#ifdef USE_OPENMP
 			if (options.verbose || options.max_time >= 0) {
 				double time = ::omp_get_wtime();
+				std::stringstream sout;
 				if (options.verbose && (time - print_time >= 1.0 || iter == options.max_iterations)) {
-					std::cerr << iter << " games played (" << double(iter) / (time - start_time) << " / second)." << endl;
+					sout << iter << " games played (" << double(iter) / (time - start_time) << " / second).\n";
+					_cprintf("%s", sout.str().c_str());
 					print_time = time;
 				}
 
@@ -342,14 +333,13 @@ namespace MCTS
 					break;
 				}
 			}
-#endif
 
 		}
-		if (options.verbose) {
-			auto node = root.get();
-			_cprintf("*******compute tree:*******\n %s\n", node->tree2String().c_str());
-			// system("pause");
-		}
+		//if (options.verbose) {
+		//	auto node = root.get();
+		//	_cprintf("*******compute tree:*******\n %s\n", node->tree2String().c_str());
+		//	// system("pause");
+		//}
 
 		return root;
 	}
@@ -374,9 +364,7 @@ namespace MCTS
 			}
 		}
 
-#ifdef USE_OPENMP
 		double start_time = ::omp_get_wtime();
-#endif
 
 		// 分发所有的任务去计算树——这里采用的是异步线程的方式来处理树
 		vector<future<unique_ptr<Node<State>>>> root_futures;
@@ -400,14 +388,29 @@ namespace MCTS
 		// 合并所有根结点的孩子结点
 		map<int, int> visits;
 		map<int, double> wins;
+
+		// 初始化数据容器
+		for (int move : moves) {
+			visits[move] = 0;
+			wins[move] = 0.0;
+		}
+
 		long long games_played = 0;
+		map<int, int>::iterator visitsItr;
+		map<int, double>::iterator winsItr;
 		// UTC合并加分
 		for (int t = 0; t < options.number_of_threads; ++t) {
 			auto root = roots[t].get();
 			games_played += root->visits;
 			for (auto child = root->children.cbegin(); child != root->children.cend(); ++child) {
-				visits[(*child)->move] += (*child)->visits;
-				wins[(*child)->move] += (*child)->wins;
+				visitsItr = visits.find((*child)->move);
+				if (visitsItr != visits.end()) {
+					(*visitsItr).second += (*child)->visits;
+				}
+				winsItr = wins.find((*child)->move);
+				if (winsItr != wins.end()) {
+					(*winsItr).second += (*child)->visits;
+				}
 			}
 		}
 
@@ -445,14 +448,14 @@ namespace MCTS
 				int(100.0 * best_wins / best_visits));
 		}
 
-#ifdef USE_OPENMP
 		if (options.verbose) {
 			double time = ::omp_get_wtime();
-			std::cerr << games_played << " games played in " << double(time - start_time) << " s. "
+			std::stringstream sout;
+			sout << games_played << " games played in " << double(time - start_time) << " s. "
 				<< "(" << double(games_played) / (time - start_time) << " / second, "
-				<< options.number_of_threads << " parallel jobs)." << endl;
+				<< options.number_of_threads << " parallel jobs).\n";
+			_cprintf("%s", sout.str().c_str());
 		}
-#endif
 		return best_move;
 	}
 }

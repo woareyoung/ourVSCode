@@ -68,15 +68,14 @@ public:
 			return false;
 		}
 		if (!moves.empty()) {
-			doRandomMove(engine, moves);
-			return true;
+			return doRandomMove(engine, moves);
 		}
 		return false;
 	}
 
 	// 随机走步
 	template<typename RandomEngine>
-	void doRandomMove(RandomEngine* engine, std::vector<int>& moves)
+	bool doRandomMove(RandomEngine* engine, std::vector<int>& moves)
 	{
 		int move;
 		// 判断是否是死棋位
@@ -89,7 +88,7 @@ public:
 		while (true) {
 			if (moves.size() == 0) {
 				Winner = getRival(player_to_move);
-				return;
+				return false;
 			}
 			std::uniform_int_distribution<std::size_t> move_ind(0, moves.size() - 1);
 			move = moves[move_ind(*engine)];
@@ -103,7 +102,7 @@ public:
 			}
 			else if (moves.empty()) {
 				Winner = getRival(player_to_move);
-				return;
+				return false;
 			}
 			else {
 				break;
@@ -112,6 +111,7 @@ public:
 
 		// 开始模拟走步
 		SimulateMove(move);
+		return true;
 	}
 
 	// 模拟着子，主要的作用是用于模拟下棋
