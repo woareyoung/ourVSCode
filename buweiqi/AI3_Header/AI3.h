@@ -141,6 +141,10 @@ public:
 	// 用于判断输赢结果
 	double getResult(const int& current_player_to_move)
 	{
+		// 没有模拟到尽头
+		if (Winner != White && Black != Black) {
+			return 0.5;
+		}
 		return Winner == current_player_to_move ? 0.0 : 1.0;
 	}
 

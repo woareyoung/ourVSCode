@@ -407,10 +407,13 @@ namespace MCTS
 				if (visitsItr != visits.end()) {
 					(*visitsItr).second += (*child)->visits;
 				}
+				_cprintf("move and visits:[%d, %d] ", (*visitsItr).first, (*visitsItr).second);
+				
 				winsItr = wins.find((*child)->move);
 				if (winsItr != wins.end()) {
-					(*winsItr).second += (*child)->visits;
+					(*winsItr).second += (*child)->wins;
 				}
+				_cprintf("move and wins:[%d, %d] \n", (*winsItr).first, (*winsItr).second);
 			}
 		}
 
@@ -424,6 +427,7 @@ namespace MCTS
 			double w = wins[move];
 			// Expected success rate assuming a uniform prior (Beta(1, 1)).
 			// https://en.wikipedia.org/wiki/Beta_distribution
+			// 讲道理能够两次中赢一次就很好了。
 			double expected_success_rate = (w + 1) / (v + 2);
 			if (expected_success_rate > best_score) {
 				best_move = move;
@@ -432,9 +436,10 @@ namespace MCTS
 
 			// 输出UCT分数
 			if (options.verbose) {
-				_cprintf("MOVE: %d  (%d %%visits) (%d %%wins) \n", itr.first,
-					int(100.0 * v / double(games_played) + 0.5),
-					int(100.0 * w / v + 0.5));
+				_cprintf("MOVE: %d  (%f %%visits) (%f %%wins) \n", 
+					itr.first,
+					100.0 * v / double(games_played),
+					100.0 * w / v + 0.5);
 			}
 		}
 
@@ -442,10 +447,10 @@ namespace MCTS
 		if (options.verbose) {
 			auto best_wins = wins[best_move];
 			auto best_visits = visits[best_move];
-			_cprintf("---- \n Best: %d  (%d  visits) (%d  wins) \n",
+			_cprintf("---- \n Best: %d  (%f  %%visits) (%f %%wins) \n",
 				best_move,
-				int(100.0 * best_visits / double(games_played)),
-				int(100.0 * best_wins / best_visits));
+				100.0 * best_visits / double(games_played),
+				100.0 * best_wins / best_visits);
 		}
 
 		if (options.verbose) {
