@@ -10,11 +10,6 @@ std::vector<int> SimulatorGo::getMoves() /*const*/
 	// 下面是搜集所有可能的着子点。
 	std::vector<int> moves;
 
-	// 如果深度大于888层的话就，就直接返回moves了。
-	if (depth > 888) {
-		return moves;
-	}
-
 	if (Winner == Black || Winner == White) {
 		if (ifShowInfo) {
 			system("pause");

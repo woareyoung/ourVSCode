@@ -1,4 +1,5 @@
 #include "../AI4_Header/AI4.h"
+#include "../ChessBoard_Header/Pattern_Moves.h"
 
 void AI4::GetPosition(int &line, int &column, int onTurn)
 {

@@ -133,7 +133,7 @@ namespace MCTS
 		player_to_move(state->getRole()),// 初始化为当前玩家一样的角色
 		wins(0),
 		visits(0),
-		moves(state->getAllMoves()),// 可供着子的着子点集
+		moves(state->getMoves()),// 可供着子的着子点集
 		UCT_score(0)
 	{ }
 
@@ -144,7 +144,7 @@ namespace MCTS
 		player_to_move(state->getRole()),
 		wins(0),
 		visits(0),
-		moves(state->getAllMoves()),
+		moves(state->getMoves()),
 		UCT_score(0)
 	{ }
 
@@ -407,13 +407,13 @@ namespace MCTS
 				if (visitsItr != visits.end()) {
 					(*visitsItr).second += (*child)->visits;
 				}
-				_cprintf("move and visits:[%d, %d] ", (*visitsItr).first, (*visitsItr).second);
+				_cprintf("move and visits:[%d, %d] ", (*child)->move, (*child)->visits);
 				
 				winsItr = wins.find((*child)->move);
 				if (winsItr != wins.end()) {
 					(*winsItr).second += (*child)->wins;
 				}
-				_cprintf("move and wins:[%d, %d] \n", (*winsItr).first, (*winsItr).second);
+				_cprintf("move and wins:[%d, %d] \n", (*child)->move, (*child)->wins);
 			}
 		}
 

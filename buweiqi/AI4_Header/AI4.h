@@ -3,7 +3,6 @@
 #include <set>
 #include <random>
 #include "../ChessBoard_Header/AI.h"
-#include "../ChessBoard_Header/Pattern_Moves.h"
 #define GetId(x) ((x) < 0 ? 3 + x : 3 - (x)) //获取玩家身份
 #define HaveChess -20 //有子的位置的分数
 #define MyDeadChess -10 //我的死棋点的分数
