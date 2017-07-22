@@ -58,6 +58,9 @@
     <Filter Include="Source Files\AI4_Source">
       <UniqueIdentifier>{2bb2093a-2804-438e-9389-4172606c8df8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\AI5_Header">
+      <UniqueIdentifier>{a3beb15a-4267-4272-9ac8-3710b65a9cc9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -140,6 +143,9 @@
     </ClInclude>
     <ClInclude Include="ChessBoard_Header\parameter.h">
       <Filter>Header Files\ChessBoard_Header</Filter>
+    </ClInclude>
+    <ClInclude Include="AI5_Header\AI5.h">
+      <Filter>Header Files\AI5_Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

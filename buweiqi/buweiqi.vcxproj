@@ -159,6 +159,7 @@
     <ClInclude Include="AI3_Header\AI3.h" />
     <ClInclude Include="AI3_Header\MCTS.h" />
     <ClInclude Include="AI4_Header\AI4.h" />
+    <ClInclude Include="AI5_Header\AI5.h" />
     <ClInclude Include="buweiqi.h" />
     <ClInclude Include="ChessBoard_Header\AI.h" />
     <ClInclude Include="ChessBoard_Header\Chess.h" />

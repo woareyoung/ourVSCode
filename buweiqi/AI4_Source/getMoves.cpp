@@ -37,6 +37,7 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 			if(CanSeeWinner) return false;
 		}
 	}
+	CanSeeWinner = false;
 	for (auto t : SP)
 	{
 		if (CalDeadPosNumber(GetLine(t.first), GetColumn(t.first)) != 1)
