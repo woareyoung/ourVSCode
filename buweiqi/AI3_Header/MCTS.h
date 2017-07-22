@@ -80,7 +80,7 @@ namespace MCTS
 	class Node
 	{
 	protected:
-		
+
 	public:
 
 		Node(const State& state);
@@ -196,10 +196,11 @@ namespace MCTS
 	{
 		// 计算结点的UCT分数
 		for (auto child : children) {
-			child->UCT_score = double(child->wins) / double(child->visits) +
-				std::sqrt(2.0 * std::log(double(this->visits)) / child->visits);
+			child->UCT_score = (double)(child->visits - 2 * child->wins) / double(child->visits)
+				+ std::sqrt(2.0 * std::log(double(this->visits)) / child->visits);
 		}
 
+		// 选取拥有最大信心上界的子节点
 		return *std::max_element(children.begin(), children.end(),
 			[](Node* a, Node* b) { return a->UCT_score < b->UCT_score; });
 	}
@@ -409,14 +410,13 @@ namespace MCTS
 				visitsItr = visits.find((*child)->move);
 				if (visitsItr != visits.end()) {
 					(*visitsItr).second += (*child)->visits;
+					_cprintf("move and visits:[%d, %d] ", (*child)->move, (*child)->visits);
 				}
-				_cprintf("move and visits:[%d, %d] ", (*child)->move, (*child)->visits);
-				
 				winsItr = wins.find((*child)->move);
 				if (winsItr != wins.end()) {
 					(*winsItr).second += (*child)->wins;
+					_cprintf("move and wins:[%d, %d] \n", (*child)->move, (*child)->wins);
 				}
-				_cprintf("move and wins:[%d, %d] \n", (*child)->move, (*child)->wins);
 			}
 		}
 
@@ -439,7 +439,7 @@ namespace MCTS
 
 			// 输出UCT分数
 			if (options.verbose) {
-				_cprintf("MOVE: %d  (%f %%visits) (%f %%wins) \n", 
+				_cprintf("MOVE: %d  (%f %%visits) (%f %%wins) \n",
 					itr.first,
 					100.0 * v / double(games_played),
 					100.0 * w / v + 0.5);
