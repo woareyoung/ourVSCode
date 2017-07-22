@@ -1,7 +1,7 @@
 #include "../AI4_Header/AI4.h"
 #include "../ChessBoard_Header/Pattern_Moves.h"
 
-bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int playerId)
+bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int playerId, bool &CanSeeWinner)
 {
 	PlayerId = playerId;
 	for (int i = 0; i < 10; ++i)
@@ -10,13 +10,38 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 	//获取特殊点链表
 	Pattern_Moves PM(playerId);
 	std::list<std::pair<int, int>> SP = PM.getMoves(true, BoardCross);
-	int temp, DoubleNotDeadPos;//DoubleNotDeadPos记录双方都不会死的位置数量
+	CanSeeWinner = true;
+	//没有匹配到模式
+	if (SP.empty())
+	{
+		int EmptyPosLine, EmptyPosColumn;
+		for (int i = 1; i < 10; ++i)
+		{
+			for (int j = 1; j < 10; ++j)
+			{
+				if (cross[i][j] != 0) continue;
+				EmptyPosLine = i;
+				EmptyPosColumn = j;
+				//如果遇到不会死的位置
+				if (DeadCheck(i, j, PlayerId, cross) == false)
+				{
+					SP.push_back(std::make_pair(i * 100 + j, 0));
+					CanSeeWinner = false;//设定当前回合不是最终回合
+				}
+			}
+		}
+		//如果连不会死的位置都没有了，就随便找个空位下了
+		if (SP.empty())
+		{
+			moves.push_back(EmptyPosLine * 100 + EmptyPosColumn);
+			if(CanSeeWinner) return false;
+		}
+	}
 	for (auto t : SP)
 	{
-		temp = CalDeadPosNumber(GetLine(t.first), GetColumn(t.first));
-		//如果只剩下死棋的时候
-		if (temp != 1)
+		if (CalDeadPosNumber(GetLine(t.first), GetColumn(t.first)) != 1)
 		{
+			moves.clear();
 			moves.push_back(t.first);
 			return false;
 		}

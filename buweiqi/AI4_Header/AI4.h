@@ -3,6 +3,7 @@
 #include <set>
 #include <random>
 #include "../ChessBoard_Header/AI.h"
+#include "../ChessBoard_Header/Pattern_Moves.h"
 #define GetId(x) ((x) < 0 ? 3 + x : 3 - (x)) //获取玩家身份
 #define HaveChess -20 //有子的位置的分数
 #define MyDeadChess -10 //我的死棋点的分数
@@ -23,13 +24,15 @@ public:
 	param[moves]:下棋的位置的集合
 	param[BoardCross]:棋盘状况
 	param[playerId]:AI身份
+	param[CanSeeWinner]:是否分出胜负
 	return:是否需要模拟下棋
 	*/
-	bool getMoves(std::vector<int> &moves, const int BoardCross[][10], int playerId);//获取下棋位置的集合
+	bool getMoves(std::vector<int> &moves, const int BoardCross[][10], int playerId, bool &CanSeeWinner);//获取下棋位置的集合
 private:
 	int cross[10][10]; //棋盘状况
 	int PlayerId; //玩家身份——玩家1还是玩家2
 	int Score[10][10] = { 0 }; //记录棋盘每个位置的分值
+	int Round;
 	int MaxScore;
 	std::set<std::pair<int, int>> ForeFiveLevel;//前五级别的位置
 	/*
@@ -72,6 +75,7 @@ private:
 				Score[i][j] = 0;
 			}
 		InitScore();
+		Round = 0;
 	}
 	//初始化分值（一回合一次）
 	void InitScore()
