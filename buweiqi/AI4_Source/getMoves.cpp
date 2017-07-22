@@ -1,4 +1,5 @@
 #include "../AI4_Header/AI4.h"
+#include "../ChessBoard_Header/Pattern_Moves.h"
 
 bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int playerId)
 {

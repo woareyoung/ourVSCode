@@ -7,7 +7,6 @@
 
 class SimulatorGo : public AI2 {
 private:
-	WinCheck::ChessInfo chessInfo;
 	mutable int chessScoreW[ChessEnd][ChessEnd];
 protected:
 	virtual int* getPatternType() override {
@@ -75,36 +74,11 @@ public:
 	bool doRandomMove(RandomEngine* engine, std::vector<int>& moves)
 	{
 		int move;
-		//// 判断是否是死棋位
-		//WinCheck::ChessBoardOption option;
-		//option.black = Black;
-		//option.white = White;
-		//option.edge = Edge;
-		//option.emptyChess = NoChess;
-		//WinCheck::ChessInfo chessInfo(option);
-		/*while (true) {
-			if (moves.size() == 0) {
-				Winner = getRival(player_to_move);
-				return false;
-			}*/
-			std::uniform_int_distribution<std::size_t> move_ind(0, moves.size() - 1);
-			move = moves[move_ind(*engine)];
-			int line = getLine(move);
-			int column = getColumn(move);
-		//	if (chessInfo.WinOrLoseCheck(line, column, player_to_move, cross)) {
-		//		CS[line][column] = minLimit;
-		//		auto itr = moves.begin();
-		//		for (; itr != moves.end() && *itr != move; ++itr);
-		//		moves.erase(itr);// 从moves数组中删除move元素
-		//	}
-		//	else if (moves.empty()) {
-		//		Winner = getRival(player_to_move);
-		//		return false;
-		//	}
-		//	else {
-		//		break;
-		//	}
-		//}
+
+		std::uniform_int_distribution<std::size_t> move_ind(0, moves.size() - 1);
+		move = moves[move_ind(*engine)];
+		int line = getLine(move);
+		int column = getColumn(move);
 
 		// 开始模拟走步
 		SimulateMove(move);
@@ -169,16 +143,7 @@ public:
 
 	virtual int maxandmin(const int& depth) override {
 		initChessScore(true);
-		int maxCount = 6;
-		int bestMove;
-		/*do {*/
-		bestMove = predict();
-		/*	--maxCount;
-		} while (this->isGo2Dead(getLine(bestMove), getColumn(bestMove), turn2Who) && maxCount != 0);
-		if (maxCount == 0) {
-			bestMove = 0;
-		}*/
-		return bestMove;
+		return predict();
 	}
 	int predict();
 };

@@ -374,6 +374,7 @@ namespace MCTS
 		vector<future<unique_ptr<Node<State>>>> root_futures;
 		ComputeOptions job_options = options;
 		job_options.verbose = false;
+#pragma omp parallel for private(root_futures)
 		for (int t = 0; t < options.number_of_threads; ++t) {
 			auto func = [t, &root_state, &job_options]() -> std::unique_ptr<Node<State>> // 指定类型
 			{
