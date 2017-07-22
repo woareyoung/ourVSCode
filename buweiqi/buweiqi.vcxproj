@@ -130,14 +130,12 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <PrecompiledHeaderFile />
-      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -193,7 +191,6 @@
     <ClCompile Include="AI4_Source\DeadFall.cpp" />
     <ClCompile Include="AI4_Source\GetMaxScorePosition.cpp" />
     <ClCompile Include="AI4_Source\GetPosition.cpp" />
-    <ClCompile Include="AI4_Source\SetScoreLevel.cpp" />
     <ClCompile Include="AI4_Source\UpdateBoardScore.cpp" />
     <ClCompile Include="AIForFile_Source\DeadCheck.cpp" />
     <ClCompile Include="AIForFile_Source\MatchMemory.cpp" />

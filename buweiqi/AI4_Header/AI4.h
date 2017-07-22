@@ -53,10 +53,6 @@ private:
 	param[MaxColumn]:分数最大的位置——列
 	*/
 	void GetMaxScorePosition(int &MaxLine, int &MaxColumn);//获取分值最大的位置
-	/*
-	param[PositionLevel]:存放整个棋盘分值排列顺序的容器
-	*/
-	void SetScoreLevel(std::set<std::pair<int, int>> PositionLevel);//设置分值等级
 	//初始化数组（一局游戏一次）
 	void Initialize()
 	{
