@@ -8,6 +8,29 @@ void ChessBoard::PaintChess()
 	WinCheck::ChessBoardOption option;
 	option.isInterface = true;
 	WinCheck::ChessInfo chessInfo(option);
+	auto showChessBroadInfoOnDOS = [&]()
+	{
+		int countB = 0;
+		int countW = 0;
+		_cprintf("------------------Chess Broad---------------------\n");
+		for (int i = 1; i < 10; ++i)
+		{
+			for (int j = 1; j < 10; ++j)
+			{
+				_cprintf("%d\t", cross[i][j]);
+				if (cross[i][j] == option.white)
+				{
+					countW++;
+				}
+				else if (cross[i][j] == option.black)
+				{
+					countB++;
+				}
+			}
+			_cprintf("\n");
+		}
+		_cprintf("----Black:%d,White:%d----\n", countB, countW);
+	};
 	// ÅÐ¶ÏÂÖµ½ÄÄÒ»·½
 	switch (onTurn)
 	{
@@ -23,6 +46,7 @@ void ChessBoard::PaintChess()
 		if (chessInfo.WinOrLoseCheck(line, column, onTurn, Winner, cross))
 		{
 			// Winner = 2;
+			showChessBroadInfoOnDOS();
 			ReStart();
 		}
 		break;
@@ -38,6 +62,7 @@ void ChessBoard::PaintChess()
 		if (chessInfo.WinOrLoseCheck(line, column, onTurn, Winner, cross))
 		{
 			// Winner = 1;
+			showChessBroadInfoOnDOS();
 			ReStart();
 		}
 		break;
@@ -61,6 +86,7 @@ void ChessBoard::PaintChess()
 		if (chessInfo.WinOrLoseCheck(line, column, onTurn, Winner, cross))
 		{
 			// Winner = 2;
+			showChessBroadInfoOnDOS();
 			ReStart();
 		}
 	};
@@ -84,6 +110,7 @@ void ChessBoard::PaintChess()
 		if (chessInfo.WinOrLoseCheck(line, column, onTurn, Winner, cross))
 		{
 			// Winner = 1;
+			showChessBroadInfoOnDOS();
 			ReStart();
 		}
 	};
