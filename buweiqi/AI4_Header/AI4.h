@@ -99,4 +99,13 @@ private:
 		Score[8][9] = 2;
 		Score[9][9] = 2;
 	}
+	int GetSurroundNumber(int line, int column)
+	{
+		int num = 0;
+		if (cross[line - 1][column] == 3 - PlayerId) num++;
+		if (cross[line + 1][column] == 3 - PlayerId) num++;
+		if (cross[line][column - 1] == 3 - PlayerId) num++;
+		if (cross[line][column + 1] == 3 - PlayerId) num++;
+		return num;
+	}
 };

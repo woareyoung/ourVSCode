@@ -38,6 +38,31 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 		}
 	}
 	CanSeeWinner = false;
+	//搜索眼的数量
+	{
+		int EyeNumber = 0;
+		int temp;
+		int EyeLine, EyeColumn;
+		for (int i = 1; i < 10; ++i)
+		{
+			for (int j = 1; j < 10; ++j)
+			{
+				temp = GetSurroundNumber(i, j);
+				if (temp == 3)
+				{
+					EyeNumber++;
+					EyeLine = i;
+					EyeColumn = j;
+				}
+			}
+		}
+		if (EyeNumber > 0)
+		{
+			moves.push_back(EyeLine * 100 + EyeColumn);
+			return false;
+		}
+	}
+	//遍历链表
 	for (auto t : SP)
 	{
 		if (CalDeadPosNumber(GetLine(t.first), GetColumn(t.first)) != 1)
