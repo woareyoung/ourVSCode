@@ -6,7 +6,7 @@
 class AI5 : public AI, public AIPlayer {
 private:
 public:
-	AI5() : 
+	AI5() :
 		chessCount(0)
 	{
 		for (int i = ChessStart; i < ChessEnd; ++i) {
@@ -105,7 +105,7 @@ private:
 public:
 	mutable int Winner;
 	int player_to_move;
-	
+
 	SimulatorGo2() :
 		Winner(NoChess)
 	{
@@ -136,12 +136,18 @@ public:
 	{
 		AI4 state;
 		std::vector<int> moves;
-		if (state.getMoves(moves, cross, PlayerId)) {
+		bool Win;
+		if (state.getMoves(moves, cross, PlayerId, Win)) {
 			return doRandomMove(engine, moves);
 		}
 		else {
-			Winner = getRival(player_to_move);
-			return false;
+			if (!Win) {
+				SimulateMove(*moves.begin());
+			}
+			else {
+				Winner = getRival(player_to_move);
+				return false;
+			}
 		}
 		return false;
 	}
@@ -177,6 +183,8 @@ public:
 			return moves;
 		}
 		else {
+			// 如果Win为true的话，就是表示输了，就直接清空数据
+			// 如果Win为false的话，就是表示moves有且仅有一个子，而且这一步是确定的，也直接清空数据。
 			moves.clear();
 			moves.swap(std::vector<int>());
 			return moves;
