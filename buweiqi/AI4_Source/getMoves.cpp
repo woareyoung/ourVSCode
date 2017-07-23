@@ -56,8 +56,9 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 				}
 			}
 		}
-		if (EyeNumber > 0)
+		if (EyeNumber == 1)
 		{
+			moves.clear();
 			moves.push_back(EyeLine * 100 + EyeColumn);
 			return false;
 		}
