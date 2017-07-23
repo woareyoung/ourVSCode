@@ -4,6 +4,10 @@
 #include <iostream>
 #include <cstdlib>
 
+bool sort(const std::pair<int, int>& first, const std::pair<int, int>& second) {
+	return first.second > second.second;
+}
+
 // 从棋盘中搜集所有可行的着子点
 std::vector<int> SimulatorGo::getMoves() /*const*/
 {
@@ -25,6 +29,7 @@ std::vector<int> SimulatorGo::getMoves() /*const*/
 	startPattern();
 	ScanChessBroad();
 
+	std::vector<std::pair<int, int>> topMoves;
 	// 判断是否是死棋位
 	WinCheck::ChessBoardOption option;
 	option.black = Black;
@@ -37,8 +42,21 @@ std::vector<int> SimulatorGo::getMoves() /*const*/
 		for (int j = ChessStart; j < ChessEnd; ++j) {
 			if (cross[i][j] == NoChess && CS[i][j] >= 20) {
 				moves.emplace_back(getMove(i, j));
+				topMoves.emplace_back(getMove(i, j), CS[i][j]);
 			}
 		}
+	}
+	if (moves.size() > 0) {
+		std::sort(topMoves.begin(), topMoves.end(), sort);
+		std::vector<int> tempMoves;
+		int MaxScore = (*topMoves.begin()).first;
+		int size = topMoves.size();
+		for (int i = 0; i < size; ++i) { 
+			if (MaxScore == topMoves[i].first) {
+				tempMoves.emplace_back(topMoves[i].first);
+			}
+		}
+		return tempMoves;
 	}
 	// 如果当前Pattern匹配完之后，没有一个是好的着子点
 	if (moves.size() == 0) {
@@ -268,8 +286,7 @@ int AI3::predict() {
 	options.number_of_threads = 4;
 	options.verbose = true;
 	options.max_iterations = -1;
-	options.max_time = 3;
+	options.max_time = 2;
 	auto state_copy = new SimulatorGo(cross, PlayerId);
-	auto best_move = MCTS::computeNextMove(state_copy, options);
-	return best_move;
+	return MCTS::computeNextMove(state_copy, options);
 }

@@ -64,10 +64,16 @@ public:
 			return false;
 		}
 		else {
-			std::uniform_int_distribution<std::size_t> move_ind(0, moves.size() - 1);
-			// 开始模拟走步
-			SimulateMove(moves[move_ind(*engine)]);
-			return true;
+			if (moves.size() == 1) {
+				SimulateMove(*moves.begin());
+				return true;
+			}
+			else {
+				std::uniform_int_distribution<std::size_t> move_ind(0, moves.size() - 1);
+				// 开始模拟走步
+				SimulateMove(moves[move_ind(*engine)]);
+				return true;
+			}
 		}
 		return false;
 	}

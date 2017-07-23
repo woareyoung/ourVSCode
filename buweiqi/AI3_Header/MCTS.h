@@ -198,7 +198,7 @@ namespace MCTS
 	{
 		// 计算结点的UCT分数
 		for (auto child : children) {
-			child->UCT_score = (double)(child->visits - 2 * child->wins) / double(child->visits)
+			child->UCT_score = double(child->wins) / double(child->visits)
 				+ std::sqrt(2.0 * std::log(double(this->visits)) / child->visits);
 		}
 
