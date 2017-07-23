@@ -267,8 +267,8 @@ int AI3::predict() {
 	MCTS::ComputeOptions options;
 	options.number_of_threads = 4;
 	options.verbose = true;
-	// options.max_iterations = -1;
-	options.max_time = 10000;
+	options.max_iterations = -1;
+	options.max_time = 3;
 	auto state_copy = new SimulatorGo(cross, PlayerId);
 	auto best_move = MCTS::computeNextMove(state_copy, options);
 	return best_move;

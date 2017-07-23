@@ -45,11 +45,15 @@ public:
 		std::vector<int> moves;
 		bool Win;
 		if (state.getMoves(moves, cross, PlayerId, Win)) {
-			return doRandomMove(engine, moves);
+			std::uniform_int_distribution<std::size_t> move_ind(0, moves.size() - 1);
+			// 开始模拟走步
+			SimulateMove(moves[move_ind(*engine)]);
+			return true;
 		}
 		else {
 			if (!Win) {
 				SimulateMove(*moves.begin());
+				return true;
 			}
 			else {
 				Winner = getRival(player_to_move);
@@ -57,22 +61,6 @@ public:
 			}
 		}
 		return false;
-	}
-
-	// 随机走步
-	template<typename RandomEngine>
-	bool doRandomMove(RandomEngine* engine, std::vector<int>& moves)
-	{
-		int move;
-
-		std::uniform_int_distribution<std::size_t> move_ind(0, moves.size() - 1);
-		move = moves[move_ind(*engine)];
-		int line = getLine(move);
-		int column = getColumn(move);
-
-		// 开始模拟走步
-		SimulateMove(move);
-		return true;
 	}
 
 	// 从棋盘中搜集所有可行的着子点
@@ -205,8 +193,8 @@ protected:
 		MCTS::ComputeOptions options;
 		options.number_of_threads = 4;
 		options.verbose = true;
-		// options.max_iterations = -1;
-		options.max_time = 10000;
+		options.max_iterations = -1;
+		options.max_time = 1;
 		auto state_copy = new SimulatorGo2(cross, turn2Who);
 		auto best_move = MCTS::computeNextMove(state_copy, options);
 		return best_move;

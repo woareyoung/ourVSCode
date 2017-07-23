@@ -151,12 +151,14 @@ namespace MCTS
 	template<typename State>
 	Node<State>::~Node()
 	{
-		int temp = children.size();
-		for (int i = 0; i < temp; ++i) {
-			delete children[i];
+		if (children.size() != 0) {
+			int temp = children.size();
+			for (int i = 0; i < temp; ++i) {
+				delete children[i];
+			}
+			children.clear();
+			children.swap(vector<Node*>());
 		}
-		children.clear();
-		children.swap(vector<Node*>());
 	}
 
 	template<typename State>
@@ -362,10 +364,11 @@ namespace MCTS
 		using namespace std;
 
 		auto moves = root_state->getMoves();// 获取所有的可行走的着子点
-		if (options.verbose) {
-			if (moves.size() == 1) {
-				return moves[0];
-			}
+		if (moves.size() == 1) {
+			return *moves.begin();
+		}
+		else if (moves.size() == 0) {
+			return 0;
 		}
 
 		double start_time = ::omp_get_wtime();
@@ -411,12 +414,12 @@ namespace MCTS
 				visitsItr = visits.find((*child)->move);
 				if (visitsItr != visits.end()) {
 					(*visitsItr).second += (*child)->visits;
-					_cprintf("move and visits:[%d, %d] ", (*child)->move, (*child)->visits);
+					// _cprintf("move and visits:[%d, %d] ", (*child)->move, (*child)->visits);
 				}
 				winsItr = wins.find((*child)->move);
 				if (winsItr != wins.end()) {
 					(*winsItr).second += (*child)->wins;
-					_cprintf("move and wins:[%d, %lf] \n", (*child)->move, (*child)->wins);
+					// _cprintf("move and wins:[%d, %lf] \n", (*child)->move, (*child)->wins);
 				}
 			}
 		}
