@@ -83,7 +83,8 @@ protected:
 int AI5::predict() {
 	AI4 state;
 	std::vector<int> moves;
-	if (!state.getMoves(moves, cross, turn2Who)) {
+	bool Win;
+	if (!state.getMoves(moves, cross, turn2Who, Win)) {
 		return *moves.begin();
 	}
 	MCTS::ComputeOptions options;
@@ -171,7 +172,8 @@ public:
 		}
 
 		AI4 state;
-		if (state.getMoves(moves, cross, player_to_move)) {
+		bool Win;
+		if (state.getMoves(moves, cross, player_to_move, Win)) {
 			return moves;
 		}
 		else {
