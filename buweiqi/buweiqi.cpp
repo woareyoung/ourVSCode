@@ -368,7 +368,7 @@ void Select()
 		switch (Num)
 		{
 			case 1:CB.Player1AI = &CB.ai4; SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI4"));break;
-			case 2:CB.Player1AI = &CB.ai2; SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI2"));break;
+			case 2:CB.Player1AI = &CB.ai5; SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI5"));break;
 			case 3:CB.Player1AI = &CB.ai3; SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI3"));break;
 		}
 		CB.Player1isAI = true;
@@ -378,7 +378,7 @@ void Select()
 		switch (Num)
 		{
 			case 1:CB.Player2AI = &CB.ai44; SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI4"));break;
-			case 2:CB.Player2AI = &CB.ai22; SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI2"));break;
+			case 2:CB.Player2AI = &CB.ai55; SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI5"));break;
 			case 3:CB.Player2AI = &CB.ai33; SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI3"));break;
 		}
 		CB.Player2isAI = true;
@@ -403,7 +403,7 @@ LRESULT CALLBACK WndProcB(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_CREATE:
 		CB.SelectAI1 = CreateWindow(_T("Button"), _T("AI4"), WS_CHILD | ES_CENTER, 45, 20, 160, 50, hwnd, (HMENU)AI_1, CB.hInst, NULL);
-		CB.SelectAI2 = CreateWindow(_T("Button"), _T("AI2"), WS_CHILD | ES_CENTER, 45, 100, 160, 50, hwnd, (HMENU)AI_2, CB.hInst, NULL);
+		CB.SelectAI2 = CreateWindow(_T("Button"), _T("AI5"), WS_CHILD | ES_CENTER, 45, 100, 160, 50, hwnd, (HMENU)AI_2, CB.hInst, NULL);
 		CB.SelectAI3 = CreateWindow(_T("Button"), _T("AI3"), WS_CHILD | ES_CENTER, 45, 180, 160, 50, hwnd, (HMENU)AI_3, CB.hInst, NULL);
 		break;
 	case WM_COMMAND:
@@ -436,13 +436,13 @@ LRESULT CALLBACK WndCombatRecord(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 		CB.AllWin = CreateWindow(_T("Static"), _T("胜"), WS_CHILD | ES_CENTER | WS_VISIBLE, 365, 40, 20, 20, hwnd, NULL, CB.hInst, NULL);
 		CB.AllLose = CreateWindow(_T("Static"), _T("负"), WS_CHILD | ES_CENTER | WS_VISIBLE, 443, 40, 20, 20, hwnd, NULL, CB.hInst, NULL);
 		CB.AI1_VS_AI1 = CreateWindow(_T("Static"), _T("AI4 VS AI4"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 70, 100, 20, hwnd, NULL, CB.hInst, NULL);
-		CB.AI1_VS_AI2 = CreateWindow(_T("Static"), _T("AI4 VS AI2"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 100, 100, 20, hwnd, NULL, CB.hInst, NULL);
+		CB.AI1_VS_AI2 = CreateWindow(_T("Static"), _T("AI4 VS AI5"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 100, 100, 20, hwnd, NULL, CB.hInst, NULL);
 		CB.AI1_VS_AI3 = CreateWindow(_T("Static"), _T("AI4 VS AI3"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 130, 100, 20, hwnd, NULL, CB.hInst, NULL);
-		CB.AI2_VS_AI1 = CreateWindow(_T("Static"), _T("AI2 VS AI4"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 160, 100, 20, hwnd, NULL, CB.hInst, NULL);
-		CB.AI2_VS_AI2 = CreateWindow(_T("Static"), _T("AI2 VS AI2"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 190, 100, 20, hwnd, NULL, CB.hInst, NULL);
-		CB.AI2_VS_AI3 = CreateWindow(_T("Static"), _T("AI2 VS AI3"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 220, 100, 20, hwnd, NULL, CB.hInst, NULL);
+		CB.AI2_VS_AI1 = CreateWindow(_T("Static"), _T("AI5 VS AI4"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 160, 100, 20, hwnd, NULL, CB.hInst, NULL);
+		CB.AI2_VS_AI2 = CreateWindow(_T("Static"), _T("AI5 VS AI5"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 190, 100, 20, hwnd, NULL, CB.hInst, NULL);
+		CB.AI2_VS_AI3 = CreateWindow(_T("Static"), _T("AI5 VS AI3"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 220, 100, 20, hwnd, NULL, CB.hInst, NULL);
 		CB.AI3_VS_AI1 = CreateWindow(_T("Static"), _T("AI3 VS AI4"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 250, 100, 20, hwnd, NULL, CB.hInst, NULL);
-		CB.AI3_VS_AI2 = CreateWindow(_T("Static"), _T("AI3 VS AI2"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 280, 100, 20, hwnd, NULL, CB.hInst, NULL);
+		CB.AI3_VS_AI2 = CreateWindow(_T("Static"), _T("AI3 VS AI5"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 280, 100, 20, hwnd, NULL, CB.hInst, NULL);
 		CB.AI3_VS_AI3 = CreateWindow(_T("Static"), _T("AI3 VS AI3"), WS_CHILD | ES_CENTER | WS_VISIBLE, 0, 310, 100, 20, hwnd, NULL, CB.hInst, NULL);
 		int i;
 		for(i = 0; i < 9; i++) CB.DataHwnd[i] = CreateWindow(_T("Static"), _T("0"), WS_CHILD | ES_CENTER | WS_VISIBLE, 140, 70 + i * 30, 50, 20, hwnd, NULL, CB.hInst, NULL);

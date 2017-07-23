@@ -113,19 +113,19 @@ public:
 			if (Player1 == 4)
 			{
 				if (Player2 == 4) { data[0]++; data[18]++; }
-				else if (Player2 == 2) { data[1]++; data[19]++; }
+				else if (Player2 == 5) { data[1]++; data[19]++; }
 				else { data[2]++; data[20]++; }
 			}
-			else if (Player1 == 2)
+			else if (Player1 == 5)
 			{
 				if (Player2 == 4) { data[3]++; data[21]++; }
-				else if (Player2 == 2) { data[4]++; data[22]++; }
+				else if (Player2 == 5) { data[4]++; data[22]++; }
 				else { data[5]++; data[23]++; }
 			}
 			else if (Player1 == 3)
 			{
 				if (Player2 == 4) { data[6]++; data[24]++; }
-				else if (Player2 == 2) { data[7]++; data[25]++; }
+				else if (Player2 == 5) { data[7]++; data[25]++; }
 				else { data[8]++; data[26]++; }
 			}
 		}
@@ -134,19 +134,19 @@ public:
 			if (Player1 == 4)
 			{
 				if (Player2 == 4) { data[9]++; data[27]++; }
-				else if (Player2 == 2) { data[10]++; data[28]++; }
+				else if (Player2 == 5) { data[10]++; data[28]++; }
 				else { data[11]++; data[29]++; }
 			}
-			else if (Player1 == 2)
+			else if (Player1 == 5)
 			{
 				if (Player2 == 4) { data[12]++; data[30]++; }
-				else if (Player2 == 2) { data[13]++; data[31]++; }
+				else if (Player2 == 5) { data[13]++; data[31]++; }
 				else { data[14]++; data[32]++; }
 			}
 			else if (Player1 == 3)
 			{
 				if (Player2 == 4) { data[15]++; data[33]++; }
-				else if (Player2 == 2) { data[16]++; data[34]++; }
+				else if (Player2 == 5) { data[16]++; data[34]++; }
 				else { data[17]++; data[35]++; }
 			}
 		}

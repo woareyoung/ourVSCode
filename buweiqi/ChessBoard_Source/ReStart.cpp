@@ -52,19 +52,19 @@ void ChessBoard::ReStart()
 	if (Player1AI == &ai4)
 	{
 		if (Player2AI == &ai44) UpdateCRdata(4, 4, Winner);
-		else if (Player2AI == &ai22) UpdateCRdata(4, 2, Winner);
+		else if (Player2AI == &ai55) UpdateCRdata(4, 5, Winner);
 		else if (Player2AI == &ai33) UpdateCRdata(4, 3, Winner);
 	}
-	else if (Player1AI == &ai2)
+	else if (Player1AI == &ai5)
 	{
-		if (Player2AI == &ai44) UpdateCRdata(2, 4, Winner);
-		else if (Player2AI == &ai22) UpdateCRdata(2, 2, Winner);
-		else if (Player2AI == &ai33) UpdateCRdata(2, 3, Winner);
+		if (Player2AI == &ai44) UpdateCRdata(5, 4, Winner);
+		else if (Player2AI == &ai55) UpdateCRdata(5, 5, Winner);
+		else if (Player2AI == &ai33) UpdateCRdata(5, 3, Winner);
 	}
 	else if(Player1AI == &ai3)
 	{
 		if (Player2AI == &ai44) UpdateCRdata(3, 4, Winner);
-		else if (Player2AI == &ai22) UpdateCRdata(3, 2, Winner);
+		else if (Player2AI == &ai55) UpdateCRdata(3, 5, Winner);
 		else if(Player2AI == &ai33) UpdateCRdata(3, 3, Winner);
 	}
 	//	_cprintf("Black Chess number : %d  White Chess number : %d\n", ChessAmount[1], ChessAmount[2]);
