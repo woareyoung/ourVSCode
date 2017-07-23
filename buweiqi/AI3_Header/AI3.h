@@ -19,6 +19,7 @@ public:
 	int player_to_move;
 	SimulatorGo() :
 		Winner(NoChess),
+		player_to_move(Black),
 		ifShowInfo(false)
 	{
 		initAllArray();
