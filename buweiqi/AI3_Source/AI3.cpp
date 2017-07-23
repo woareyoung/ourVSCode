@@ -11,10 +11,6 @@ std::vector<int> SimulatorGo::getMoves() /*const*/
 	std::vector<int> moves;
 
 	if (Winner == Black || Winner == White) {
-		if (ifShowInfo) {
-			system("pause");
-			_cprintf("Winner is %s", Winner == Black ? "Black" : "White");
-		}
 		return moves;
 	}
 

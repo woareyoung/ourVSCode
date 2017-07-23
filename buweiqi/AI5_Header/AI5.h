@@ -1,103 +1,10 @@
 #pragma once
 #include "../ChessBoard_Header/parameter.h"
-#include "../chessBoard_Header/AI.h"
-#include "../AI2_Header/AIPlayer.h"
-
-class AI5 : public AI, public AIPlayer {
-private:
-public:
-	AI5() :
-		chessCount(0)
-	{
-		for (int i = ChessStart; i < ChessEnd; ++i) {
-			for (int j = ChessStart; j < ChessEnd; ++j) {
-				cross[i][j] = NoChess;
-			}
-		}
-	}
-	void GetPosition(int &line, int &column, int onTurn) {
-		//接收到界面的远程命令
-		if (onTurn != 1 && onTurn != -1 && onTurn != 2 && onTurn != -2)
-		{
-			//用于响应主窗口对AI的检查
-			if (onTurn == 0)
-			{
-				// 这里是重新开始游戏的数据重置过程
-				line++;
-				column++;
-			}
-			//回退一步的命令，对数据进行回退。（100为玩家1，200为玩家2，line与column为回退的位置）
-			else if (onTurn == 100 || onTurn == 200)
-			{
-				rollback(line, column, onTurn / 100);
-			}
-			return;
-		}
-		/******************************************
-		添加敌方着子点到我方棋盘上
-		*******************************************/
-		this->chessCount++;
-		// 注意传递进来的onTurn参数是对方的，而不是己方的。
-		initPlayerRole(onTurn);
-		cross[line][column] = Rival;
-
-		/******************************************
-		我方着子
-		*******************************************/
-		int temp = predict();
-		line = getLine(temp);
-		column = getColumn(temp);
-		if (!OnChessBoard(line, column)) {
-			line = 0;
-			column = 0;
-		}
-		cross[line][column] = turn2Who;
-	}
-protected:
-	int cross[10][10];
-	int chessCount;
-
-	void rollback(int line, int column, int onTurn) {
-		if (onTurn == turn2Who) {
-			--chessCount;
-		}
-		if (cross[line][column] != NoChess) {
-			cross[line][column] = NoChess;
-		}
-	}
-
-	void initPlayerRole(int onTurn) {
-		Rival = (onTurn == Black || onTurn == isAI1onTurn) ? Black : White;
-		this->turn2Who = getRival(Rival);
-		this->PlayerId = turn2Who;
-	}
-
-	int predict();
-};
-
 #include "../AI3_Header/MCTS.h"
 #include "../AI4_Header/AI4.h"
 #include <vector>
 #include <iostream>
 
-int AI5::predict() {
-	AI4 state;
-	std::vector<int> moves;
-	bool Win;
-	if (!state.getMoves(moves, cross, turn2Who, Win)) {
-		return *moves.begin();
-	}
-	MCTS::ComputeOptions options;
-	options.number_of_threads = 4;
-	options.verbose = true;
-	// options.max_iterations = -1;
-	options.max_time = 10000;
-	auto state_copy = new SimulatorGo2(cross, turn2Who);
-	auto best_move = MCTS::computeNextMove(state_copy, options);
-	return best_move;
-}
-
-#include "../AI4_Header/AI4.h"
 
 class SimulatorGo2 : public AIPlayer {
 private:
@@ -217,3 +124,92 @@ public:
 		player_to_move = rival;
 	}
 };
+
+
+class AI5 : public AI, public AIPlayer {
+private:
+public:
+	AI5() :
+		chessCount(0)
+	{
+		for (int i = ChessStart; i < ChessEnd; ++i) {
+			for (int j = ChessStart; j < ChessEnd; ++j) {
+				cross[i][j] = NoChess;
+			}
+		}
+	}
+	void GetPosition(int &line, int &column, int onTurn) {
+		//接收到界面的远程命令
+		if (onTurn != 1 && onTurn != -1 && onTurn != 2 && onTurn != -2)
+		{
+			//用于响应主窗口对AI的检查
+			if (onTurn == 0)
+			{
+				// 这里是重新开始游戏的数据重置过程
+				line++;
+				column++;
+			}
+			//回退一步的命令，对数据进行回退。（100为玩家1，200为玩家2，line与column为回退的位置）
+			else if (onTurn == 100 || onTurn == 200)
+			{
+				rollback(line, column, onTurn / 100);
+			}
+			return;
+		}
+		/******************************************
+		添加敌方着子点到我方棋盘上
+		*******************************************/
+		this->chessCount++;
+		// 注意传递进来的onTurn参数是对方的，而不是己方的。
+		initPlayerRole(onTurn);
+		cross[line][column] = Rival;
+
+		/******************************************
+		我方着子
+		*******************************************/
+		int temp = predict();
+		line = getLine(temp);
+		column = getColumn(temp);
+		if (!OnChessBoard(line, column)) {
+			line = 0;
+			column = 0;
+		}
+		cross[line][column] = turn2Who;
+	}
+protected:
+	int cross[10][10];
+	int chessCount;
+
+	void rollback(int line, int column, int onTurn) {
+		if (onTurn == turn2Who) {
+			--chessCount;
+		}
+		if (cross[line][column] != NoChess) {
+			cross[line][column] = NoChess;
+		}
+	}
+
+	void initPlayerRole(int onTurn) {
+		Rival = (onTurn == Black || onTurn == isAI1onTurn) ? Black : White;
+		this->turn2Who = getRival(Rival);
+		this->PlayerId = turn2Who;
+	}
+
+	int predict() {
+		AI4 state;
+		std::vector<int> moves;
+		bool Win;
+		if (!state.getMoves(moves, cross, turn2Who, Win)) {
+			return *moves.begin();
+		}
+		MCTS::ComputeOptions options;
+		options.number_of_threads = 4;
+		options.verbose = true;
+		// options.max_iterations = -1;
+		options.max_time = 10000;
+		auto state_copy = new SimulatorGo2(cross, turn2Who);
+		auto best_move = MCTS::computeNextMove(state_copy, options);
+		return best_move;
+	}
+};
+

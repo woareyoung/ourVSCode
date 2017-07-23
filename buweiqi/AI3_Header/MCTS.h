@@ -361,7 +361,7 @@ namespace MCTS
 	{
 		using namespace std;
 
-		auto moves = root_state->getAllMoves();// 获取所有的可行走的着子点
+		auto moves = root_state->getMoves();// 获取所有的可行走的着子点
 		if (options.verbose) {
 			if (moves.size() == 1) {
 				return moves[0];
@@ -416,7 +416,7 @@ namespace MCTS
 				winsItr = wins.find((*child)->move);
 				if (winsItr != wins.end()) {
 					(*winsItr).second += (*child)->wins;
-					_cprintf("move and wins:[%d, %d] \n", (*child)->move, (*child)->wins);
+					_cprintf("move and wins:[%d, %lf] \n", (*child)->move, (*child)->wins);
 				}
 			}
 		}
