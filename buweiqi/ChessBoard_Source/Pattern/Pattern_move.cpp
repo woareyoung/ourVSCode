@@ -13,6 +13,7 @@ std::list<std::pair<int, int>> Pattern_Moves::getMoves(const bool& isFirst, cons
 		}
 	}
 	initChessScore(isFirst);
+	ScanChessBroad();
 	startPattern();
 	return patternMoves;
 }
@@ -398,6 +399,28 @@ void Pattern_Moves::resetGo2DeadStatus() {
 	for (register int i = ChessInit; i < ChessEnd; ++i) {
 		for (register int j = ChessInit; j < ChessEnd; ++j) {
 			isGo2DeadStatus[i][j] = false;
+		}
+	}
+}
+
+void Pattern_Moves::ScanChessBroad() {
+	for (int x = ChessStart; x < ChessEnd; ++x) {
+		for (int y = ChessStart; y < ChessEnd; ++y) {
+			if (cross[x][y] == NoChess) {
+				if (isGo2Dead(x, y, turn2Who)) {
+					chessScore[x][y] = minLimit;
+					// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
+					continue;
+				}
+				// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
+				if (cross[x][y] == NoChess && chessScore[x][y] == 0) continue;
+				if (isGo2Dead(x, y, Rival)) {
+					// 如果是敌方的自杀点的话，这里就置零   -.-！！！
+					chessScore[x][y] = 0;
+					continue;
+				}
+				// 这里既不是我方自杀点，也不是敌方自杀点
+			}
 		}
 	}
 }

@@ -63,6 +63,7 @@ protected:
 	void initChessScore(const bool& isFirst);
 	// Æ¥Åäº¯Êý
 	void startPattern();
+	void ScanChessBroad();
 	void Pattern(const int *PatternType);
 	bool checkEmptyPos(const int& x, const int& y, const int& start, const int& mainColor, const Pos* emptyPos) {
 		/******************************************

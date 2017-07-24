@@ -102,11 +102,8 @@ public:
 		// 对方的结点
 		int rival = getRival(player_to_move);
 		// 这里表示模拟没有结束，这时我们需要判断是否已经输赢论定了
-		int line, column;
-		line = getLine(move);
-		column = getColumn(move);
 		// 如果没有输赢未论定的话，就继续模拟
-		cross[line][column] = player_to_move;
+		cross[getLine(move)][getColumn(move)] = player_to_move;
 
 		// 轮到下一个玩家着子
 		player_to_move = rival;
@@ -191,7 +188,7 @@ protected:
 			return *moves.begin();
 		}
 		MCTS::ComputeOptions options;
-		options.number_of_threads = 4;
+		options.number_of_threads = 1;
 		options.verbose = true;
 		options.max_iterations = -1;
 		options.max_time = 1;
