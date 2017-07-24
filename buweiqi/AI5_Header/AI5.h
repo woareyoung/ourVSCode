@@ -29,7 +29,6 @@ public:
 		player_to_move(Id),
 		Winner(NoChess)
 	{
-		setRole(Id);
 		this->turn2Who = Id;
 		this->PlayerId = turn2Who;
 		for (int i = ChessInit; i < ChessEnd; ++i) {
@@ -107,14 +106,20 @@ public:
 	// 模拟着子，主要的作用是用于模拟下棋
 	virtual void SimulateMove(const int& move)
 	{
-		// 对方的结点
-		int rival = getRival(player_to_move);
 		// 这里表示模拟没有结束，这时我们需要判断是否已经输赢论定了
 		// 如果没有输赢未论定的话，就继续模拟
 		cross[getLine(move)][getColumn(move)] = player_to_move;
-
+		// showSimaluteInfo(getLine(move), getColumn(move));
 		// 轮到下一个玩家着子
-		player_to_move = rival;
+		player_to_move = getRival(player_to_move);
+	}
+
+	void showSimaluteInfo(const int& line, const int& column) {
+		_cprintf("**************This is chess cross*********(%d, %d)***%s******\n",
+			line, column, player_to_move == Black ? "Black" : "White");
+		showChessBoard(cross);
+		system("pause");
+
 	}
 };
 
@@ -141,6 +146,11 @@ public:
 				// 这里是重新开始游戏的数据重置过程
 				line++;
 				column++;
+				for (int i = ChessStart; i < ChessEnd; ++i) {
+					for (int j = ChessStart; j < ChessEnd; ++j) {
+						cross[i][j] = NoChess;
+					}
+				}
 			}
 			//回退一步的命令，对数据进行回退。（100为玩家1，200为玩家2，line与column为回退的位置）
 			else if (onTurn == 100 || onTurn == 200)
@@ -168,6 +178,9 @@ public:
 			column = 0;
 		}
 		cross[line][column] = turn2Who;
+
+		_cprintf("**************This is chess cross*******(%d, %d)***********\n", line, column);
+		showChessBoard(cross);
 	}
 protected:
 	int cross[10][10];
@@ -192,17 +205,23 @@ protected:
 		AI4 state;
 		std::vector<int> moves;
 		bool Win;
-		if (!state.getMoves(moves, cross, turn2Who, Win)) {
+		if (!state.getMoves(moves, cross, PlayerId, Win)) {
 			return *moves.begin();
 		}
-		MCTS::ComputeOptions options;
+		else {
+			std::mt19937_64 random_engine(1008611);// 随机函数种子，用于随机走步
+			std::uniform_int_distribution<std::size_t> move_ind(0, moves.size() - 1);
+			// 开始模拟走步
+			return moves[move_ind(random_engine)];
+		}
+		/*MCTS::ComputeOptions options;
 		options.number_of_threads = 1;
 		options.verbose = true;
 		options.max_iterations = -1;
 		options.max_time = 1;
 		auto state_copy = new SimulatorGo2(cross, PlayerId);
 		auto best_move = MCTS::computeNextMove(state_copy, options);
-		return best_move;
+		return best_move;*/
 	}
 };
 

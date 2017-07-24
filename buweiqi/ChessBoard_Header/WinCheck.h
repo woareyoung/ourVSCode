@@ -217,6 +217,12 @@ namespace WinCheck {
 
 		bool WinOrLoseCheck(const int& line, const int& column, const int& type, int& Winner, int CROSS[][10])
 		{
+			if (option.isInterface) {
+				if (line == 0 && column == 0) {
+					Winner = getRival(type);
+					return true;
+				}
+			}
 			auto initArray = [&](int c[10][10]) {
 				for (int i = 0; i < 10; ++i) {
 					for (int j = 0; j < 10; ++j) {

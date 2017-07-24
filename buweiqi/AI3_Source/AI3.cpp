@@ -113,6 +113,7 @@ bool SimulatorGo::checkEmptyPos(
 	如果是的话，就把该点的分数设置为0，跳过匹配模式
 	*******************************************/
 	int rival = getRival(player_to_move);
+#pragma omp parallel for
 	for (int i = 0; i < start; ++i) {
 		if (mainColor == rival) {
 			if (CS[emptyPos[i].line][emptyPos[i].column] == 0) {
@@ -192,7 +193,9 @@ std::vector<int> SimulatorGo::getAllMoves() {
 	option.edge = Edge;
 	option.emptyChess = NoChess;
 	WinCheck::ChessInfo chessInfo(option);
+#pragma omp parallel for
 	for (int i = ChessStart; i < ChessEnd; ++i) {
+#pragma omp parallel for
 		for (int j = ChessStart; j < ChessEnd; ++j) {
 			if (cross[i][j] == NoChess && CS[i][j] != minLimit) {
 				if (!chessInfo.WinOrLoseCheck(i, j, player_to_move,cross)) {
@@ -213,7 +216,9 @@ std::vector<int> SimulatorGo::getAllMoves() {
 }
 
 void SimulatorGo::initSimulation() /*const*/ {
+#pragma omp parallel for
 	for (int i = ChessInit; i < ChessEnd; ++i) {
+#pragma omp parallel for
 		for (int j = ChessInit; j < ChessEnd; ++j) {
 			if (cross[i][j] == NoChess && CS[i][j] == minLimit) continue;
 			if (cross[i][j] == NoChess && CS[i][j] == 0) continue;
@@ -221,6 +226,8 @@ void SimulatorGo::initSimulation() /*const*/ {
 		}
 	}
 }
+
+#include <omp.h>
 
 void SimulatorGo::ScanChessBroad() {
 	WinCheck::ChessBoardOption option;
@@ -230,7 +237,9 @@ void SimulatorGo::ScanChessBroad() {
 	option.emptyChess = NoChess;
 	WinCheck::ChessInfo chessInfo(option);
 	int rival = getRival(player_to_move);
+#pragma omp parallel for
 	for (int x = ChessStart; x < ChessEnd; ++x) {
+#pragma omp parallel for
 		for (int y = ChessStart; y < ChessEnd; ++y) {
 			if (cross[x][y] == NoChess) {
 				if (CS[x][y] == minLimit) continue;
