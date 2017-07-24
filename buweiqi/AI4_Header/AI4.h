@@ -29,7 +29,6 @@ public:
 	*/
 	bool getMoves(std::vector<int> &moves, const int BoardCross[][10], int playerId, bool &CanSeeWinner);//获取下棋位置的集合
 private:
-	static bool DeadPosition[3][10][10];
 	int cross[10][10]; //棋盘状况
 	int PlayerId; //玩家身份——玩家1还是玩家2
 	int Score[10][10] = { 0 }; //记录棋盘每个位置的分值
