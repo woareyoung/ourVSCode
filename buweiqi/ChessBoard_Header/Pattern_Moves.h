@@ -127,6 +127,7 @@ public:
 		Rival(getRival(onTurn))
 	{
 		initAll();
+		initChessScore(true);
 	}
 
 	// 获取最后着子的位置

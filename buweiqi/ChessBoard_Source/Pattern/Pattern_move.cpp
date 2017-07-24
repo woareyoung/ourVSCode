@@ -15,7 +15,18 @@ std::list<std::pair<int, int>> Pattern_Moves::getMoves(const bool& isFirst, cons
 	initChessScore(isFirst);
 	ScanChessBroad();
 	startPattern();
-	return patternMoves;
+	ScanChessBroad();
+	std::list<std::pair<int, int>> tempMoves;
+	int size = static_cast<int>(patternMoves.size());
+	for (std::list<std::pair<int, int>>::iterator it = patternMoves.begin();
+		it != patternMoves.end(); ++it) {
+		if (chessScore[getLine((*it).first)][getColumn((*it).first)] != minLimit) {
+			if (!isGo2Dead(getLine((*it).first), getColumn((*it).first), turn2Who)) {
+				tempMoves.emplace_back(*it);
+			}
+		}
+	}
+	return tempMoves;
 }
 
 void Pattern_Moves::initAll() {
@@ -363,12 +374,12 @@ void Pattern_Moves::Pattern(const int *PatternType) {
 				2、需要注意该着子点是否是死棋点
 				*******************************************/
 				// 检查棋子是否有效，并对分析的结果进行相应的加分
-				if (pattern_Score_Pos[i].x_offset == 0  && 
+				if (pattern_Score_Pos[i].x_offset == 0 &&
 					pattern_Score_Pos[i].y_offset == 0 &&
 					!checkStone(x, y, pattern_Count[i] <= 4)) {
 					goto mismatch;
 				};
-				if (chessScore[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] != 0 && 
+				if (chessScore[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] != 0 &&
 					chessScore[x + pattern_Score_Pos[i].x_offset][y + pattern_Score_Pos[i].y_offset] != minLimit) {
 					patternMoves.emplace_back(getMove(x + pattern_Score_Pos[i].x_offset, y + pattern_Score_Pos[i].y_offset), score);
 				}
@@ -404,6 +415,7 @@ void Pattern_Moves::resetGo2DeadStatus() {
 }
 
 void Pattern_Moves::ScanChessBroad() {
+	int rival = getRival(turn2Who);
 	for (int x = ChessStart; x < ChessEnd; ++x) {
 		for (int y = ChessStart; y < ChessEnd; ++y) {
 			if (cross[x][y] == NoChess) {
@@ -414,7 +426,7 @@ void Pattern_Moves::ScanChessBroad() {
 				}
 				// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
 				if (cross[x][y] == NoChess && chessScore[x][y] == 0) continue;
-				if (isGo2Dead(x, y, Rival)) {
+				if (isGo2Dead(x, y, rival)) {
 					// 如果是敌方的自杀点的话，这里就置零   -.-！！！
 					chessScore[x][y] = 0;
 					continue;

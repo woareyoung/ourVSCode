@@ -50,7 +50,7 @@ std::vector<int> SimulatorGo::getMoves() /*const*/
 		std::sort(topMoves.begin(), topMoves.end(), sort);
 		std::vector<int> tempMoves;
 		int MaxScore = (*topMoves.begin()).first;
-		int size = topMoves.size();
+		int size = static_cast<int>(topMoves.size());
 		for (int i = 0; i < size; ++i) { 
 			if (MaxScore == topMoves[i].first) {
 				tempMoves.emplace_back(topMoves[i].first);
