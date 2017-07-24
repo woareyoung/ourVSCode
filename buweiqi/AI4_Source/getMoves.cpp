@@ -45,43 +45,48 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 	//搜索眼的数量
 	{
 		//计算棋盘上虎口数量
-		auto TigerMouthNumberCal = [&](int &EyeLine, int &EyeColumn) {
+		auto TigerMouthNumberCal = [&](int &EyePosition) {
 			int temp;
 			int number = 0;
+			int pos;
+			bool Attack;
+			if (EyePosition == 0) Attack = true;
+			else Attack = false;
 			for (int i = 1; i < 10; ++i)
 			{
 				for (int j = 1; j < 10; ++j)
 				{
 					if (cross[i][j] != 0) continue;
-					temp = GetSurroundNumber(i, j);
+					if (Attack) pos = 0;
+					else pos = 1;
+					temp = GetSurroundNumber(i, j, pos);
 					if (temp == 3)
 					{
+						EyePosition = pos;
 						number++;
-						EyeLine = i;
-						EyeColumn = j;
 					}
 				}
 			}
 			return number;
 		};
 		int MyEyeNumber = 0, RivalEyeNumber = 0;
-		int tempL1, tempC1, tempL2, tempC2;
-		RivalEyeNumber = TigerMouthNumberCal(tempL1, tempC1);
+		int temp1 = 1, temp2 = 0;
+		RivalEyeNumber = TigerMouthNumberCal(temp1);
 		PlayerId = 3 - PlayerId;
-		MyEyeNumber = TigerMouthNumberCal(tempL2, tempC2);
+		MyEyeNumber = TigerMouthNumberCal(temp2);
 		PlayerId = 3 - PlayerId;
 		//如果对方有一个虎口，优先阻止，不管三七二十一
 		if (RivalEyeNumber == 1)
 		{
 			moves.clear();
-			moves.emplace_back(tempL1 * 100 + tempC1);
+			moves.emplace_back(temp1);
 			return false;
 		}
 		//如果对方没有虎口，而自己有虎口
 		else if (RivalEyeNumber == 0 && MyEyeNumber > 0)
 		{
 			moves.clear();
-			moves.emplace_back(tempL2 * 100 + tempC2);
+			moves.emplace_back(temp2);
 			return false;
 		}
 	}

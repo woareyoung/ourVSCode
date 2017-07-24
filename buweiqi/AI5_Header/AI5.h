@@ -46,7 +46,7 @@ public:
 		AI4 state;
 		std::vector<int> moves;
 		bool Win;
-		if (state.getMoves(moves, cross, PlayerId, Win)) {
+		if (state.getMoves(moves, cross, player_to_move, Win)) {
 			std::uniform_int_distribution<std::size_t> move_ind(0, moves.size() - 1);
 			// 开始模拟走步
 			SimulateMove(moves[move_ind(*engine)]);

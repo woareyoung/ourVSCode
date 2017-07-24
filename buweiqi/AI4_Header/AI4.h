@@ -99,13 +99,24 @@ private:
 		Score[8][9] = 2;
 		Score[9][9] = 2;
 	}
-	int GetSurroundNumber(int line, int column)
+	int GetSurroundNumber(int line, int column, int &NullPosition)
 	{
+		bool Attack;
+		if (NullPosition == 0) Attack = true;
+		else Attack = false;
 		int num = 0;
 		if (cross[line - 1][column] == 3 - PlayerId || line == 1) num++;
+		else if(Attack) NullPosition = (line - 1) * 100 + column;
+		else NullPosition = line * 100 + column;
 		if (cross[line + 1][column] == 3 - PlayerId || line == 9) num++;
+		else if (Attack) NullPosition = (line + 1) * 100 + column;
+		else NullPosition = line * 100 + column;
 		if (cross[line][column - 1] == 3 - PlayerId || column == 1) num++;
+		else if(Attack) NullPosition = line * 100 + (column - 1);
+		else NullPosition = line * 100 + column;
 		if (cross[line][column + 1] == 3 - PlayerId || column == 9) num++;
+		else if (Attack) NullPosition = line * 100 + (column + 1);
+		else NullPosition = line * 100 + column;
 		return num;
 	}
 };
