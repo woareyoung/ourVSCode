@@ -6,7 +6,10 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 	PlayerId = playerId;
 	for (int i = 0; i < 10; ++i)
 		for (int j = 0; j < 10; ++j)
-			cross[i][j] = BoardCross[i][j];
+		{
+			if (BoardCross[i][j] == 4) cross[i][j] = 0;
+			else cross[i][j] = BoardCross[i][j];
+		}
 	//获取特殊点链表
 	Pattern_Moves PM(playerId);
 	std::list<std::pair<int, int>> SP = PM.getMoves(true, BoardCross);
@@ -14,6 +17,7 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 	//没有匹配到模式
 	if (SP.empty())
 	{
+		CanSeeWinner = true;
 		int EmptyPosLine, EmptyPosColumn;
 		for (int i = 1; i < 10; ++i)
 		{
@@ -47,6 +51,7 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 		{
 			for (int j = 1; j < 10; ++j)
 			{
+				if (cross[i][j] != 0) continue;
 				temp = GetSurroundNumber(i, j);
 				if (temp == 3)
 				{
@@ -66,6 +71,7 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 	//遍历链表
 	for (auto t : SP)
 	{
+		if (DeadCheck(GetLine(t.first), GetColumn(t.first), PlayerId, cross)) continue;
 		if (CalDeadPosNumber(GetLine(t.first), GetColumn(t.first)) != 1)
 		{
 			moves.clear();
@@ -73,6 +79,11 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 			return false;
 		}
 		moves.push_back(t.first);
+	}
+	//如果Pattern的点都是死棋的话
+	if (moves.empty())
+	{
+
 	}
 	return true;
 }
@@ -88,7 +99,11 @@ int AI4::CalDeadPosNumber(int line, int column)
 	{
 		for (int j = 1; j < 10; ++j)
 		{
-			if (cross[i][j] != 0) continue;
+			if (cross[i][j] != 0)
+			{
+				--DoubleNotDeadPos;
+				continue;
+			}
 			MyDead = DeadCheck(i, j, PlayerId, cross);
 			RivalDead = DeadCheck(i, j, 3 - PlayerId, cross);
 			if (MyDead)
@@ -128,7 +143,8 @@ int AI4::CalDeadPosNumber(int line, int column)
 	cross[line][column] = 3 - PlayerId;
 	int MyDeadPosNumber2 = 0;//自己的死棋位置数量
 	int RivalDeadPosNumber2 = 0;//对方的死棋位置数量
-	GetDeadNumber(3 - PlayerId, MyDeadPosNumber2, RivalDeadPosNumber2);
+	GetDeadNumber(3 - PlayerId, RivalDeadPosNumber2, MyDeadPosNumber2);
+	cross[line][column] = 0;
 	//如果己方下了该位置，可令对方增加2个以上死棋位置数，则不用犹豫了
 	if (RivalDeadPosNumber1 - saveRivalDead > 1) return 2;
 	//如果己方下了该位置，会令对方增加1个死棋位置；且如果对方下了该位置，会令己方增加1个死棋位置
