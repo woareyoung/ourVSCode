@@ -1,6 +1,8 @@
 #include "../AI4_Header/AI4.h"
 #include "../ChessBoard_Header/Pattern_Moves.h"
 
+bool AI4::DeadPosition[3][10][10] = { false };
+
 bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int playerId, bool &CanSeeWinner)
 {
 	PlayerId = playerId;
@@ -23,7 +25,7 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 		{
 			for (int j = 1; j < 10; ++j)
 			{
-				if (cross[i][j] != 0) continue;
+				if (cross[i][j] != 0 || DeadPosition[PlayerId][i][j]) continue;
 				EmptyPosLine = i;
 				EmptyPosColumn = j;
 				//如果遇到不会死的位置
@@ -32,6 +34,7 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 					SP.push_back(std::make_pair(i * 100 + j, 0));
 					CanSeeWinner = false;//设定当前回合不是最终回合
 				}
+				else DeadPosition[PlayerId][i][j] = true;
 			}
 		}
 		//如果连不会死的位置都没有了，就随便找个空位下了
@@ -93,7 +96,12 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 	//遍历链表
 	for (auto t : SP)
 	{
-		if (DeadCheck(GetLine(t.first), GetColumn(t.first), PlayerId, cross)) continue;
+		if (DeadPosition[PlayerId][GetLine(t.first)][GetColumn(t.first)]) continue;
+		else if (DeadCheck(GetLine(t.first), GetColumn(t.first), PlayerId, cross))
+		{
+			DeadPosition[PlayerId][GetLine(t.first)][GetColumn(t.first)] = true;
+			continue;
+		}
 		if (CalDeadPosNumber(GetLine(t.first), GetColumn(t.first)) != 1)
 		{
 			moves.clear();
@@ -121,15 +129,17 @@ int AI4::CalDeadPosNumber(int line, int column)
 				--DoubleNotDeadPos;
 				continue;
 			}
-			MyDead = DeadCheck(i, j, PlayerId, cross);
-			RivalDead = DeadCheck(i, j, 3 - PlayerId, cross);
+			MyDead = DeadPosition[PlayerId][i][j] || DeadCheck(i, j, PlayerId, cross);
+			RivalDead = DeadPosition[3 - PlayerId][i][j] || DeadCheck(i, j, 3 - PlayerId, cross);
 			if (MyDead)
 			{
+				DeadPosition[PlayerId][i][j] = true;
 				++saveMyDead;
 				--DoubleNotDeadPos;
 			}
 			if (RivalDead)
 			{
+				DeadPosition[3 - PlayerId][i][j] = true;
 				++saveRivalDead;
 				--DoubleNotDeadPos;
 			}
@@ -144,8 +154,8 @@ int AI4::CalDeadPosNumber(int line, int column)
 			for (int j = 1; j < 10; ++j)
 			{
 				if (cross[i][j] != 0) continue;
-				MyDead = DeadCheck(i, j, type, cross);
-				RivalDead = DeadCheck(i, j, rival, cross);
+				MyDead = DeadPosition[PlayerId][i][j] || DeadCheck(i, j, PlayerId, cross);
+				RivalDead = DeadPosition[3 - PlayerId][i][j] || DeadCheck(i, j, 3 - PlayerId, cross);
 				if (MyDead) ++MyDeadPosNumber;
 				if (RivalDead) ++RivalDeadPosNumber;
 			}
