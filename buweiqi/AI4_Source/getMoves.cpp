@@ -37,34 +37,51 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 		//如果连不会死的位置都没有了，就随便找个空位下了
 		if (SP.empty())
 		{
-			moves.push_back(EmptyPosLine * 100 + EmptyPosColumn);
+			moves.emplace_back(EmptyPosLine * 100 + EmptyPosColumn);
 			if(CanSeeWinner) return false;
 		}
 	}
 	CanSeeWinner = false;
 	//搜索眼的数量
 	{
-		int EyeNumber = 0;
-		int temp;
-		int EyeLine, EyeColumn;
-		for (int i = 1; i < 10; ++i)
-		{
-			for (int j = 1; j < 10; ++j)
+		//计算棋盘上虎口数量
+		auto TigerMouthNumberCal = [&](int &EyeLine, int &EyeColumn) {
+			int temp;
+			int number = 0;
+			for (int i = 1; i < 10; ++i)
 			{
-				if (cross[i][j] != 0) continue;
-				temp = GetSurroundNumber(i, j);
-				if (temp == 3)
+				for (int j = 1; j < 10; ++j)
 				{
-					EyeNumber++;
-					EyeLine = i;
-					EyeColumn = j;
+					if (cross[i][j] != 0) continue;
+					temp = GetSurroundNumber(i, j);
+					if (temp == 3)
+					{
+						number++;
+						EyeLine = i;
+						EyeColumn = j;
+					}
 				}
 			}
-		}
-		if (EyeNumber == 1)
+			return number;
+		};
+		int MyEyeNumber = 0, RivalEyeNumber = 0;
+		int tempL1, tempC1, tempL2, tempC2;
+		RivalEyeNumber = TigerMouthNumberCal(tempL1, tempC1);
+		PlayerId = 3 - PlayerId;
+		MyEyeNumber = TigerMouthNumberCal(tempL2, tempC2);
+		PlayerId = 3 - PlayerId;
+		//如果对方有一个虎口，优先阻止，不管三七二十一
+		if (RivalEyeNumber == 1)
 		{
 			moves.clear();
-			moves.push_back(EyeLine * 100 + EyeColumn);
+			moves.emplace_back(tempL1 * 100 + tempC1);
+			return false;
+		}
+		//如果对方没有虎口，而自己有虎口
+		else if (RivalEyeNumber == 0 && MyEyeNumber > 0)
+		{
+			moves.clear();
+			moves.emplace_back(tempL2 * 100 + tempC2);
 			return false;
 		}
 	}
@@ -75,15 +92,10 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 		if (CalDeadPosNumber(GetLine(t.first), GetColumn(t.first)) != 1)
 		{
 			moves.clear();
-			moves.push_back(t.first);
+			moves.emplace_back(t.first);
 			return false;
 		}
-		moves.push_back(t.first);
-	}
-	//如果Pattern的点都是死棋的话
-	if (moves.empty())
-	{
-
+		moves.emplace_back(t.first);
 	}
 	return true;
 }
