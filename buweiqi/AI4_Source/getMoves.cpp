@@ -1,6 +1,5 @@
 #include "../AI4_Header/AI4.h"
 #include "../ChessBoard_Header/Pattern_Moves.h"
-#include <conio.h>
 
 bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int playerId, bool &CanSeeWinner)
 {
@@ -18,7 +17,6 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 	//没有匹配到模式
 	if (SP.empty())
 	{
-		_cprintf(" PM.getMoves(true, BoardCross) is null");
 		CanSeeWinner = true;
 		int EmptyPosLine, EmptyPosColumn;
 		for (int i = 1; i < 10; ++i)
@@ -39,60 +37,62 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 		//如果连不会死的位置都没有了，就随便找个空位下了
 		if (SP.empty())
 		{
-			_cprintf(" No chess!");
-			moves.emplace_back(0);
+			moves.emplace_back(EmptyPosLine * 100 + EmptyPosColumn);
 			if(CanSeeWinner) return false;
 		}
 	}
 	CanSeeWinner = false;
 	//搜索眼的数量
-	//{
-	//	//计算棋盘上虎口数量
-	//	auto TigerMouthNumberCal = [&](int &EyePosition) {
-	//		int temp;
-	//		int number = 0;
-	//		int pos;
-	//		bool Attack;
-	//		if (EyePosition == 0) Attack = true;
-	//		else Attack = false;
-	//		for (int i = 1; i < 10; ++i)
-	//		{
-	//			for (int j = 1; j < 10; ++j)
-	//			{
-	//				if (cross[i][j] != 0) continue;
-	//				if (Attack) pos = 0;
-	//				else pos = 1;
-	//				temp = GetSurroundNumber(i, j, pos);
-	//				if (temp == 3)
-	//				{
-	//					EyePosition = pos;
-	//					number++;
-	//				}
-	//			}
-	//		}
-	//		return number;
-	//	};
-	//	int MyEyeNumber = 0, RivalEyeNumber = 0;
-	//	int temp1 = 1, temp2 = 0;
-	//	RivalEyeNumber = TigerMouthNumberCal(temp1);
-	//	PlayerId = 3 - PlayerId;
-	//	MyEyeNumber = TigerMouthNumberCal(temp2);
-	//	PlayerId = 3 - PlayerId;
-	//	//如果对方有一个虎口，优先阻止，不管三七二十一
-	//	if (RivalEyeNumber == 1)
-	//	{
-	//		moves.clear();
-	//		moves.emplace_back(temp1);
-	//		return false;
-	//	}
-	//	//如果对方没有虎口，而自己有虎口
-	//	else if (RivalEyeNumber == 0 && MyEyeNumber > 0)
-	//	{
-	//		moves.clear();
-	//		moves.emplace_back(temp2);
-	//		return false;
-	//	}
-	//}
+	{
+		//计算棋盘上虎口数量
+		auto TigerMouthNumberCal = [&](int &EyePosition) {
+			int temp;
+			int number = 0;
+			int pos;
+			bool Attack;
+			if (EyePosition == 0) Attack = true;
+			else Attack = false;
+			for (int i = 1; i < 10; ++i)
+			{
+				for (int j = 1; j < 10; ++j)
+				{
+					if (cross[i][j] != 0) continue;
+					if (Attack) pos = 0;
+					else pos = 1;
+					temp = GetSurroundNumber(i, j, pos);
+					if (temp == 3)
+					{
+						if (DeadCheck(GetLine(pos), GetColumn(pos), playerId, cross) == false)
+						{
+							EyePosition = pos;
+							number++;
+						}
+					}
+				}
+			}
+			return number;
+		};
+		int MyEyeNumber = 0, RivalEyeNumber = 0;
+		int temp1 = 1, temp2 = 0;
+		RivalEyeNumber = TigerMouthNumberCal(temp1);
+		PlayerId = 3 - PlayerId;
+		MyEyeNumber = TigerMouthNumberCal(temp2);
+		PlayerId = 3 - PlayerId;
+		//如果对方有一个虎口，优先阻止，不管三七二十一
+		if (RivalEyeNumber == 1)
+		{
+			moves.clear();
+			moves.emplace_back(temp1);
+			return false;
+		}
+		//如果对方没有虎口，而自己有虎口
+		else if (RivalEyeNumber == 0 && MyEyeNumber > 0)
+		{
+			moves.clear();
+			moves.emplace_back(temp2);
+			return false;
+		}
+	}
 	//遍历链表
 	for (auto t : SP)
 	{
