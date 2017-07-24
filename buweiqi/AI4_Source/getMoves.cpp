@@ -42,6 +42,7 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 		}
 	}
 	CanSeeWinner = false;
+	/*
 	//搜索眼的数量
 	{
 		//计算棋盘上虎口数量
@@ -92,7 +93,7 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 			moves.emplace_back(temp2);
 			return false;
 		}
-	}
+	}*/
 	//遍历链表
 	for (auto t : SP)
 	{
