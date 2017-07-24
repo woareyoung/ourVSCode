@@ -152,7 +152,7 @@ namespace MCTS
 	Node<State>::~Node()
 	{
 		if (children.size() != 0) {
-			int temp = children.size();
+			int temp = static_cast<int>(children.size());
 			for (int i = 0; i < temp; ++i) {
 				delete children[i];
 			}

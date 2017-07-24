@@ -30,6 +30,8 @@ public:
 		Winner(NoChess)
 	{
 		setRole(Id);
+		this->turn2Who = Id;
+		this->PlayerId = turn2Who;
 		for (int i = ChessInit; i < ChessEnd; ++i) {
 			for (int j = ChessInit; j < ChessEnd; ++j) {
 				cross[i][j] = b[i][j];
@@ -51,13 +53,13 @@ public:
 			return true;
 		}
 		else {
-			if (!Win) {
-				SimulateMove(*moves.begin());
-				return true;
-			}
-			else {
+			if (Win) {
 				Winner = getRival(player_to_move);
 				return false;
+			}
+			else {
+				SimulateMove(*moves.begin());
+				return true;
 			}
 		}
 		return false;
@@ -74,15 +76,21 @@ public:
 
 		AI4 state;
 		bool Win;
+		// 如果是true，那就直接返回
 		if (state.getMoves(moves, cross, player_to_move, Win)) {
 			return moves;
 		}
 		else {
-			// 如果Win为true的话，就是表示输了，就直接清空数据
-			// 如果Win为false的话，就是表示moves有且仅有一个子，而且这一步是确定的，也直接清空数据。
-			moves.clear();
-			moves.swap(std::vector<int>());
-			return moves;
+			if (Win) {
+				// 如果Win为true的话，就是表示输了，就直接清空数据
+				moves.clear();
+				moves.swap(std::vector<int>());
+				return moves;
+			}
+			else {
+				// 如果Win为false的话，就是表示moves有且仅有一个子，而且这一步是确定的，也直接清空数据。
+				return moves;
+			}
 		}
 	}
 
@@ -192,7 +200,7 @@ protected:
 		options.verbose = true;
 		options.max_iterations = -1;
 		options.max_time = 1;
-		auto state_copy = new SimulatorGo2(cross, turn2Who);
+		auto state_copy = new SimulatorGo2(cross, PlayerId);
 		auto best_move = MCTS::computeNextMove(state_copy, options);
 		return best_move;
 	}

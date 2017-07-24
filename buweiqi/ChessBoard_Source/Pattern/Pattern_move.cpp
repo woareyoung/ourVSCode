@@ -419,13 +419,14 @@ void Pattern_Moves::ScanChessBroad() {
 	for (int x = ChessStart; x < ChessEnd; ++x) {
 		for (int y = ChessStart; y < ChessEnd; ++y) {
 			if (cross[x][y] == NoChess) {
+				if (chessScore[x][y] == minLimit) continue;
 				if (isGo2Dead(x, y, turn2Who)) {
 					chessScore[x][y] = minLimit;
 					// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
 					continue;
 				}
 				// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
-				if (cross[x][y] == NoChess && chessScore[x][y] == 0) continue;
+				if (chessScore[x][y] == 0) continue;
 				if (isGo2Dead(x, y, rival)) {
 					// 如果是敌方的自杀点的话，这里就置零   -.-！！！
 					chessScore[x][y] = 0;

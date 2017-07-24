@@ -440,13 +440,14 @@ void AI2::ScanChessBroad() {
 	for (int x = ChessStart; x < ChessEnd; ++x) {
 		for (int y = ChessStart; y < ChessEnd; ++y) {
 			if (cross[x][y] == NoChess) {
+				if (CS[x][y] == minLimit) continue;
 				if (chessInfo.WinOrLoseCheck(x, y, turn2Who, cross)) {
 					CS[x][y] = minLimit;
 					// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
 					continue;
 				}
 				// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
-				if (cross[x][y] == NoChess && CS[x][y] == 0) continue;
+				if (CS[x][y] == 0) continue;
 				if (chessInfo.WinOrLoseCheck(x, y, Rival, cross)) {
 					// 如果是敌方的自杀点的话，这里就置零   -.-！！！
 					CS[x][y] = 0;
