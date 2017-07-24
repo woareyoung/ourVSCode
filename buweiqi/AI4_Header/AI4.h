@@ -102,10 +102,10 @@ private:
 	int GetSurroundNumber(int line, int column)
 	{
 		int num = 0;
-		if (cross[line - 1][column] == 3 - PlayerId) num++;
-		if (cross[line + 1][column] == 3 - PlayerId) num++;
-		if (cross[line][column - 1] == 3 - PlayerId) num++;
-		if (cross[line][column + 1] == 3 - PlayerId) num++;
+		if (cross[line - 1][column] == 3 - PlayerId || line == 1) num++;
+		if (cross[line + 1][column] == 3 - PlayerId || line == 9) num++;
+		if (cross[line][column - 1] == 3 - PlayerId || column == 1) num++;
+		if (cross[line][column + 1] == 3 - PlayerId || column == 9) num++;
 		return num;
 	}
 };
