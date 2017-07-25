@@ -26,6 +26,7 @@ std::vector<int> SimulatorGo::getMoves() /*const*/
 	initSimulation();
 	// const_cast<SimulatorGo*>(this)->startPattern();
 	// const_cast<SimulatorGo*>(this)->ScanChessBroad();
+	ScanChessBroad();
 	startPattern();
 	ScanChessBroad();
 

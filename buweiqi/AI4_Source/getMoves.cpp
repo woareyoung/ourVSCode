@@ -63,8 +63,7 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 					temp = GetSurroundNumber(i, j, pos);
 					if (temp == 3)
 					{
-						if (DeadCheck(GetLine(pos), GetColumn(pos), playerId, cross) == false)
-						{
+						if (DeadCheck(GetLine(pos), GetColumn(pos), playerId, cross) == false) {
 							EyePosition = pos;
 							number++;
 						}
