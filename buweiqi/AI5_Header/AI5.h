@@ -211,15 +211,15 @@ protected:
 		bool Win;
 		if (!state.getMoves(moves, cross, PlayerId, Win)) {
 			return *moves.begin();
-		}
-		//else {
-		//	std::mt19937_64 random_engine(1008611);// 随机函数种子，用于随机走步
-		//	std::uniform_int_distribution<std::size_t> move_ind(0, moves.size() - 1);
-		//	// 开始模拟走步
-		//	return moves[move_ind(random_engine)];
-		//}
+		}/*
+		else {
+			std::mt19937_64 random_engine(1008611);// 随机函数种子，用于随机走步
+			std::uniform_int_distribution<std::size_t> move_ind(0, moves.size() - 1);
+			// 开始模拟走步
+			return moves[move_ind(random_engine)];
+		}*/
 		MCTS::ComputeOptions options;
-		options.number_of_threads = 2;
+		options.number_of_threads = 1;
 		options.verbose = true;
 		options.max_iterations = -1;
 		options.max_time = 1;
