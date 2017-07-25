@@ -94,17 +94,20 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 			return false;
 		}
 	}*/
+	int temp;
 	//遍历链表
 	for (auto t : SP)
 	{
 		if (DeadCheck(GetLine(t.first), GetColumn(t.first), PlayerId, cross)) continue;
-		if (CalDeadPosNumber(GetLine(t.first), GetColumn(t.first)) != 1)
+		temp = CalDeadPosNumber(GetLine(t.first), GetColumn(t.first));
+		if (temp == -1) continue;
+		if (temp != 1)
 		{
 			moves.clear();
 			moves.emplace_back(t.first);
 			return false;
 		}
-		moves.emplace_back(t.first);
+		else moves.emplace_back(t.first);
 	}
 	return true;
 }
@@ -168,7 +171,7 @@ int AI4::CalDeadPosNumber(int line, int column)
 	cross[line][column] = 0;
 	//如果己方下了该位置，可令对方增加2个以上死棋位置数，则不用犹豫了
 	if (RivalDeadPosNumber1 - saveRivalDead > 1) return 2;
-	//如果己方下了该位置，会令对方增加1个死棋位置；且如果对方下了该位置，会令己方增加1个死棋位置
-	if (MyDeadPosNumber2 - MyDeadPosNumber1 > 0 && RivalDeadPosNumber1 - RivalDeadPosNumber2 > 0) return 2;
+	//如果对方下了该位置，可令己方增加2个或以上死棋位置数
+	if (MyDeadPosNumber2 - saveMyDead > 1) return 2;
 	return 1;
 }
