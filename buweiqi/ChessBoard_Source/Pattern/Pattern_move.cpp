@@ -414,9 +414,12 @@ void Pattern_Moves::resetGo2DeadStatus() {
 	}
 }
 
+#include<omp.h>  
 void Pattern_Moves::ScanChessBroad() {
 	int rival = getRival(turn2Who);
+#pragma omp parallel for
 	for (int x = ChessStart; x < ChessEnd; ++x) {
+#pragma omp parallel for
 		for (int y = ChessStart; y < ChessEnd; ++y) {
 			if (cross[x][y] == NoChess) {
 				if (chessScore[x][y] == minLimit) continue;

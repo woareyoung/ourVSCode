@@ -10,7 +10,12 @@ private:
 	mutable int chessScoreW[ChessEnd][ChessEnd];
 protected:
 	virtual int* getPatternType() override {
-		return Type[player_to_move - 1];
+		if (player_to_move == Black || player_to_move == White) {
+			return Type[player_to_move - 1];
+		}
+		else {
+			return nullptr;
+		}
 	}
 public:
 	bool ifShowInfo;

@@ -264,6 +264,9 @@ void AI2::reverse_X_Y(DIRECTION *PatternType) {
 */
 void AI2::startPattern() {
 	int *PatternType = getPatternType();
+	if (PatternType == nullptr) {
+		return;
+	}
 	(this->*Reverse[1])(pattern_Background);//第一个版本 (X, Y)
 	Pattern(PatternType);
 	(this->*Reverse[2])(pattern_Background);//第二个版本，Y轴反转 (X, -Y)

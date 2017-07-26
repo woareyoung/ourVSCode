@@ -54,7 +54,12 @@ protected:
 
 	// 填充数组进行变换
 	virtual int* getPatternType() {
-		return Type[turn2Who - 1];
+		if (turn2Who == Black || turn2Who == White) {
+			return Type[turn2Who - 1];
+		}
+		else {
+			return nullptr;
+		}
 	}
 
 	virtual void initPlayerRole(int onTurn) {

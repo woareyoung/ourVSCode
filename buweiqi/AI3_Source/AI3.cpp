@@ -101,7 +101,7 @@ bool SimulatorGo::checkEmptyPos(
 	const int& y,
 	const int& start,
 	const int& mainColor,
-	const Pos* emptyPos) 
+	const Pos* emptyPos)
 {
 	WinCheck::ChessBoardOption option;
 	option.black = Black;
@@ -114,7 +114,6 @@ bool SimulatorGo::checkEmptyPos(
 	如果是的话，就把该点的分数设置为0，跳过匹配模式
 	*******************************************/
 	int rival = getRival(player_to_move);
-#pragma omp parallel for
 	for (int i = 0; i < start; ++i) {
 		if (mainColor == rival) {
 			if (CS[emptyPos[i].line][emptyPos[i].column] == 0) {
@@ -181,7 +180,7 @@ void SimulatorGo::initCSPoint() {
 		CS = chessScore;// 这里目测不会用到的
 	}
 }
-
+#include <omp.h>
 std::vector<int> SimulatorGo::getAllMoves() {
 	initSimulation();
 	startPattern();
@@ -227,8 +226,6 @@ void SimulatorGo::initSimulation() /*const*/ {
 		}
 	}
 }
-
-#include <omp.h>
 
 void SimulatorGo::ScanChessBroad() {
 	WinCheck::ChessBoardOption option;
@@ -294,10 +291,10 @@ void SimulatorGo::showSimaluteInfo(const int& line, const int& column) {
 
 int AI3::predict() {
 	MCTS::ComputeOptions options;
-	options.number_of_threads = 1;
+	options.number_of_threads = 6;
 	options.verbose = true;
 	options.max_iterations = -1;
-	options.max_time = 2;
+	options.max_time = 6;
 	auto state_copy = new SimulatorGo(cross, PlayerId);
 	return MCTS::computeNextMove(state_copy, options);
 }
