@@ -30,18 +30,9 @@ int AI3::GetSurroundChessNumber(int line, int column, int playerNum, int CROSS[]
 		column = saveColumn;
 		while (!MyChessPosition.empty()) MyChessPosition.pop();
 	};
+	Visit[line][column] = true;//设置眼中心的遍历标识
 	while (true)
 	{
-		Visit[line][column] = true;
-		//遇到没遇到过的空位，数量加1
-		if (CROSS[line][column] == 0 && OnChessBoard(line, column) && !Visit[line][column])
-		{
-			BackData();
-			++number;
-			NullPos.emplace_back(std::make_pair(line, column));
-			if (number == MaxNull) return 3;
-			continue;
-		}
 		//如果上面有自己的棋子且未遍历过
 		if (CROSS[line - 1][column] == playerNum && Visit[line - 1][column] == false && line > 1)
 		{
@@ -51,6 +42,8 @@ int AI3::GetSurroundChessNumber(int line, int column, int playerNum, int CROSS[]
 		else if (CROSS[line - 1][column] == 0 && line > 1)
 		{
 			line = line - 1;
+			Visit[line][column] = true;
+			++number;
 			continue;
 		}
 		//如果下面有自己的棋子且未遍历过
@@ -62,6 +55,8 @@ int AI3::GetSurroundChessNumber(int line, int column, int playerNum, int CROSS[]
 		else if (CROSS[line + 1][column] == 0 && line < 9)
 		{
 			line = line + 1;
+			Visit[line][column] = true;
+			++number;
 			continue;
 		}
 		//如果左边有自己的棋子且未遍历过
@@ -73,6 +68,8 @@ int AI3::GetSurroundChessNumber(int line, int column, int playerNum, int CROSS[]
 		else if (CROSS[line][column - 1] == 0 && column > 1)
 		{
 			column = column - 1;
+			Visit[line][column] = true;
+			++number;
 			continue;
 		}
 		//如果右边有自己的棋子且未遍历过
@@ -84,8 +81,11 @@ int AI3::GetSurroundChessNumber(int line, int column, int playerNum, int CROSS[]
 		else if (CROSS[line][column + 1] == 0 && column < 9)
 		{
 			column = column + 1;
+			Visit[line][column] = true;
+			++number;
 			continue;
 		}
+		if (POPdata()) continue;
 		break;
 	}
 	return number;
