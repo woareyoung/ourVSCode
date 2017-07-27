@@ -41,7 +41,7 @@ std::vector<int> SimulatorGo::getMoves() /*const*/
 	// 从当前棋盘中选择出由Pattern匹配出来的比较好的着子点集合
 	for (int i = ChessStart; i < ChessEnd; ++i) {
 		for (int j = ChessStart; j < ChessEnd; ++j) {
-			if (cross[i][j] == NoChess && CS[i][j] >= 20) {
+			if (cross[i][j] == NoChess && CS[i][j] >= 10) {
 				moves.emplace_back(getMove(i, j));
 				topMoves.emplace_back(getMove(i, j), CS[i][j]);
 			}
@@ -52,7 +52,7 @@ std::vector<int> SimulatorGo::getMoves() /*const*/
 		std::vector<int> tempMoves;
 		int MaxScore = (*topMoves.begin()).first;
 		int size = static_cast<int>(topMoves.size());
-		for (int i = 0; i < size; ++i) { 
+		for (int i = 0; i < size; ++i) {
 			if (MaxScore == topMoves[i].first) {
 				tempMoves.emplace_back(topMoves[i].first);
 			}
@@ -180,6 +180,37 @@ void SimulatorGo::initCSPoint() {
 		CS = chessScore;// 这里目测不会用到的
 	}
 }
+
+void SimulatorGo::changeLiveEye2DeadEye(int line, int column, int type) {
+	std::vector<std::pair<int, int>> NullPos;
+	int size = GetSurroundChessNumber(line, column, type, cross, NullPos);
+	int score = 0;
+
+	if (size > 0 && size <= 3) {
+		for (int i = 0; i < size; ++i) {
+			if (CS[NullPos[i].first][NullPos[i].second] == minLimit) {
+				return;
+			}
+		}
+	}
+
+	if (size == 3) {
+		score = pattern_Score[7];
+	}
+	else if (size == 2) {
+		score = pattern_Score[5];
+	}
+	else if (size == 1) {
+		score = pattern_Score[3];
+	}
+
+	if (size > 0 && size <= 3) {
+		for (int i = 0; i < size; ++i) {
+			CS[NullPos[i].first][NullPos[i].second] = score;
+		}
+	}
+}
+
 #include <omp.h>
 std::vector<int> SimulatorGo::getAllMoves() {
 	initSimulation();
@@ -199,14 +230,14 @@ std::vector<int> SimulatorGo::getAllMoves() {
 #pragma omp parallel for
 		for (int j = ChessStart; j < ChessEnd; ++j) {
 			if (cross[i][j] == NoChess && CS[i][j] != minLimit) {
-				if (!chessInfo.WinOrLoseCheck(i, j, player_to_move,cross)) {
+				if (!chessInfo.WinOrLoseCheck(i, j, player_to_move, cross)) {
 					allMoves.emplace_back(getMove(i, j));
 				}
 				else {
 					if (CS[i][j] != 0 && chessInfo.WinOrLoseCheck(i, j, rival, cross)) {
 						CS[i][j] = 0;
 					}
-					else if (CS[i][j] != 0){
+					else if (CS[i][j] != 0) {
 						CS[i][j] = minLimit;
 					}
 				}
@@ -235,24 +266,28 @@ void SimulatorGo::ScanChessBroad() {
 	option.edge = Edge;
 	option.emptyChess = NoChess;
 	WinCheck::ChessInfo chessInfo(option);
-	int rival = getRival(player_to_move);
 #pragma omp parallel for
 	for (int x = ChessStart; x < ChessEnd; ++x) {
 #pragma omp parallel for
 		for (int y = ChessStart; y < ChessEnd; ++y) {
 			if (cross[x][y] == NoChess) {
-				if (CS[x][y] == minLimit) continue;
+				if (CS[x][y] == minLimit) {
+					continue;
+				}
 				if (chessInfo.WinOrLoseCheck(x, y, player_to_move, cross)) {
 					CS[x][y] = minLimit;
 					// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
 					continue;
 				}
 				// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
-				if (CS[x][y] == 0) continue;
-				if (chessInfo.WinOrLoseCheck(x, y, rival, cross)) {
+				if (CS[x][y] == 0) {
+					continue;
+				}
+				if (chessInfo.WinOrLoseCheck(x, y, getRival(player_to_move), cross)) {
 					// 如果是敌方的自杀点的话，这里就置零   -.-！！！
 					CS[x][y] = 0;
 					continue;
+
 				}
 				// 这里既不是我方自杀点，也不是敌方自杀点
 			}
@@ -295,7 +330,7 @@ int AI3::predict() {
 	options.number_of_threads = 4;
 	// options.verbose = true;
 	options.max_iterations = -1;
-	options.max_time = 6;
+	options.max_time = 1;
 	auto state_copy = new SimulatorGo(cross, PlayerId);
 	return MCTS::computeNextMove(state_copy, options);
 }

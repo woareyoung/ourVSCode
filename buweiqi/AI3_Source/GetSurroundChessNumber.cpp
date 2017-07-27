@@ -1,15 +1,13 @@
 #include "../AI3_Header/AI3.h"
 
-#define MaxNull 2 //大于这个数的时候，放弃围攻这个眼
-
-int AI3::GetSurroundChessNumber(int line, int column, int playerNum, int CROSS[][10], std::vector<std::pair<int, int>> &NullPos)
+int SimulatorGo::GetSurroundChessNumber(int line, int column, int playerNum, int CROSS[][10], std::vector<std::pair<int, int>> &NullPos)
 {
 	int number = 0;//空位数量
 	bool Visit[10][10] = { false };//遍历标识
 	int saveLine = line, saveColumn = column;//保存数据
 	std::stack<std::pair<int, int>> MyChessPosition;//属于playerNum的棋子
 	std::pair<int, int> p;//临时变量
-	//弹出数据
+						  //弹出数据
 	auto POPdata = [&]() {
 		if (MyChessPosition.empty()) return false;
 		p = MyChessPosition.top();
@@ -33,25 +31,17 @@ int AI3::GetSurroundChessNumber(int line, int column, int playerNum, int CROSS[]
 	while (true)
 	{
 		Visit[line][column] = true;
-		//遇到没遇到过的空位，数量加1
-		if (CROSS[line][column] == 0 && OnChessBoard(line, column) && !Visit[line][column])
-		{
-			BackData();
-			++number;
-			NullPos.emplace_back(std::make_pair(line, column));
-			if (number == MaxNull) return 3;
-			continue;
-		}
 		//如果上面有自己的棋子且未遍历过
 		if (CROSS[line - 1][column] == playerNum && Visit[line - 1][column] == false && line > 1)
 		{
 			PUSHdata(line - 1, column);
 			continue;
 		}
-		else if (CROSS[line - 1][column] == 0 && line > 1)
+		else if (CROSS[line - 1][column] == NoChess && Visit[line - 1][column] == false && line > 1)
 		{
-			line = line - 1;
-			continue;
+			NullPos.emplace_back(std::make_pair(line - 1, column));
+			Visit[line - 1][column] = true;
+			number++;
 		}
 		//如果下面有自己的棋子且未遍历过
 		if (CROSS[line + 1][column] == playerNum && Visit[line + 1][column] == false && line < 9)
@@ -59,10 +49,11 @@ int AI3::GetSurroundChessNumber(int line, int column, int playerNum, int CROSS[]
 			PUSHdata(line + 1, column);
 			continue;
 		}
-		else if (CROSS[line + 1][column] == 0 && line < 9)
+		else if (CROSS[line + 1][column] == NoChess && Visit[line + 1][column] == false && line < 9)
 		{
-			line = line + 1;
-			continue;
+			NullPos.emplace_back(std::make_pair(line + 1, column));
+			Visit[line + 1][column] = true;
+			number++;
 		}
 		//如果左边有自己的棋子且未遍历过
 		if (CROSS[line][column - 1] == playerNum && Visit[line][column - 1] == false && column > 1)
@@ -70,10 +61,11 @@ int AI3::GetSurroundChessNumber(int line, int column, int playerNum, int CROSS[]
 			PUSHdata(line, column - 1);
 			continue;
 		}
-		else if (CROSS[line][column - 1] == 0 && column > 1)
+		else if (CROSS[line][column - 1] == NoChess && Visit[line][column - 1] == false && column > 1)
 		{
-			column = column - 1;
-			continue;
+			NullPos.emplace_back(std::make_pair(line, column - 1));
+			Visit[line][column - 1] = true;
+			number++;
 		}
 		//如果右边有自己的棋子且未遍历过
 		if (CROSS[line][column + 1] == playerNum && Visit[line][column + 1] == false && column < 9)
@@ -81,11 +73,13 @@ int AI3::GetSurroundChessNumber(int line, int column, int playerNum, int CROSS[]
 			PUSHdata(line, column + 1);
 			continue;
 		}
-		else if (CROSS[line][column + 1] == 0 && column < 9)
+		else if (CROSS[line][column + 1] == NoChess && Visit[line][column + 1] == false && column < 9)
 		{
-			column = column + 1;
-			continue;
+			NullPos.emplace_back(std::make_pair(line, column + 1));
+			Visit[line][column + 1] = true;
+			number++;
 		}
+		if (POPdata()) continue;
 		break;
 	}
 	return number;

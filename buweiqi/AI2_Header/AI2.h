@@ -11,13 +11,9 @@ class AI2 : public AI, public AIPlayer, public DefaultChess
 private:
 
 	// 匹配模式
-	static const int pattern_Total = 27;
+	static const int pattern_Total = /*27*/23;
 	// 匹配的次数
-	static const int pattern_Sum = 168;
-	// 模式分数尺度
-	int pattern_Score[pattern_Total];
-	// 分数说明：
-	// 对方自杀点且非我方自杀点的分数为0，我方自杀点为minLitmit。
+	static const int pattern_Sum = /*168*/152;
 
 	// pattern加分位置
 	DIRECTION pattern_Score_Pos[pattern_Total];
@@ -39,6 +35,10 @@ private:
 	void reverse_X(DIRECTION *PatternType);
 	void reverse_X_Y(DIRECTION *PatternType);
 protected:
+	// 模式分数尺度
+	int pattern_Score[pattern_Total];
+	// 分数说明：
+	// 对方自杀点且非我方自杀点的分数为0，我方自杀点为minLitmit。
 	mutable int(*CS)[10];
 	virtual void initCSPoint() {
 		CS = chessScore;
@@ -75,7 +75,7 @@ protected:
 		}
 		if (cross[line][column] != NoChess) {
 			cross[line][column] = NoChess;
-			CS[line][column] = getDefaultChessScore(line, column);
+			chessScore[line][column] = getDefaultChessScore(line, column);
 		}
 	}
 public:
@@ -139,6 +139,10 @@ public:
 
 	// 当没有匹配到的时候获取一个合适的位置
 	int FindPosition();
+
+	virtual void changeLiveEye2DeadEye(int line, int column, int type) { 
+		;
+	}
 };
 
 

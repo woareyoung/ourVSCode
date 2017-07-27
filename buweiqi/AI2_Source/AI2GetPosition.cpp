@@ -21,6 +21,7 @@ void AI2::GetPosition(int &line, int &column, int onTurn)
 			line++;
 			column++;
 			initAllArray();
+			initChessScore(true);
 		}
 		//回退一步的命令，对数据进行回退。（100为玩家1，200为玩家2，line与column为回退的位置）
 		else if (onTurn == 100 || onTurn == 200)
@@ -52,7 +53,7 @@ void AI2::GetPosition(int &line, int &column, int onTurn)
 	cross[line][column] = turn2Who;
 	// 将计算出的位置的分数设为最小值
 	
-	_cprintf("\n**************This is chess score*******(%d, %d)***********\n", line, column);
+	/*_cprintf("\n**************This is chess score*******(%d, %d)***********\n", line, column);
 	for (int i = ChessStart; i < ChessEnd; ++i)
 	{
 		for (int j = 1; j < 10; ++j)
@@ -69,7 +70,7 @@ void AI2::GetPosition(int &line, int &column, int onTurn)
 				_cprintf(".\t");
 			}
 			_cprintf("\n");
-	}
-	_cprintf("**************This is chess cross*******(%d, %d)***********\n", line, column);
-	showChessBoard(cross);
+	}*/
+	//_cprintf("**************This is chess cross*******(%d, %d)***********\n", line, column);
+	//showChessBoard(cross);
 }

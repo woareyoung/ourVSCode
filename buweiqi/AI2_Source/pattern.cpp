@@ -81,7 +81,7 @@ void AI2::initAll() {
 		{ 0, -2 },{ 2, -2 },{ 1, -1 },{ 2, 0 },
 		{ -1, -1 },{ 1, -1 },{ -1, 1 },{ 1, 1 },
 		{ 0, -2 },{ 2, -2 },{ 1, -1 },{ 2, 0 },
-		{ -1, -1 },{ 1, -1 },{ -1, 1 },{ 1, 1 }	
+		{ -1, -1 },{ 1, -1 },{ -1, 1 },{ 1, 1 }
 	};
 	// 利用与或处理棋子点
 	// 匹配模式中棋子分布
@@ -324,6 +324,9 @@ void AI2::Pattern(const int *PatternType) {
 				j = pointer;
 				pointer += pattern_Count[i];
 				if (NoChess != cross[x][y]) continue;// 如果不是空着子点就跳转下一次循环
+
+
+
 				start = 0;
 				score = pattern_Score[i];
 				for (; j < pointer; ++j)
@@ -464,14 +467,19 @@ void AI2::ScanChessBroad() {
 	for (int x = ChessStart; x < ChessEnd; ++x) {
 		for (int y = ChessStart; y < ChessEnd; ++y) {
 			if (cross[x][y] == NoChess) {
-				if (CS[x][y] == minLimit) continue;
+				if (CS[x][y] == minLimit) {
+					continue;
+				}
 				if (chessInfo.WinOrLoseCheck(x, y, turn2Who, cross)) {
 					CS[x][y] = minLimit;
 					// 如果是我方的自杀点的话，就直接跳转，不用判断是否是敌方的自杀点了。
 					continue;
 				}
+
 				// 临时设置当前获得的位置为敌方着子点，判断是否是敌方的自杀点
-				if (CS[x][y] == 0) continue;
+				if (CS[x][y] == 0) {
+					continue;
+				}
 				if (chessInfo.WinOrLoseCheck(x, y, Rival, cross)) {
 					// 如果是敌方的自杀点的话，这里就置零   -.-！！！
 					CS[x][y] = 0;

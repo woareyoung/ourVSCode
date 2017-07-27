@@ -132,6 +132,22 @@ public:
 	virtual void ScanChessBroad() override;
 
 	void showSimaluteInfo(const int& line, const int& column);
+
+	virtual void changeLiveEye2DeadEye(int line, int column, int type);
+	/*
+	param[line]:眼的位置——行
+	param[column]:眼的位置——列
+	param[playerNum]:眼的拥有者
+	param[CROSS]:棋盘状态
+	param[NullPos]:存放眼周围的空位位置
+	return:眼的气
+	*/
+	int GetSurroundChessNumber(
+		int line, 
+		int column, 
+		int playerNum, 
+		int CROSS[][10], 
+		std::vector<std::pair<int, int>> &NullPos);
 };
 
 class AI3 : public AI2
@@ -142,17 +158,18 @@ public:
 
 	virtual int maxandmin(const int& depth) override {
 		initChessScore(true);
-		return predict();
+		int best_move = predict();
+		if (best_move == 0) {
+			for (int x = ChessStart; x < ChessEnd; ++x) {
+				for (int y = ChessStart; y < ChessEnd; ++y) {
+					if (cross[x][y] == NoChess) {
+						return getMove(x, y);
+					}
+				}
+			}
+		}
+		return best_move;
 	}
 	int predict();
-	/*
-	param[line]:眼的位置——行
-	param[column]:眼的位置——列
-	param[playerNum]:眼的拥有者
-	param[CROSS]:棋盘状态
-	param[NullPos]:存放眼周围的空位位置
-	return:眼的气
-	*/
-	int GetSurroundChessNumber(int line, int column, int playerNum, int CROSS[][10], std::vector<std::pair<int, int>> &NullPos);
 };
 

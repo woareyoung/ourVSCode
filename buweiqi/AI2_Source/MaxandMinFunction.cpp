@@ -142,7 +142,10 @@ void AI2::Revalute()
 
 	// 估值并加分
 	// 这里进行模板匹配
+	initCSPoint();
+	ScanChessBroad();
 	startPattern();
+	ScanChessBroad();
 }
 
 int AI2::FindPosition() {
