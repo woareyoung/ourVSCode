@@ -148,6 +148,7 @@ namespace WinCheck {
 		//注：调用该函数（即下棋的玩家）的那个人或AI是“己方”
 		bool WinOrLose(int& line, int& column, int& onTurn, int& Winner, int c[10][10]) const
 		{
+
 			auto initArray = [&](int c[10][10]) {
 				for (int i = 0; i < 10; ++i) {
 					for (int j = 0; j < 10; ++j) {
@@ -217,12 +218,6 @@ namespace WinCheck {
 
 		bool WinOrLoseCheck(const int& line, const int& column, const int& type, int& Winner, int CROSS[][10])
 		{
-			if (option.isInterface) {
-				if (line == 0 && column == 0) {
-					Winner = getRival(type);
-					return true;
-				}
-			}
 			auto initArray = [&](int c[10][10]) {
 				for (int i = 0; i < 10; ++i) {
 					for (int j = 0; j < 10; ++j) {
@@ -255,6 +250,13 @@ namespace WinCheck {
 			else {
 				player = type;
 				rival = getRival(type);//对方
+			}
+
+			if (option.isInterface) {
+				if (line == 0 || column == 0) {
+					Winner = rival;
+					return true;
+				}
 			}
 
 			bool simulate = false;//标记是否是模拟下棋

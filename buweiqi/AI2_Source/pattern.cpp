@@ -25,7 +25,8 @@ void AI2::initAll() {
 		//55, 55, 55, 45, 45, 45,// 6
 		//55, 55, 55, 45, 45, 45// 6
 		60, 60, 60, 50, 50, 50,// 6
-		60, 60, 60, 50, 50, 50// 6
+		60, 60, 60, 50, 50, 50,// 6
+		45, 45, 40, 40// 4
 	};
 	// 分数说明：
 	// 对方自杀点且非我方自杀点的分数为0，我方自杀点为minLitmit。
@@ -33,14 +34,16 @@ void AI2::initAll() {
 	DIRECTION patternAddScorePos[] = {
 		{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 },// 11
 		{ 0, -1 },{ 1, 0 },{ 1, 1 },{ 0, -1 },{ 1, 0 },{ 1, 1 },// 6，形成围杀，默认采用外部空位
-		{ 0, 1 },{ 1, 1 },{ 2, -1 },{ 0, 1 },{ 1, 1 },{ 2, -1 }// 6
+		{ 0, 1 },{ 1, 1 },{ 2, -1 },{ 0, 1 },{ 1, 1 },{ 2, -1 },// 6
+		{ 0, 0 },{ 0, 0 },{ 0, 0 },{ 0, 0 }// 4
 	};
 
 	// 模式内判断棋子点数
 	int patternCount[] = {
 		4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,// 44
 		7, 7, 7, 7, 7, 7,// 42
-		11,11,11,11,11,11// 66
+		11,11,11,11,11,11,// 66
+		4,4,4,4//16
 	};
 	// 看不懂的请看种子填充算法
 	DIRECTION patternBackground[] = {
@@ -73,7 +76,12 @@ void AI2::initAll() {
 		{ 0, -2 },{ 1, -2 },{ -1, -1 },{ 0, -1 },{ 1, -1 },{ 2, -1 },{ -1 ,0 },{ 1, 0 },{ 2, 0 },{ 0, 1 },{ 1, 1 },
 		{ 0, -2 },{ 1, -2 },{ -1, -1 },{ 0, -1 },{ 1, -1 },{ 2, -1 },{ -1 ,0 },{ 1, 0 },{ 2, 0 },{ 0, 1 },{ 1, 1 },
 		{ 0, -2 },{ 1, -2 },{ -1, -1 },{ 0, -1 },{ 1, -1 },{ 2, -1 },{ -1 ,0 },{ 1, 0 },{ 2, 0 },{ 0, 1 },{ 1, 1 },
-		{ 0, -2 },{ 1, -2 },{ -1, -1 },{ 0, -1 },{ 1, -1 },{ 2, -1 },{ -1 ,0 },{ 1, 0 },{ 2, 0 },{ 0, 1 },{ 1, 1 }// 6 66
+		{ 0, -2 },{ 1, -2 },{ -1, -1 },{ 0, -1 },{ 1, -1 },{ 2, -1 },{ -1 ,0 },{ 1, 0 },{ 2, 0 },{ 0, 1 },{ 1, 1 },// 6 66
+
+		{ 0, -2 },{ 2, -2 },{ 1, -1 },{ 2, 0 },
+		{ -1, -1 },{ 1, -1 },{ -1, 1 },{ 1, 1 },
+		{ 0, -2 },{ 2, -2 },{ 1, -1 },{ 2, 0 },
+		{ -1, -1 },{ 1, -1 },{ -1, 1 },{ 1, 1 }	
 	};
 	// 利用与或处理棋子点
 	// 匹配模式中棋子分布
@@ -133,7 +141,14 @@ void AI2::initAll() {
 		Black | Edge,Black | Edge,Black | Edge,	White,White,NoChess,Black | Edge,White,Black | Edge,Black | Edge,Black | Edge,
 		White | Edge,White | Edge,White | Edge,	Black,Black,White | Edge,White | Edge,Black,White | Edge,NoChess,White | Edge,
 		White | Edge,White | Edge,White | Edge,	Black,Black,White | Edge,White | Edge,Black,White | Edge,White | Edge,NoChess,
-		White | Edge,White | Edge,White | Edge,	Black,Black,NoChess,White | Edge,Black,White | Edge,White | Edge,White | Edge
+		White | Edge,White | Edge,White | Edge,	Black,Black,NoChess,White | Edge,Black,White | Edge,White | Edge,White | Edge,
+		/*********************************************
+		直线围杀缺二陷阱构成
+		**********************************************/
+		NoChess, Black,	Black, NoChess,
+		NoChess, Black, Black, NoChess,
+		NoChess, White,	White, NoChess,
+		NoChess, White, White, NoChess,
 	};
 	// 匹配模式中棋子分布
 	int patternBlack[] = {
@@ -159,7 +174,11 @@ void AI2::initAll() {
 		White | Edge,White | Edge,White | Edge,	Black,Black,NoChess,White | Edge,Black,White | Edge,White | Edge,White | Edge,
 		Black | Edge,Black | Edge,Black | Edge,	White,White,Black | Edge,Black | Edge,White,Black | Edge,NoChess,Black | Edge,
 		Black | Edge,Black | Edge,Black | Edge,	White,White,Black | Edge,Black | Edge,White,Black | Edge,Black | Edge,NoChess,
-		Black | Edge,Black | Edge,Black | Edge,	White,White,NoChess,Black | Edge,White,Black | Edge,Black | Edge,Black | Edge
+		Black | Edge,Black | Edge,Black | Edge,	White,White,NoChess,Black | Edge,White,Black | Edge,Black | Edge,Black | Edge,
+		NoChess, White,	White, NoChess,
+		NoChess, White,	White, NoChess,
+		NoChess, Black,	Black, NoChess,
+		NoChess, Black,	Black, NoChess
 	};
 	for (i = 0; i < pattern_Total; ++i) {
 		this->pattern_Score_Pos[i] = patternAddScorePos[i];

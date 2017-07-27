@@ -183,6 +183,7 @@ void SimulatorGo::initCSPoint() {
 #include <omp.h>
 std::vector<int> SimulatorGo::getAllMoves() {
 	initSimulation();
+	ScanChessBroad();
 	startPattern();
 	ScanChessBroad();
 	std::vector<int> allMoves;
@@ -291,8 +292,8 @@ void SimulatorGo::showSimaluteInfo(const int& line, const int& column) {
 
 int AI3::predict() {
 	MCTS::ComputeOptions options;
-	options.number_of_threads = 6;
-	options.verbose = true;
+	options.number_of_threads = 4;
+	// options.verbose = true;
 	options.max_iterations = -1;
 	options.max_time = 6;
 	auto state_copy = new SimulatorGo(cross, PlayerId);

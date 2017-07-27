@@ -183,8 +183,8 @@ public:
 		}
 		cross[line][column] = turn2Who;
 
-		_cprintf("**************This is chess cross*******(%d, %d)***********\n", line, column);
-		showChessBoard(cross);
+		/*_cprintf("**************This is chess cross*******(%d, %d)***********\n", line, column);
+		showChessBoard(cross);*/
 	}
 protected:
 	int cross[10][10];
@@ -219,10 +219,10 @@ protected:
 			return moves[move_ind(random_engine)];
 		}*/
 		MCTS::ComputeOptions options;
-		options.number_of_threads = 1;
-		options.verbose = true;
+		options.number_of_threads = 4;
+		// options.verbose = true;
 		options.max_iterations = -1;
-		options.max_time = 2;
+		options.max_time = 6;
 		auto state_copy = new SimulatorGo2(cross, PlayerId);
 		auto best_move = MCTS::computeNextMove(state_copy, options);
 		return best_move;
