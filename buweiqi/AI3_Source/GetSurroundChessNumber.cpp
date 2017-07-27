@@ -28,6 +28,7 @@ int SimulatorGo::GetSurroundChessNumber(int line, int column, int playerNum, int
 		column = saveColumn;
 		while (!MyChessPosition.empty()) MyChessPosition.pop();
 	};
+	Visit[line][column] = true;//设置眼中心的遍历标识
 	while (true)
 	{
 		Visit[line][column] = true;
