@@ -192,6 +192,7 @@
     <ClCompile Include="AI2_Source\MaxandMinFunction.cpp" />
     <ClCompile Include="AI2_Source\pattern.cpp" />
     <ClCompile Include="AI3_Source\AI3.cpp" />
+    <ClCompile Include="AI3_Source\GetSurroundChessNumber.cpp" />
     <ClCompile Include="AI4_Source\DeadFall.cpp" />
     <ClCompile Include="AI4_Source\DeadPosNumberAddScore.cpp" />
     <ClCompile Include="AI4_Source\GetMaxScorePosition.cpp" />

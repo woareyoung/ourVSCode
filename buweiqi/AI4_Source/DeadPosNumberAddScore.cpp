@@ -1,11 +1,12 @@
 #include "../AI4_Header/AI4.h"
 
-#define FIRSTVALUE 10 //额外价值的倍率
-#define SECVALUE 10 
+#define FIRSTVALUE 100 //额外价值的倍率
+#define SECVALUE 100 
 
-template<class T>
-T AI4::DeadPosNumberAddScore(int line, int column)
+int AI4::DeadPosNumberAddScore(int line, int column)
 {
+	int temp;
+	if(GetSurroundNumber(line, column, temp) == 4) return 0;
 	int Crossing[10][10];
 	int i, j;
 	for (i = 0; i < 10; ++i)
@@ -71,4 +72,7 @@ T AI4::DeadPosNumberAddScore(int line, int column)
 	int RivalDeadPosNumber2 = 0;//对方的死棋位置数量
 	GetDeadNumber(3 - PlayerId, RivalDeadPosNumber2, MyDeadPosNumber2);
 	Crossing[line][column] = 0;
+	int myScoreValue = (MyDeadPosNumber1 - MyDeadPosNumber2) * SECVALUE;
+	int rivalScoreValue = (RivalDeadPosNumber1 - RivalDeadPosNumber2) * FIRSTVALUE;
+	return myScoreValue + rivalScoreValue;
 }

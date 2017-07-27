@@ -72,8 +72,7 @@ private:
 	param[column]:下棋的位置
 	return:额外价值
 	*/
-	template<class T>
-	T DeadPosNumberAddScore(int line, int column);//计算棋盘死棋位置数量对分值的影响
+	int DeadPosNumberAddScore(int line, int column);//计算棋盘死棋位置数量对分值的影响
 	//初始化数组（一局游戏一次）
 	void Initialize()
 	{
