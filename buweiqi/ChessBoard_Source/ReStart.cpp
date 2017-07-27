@@ -36,7 +36,7 @@ void ChessBoard::ReStart()
 				std::ostringstream convert;
 				convert << CombatNumber;
 				temp = convert.str();
-				str = "***The Winner of the" + temp + "is : Player2 ( ©– )***\n";
+				str = "***The Winner of the " + temp + " is : Player2 ( ©– )***\n";
 				showInfo(str.c_str());
 			}
 		}
@@ -48,7 +48,7 @@ void ChessBoard::ReStart()
 			MessageBox(RootHwnd, _T("¹§Ï²Íæ¼Ò1£¨ºÚ×Ó£©Ê¤³ö"), _T("¿­Ðý"), MB_OK);
 		else MessageBox(RootHwnd, _T("¹§Ï²Íæ¼Ò2£¨°××Ó£©Ê¤³ö"), _T("¿­Ðý"), MB_OK);
 	}
-//	FileS.AddMemory(MemBattle, Winner);
+	FileS.AddMemory(MemBattle, Winner);
 	if (Player1AI == &ai4)
 	{
 		if (Player2AI == &ai44) UpdateCRdata(4, 4, Winner);

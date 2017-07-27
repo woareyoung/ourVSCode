@@ -271,6 +271,10 @@ void SimulatorGo::ScanChessBroad() {
 #pragma omp parallel for
 		for (int y = ChessStart; y < ChessEnd; ++y) {
 			if (cross[x][y] == NoChess) {
+				if (GetSurroundNumber(x, y) == 4)
+				{
+					changeLiveEye2DeadEye(x, y, cross[x][y]);
+				}
 				if (CS[x][y] == minLimit) {
 					continue;
 				}

@@ -148,6 +148,43 @@ public:
 		int playerNum, 
 		int CROSS[][10], 
 		std::vector<std::pair<int, int>> &NullPos);
+	/*
+	param[line]:空位位置
+	param[column]:空位位置
+	*/
+	int GetSurroundNumber(int line, int column)
+	{
+		int num = 0;
+		int ID = 0;
+		//上面是否有子
+		if (cross[line - 1][column] != NoChess || line == 1)
+		{
+			if (line != 1) ID = cross[line - 1][column];
+			num++;
+		}
+		//下面是否有子
+		if (cross[line + 1][column] != NoChess || line == 9)
+		{
+			if (line != 9 && ID == 0) ID = cross[line + 1][column];
+			else if (ID != cross[line + 1][column]) return -1;
+			num++;
+		}
+		//左边是否有子
+		if (cross[line][column - 1] != NoChess || column == 1)
+		{
+			if (column != 1 && ID == 0) ID = cross[line][column - 1];
+			else if (ID != cross[line][column - 1]) return -1;
+			num++;
+		}
+		//右边是否有子
+		if (cross[line][column + 1] != NoChess || column == 9)
+		{
+			if (column != 9 && ID == 0) ID = cross[line][column + 1];
+			else if (ID != cross[line][column + 1]) return -1;
+			num++;
+		}
+		return num;
+	}
 };
 
 class AI3 : public AI2

@@ -141,9 +141,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			if (CB.Start == true) break;
 			if (!CB.Player1isAI)
 			{
+				Param = lParam;
+				CB.Player1AI = &CB.ai3;
+				SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI3"));
+				CB.Player1isAI = true;
+				CB.Player1AI->GetPosition(Num, Type, 0);
+				/*
 				Type = 1;
 				SelectFun();
-				Param = lParam;
+				*/
 			}
 			else
 			{
@@ -159,9 +165,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			if (CB.Start == true) break;
 			if (!CB.Player2isAI)
 			{
+				Param = lParam;
+				CB.Player2AI = &CB.ai33;
+				SendMessageA((HWND)Param, WM_SETTEXT, (WPARAM)NULL, LPARAM("已使用了AI3"));	
+				CB.Player2isAI = true;
+				CB.Player2AI->GetPosition(Num, Type, 0);
+				/*
 				Type = 2;
 				SelectFun();
-				Param = lParam;
+				Param = lParam;*/
 			}
 			else
 			{

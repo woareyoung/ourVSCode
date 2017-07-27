@@ -3,8 +3,11 @@ void ChessBoard::AddSituationList()
 {
 	SITUATION sit;
 	CurrentRoundNumber++;
-	int maxQuadrant = Qua.GetMaxQuadrant();//获取最多棋子的象限
 	int i, j;
+	/*
+	int maxQuadrant = Qua.GetMaxQuadrant();//获取最多棋子的象限
+	maxQuadrant = Qua.SecondQuadrant;
+
 	//如果最多棋子的是第一象限
 	if (maxQuadrant == Qua.FirstQuadrant)
 	{
@@ -36,12 +39,17 @@ void ChessBoard::AddSituationList()
 		for (i = 9; i > 0; i--)
 			for (j = 9; j > 0; j--)
 				sit.BoardStatus += std::to_string(cross[i][j]);
-	}
+	}*/
+	sit.ChessPosition = line * 10 + column;//记录本次走棋位置
+	for (i = 1; i < 10; ++i)
+		for (j = 1; j < 10; ++j)
+			sit.BoardStatus += std::to_string(cross[i][j]);
 	MemBattle.push_back(sit);
+	/*
 	if (line < 5 && column > 5) Qua.FirstQuadrant++;
 	else if (line < 5 && column < 5) Qua.SecondQuadrant++;
 	else if (line > 5 && column < 5) Qua.ThirdQuadrant++;
-	else if (line > 5 && column > 5) Qua.ForthQuadrant++;
+	else if (line > 5 && column > 5) Qua.ForthQuadrant++;*/
 }
 
 void ChessBoard::AddList(int type)

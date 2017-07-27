@@ -7,7 +7,7 @@ int SimulatorGo::GetSurroundChessNumber(int line, int column, int playerNum, int
 	int saveLine = line, saveColumn = column;//保存数据
 	std::stack<std::pair<int, int>> MyChessPosition;//属于playerNum的棋子
 	std::pair<int, int> p;//临时变量
-						  //弹出数据
+	//弹出数据
 	auto POPdata = [&]() {
 		if (MyChessPosition.empty()) return false;
 		p = MyChessPosition.top();

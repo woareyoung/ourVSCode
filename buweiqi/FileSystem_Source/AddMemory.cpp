@@ -15,6 +15,7 @@ void FileSystem::AddMemory(std::list<SITUATION> header, int winner)
 		std::string name = FN.ForeName + std::to_string(round) + FN.TXT;
 		std::fstream file;
 		OpenFile(name, file);
+		/*
 		bool repeat = false;
 		int temp;
 		int Win;
@@ -35,7 +36,9 @@ void FileSystem::AddMemory(std::list<SITUATION> header, int winner)
 			OpenFile(name, file);
 			file.seekg(0, std::ios::end);
 			file << it->BoardStatus << " " << it->ChessPosition << " " << winner << std::endl;
-		}
+		}*/
+		file.seekg(0, std::ios::end);
+		file << Boarddata << " " << site << " " << winn << std::endl;
 		file.close();
 	};
 	for (int j = 1; it != header.end();)
