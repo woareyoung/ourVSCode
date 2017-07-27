@@ -222,7 +222,7 @@ protected:
 		options.number_of_threads = 1;
 		options.verbose = true;
 		options.max_iterations = -1;
-		options.max_time = 1;
+		options.max_time = 2;
 		auto state_copy = new SimulatorGo2(cross, PlayerId);
 		auto best_move = MCTS::computeNextMove(state_copy, options);
 		return best_move;

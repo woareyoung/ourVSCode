@@ -4,12 +4,14 @@
 #include <random>
 #include "../ChessBoard_Header/AI.h"
 #include "../ChessBoard_Header/Pattern_Moves.h"
-#define GetId(x) ((x) < 0 ? 3 + x : 3 - (x)) //获取玩家身份
+#define GetId(x) ((x) < 0 ? 3 + (x) : 3 - (x)) //获取玩家身份
 #define HaveChess -20 //有子的位置的分数
 #define MyDeadChess -10 //我的死棋点的分数
 #define RivalDeadChess -5 //对方死棋点的分数
-#define GetLine(x) (x / 100)
-#define GetColumn(y) (y % 100)
+#define GetLine(x) ((x) / 100)
+#define GetColumn(y) ((y) % 100) 
+#define GetPositionCode(x, y) ((x) * 100 + (y))
+#define GetBoundScore(z) ((z) * 0.39) //计算临时分值
 
 class AI4 : public AI
 {
@@ -32,8 +34,8 @@ private:
 	int cross[10][10]; //棋盘状况
 	int PlayerId; //玩家身份——玩家1还是玩家2
 	int Score[10][10] = { 0 }; //记录棋盘每个位置的分值
-	int Round;
-	int MaxScore;
+	int Round;//当前回合数
+	int MaxScore;//最高分
 	std::set<std::pair<int, int>> ForeFiveLevel;//前五级别的位置
 	/*
 	param[SpecialPoint]:存放特殊点及其分数的链表
@@ -65,6 +67,13 @@ private:
 	param[deadPos]:死棋数量
 	*/
 	int CalDeadPosNumber(int line, int column);//计算棋盘死棋位置数量
+	/*
+	param[line]:下棋的位置
+	param[column]:下棋的位置
+	return:额外价值
+	*/
+	template<class T>
+	T DeadPosNumberAddScore(int line, int column);//计算棋盘死棋位置数量对分值的影响
 	//初始化数组（一局游戏一次）
 	void Initialize()
 	{
@@ -104,22 +113,38 @@ private:
 		bool Attack = false;
 		if (NullPosition == 0) Attack = true;
 		int num = 0;
+		//上面是否有子
 		if (cross[line - 1][column] == 3 - PlayerId || line == 1) num++;
 		else if (cross[line - 1][column] == PlayerId) return -1;
-		else if(Attack) NullPosition = (line - 1) * 100 + column;
-		else NullPosition = line * 100 + column;
+		else if(Attack) NullPosition = GetPositionCode(line - 1, column);
+		else NullPosition = GetPositionCode(line, column);
+		//下面是否有子
 		if (cross[line + 1][column] == 3 - PlayerId || line == 9) num++;
 		else if (cross[line + 1][column] == PlayerId) return -1;
-		else if (Attack) NullPosition = (line + 1) * 100 + column;
-		else NullPosition = line * 100 + column;
+		else if (Attack) NullPosition = GetPositionCode(line + 1, column);
+		else NullPosition = GetPositionCode(line, column);
+		//左边是否有子
 		if (cross[line][column - 1] == 3 - PlayerId || column == 1) num++;
 		else if (cross[line][column - 1] == PlayerId) return -1;
-		else if(Attack) NullPosition = line * 100 + (column - 1);
-		else NullPosition = line * 100 + column;
+		else if(Attack) NullPosition = GetPositionCode(line, column - 1);
+		else NullPosition = GetPositionCode(line, column);
+		//右边是否有子
 		if (cross[line][column + 1] == 3 - PlayerId || column == 9) num++;
 		else if (cross[line][column + 1] == PlayerId) return -1;
-		else if (Attack) NullPosition = line * 100 + (column + 1);
-		else NullPosition = line * 100 + column;
+		else if (Attack) NullPosition = GetPositionCode(line, column + 1);
+		else NullPosition = GetPositionCode(line, column);
 		return num;
+	}
+
+	void GetNeedScorePosition(std::set<int> &pos)
+	{
+		double BoundScore = MaxScore > 9 ? 9 : (MaxScore > RivalDeadChess ? 5 : HaveChess);//临界分值
+		for (int i = 1; i < 10; ++i)
+		{
+			for (int j = 1; j < 10; ++j)
+			{
+				if (Score[i][j] > BoundScore) pos.insert(GetPositionCode(i, j));//录取达到分数的位置
+			}
+		}
 	}
 };

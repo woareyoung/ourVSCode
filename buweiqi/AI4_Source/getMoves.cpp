@@ -5,14 +5,25 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 {
 	PlayerId = playerId;
 	for (int i = 0; i < 10; ++i)
+	{
 		for (int j = 0; j < 10; ++j)
 		{
-			if (BoardCross[i][j] == 4) cross[i][j] = 0;
-			else cross[i][j] = BoardCross[i][j];
+			if (BoardCross[i][j] == 4)
+			{
+				cross[i][j] = 0;
+				Score[i][j] = 0;
+			}
+			else
+			{
+				cross[i][j] = BoardCross[i][j];
+				Score[i][j] = HaveChess;
+			}
 		}
+	}
 	//获取特殊点链表
 	Pattern_Moves PM(playerId);
 	std::list<std::pair<int, int>> SP = PM.getMoves(true, BoardCross);
+	std::set<int> NeedPosition;
 	CanSeeWinner = true;
 	//没有匹配到模式
 	if (SP.empty())
@@ -29,19 +40,19 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 				//如果遇到不会死的位置
 				if (DeadCheck(i, j, PlayerId, cross) == false)
 				{
-					SP.push_back(std::make_pair(i * 100 + j, 0));
+					NeedPosition.insert(GetPositionCode(i, j));
 					CanSeeWinner = false;//设定当前回合不是最终回合
 				}
 			}
 		}
 		//如果连不会死的位置都没有了，就随便找个空位下了
-		if (SP.empty())
+		if (NeedPosition.empty())
 		{
-			moves.emplace_back(EmptyPosLine * 100 + EmptyPosColumn);
-			if(CanSeeWinner) return false;
+			moves.emplace_back(GetPositionCode(EmptyPosLine, EmptyPosColumn));
+			if (CanSeeWinner) return false;
 		}
+		CanSeeWinner = false;
 	}
-	CanSeeWinner = false;
 	/*
 	//搜索眼的数量
 	{
@@ -93,20 +104,50 @@ bool AI4::getMoves(std::vector<int> &moves, const int BoardCross[][10], int play
 			return false;
 		}
 	}*/
+	else
+	{
+		int line = 0, column = 0;
+		std::list<std::pair<int, int>> sp;
+		for (auto s : SP)
+		{
+			if (s.second > 9) sp.push_back(std::make_pair(s.first, s.second));
+		}
+		if (sp.empty())
+		{
+			for (auto s : SP)
+			{
+				if(s.second > 4) sp.push_back(std::make_pair(s.first, s.second));
+			}
+		}
+		if (sp.empty())
+		{
+			for (auto s : SP)
+			{
+				if (s.second > RivalDeadChess) sp.push_back(std::make_pair(s.first, s.second));
+			}
+		}
+		UpdateBoardScore(sp);//更新分数
+		GetMaxScorePosition(line, column);
+		MaxScore = Score[line][column];
+		GetNeedScorePosition(NeedPosition); 
+		for (auto au : NeedPosition)
+			moves.emplace_back(au);
+		return true;
+	}
 	int temp;
 	//遍历链表
-	for (auto t : SP)
+	for (auto t : NeedPosition)
 	{
-		if (DeadCheck(GetLine(t.first), GetColumn(t.first), PlayerId, cross)) continue;
-		temp = CalDeadPosNumber(GetLine(t.first), GetColumn(t.first));
+		if (DeadCheck(GetLine(t), GetColumn(t), PlayerId, cross)) continue;
+		temp = CalDeadPosNumber(GetLine(t), GetColumn(t));
 		if (temp == -1) continue;
 		if (temp != 1)
 		{
 			moves.clear();
-			moves.emplace_back(t.first);
+			moves.emplace_back(t);
 			return false;
 		}
-		else moves.emplace_back(t.first);
+		else moves.emplace_back(t);
 	}
 	return true;
 }
@@ -150,8 +191,8 @@ int AI4::CalDeadPosNumber(int line, int column)
 			for (int j = 1; j < 10; ++j)
 			{
 				if (cross[i][j] != 0) continue;
-				MyDead = DeadCheck(i, j, PlayerId, cross);
-				RivalDead = DeadCheck(i, j, 3 - PlayerId, cross);
+				MyDead = DeadCheck(i, j, type, cross);
+				RivalDead = DeadCheck(i, j, rival, cross);
 				if (MyDead) ++MyDeadPosNumber;
 				if (RivalDead) ++RivalDeadPosNumber;
 			}
@@ -174,3 +215,4 @@ int AI4::CalDeadPosNumber(int line, int column)
 	if (MyDeadPosNumber2 - saveMyDead > 1) return 2;
 	return 1;
 }
+

@@ -254,6 +254,9 @@
     <ClCompile Include="AI4_Source\getMoves.cpp">
       <Filter>Source Files\AI4_Source</Filter>
     </ClCompile>
+    <ClCompile Include="AI4_Source\DeadPosNumberAddScore.cpp">
+      <Filter>Source Files\AI4_Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="buweiqi.rc">
