@@ -30,6 +30,20 @@ void AI4::GetPosition(int &line, int &column, int onTurn)
 	std::list<std::pair<int, int>> SP = PM.getMoves(true, cross);
 	//更新分值
 	UpdateBoardScore(SP);
+	for (int i = 1; i < 10; ++i)
+	{
+		for (int j = 1; j < 10; ++j)
+		{
+			if (cross[i][j] != 0) continue;
+			int save = Score[i][j];
+			Score[i][j] += DeadPosNumberAddScore(i, j);
+			if (Score[i][j] < 0)
+			{
+				if (save < 0) Score[i][j] = save;
+				else Score[i][j] = 0;
+			}
+		}
+	}
 	//获取最高分位置
 	GetMaxScorePosition(line, column);
 	cross[line][column] = PlayerId;

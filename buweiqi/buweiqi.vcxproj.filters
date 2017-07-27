@@ -257,6 +257,9 @@
     <ClCompile Include="AI4_Source\DeadPosNumberAddScore.cpp">
       <Filter>Source Files\AI4_Source</Filter>
     </ClCompile>
+    <ClCompile Include="AI3_Source\GetSurroundChessNumber.cpp">
+      <Filter>Source Files\AI3_Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="buweiqi.rc">
